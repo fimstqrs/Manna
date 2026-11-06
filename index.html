@@ -1527,6 +1527,7 @@ function defaults0(){
   return s;
 }
 var S=defaults();
+if(!S.onboarded)S.themeMode='plain'; /* setup always starts in the Default theme */
 function seedMeals(){S.meals=[]}
 var GENF=[],AL9=['peanut','treenut','dairy','egg','gluten','shellfish','fish','soy','sesame'];
 function usdaLoad(){
@@ -1834,7 +1835,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='62';
+var heroLast='',APPV='63';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
