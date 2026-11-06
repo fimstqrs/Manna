@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><script>/* Apply the last-used theme before first paint so the default red never flashes */var de=document.documentElement;de.setAttribute('data-vtheme','plain');try{var mt=JSON.parse(localStorage.getItem('manna.theme.v1')||'null');if(mt&&/^[a-z]+$/.test(mt.id)){de.setAttribute('data-vtheme',mt.id);if(mt.fs)de.style.fontSize=mt.fs+'px';if(mt.hc)de.classList.add('hc');if(mt.rm)de.classList.add('rm');if(mt.ng)de.classList.add('noglass')}}catch(e){}try{var nv=navigator,lite=localStorage.getItem('manna.lite.v1')==='1'||(nv.connection&&nv.connection.saveData)||(nv.deviceMemory&&nv.deviceMemory<=2)||(window.matchMedia&&matchMedia('(prefers-reduced-transparency: reduce)').matches);if(lite)de.classList.add('lite')}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manna: Fuel, Faith and Fitness</title><meta name="description" content="Manna is a free food, calorie and workout tracker with personalized targets and a daily Bible verse."><link rel="canonical" href="https://manna-beta-five.vercel.app/"><meta name="theme-color" content="#ffffff"><link rel="preload" href="/data/food-5541a484b6.bin" as="fetch" crossorigin><link rel="preload" href="/data/web-3216f216be.bin" as="fetch" crossorigin><link rel="apple-touch-icon" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="32x32" href="/icons/manna-icon-32.png?v=72"><meta property="og:type" content="website"><meta property="og:title" content="Manna: Fuel, Faith and Fitness"><meta property="og:description" content="Track food and workouts with personalized targets and a daily Bible verse."><meta property="og:url" content="https://manna-beta-five.vercel.app/"><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box}</style></head><body><title>Manna</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><script>/* Apply the last-used theme before first paint so the default red never flashes */var de=document.documentElement;de.setAttribute('data-vtheme','plain');try{var mt=JSON.parse(localStorage.getItem('manna.theme.v1')||'null');if(mt&&/^[a-z]+$/.test(mt.id)){de.setAttribute('data-vtheme',mt.id);if(mt.fs)de.style.fontSize=mt.fs+'px';if(mt.hc)de.classList.add('hc');if(mt.rm)de.classList.add('rm');if(mt.ng)de.classList.add('noglass')}}catch(e){}try{var nv=navigator,lite=localStorage.getItem('manna.lite.v1')==='1'||(nv.connection&&nv.connection.saveData)||(nv.deviceMemory&&nv.deviceMemory<=2)||(window.matchMedia&&matchMedia('(prefers-reduced-transparency: reduce)').matches);if(lite)de.classList.add('lite')}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manna</title><meta name="description" content="Manna is a free food, calorie and workout tracker with personalized targets and a daily Bible verse."><link rel="canonical" href="https://manna-beta-five.vercel.app/"><meta name="theme-color" content="#ffffff"><link rel="preload" href="/data/food-5541a484b6.bin" as="fetch" crossorigin><link rel="preload" href="/data/web-3216f216be.bin" as="fetch" crossorigin><link rel="apple-touch-icon" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="32x32" href="/icons/manna-icon-32.png?v=72"><meta property="og:type" content="website"><meta property="og:title" content="Manna"><meta property="og:description" content="Track food and workouts with personalized targets and a daily Bible verse."><meta property="og:url" content="https://manna-beta-five.vercel.app/"><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box}</style></head><body><title>Manna</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -735,7 +735,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 
     <!-- SCRIPTURE -->
     <section class="view" id="v-scripture" hidden>
-      <header class="vh"><p class="eyebrow">Scripture</p><h2>Word for today</h2>
+      <header class="vh"><p class="eyebrow">Faith</p><h2>Word for today</h2>
         <p class="lede">A new verse each day, and the whole Bible to read.</p></header>
       <div class="card paper stack" id="sc-votd"></div>
       <div class="card stack" id="sc-fav" hidden></div>
@@ -754,7 +754,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 
     <!-- WORKOUTS -->
     <section class="view" id="v-workouts" hidden>
-      <header class="vh"><p class="eyebrow">Train</p><h2>Workouts</h2>
+      <header class="vh"><p class="eyebrow">Fitness</p><h2>Workouts</h2>
         <p class="lede">Answer a few quick questions and pick a workout. You can go back at any step to change something.</p></header>
       <div class="card stack" id="w-sbox"><label class="f" for="w-q">Search workouts<input type="search" id="w-q" autocomplete="off" placeholder="Try soccer, legs, 20 minutes, plank"></label><div id="w-sres" aria-live="polite"></div></div>
       <div class="card stack" id="w-wiz">
@@ -791,7 +791,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 
     <!-- SCHEDULE -->
     <section class="view" id="v-schedule" hidden>
-      <header class="vh"><p class="eyebrow">Train</p><h2>Weekly schedule</h2>
+      <header class="vh"><p class="eyebrow">Fitness</p><h2>Weekly schedule</h2>
         <p class="lede">You have three schedules. Give each one a name and choose a workout for every day. The schedule you select is the one used for Today and the home page.</p></header>
       <div class="scards" id="sh-plans"></div>
       <div class="card stack" id="sh-week"></div>
@@ -799,7 +799,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 
     <!-- HISTORY -->
     <section class="view" id="v-history" hidden>
-      <header class="vh"><p class="eyebrow">Train</p><h2>Workout history</h2>
+      <header class="vh"><p class="eyebrow">Fitness</p><h2>Workout history</h2>
         <p class="lede">Every finished session, with the sets you logged. The four sample sessions can be removed.</p></header>
       <div id="hs-body" class="stack"></div>
     </section>
@@ -1082,9 +1082,9 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <nav class="tabs" id="tabs" aria-label="Main">
   <a href="#today" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>
-  <a href="#workouts" data-tab="workouts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 6.5v11M3.5 9v6M17.5 6.5v11M20.5 9v6M6.5 12h11"/></svg><span>Workouts</span></a>
-  <a href="#eat" data-tab="eat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 19v-6.3A3.6 3.6 0 0 1 4.5 9.6C4.5 7 7 5.5 9 5.5h6c2 0 4.5 1.5 4.5 4.1a3.6 3.6 0 0 1-1.5 3.1V19z"/><path d="M9.5 9.5l1.2 2.2M13.3 9.5l1.2 2.2"/></svg><span>Food</span></a>
-  <a href="#scripture" data-tab="scripture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 4h11a1 1 0 0 1 1 1v14H7a1 1 0 0 1-1-1V4zM6 18a1 1 0 0 1 1-1h11M12 7v6M10 9h4"/></svg><span>Scripture</span></a>
+  <a href="#workouts" data-tab="workouts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 6.5v11M3.5 9v6M17.5 6.5v11M20.5 9v6M6.5 12h11"/></svg><span>Fitness</span></a>
+  <a href="#eat" data-tab="eat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 19v-6.3A3.6 3.6 0 0 1 4.5 9.6C4.5 7 7 5.5 9 5.5h6c2 0 4.5 1.5 4.5 4.1a3.6 3.6 0 0 1-1.5 3.1V19z"/><path d="M9.5 9.5l1.2 2.2M13.3 9.5l1.2 2.2"/></svg><span>Fuel</span></a>
+  <a href="#scripture" data-tab="scripture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 4h11a1 1 0 0 1 1 1v14H7a1 1 0 0 1-1-1V4zM6 18a1 1 0 0 1 1-1h11M12 7v6M10 9h4"/></svg><span>Faith</span></a>
   <button type="button" id="more" data-tab="more" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"/></svg><span>Settings</span></button>
 </nav>
 
@@ -1928,7 +1928,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='74';
+var heroLast='',APPV='75';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3247,7 +3247,7 @@ $('#cm-form').addEventListener('submit',function(e){
 });
 
 /* ---------- navigation ---------- */
-var GROUPS=[['today','Today',['today']],['train','Train',['workouts','schedule','history','session']],['fuel','Fuel',['eat','meals','foods','log','safeguards']],['faith','Scripture',['scripture']],['community','Community',['community']],['settings','Settings',['settings','themes']]];
+var GROUPS=[['today','Today',['today']],['train','Fitness',['workouts','schedule','history','session']],['fuel','Fuel',['eat','meals','foods','log','safeguards']],['faith','Faith',['scripture']],['community','Community',['community']],['settings','Settings',['settings','themes']]];
 var VLABEL={today:'Today',workouts:'Workouts',schedule:'Schedule',history:'History',session:'Session',log:'Fast logging',eat:'What are you eating?',meals:"Today's meals",foods:'Browse foods',labs:'Nutrients and labs',safeguards:'Eating safeguards',sleep:'Sleep and recovery',injury:'Injury and rehab',mind:'Mind and hormones',medical:'Medical context',coach:'Adaptive coaching',scripture:'Verse of the day',themes:'Themes',community:'Community',settings:'Settings'};
 var VGROUP={more:'more'},VALID={more:1};
 GROUPS.forEach(function(g){g[2].forEach(function(v){VGROUP[v]=g[0];VALID[v]=1})});
