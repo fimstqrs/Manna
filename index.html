@@ -674,6 +674,16 @@ a,button,.chip,.btn,.wcard,.fcard,.onb-wt,.onb-opt,.tile,.scard,.action,label.ch
 /* Slower phones: shorter, lighter motion */
 html.lite .view:not([hidden])>*{animation-duration:.35s!important}
 html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
+.wrec{display:flex;flex-direction:column;gap:.35rem;min-width:0}
+.wrec>.wcard{flex:1}
+.wdone{font:500 .78rem var(--f-body);color:var(--muted);padding-left:.2rem}
+.wgone{cursor:default;opacity:.75}
+.wsavebtn{display:inline-flex;align-items:center;gap:.35rem}
+.wsavebtn svg{width:16px;height:16px;flex:none}
+.wsavebtn[aria-pressed=true]{color:var(--accent);border-color:var(--accent)}
+.savedempty{display:flex;gap:.6rem;align-items:flex-start}
+.savedempty .bmk svg{width:20px;height:20px;color:var(--accent);flex:none;margin-top:.1rem}
+@media (prefers-reduced-motion:no-preference){.wsavebtn[aria-pressed=true] svg{animation:pf-pop .45s cubic-bezier(.34,1.56,.64,1)}}
 </style>
 <style id="logo-style">
 /* Logo is black and white: white on the coloured themes, black on Default light */
@@ -756,6 +766,8 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <section class="view" id="v-workouts" hidden>
       <header class="vh"><p class="eyebrow">Fitness</p><h2>Workouts</h2>
         <p class="lede">Answer a few quick questions and pick a workout. You can go back at any step to change something.</p></header>
+      <div class="card stack" id="w-recent"></div>
+      <div class="card stack" id="w-saved"></div>
       <div class="card stack" id="w-sbox"><label class="f" for="w-q">Search workouts<input type="search" id="w-q" autocomplete="off" placeholder="Try soccer, legs, 20 minutes, plank"></label><div id="w-sres" aria-live="polite"></div></div>
       <div class="card stack" id="w-wiz">
         <div class="row spread"><span class="eyebrow" id="w-step">Step 1 of 4</span><div class="chips" id="w-sum"></div></div>
@@ -1602,7 +1614,7 @@ function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:true,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],favVerse:'',
     sleep:6.2,hrv:48,sore:3,
     meals:[],labs:{fe:22,vd:24,b12:410},
     override:false,coachMsg:null,imported:[],
@@ -1928,7 +1940,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='76';
+var heroLast='',APPV='77';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2514,11 +2526,45 @@ function isSport(){return SPORTS.indexOf(S.wf.cat)>-1}
 function wseq(){var q=[0];if(needsAcc())q.push(1);if(!isSport())q.push(2);q.push(3);return q}
 function wSearch(){var t=(S.wq||'').toLowerCase().split(/\s+/).filter(Boolean);if(!t.length)return null;
   return sortLv(allWorkouts().filter(function(w){var h=(w.name+' '+(w.focus||'')+' '+(CATS[w.cat]||'')+' '+w.level+' '+w.mins+' min '+w.ex.map(function(e){return e[0]}).join(' ')).toLowerCase();return t.every(function(x){return h.indexOf(x)>-1})}))}
+/* ===== Recent and saved workouts on the Fitness page ===== */
+var BOOKMARK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11a1 1 0 0 1 1 1V21l-6.5-4.2L5.5 21V4.5a1 1 0 0 1 1-1z"/></svg>';
+var BOOKMARK_ON='<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 3.5h11a1 1 0 0 1 1 1V21l-6.5-4.2L5.5 21V4.5a1 1 0 0 1 1-1z"/></svg>';
+function isSaved(id){return (S.savedW||[]).indexOf(id)>-1}
+function savedSync(){
+  if(!Array.isArray(S.savedW))S.savedW=[];if(!Array.isArray(S.savedSeen))S.savedSeen=[];
+  /* Workouts you build, customise or import are saved automatically, once */
+  S.customW.forEach(function(w){if(S.savedSeen.indexOf(w.id)<0){S.savedSeen.push(w.id);if(!isSaved(w.id))S.savedW.unshift(w.id)}});
+  var ids={};allWorkouts().forEach(function(w){ids[w.id]=1});S.savedW=S.savedW.filter(function(id){return ids[id]});
+}
+function whenDone(ts){var d=new Date(ts),t=new Date();t.setHours(0,0,0,0);var day=new Date(ts);day.setHours(0,0,0,0);var n=Math.round((t-day)/86400000);
+  var tm=d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
+  if(n===0)return 'Today, '+tm;if(n===1)return 'Yesterday, '+tm;if(n<7)return d.toLocaleDateString('en-US',{weekday:'long'});return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})}
+function renderRecentSaved(z){
+  savedSync();
+  var all=allWorkouts(),byId={};all.forEach(function(w){byId[w.id]=w});
+  var show=z!==4;
+  /* Last 3 finished sessions, newest first */
+  var H=S.hist.slice().sort(function(a,b){return b.ts-a.ts}).slice(0,3),r=$('#w-recent');
+  r.hidden=!show||!H.length;
+  if(show&&H.length){
+    r.innerHTML='<div class="row spread"><h3>Recent</h3><a class="seelink small" href="#history">All history ›</a></div><div class="wgrid">'+H.map(function(x){
+      var w=byId[x.wid],when='<span class="wdone">'+esc(whenDone(x.ts))+(x.ms?' · '+Math.max(1,Math.round(x.ms/60000))+' min':'')+'</span>';
+      if(w)return '<div class="wrec">'+when+wcardHtml(w)+'</div>';
+      return '<div class="wrec">'+when+'<div class="wcard wgone" data-cat="'+esc(x.cat||'custom')+'"><span class="wcat"><i class="cdot"></i>'+esc(CATS[x.cat]||'Workout')+'</span><b>'+esc(x.name)+'</b><span class="small muted">No longer in your workouts</span></div></div>'}).join('')+'</div>';
+  }
+  /* Saved workouts */
+  var sv=$('#w-saved'),L=S.savedW.map(function(id){return byId[id]}).filter(Boolean);
+  sv.hidden=!show;
+  if(show)sv.innerHTML='<div class="row spread"><h3>Saved workouts</h3>'+(L.length?'<span class="small muted">'+L.length+' saved</span>':'')+'</div>'
+    +(L.length?'<div class="wgrid">'+L.map(function(w){return wcardHtml(w)}).join('')+'</div>'
+      :'<p class="small muted savedempty"><span class="bmk">'+BOOKMARK+'</span>Open any workout and tap Save to keep it here. Workouts you build or customise are saved automatically.</p>');
+}
 function renderWorkouts(){
   if(S.wf.cat!=='all'&&S.wf.cat!=='home'&&S.wf.cat!=='custom'||S.wf.cat==='custom')S.wf.access=accFor(S.wf.cat);
   if(S.wf.cat==='home')S.wf.access='pick';
   var z=S.wz,A=ACCESS.filter(function(a){return a[0]===S.wf.access})[0][1],T=S.wf.cat==='all'?'All types':CATS[S.wf.cat],M=S.wf.mu==='all'?'Any muscle':MUS[S.wf.mu];
   for(var zi=0;zi<4;zi++)$('#ws-'+zi).hidden=z!==zi;
+  renderRecentSaved(z);
   var SR=wSearch();$('#w-sres').innerHTML=SR?'<p class="small muted">'+SR.length+' of '+allWorkouts().length+' workouts, easiest first</p>'+(SR.length?'<div class="wgrid">'+SR.map(wcardHtml).join('')+'</div>':'<p class="muted">No workouts match. Try fewer words.</p>'):'';
   $('#w-wiz').hidden=z===4||!!SR;$('#w-cur').hidden=z!==4;
   var NA=needsAcc(),SQ=wseq(),tot=SQ.length,sn=Math.max(1,SQ.indexOf(z)+1);$('#w-step').textContent='Step '+sn+' of '+tot;
@@ -2541,7 +2587,7 @@ function renderWorkouts(){
   $('#w-grid').innerHTML=list.length?sortLv(list).map(function(w){return wcardHtml(w)}).join(''):'<p class="muted">Nothing matches those filters. Try a different access level or pick more equipment.</p>';
   var w=all.filter(function(x){return x.id===S.selW})[0]||list[0]||all[0];if(!w)return;
   var lv2=wMuscles(w),st=stageCalc(),a=S.sess,aw=sessW();
-  var h='<div class="row spread"><div class="stack" style="gap:.3rem">'+catTag(w.cat)+'<h3>'+esc(w.name)+'</h3></div><span class="badge">'+w.mins+' min · '+esc(w.level)+'</span></div>';
+  var h='<div class="row spread"><div class="stack" style="gap:.3rem">'+catTag(w.cat)+'<h3>'+esc(w.name)+'</h3></div><div class="row" style="gap:.5rem"><span class="badge">'+w.mins+' min · '+esc(w.level)+'</span><button type="button" class="btn sm wsavebtn" data-act="wsave" data-id="'+w.id+'" aria-pressed="'+isSaved(w.id)+'">'+(isSaved(w.id)?BOOKMARK_ON+'Saved':BOOKMARK+'Save')+'</button></div></div>';
   h+='<p class="small muted">'+esc(w.focus||'')+(eqText(w)?' · Equipment: '+esc(eqText(w)):'')+'</p>';
   if(S.area!=='none')h+='<p class="small muted">Checked against your '+AREAS.filter(function(x){return x[0]===S.area})[0][1].toLowerCase()+' (stage '+st+': '+STAGES[st][0]+').</p>';
   h+='<div class="wdet"><div>'+w.ex.map(function(e){var state=exState(e[0],S.area,st),m=muOf(e[0])[0].map(function(k){return MUS[k]}).join(' · ');
@@ -3035,6 +3081,7 @@ var ACT={
     var r=$('#sc-reader');if(r)r.scrollIntoView({block:'start'});
   },
   wsel:function(b){S.selW=b.dataset.id;S.wz=4;window.scrollTo(0,0)},
+  wsave:function(b){var id=b.dataset.id,i=S.savedW.indexOf(id);if(i>-1){S.savedW.splice(i,1);toast('Removed from saved workouts.')}else{S.savedW.unshift(id);toast('Saved. Find it under Saved workouts.')}},
   wnext:function(){var q=wseq(),i=q.indexOf(S.wz);S.wz=q[Math.min(q.length-1,i+1)];window.scrollTo(0,0)},
   wback:function(){var q=wseq(),i=q.indexOf(S.wz);S.wz=i>0?q[i-1]:(S.wz>3?3:0);window.scrollTo(0,0)},
   wgo:function(b){S.wz=+b.dataset.s;window.scrollTo(0,0)},
@@ -3064,7 +3111,7 @@ var ACT={
     S.selW=id;S.wz=4;S.edit=null;S.wf.cat='all';S.wf.mu='all';syncSched();toast('Saved to My workouts.');
   },
   wdel:function(b){
-    var id=b.dataset.id;S.customW=S.customW.filter(function(w){return w.id!==id});
+    var id=b.dataset.id;S.customW=S.customW.filter(function(w){return w.id!==id});S.savedW=(S.savedW||[]).filter(function(x){return x!==id});
     Object.keys(S.plans).forEach(function(k){S.plans[k]=S.plans[k].map(function(x){return x===id?null:x})});
     if(S.selW===id){S.selW='g1';S.wz=3}syncSched();toast('Deleted.');
   },
