@@ -596,6 +596,21 @@ input[type=text],input[type=number],select,textarea{
 .onb-th[aria-pressed=true] b::before{content:"✓ "}
 .onb-wlist{max-height:50vh;overflow-y:auto;padding:2px}
 [data-cat=soccer]{--cc:#58B368}[data-cat=fball]{--cc:#A0724A}[data-cat=base]{--cc:#D96C6C}[data-cat=tennis]{--cc:#C8D64A}[data-cat=golf]{--cc:#3FA66B}[data-cat=swim]{--cc:#3DA5E0}[data-cat=volley]{--cc:#E8B84A}[data-cat=hockey]{--cc:#7C8CF0}[data-cat=cycle]{--cc:#E27BC9}
+/* welcome + tutorial */
+#wel{position:fixed;inset:0;z-index:9500;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--ink);text-align:center;padding:24px;opacity:1;transition:opacity .6s ease}
+#wel[hidden]{display:none}#wel.out{opacity:0}
+.wel-ic{width:84px;height:84px;margin:0 auto 1rem;color:var(--accent)}.wel-ic svg{width:100%;height:100%}
+#wel h2{font:italic 600 clamp(2rem,9vw,3rem)/1.1 var(--f-display);margin:0 0 .5rem}#wel p{color:var(--muted);margin:0}
+#tour{position:fixed;inset:0;z-index:9300}
+#tour[hidden]{display:none}
+#tour-hl{position:fixed;border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 3px var(--accent);pointer-events:none;transition:left .35s ease,top .35s ease,width .35s ease,height .35s ease}
+#tour-card{position:fixed;left:12px;right:12px;max-width:520px;margin:0 auto;background:var(--card,var(--bg));color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-radius:22px;padding:16px 18px;box-shadow:0 12px 40px rgba(0,0,0,.35);max-height:46vh;overflow:auto}
+#tour-card.top{top:max(12px,env(safe-area-inset-top))}#tour-card.bot{bottom:calc(88px + env(safe-area-inset-bottom))}
+#tour-card h3{margin:.1rem 0 .4rem;outline:0}#tour-card p{margin:0 0 .8rem}
+.tour-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tour-btns #tour-exit{margin-left:auto}
+@media (prefers-reduced-motion:no-preference){.wel-in{animation:onb-up .8s cubic-bezier(.2,.8,.2,1) both}}
+@media (prefers-reduced-motion:reduce){#tour-hl{transition:none}}
+.onb-wf{margin:.2rem 0 .6rem}.onb-wf .eyebrow{margin:.5rem 0 .3rem}
 </style>
 
 <div class="shell">
@@ -611,6 +626,8 @@ input[type=text],input[type=number],select,textarea{
       <p class="small" id="onb-msg" aria-live="polite" role="status"></p>
       <div class="onb-nav"><button class="btn" data-onb="back" id="onb-back">Back</button><button class="btn primary" data-onb="next" id="onb-next">Next</button></div>
     </div>
+    <div id="wel" role="status" aria-live="polite" hidden><div class="wel-in"><div class="wel-ic" id="wel-ic"></div><h2 id="wel-h"></h2><p>Let's take a quick look around.</p></div></div>
+    <div id="tour" hidden><div id="tour-hl" aria-hidden="true"></div><div id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-t"><p class="eyebrow" id="tour-n"></p><h3 id="tour-t" tabindex="-1"></h3><p id="tour-p"></p><div class="tour-btns"><button class="btn" data-tour="back" id="tour-back">Back</button><button class="btn primary" data-tour="next" id="tour-next">Next</button><button class="btn" data-tour="exit" id="tour-exit">Exit tutorial</button></div></div></div>
     <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M6 19v-6.3A3.6 3.6 0 0 1 4.5 9.6C4.5 7 7 5.5 9 5.5h6c2 0 4.5 1.5 4.5 4.1a3.6 3.6 0 0 1-1.5 3.1V19z"/><path pathLength="1" d="M9.5 9.5l1.2 2.2M13.3 9.5l1.2 2.2"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
     <div class="clockbar" role="timer" aria-label="Current time"><span id="clk-time" class="clk-time"></span><span id="clk-date" class="clk-date"></span></div>
     <div class="subnav" id="subnav" hidden></div>
@@ -924,6 +941,7 @@ input[type=text],input[type=number],select,textarea{
           <label class="check" for="p-rm"><input type="checkbox" id="p-rm"><span>Reduce motion<small>Stops animations.</small></span></label>
           <label class="check" for="p-plain"><input type="checkbox" id="p-plain"><span>Plain words<small>Swaps terms like "sodium" for "salt" on the Today page.</small></span></label>
         </div>
+        <div class="card stack" id="tour-set"><div class="sh"><h3>Tutorial</h3><p class="small muted">A short walkthrough of every page. You can leave it at any time.</p></div><div class="row"><button class="btn" data-act="tourstart">Replay the tutorial</button></div></div>
         <div class="card stack" id="fv-card">
           <div class="sh"><h3>Your favorites</h3><p class="small muted">Top workouts show on your home page. Your favorite verse shows on the Scripture page.</p></div>
           <p class="small" id="fv-top"></p>
@@ -1490,7 +1508,7 @@ function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:true,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,topW:[],favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],favVerse:'',
     sleep:6.2,hrv:48,sore:3,
     meals:[],labs:{fe:22,vd:24,b12:410},
     override:false,coachMsg:null,imported:[],
@@ -1652,8 +1670,65 @@ function haInit(){
   HEROART.ember=haS(haF('M120 24C130 78 192 108 192 190A72 72 0 0 1 48 190C48 150 76 130 88 98C98 124 106 130 114 130C124 96 106 70 120 24z')+'<path class="ha-l" d="M120 150C130 176 152 186 152 214A32 32 0 0 1 88 214C88 196 104 188 108 170C112 180 116 184 120 184C124 168 114 160 120 150z"/><circle class="ha-f" cx="44" cy="110" r="4"/><circle class="ha-f" cx="206" cy="132" r="3"/><circle class="ha-f" cx="198" cy="76" r="5"/>');
 }
 
+
+/* ---------- welcome and tutorial ---------- */
+var TOUR=[
+ {v:'today',sel:'.hero',t:'This is Home',p:'Your name, the verse of the day and the date. Tap "Read the chapter" to open it in the Bible reader.'},
+ {v:'today',sel:'#t-energy',t:"Today's progress",p:'Calories, protein, water and workouts for the day in one place. Tap a number to change it, and choose which stats you want to see.'},
+ {v:'today',sel:'#t-train',t:"Today's workout",p:'The workout from your schedule, plus your top 3 workouts. Tap one to open it.'},
+ {v:'today',sel:'#t-check',t:'Daily checklist',p:'Small habits for the day. You can add your own items. Use the reorder button at the bottom of Home to move or hide any card.'},
+ {v:'eat',sel:'#v-eat .vh',t:'Log what you eat',p:'Type a food, snap a photo or describe a meal. Tap a result to see its macros, change the amount and add it to today. Anything Claude estimates is saved so you can use it again.'},
+ {v:'eat',sel:'#t-targets',t:'Your targets',p:'Your calorie and macro goals, worked out from your goals, age, height, weight and activity. You can change them in Settings.'},
+ {v:'meals',sel:'#m-sum',t:"Today's meals",p:'Everything you logged today, in order, with the time you logged it.'},
+ {v:'foods',sel:'#v-foods .vh',t:'Browse foods',p:'About 7,500 everyday foods plus fast food, scored against your targets. Search or filter, then tap a food for details.'},
+ {v:'log',sel:'#v-log .vh',t:'Fast logging',p:'Type a sentence like "two eggs and toast" to log a meal. Foods you log often show up here for one tap.'},
+ {v:'workouts',sel:'#w-sbox',t:'Find a workout',p:'Search by name, sport or exercise, or answer a few questions: what kind of workout, then the muscles. Sports go straight to a list from easy to hard.'},
+ {v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and Claude builds it. Every workout can be changed with the Configure button.'},
+ {v:'schedule',sel:'#sh-plans',t:'Three schedules',p:'Name each schedule and pick a workout for every day. The selected schedule drives Today and your home page.'},
+ {v:'history',sel:'#v-history .vh',t:'Workout history',p:'Every finished session with the sets you logged, plus your week at a glance.'},
+ {v:'scripture',sel:'#sc-votd',t:'Word for today',p:'A new verse each day and the whole Bible to read. Your favorite verse shows here too.'},
+ {v:'community',sel:'#v-community .vh',t:'Community',p:'Join a challenge, send kudos, message a coach, and choose exactly what each group can see.'},
+ {v:'safeguards',sel:'#v-safeguards .vh',t:'Eating safeguards',p:'Controls that keep counting healthy: hide numbers, keep a calorie floor, and get a gentle check-in after a hard week.'},
+ {v:'themes',sel:'#th-now',t:'Themes',p:'Default is plain white or black. The other twelve each match a mood in scripture. Leave it on the verse of the day, or pick one and keep it.'},
+ {v:'settings',sel:'#g-card',t:'Goals and body',p:'Change your goals, age, height and activity any time. Your targets update, and you can type your own numbers.'},
+ {v:'settings',sel:'#tour-set',t:'That is the tour',p:'You can replay this tutorial here any time. Welcome to Manna.'}
+];
+var TS={i:0,on:false,t:0};
+function tourStart(){TS.i=0;TS.on=true;$('#tour').hidden=false;tourShow()}
+function tourEnd(){TS.on=false;clearTimeout(TS.t);$('#tour').hidden=true;var first=!S.toured;S.toured=true;location.hash='#today';window.scrollTo(0,0);refresh();toast(first?'You can replay the tutorial in Settings.':'Tutorial closed.')}
+function tourShow(){
+  var st=TOUR[TS.i];
+  $('#tour-n').textContent='Step '+(TS.i+1)+' of '+TOUR.length;$('#tour-t').textContent=st.t;$('#tour-p').textContent=st.p;
+  $('#tour-back').style.visibility=TS.i?'visible':'hidden';$('#tour-next').textContent=TS.i===TOUR.length-1?'Done':'Next';
+  if(location.hash!=='#'+st.v)location.hash='#'+st.v;
+  clearTimeout(TS.t);TS.t=setTimeout(tourPlace,220);
+  var c=$('#tour-card');c.classList.remove('top');c.classList.add('bot');
+  setTimeout(function(){$('#tour-t').focus({preventScroll:true})},30);
+}
+function tourPlace(){
+  if(!TS.on)return;var st=TOUR[TS.i],el=st.sel&&document.querySelector(st.sel),hl=$('#tour-hl'),c=$('#tour-card');
+  if(el&&el.getClientRects().length){
+    el.scrollIntoView({block:'center'});
+    setTimeout(function(){if(!TS.on)return;var r=el.getBoundingClientRect(),h=Math.min(r.height,window.innerHeight*.6);
+      hl.style.left=(r.left-6)+'px';hl.style.top=(r.top-6)+'px';hl.style.width=(r.width+12)+'px';hl.style.height=(h+12)+'px';
+      var mid=r.top+h/2;c.classList.toggle('top',mid>window.innerHeight*.52);c.classList.toggle('bot',mid<=window.innerHeight*.52)},90);
+  }else{hl.style.left='50%';hl.style.top='40%';hl.style.width='0';hl.style.height='0';c.classList.remove('top');c.classList.add('bot')}
+}
+(function(){var t=document.getElementById('tour');if(!t)return;
+  t.addEventListener('click',function(e){var b=e.target.closest('[data-tour]');if(!b)return;var a=b.dataset.tour;
+    if(a==='exit')tourEnd();else if(a==='back'){if(TS.i>0){TS.i--;tourShow()}}else{if(TS.i>=TOUR.length-1)tourEnd();else{TS.i++;tourShow()}}});
+  document.addEventListener('keydown',function(e){if(TS.on&&e.key==='Escape')tourEnd()});
+  window.addEventListener('resize',function(){if(TS.on)tourPlace()})})();
+function welcomeThenTour(){
+  var w=$('#wel'),nm=(S.name&&S.name!=='Friend')?S.name:'';location.hash='#today';
+  $('#wel-ic').innerHTML=ICON.apple;$('#wel-h').textContent=nm?'Welcome, '+nm+'.':'Welcome.';
+  w.classList.remove('out');w.hidden=false;var done=false;
+  function go(){if(done)return;done=true;w.classList.add('out');setTimeout(function(){w.hidden=true;tourStart()},550)}
+  w.onclick=go;setTimeout(go,2800);
+}
+
 /* ---------- first-run setup ---------- */
-var ONB={step:0,back:false,shown:0,raf:0},ONBN=8;
+var ONB={step:0,back:false,shown:0,raf:0,wq:'',wc:'all',we:'all'},ONBN=8;
 function onbSrc(){return ONB.in||(S.onboarded?{a:S.age,kg:S.weight,h:S.height}:{a:NaN,kg:NaN,h:NaN})}
 function onbOk(x){return isFinite(x)&&x>0}
 function onbH(){var h=onbSrc().h,i=onbOk(h)?Math.round(h/2.54):NaN;return S.units==='lb'?'<div class="onb-row"><label class="f" for="onb-ft">Height (ft)<input type="number" id="onb-ft" data-oi="1" min="3" max="7" inputmode="numeric" placeholder="ft" value="'+(onbOk(i)?Math.floor(i/12):'')+'"></label><label class="f" for="onb-in">(in)<input type="number" id="onb-in" data-oi="1" min="0" max="11" inputmode="numeric" placeholder="in" value="'+(onbOk(i)?i%12:'')+'"></label></div>':'<div class="onb-row"><label class="f" for="onb-cm">Height (cm)<input type="number" id="onb-cm" data-oi="1" min="120" max="230" inputmode="numeric" placeholder="e.g. 175" value="'+(onbOk(h)?Math.round(h):'')+'"></label><span></span></div>'}
@@ -1663,7 +1738,7 @@ function onbPanel(n){
   if(n===2)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">About you</h2><p>These are used only to estimate how much energy your body needs.</p><div class="onb-seg" role="group" aria-label="Sex">'+[['female','Female'],['male','Male'],['other','Prefer not to say']].map(function(x){return '<button type="button" class="chip" data-onb="sex" data-k="'+x[0]+'" aria-pressed="'+(S.sex===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-seg" role="group" aria-label="Units">'+[['kg','kg and cm'],['lb','lb and ft']].map(function(x){return '<button type="button" class="chip" data-onb="unit" data-k="'+x[0]+'" aria-pressed="'+(S.units===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-row"><label class="f" for="onb-age">Age<input type="number" id="onb-age" data-oi="1" min="14" max="90" inputmode="numeric" placeholder="e.g. 30" value="'+(onbOk(onbSrc().a)?onbSrc().a:'')+'"></label><label class="f" for="onb-wt">Weight ('+S.units+')<input type="number" id="onb-wt" data-oi="1" step="0.1" inputmode="decimal" placeholder="e.g. '+(S.units==='lb'?'165':'75')+'" value="'+(onbOk(onbSrc().kg)?Math.round((S.units==='lb'?onbSrc().kg*2.20462:onbSrc().kg)*10)/10:'')+'"></label></div>'+onbH()+'</div>';
   if(n===3)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">How active are you?</h2><p>Think about a normal week, including work.</p><div class="onb-opts" role="radiogroup" aria-label="Activity level">'+ACTS.map(function(a){return '<button type="button" class="onb-opt" role="radio" data-onb="act" data-k="'+a[0]+'" aria-checked="'+(S.activity===a[0])+'" aria-pressed="'+(S.activity===a[0])+'"><b>'+a[1]+'</b><span>'+a[2]+'</span></button>'}).join('')+'</div></div>';
   if(n===5){var order=THEMES.filter(function(t){return t.id==='plain'}).concat(THEMES.filter(function(t){return t.id!=='plain'}));return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Pick a look</h2><p>The Default theme is plain white or black and follows your device. Tap any theme to preview it right now.</p><div class="onb-themes" role="radiogroup" aria-label="Theme">'+order.map(function(t){return '<button type="button" class="onb-th" role="radio" data-onb="theme" data-k="'+t.id+'" aria-checked="'+(S.themeMode===t.id)+'" aria-pressed="'+(S.themeMode===t.id)+'"><i style="background:'+t.sw+'"></i><b>'+esc(t.name)+(t.id==='plain'?' (default)':'')+'</b><span>'+esc(t.mood)+'</span></button>'}).join('')+'</div></div>'}
-  if(n===6)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your top 3 workouts</h2><p>Choose up to three you love. They show up on your home page. <b id="onb-wc" aria-live="polite">'+S.topW.length+' of 3 picked</b></p><div class="onb-opts onb-wlist" role="group" aria-label="Workouts" tabindex="0">'+LIB.map(function(w){return '<button type="button" class="onb-opt" data-onb="wk" data-id="'+w.id+'" aria-pressed="'+(S.topW.indexOf(w.id)>-1)+'"><b>'+esc(w.name)+'</b><span>'+esc(CATS[w.cat]||w.cat)+' · '+w.mins+' min · '+esc(w.focus)+'</span></button>'}).join('')+'</div></div>';
+  if(n===6)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your top 3 workouts</h2><p>Choose up to three you love. They show up on your home page. <b id="onb-wc" aria-live="polite">'+S.topW.length+' of 3 picked</b></p><label class="f" for="onb-wq">Search workouts<input type="search" id="onb-wq" data-oi="1" autocomplete="off" placeholder="Try soccer, legs, plank" value="'+esc(ONB.wq)+'"></label><div class="onb-wf"><p class="eyebrow">Type or sport</p><div class="onb-seg" id="onb-wcats" role="group" aria-label="Filter by type or sport"></div><p class="eyebrow">Equipment</p><div class="onb-seg" id="onb-weqs" role="group" aria-label="Filter by equipment"></div></div><p class="small muted" id="onb-wn" aria-live="polite"></p><div class="onb-opts onb-wlist" id="onb-wl" role="group" aria-label="Workouts" tabindex="0"></div></div>';
   if(n===7)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your favorite Bible verse</h2><p>Optional. Type a reference like John 3:16 or Philippians 4:13. You can change it any time in Settings.</p><label class="f" for="onb-v">Favorite verse<input type="text" id="onb-v" data-oi="1" maxlength="80" autocomplete="off" placeholder="John 3:16" value="'+esc(S.favVerse||'')+'"></label><div class="note" id="onb-vp" aria-live="polite" hidden></div></div>';
   var C=2*Math.PI*52;
   return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your recommended targets</h2><p id="onb-note">These are the recommended numbers for your goals and body. You can change any of them.</p><div class="onb-ring"><svg viewBox="0 0 130 130" aria-hidden="true"><circle class="bg" cx="65" cy="65" r="52"/><circle class="seg" id="seg-p" cx="65" cy="65" r="52" stroke="var(--accent)" stroke-dasharray="0 '+C+'"/><circle class="seg" id="seg-c" cx="65" cy="65" r="52" stroke="var(--ok)" stroke-dasharray="0 '+C+'"/><circle class="seg" id="seg-f" cx="65" cy="65" r="52" stroke="var(--warn)" stroke-dasharray="0 '+C+'"/></svg><div class="mid"><b id="onb-kn">0</b><span>cal a day</span></div></div><div class="onb-leg"><span><i style="background:var(--accent)"></i>Protein <b id="lg-p"></b></span><span><i style="background:var(--ok)"></i>Carbs <b id="lg-c"></b></span><span><i style="background:var(--warn)"></i>Fat <b id="lg-f"></b></span></div><div class="onb-row"><label class="f" for="onb-k">Calories<input type="number" id="onb-k" data-oi="1" min="1200" max="5000" step="10" inputmode="numeric"></label><label class="f" for="onb-p">Protein (g)<input type="number" id="onb-p" data-oi="1" min="20" max="500" inputmode="numeric"></label><label class="f" for="onb-c">Carbs (g)<input type="number" id="onb-c" data-oi="1" min="0" max="1000" inputmode="numeric"></label><label class="f" for="onb-f">Fat (g)<input type="number" id="onb-f" data-oi="1" min="10" max="300" inputmode="numeric"></label></div><div class="row"><button type="button" class="btn sm" data-onb="reset" id="onb-reset" hidden>Reset to recommended</button></div><p class="small muted">A general estimate, not medical advice. Ask a clinician or dietitian if you have a health condition.</p></div>';
@@ -1680,6 +1755,19 @@ function onbResults(anim){
   if(rm||!anim&&false){el.textContent=fmt(to);ONB.shown=to;return}
   (function tick(t){var p=Math.min(1,(t-t0)/900),e=1-Math.pow(1-p,3);ONB.shown=Math.round(from+(to-from)*e);el.textContent=fmt(ONB.shown);if(p<1)ONB.raf=requestAnimationFrame(tick)})(t0);
 }
+function onbWL(){
+  var all=allWorkouts(),cats=['all'].concat(TORDER.concat(SPORTS).filter(function(k){return all.some(function(w){return w.cat===k})}));
+  $('#onb-wcats').innerHTML=cats.map(function(k){return '<button type="button" class="chip" data-onb="wcat" data-k="'+k+'" aria-pressed="'+(ONB.wc===k)+'">'+esc(k==='all'?'All':CATS[k])+'</button>'}).join('');
+  $('#onb-weqs').innerHTML=['all'].concat(Object.keys(EQ)).map(function(k){return '<button type="button" class="chip" data-onb="weq" data-k="'+k+'" aria-pressed="'+(ONB.we===k)+'">'+esc(k==='all'?'Any':EQ[k])+'</button>'}).join('');
+  var t=ONB.wq.toLowerCase().split(/\s+/).filter(Boolean);
+  var L=sortLv(all.filter(function(w){
+    if(ONB.wc!=='all'&&w.cat!==ONB.wc)return false;
+    if(ONB.we!=='all'&&(w.eq||[]).indexOf(ONB.we)<0)return false;
+    var h=(w.name+' '+(w.focus||'')+' '+(CATS[w.cat]||'')+' '+w.level+' '+w.ex.map(function(e){return e[0]}).join(' ')).toLowerCase();
+    return t.every(function(x){return h.indexOf(x)>-1})}));
+  $('#onb-wn').textContent=L.length+(L.length===1?' workout':' workouts')+', easiest first';
+  $('#onb-wl').innerHTML=L.length?L.map(function(w){return '<button type="button" class="onb-opt" data-onb="wk" data-id="'+w.id+'" aria-pressed="'+(S.topW.indexOf(w.id)>-1)+'"><b>'+esc(w.name)+'</b><span>'+esc(CATS[w.cat]||w.cat)+' · '+w.mins+' min · '+esc(w.level)+' · '+esc(w.focus||'')+'</span></button>'}).join(''):'<p class="muted">No workouts match. Try fewer filters.</p>';
+}
 function onbRender(){
   var b=$('#onb-body');b.innerHTML=onbPanel(ONB.step);if(ONB.back)$('.onb-panel',b).classList.add('back');
   $('#onb-dots').innerHTML=Array.apply(null,Array(ONBN)).map(function(_,i){return '<i class="'+(i===ONB.step?'on':'')+'"></i>'}).join('');
@@ -1687,12 +1775,13 @@ function onbRender(){
   $('#onb-next').textContent=ONB.step===0?'Get started':(ONB.step===ONBN-1?'Finish':'Next');
   $('#onb-skip').hidden=ONB.step===ONBN-1;$('#onb-msg').textContent='';
   if(ONB.step===4){ONB.shown=0;requestAnimationFrame(function(){requestAnimationFrame(function(){onbResults(true)})})}
+  if(ONB.step===6)onbWL();
   if(ONB.step===7)onbVerse();
   setTimeout(function(){var h=$('#onb-h');if(h)h.focus({preventScroll:true})},60);
   $('#onb').scrollTop=0;
 }
-function onbOpen(step){ONB.in=null;ONB.step=step||0;ONB.back=false;var o=$('#onb');o.hidden=false;o.classList.remove('closing');onbRender()}
-function onbClose(){S.onboarded=true;var o=$('#onb');o.classList.add('closing');setTimeout(function(){o.hidden=true;o.classList.remove('closing')},520);refresh()}
+function onbOpen(step){ONB.wq='';ONB.wc='all';ONB.we='all';ONB.in=null;ONB.step=step||0;ONB.back=false;var o=$('#onb');o.hidden=false;o.classList.remove('closing');onbRender()}
+function onbClose(){var first=!S.toured;S.onboarded=true;var o=$('#onb');o.classList.add('closing');setTimeout(function(){o.hidden=true;o.classList.remove('closing');if(first)welcomeThenTour()},520);refresh()}
 function onbValid(){var m='',x=ONB.in||{a:NaN,kg:NaN,h:NaN};
   if(!onbOk(x.a)||!onbOk(x.kg)||!onbOk(x.h))m='Fill in your age, weight and height to get your targets.';
   else if(!(x.a>=14&&x.a<=90))m='Enter an age between 14 and 90.';
@@ -1711,6 +1800,8 @@ var ONBACT={
   sex:function(b){S.sex=b.dataset.k;$$('[data-onb=sex]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})},
   unit:function(b){onbReadBody();S.units=b.dataset.k;onbRender()},
   act:function(b){S.activity=b.dataset.k;$$('[data-onb=act]').forEach(function(x){var on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)})},
+  wcat:function(b){ONB.wc=b.dataset.k;onbWL()},
+  weq:function(b){ONB.we=b.dataset.k;onbWL()},
   reset:function(){S.goalKcal=null;S.macroOv={p:null,c:null,f:null};onbResults(true)},
   theme:function(b){S.themeMode=b.dataset.k;$$('[data-onb=theme]').forEach(function(x){var on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)});refresh()},
   wk:function(b){var id=b.dataset.id,i=S.topW.indexOf(id);if(i>-1)S.topW.splice(i,1);else if(S.topW.length<3)S.topW.push(id);else{$('#onb-msg').textContent='You can pick 3. Tap one you picked to swap it.';return}
@@ -1728,6 +1819,7 @@ function onbReadBody(){
 }
 function onbInput(e){
   var t=e.target;if(!t.dataset||!t.dataset.oi)return;
+  if(t.id==='onb-wq'){ONB.wq=t.value;onbWL();return}
   if(t.id==='onb-v'){S.favVerse=t.value.trim().slice(0,80);onbVerse();return}
   if(ONB.step!==4)return;
   var v=Math.round(parseFloat(t.value));if(!isFinite(v))return;var R=rec();
@@ -1740,9 +1832,9 @@ function onbInput(e){
 (function(){var o=document.getElementById('onb');if(!o)return;
   o.addEventListener('click',function(e){var b=e.target.closest('[data-onb]');if(b&&ONBACT[b.dataset.onb])ONBACT[b.dataset.onb](b)});
   o.addEventListener('input',onbInput);
-  o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4)ONBACT.next()}})})();
+  o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='61';
+var heroLast='',APPV='62';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2818,6 +2910,7 @@ var ACT={
   },
   gtog:function(b){var k=b.dataset.k,g=goalSet().slice(),i=g.indexOf(k);if(i>-1){if(g.length>1)g.splice(i,1)}else g.push(k);S.goals=g;legacyGoal();S.goalKcal=null;S.macroOv={p:null,c:null,f:null};S.goalMsg=['ok','Targets updated for your goals.']},
   recuse:function(){S.goalKcal=null;S.macroOv={p:null,c:null,f:null};S.goalMsg=['ok','Back to the recommended targets.']},
+  tourstart:function(){tourStart()},
   onbopen:function(b){onbOpen(b&&b.dataset&&b.dataset.s?+b.dataset.s:0)},
   goalauto:function(){S.macroOv={p:null,c:null,f:null};S.goalKcal=null;S.goalMsg=['ok','Using the suggested goal for your profile.'];$('#sg-goal').value=targets().kcal},
   week:function(b){S.week=b.dataset.k},
