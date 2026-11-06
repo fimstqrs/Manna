@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Sitemap: https://manna-beta-five.vercel.app/sitemap.xml
