@@ -613,9 +613,19 @@ input[type=text],input[type=number],select,textarea{
 .onb-wf{margin:.2rem 0 .6rem}.onb-wf .eyebrow{margin:.5rem 0 .3rem}
 </style>
 
+<style id="logo-style">
+/* Logo is black and white: white on the coloured themes, black on Default light */
+:root{--logo:#FFFFFF;--logo-bg:#000000}
+[data-vtheme="plain"]{--logo:#000000;--logo-bg:#FFFFFF}
+@media (prefers-color-scheme:dark){[data-vtheme="plain"]{--logo:#FFFFFF;--logo-bg:#000000}}
+.brand b{color:var(--logo)}
+.brand b svg.logo-mark{width:28px;height:28px;color:var(--logo)}
+.sp-ic{color:var(--logo)}
+.sp-t{color:var(--logo)}
+</style>
 <div class="shell">
   <aside class="side">
-    <div class="brand"><b><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 39V25a8 8 0 0 1-3.5-6.5C7.5 12 13.5 9 18.5 9h11c5 0 11 3 11 9.5A8 8 0 0 1 37 25v14z"/><path d="M24 15v13M19 19.5h10"/></svg>Manna</b><span>Food and workout tracker, demo with sample data</span></div>
+    <div class="brand"><b><svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M12 40V26.2C7.6 24.6 5 21.2 5 17.2 5 11.2 10.9 7 18 7h12c7.1 0 13 4.2 13 10.2 0 4-2.6 7.4-7 9V40a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3zM22.5 12.5h3v4.75h4.75v3H25.5V31h-3V20.25h-4.75v-3h4.75z"/></svg>Manna</b><span>Food and workout tracker, demo with sample data</span></div>
     <nav class="nav" id="nav" aria-label="Sections"></nav>
   </aside>
 
@@ -628,7 +638,7 @@ input[type=text],input[type=number],select,textarea{
     </div>
     <div id="wel" role="status" aria-live="polite" hidden><div class="wel-in"><div class="wel-ic" id="wel-ic"></div><h2 id="wel-h"></h2><p>Let's take a quick look around.</p></div></div>
     <div id="tour" hidden><div id="tour-hl" aria-hidden="true"></div><div id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-t"><p class="eyebrow" id="tour-n"></p><h3 id="tour-t" tabindex="-1"></h3><p id="tour-p"></p><div class="tour-btns"><button class="btn" data-tour="back" id="tour-back">Back</button><button class="btn primary" data-tour="next" id="tour-next">Next</button><button class="btn" data-tour="exit" id="tour-exit">Exit tutorial</button></div></div></div>
-    <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M11 39V25a8 8 0 0 1-3.5-6.5C7.5 12 13.5 9 18.5 9h11c5 0 11 3 11 9.5A8 8 0 0 1 37 25v14z"/><path pathLength="1" d="M24 15v13M19 19.5h10"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
+    <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 48 48"><path fill="currentColor" fill-rule="evenodd" d="M12 40V26.2C7.6 24.6 5 21.2 5 17.2 5 11.2 10.9 7 18 7h12c7.1 0 13 4.2 13 10.2 0 4-2.6 7.4-7 9V40a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3zM22.5 12.5h3v4.75h4.75v3H25.5V31h-3V20.25h-4.75v-3h4.75z"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
     <div class="clockbar" role="timer" aria-label="Current time"><span id="clk-time" class="clk-time"></span><span id="clk-date" class="clk-date"></span></div>
     <div class="subnav" id="subnav" hidden></div>
     <!-- TODAY -->
@@ -3228,16 +3238,16 @@ haInit();syncInputs();if(!S.onboarded)onbOpen(0);refresh();show();webLoad();usda
 })();
 </script>
 <script>
-/* Favicon follows the theme: redraw the loaf in the current --bg and --accent */
+/* Favicon follows the theme in black and white: solid loaf in --logo on --logo-bg */
 (function(){
   var link=document.getElementById('manna-favicon');if(!link)return;
-  var LOAF='<path d="M11 39V25a8 8 0 0 1-3.5-6.5C7.5 12 13.5 9 18.5 9h11c5 0 11 3 11 9.5A8 8 0 0 1 37 25v14z"/><path d="M24 15v13M19 19.5h10"/>';
+  var D="M12 40V26.2C7.6 24.6 5 21.2 5 17.2 5 11.2 10.9 7 18 7h12c7.1 0 13 4.2 13 10.2 0 4-2.6 7.4-7 9V40a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3zM22.5 12.5h3v4.75h4.75v3H25.5V31h-3V20.25h-4.75v-3h4.75z";
   var last='';
   function paint(){
     var cs=getComputedStyle(document.documentElement);
-    var bg=cs.getPropertyValue('--bg').trim()||'#52101A',fg=cs.getPropertyValue('--accent').trim()||'#E9D2C7';
+    var fg=cs.getPropertyValue('--logo').trim()||'#FFFFFF',bg=cs.getPropertyValue('--logo-bg').trim()||'#000000';
     if(bg+fg===last)return;last=bg+fg;
-    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="'+bg+'"/><g transform="translate(8 7)" fill="none" stroke="'+fg+'" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">'+LOAF+'</g></svg>';
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="'+bg+'"/><path transform="translate(8 7)" fill="'+fg+'" fill-rule="evenodd" d="'+D+'"/></svg>';
     link.href='data:image/svg+xml,'+encodeURIComponent(svg);
   }
   paint();
