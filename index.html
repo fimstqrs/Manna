@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manna: Fuel, Faith and Fitness</title><meta name="description" content="Manna is a free food, calorie and workout tracker with personalized targets and a daily Bible verse."><link rel="canonical" href="https://manna-beta-five.vercel.app/"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website"><meta property="og:title" content="Manna: Fuel, Faith and Fitness"><meta property="og:description" content="Track food and workouts with personalized targets and a daily Bible verse."><meta property="og:url" content="https://manna-beta-five.vercel.app/"><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box}</style></head><body><title>Manna</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manna: Fuel, Faith and Fitness</title><meta name="description" content="Manna is a free food, calorie and workout tracker with personalized targets and a daily Bible verse."><link rel="canonical" href="https://manna-beta-five.vercel.app/"><meta name="theme-color" content="#ffffff"><link rel="icon" type="image/svg+xml" href="/favicon.svg" id="manna-favicon"><meta property="og:type" content="website"><meta property="og:title" content="Manna: Fuel, Faith and Fitness"><meta property="og:description" content="Track food and workouts with personalized targets and a daily Bible verse."><meta property="og:url" content="https://manna-beta-five.vercel.app/"><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box}</style></head><body><title>Manna</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -615,7 +615,7 @@ input[type=text],input[type=number],select,textarea{
 
 <div class="shell">
   <aside class="side">
-    <div class="brand"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M12 3v18M6 8h12"/></svg>Manna</b><span>Food and workout tracker, demo with sample data</span></div>
+    <div class="brand"><b><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M11 39V25a8 8 0 0 1-3.5-6.5C7.5 12 13.5 9 18.5 9h11c5 0 11 3 11 9.5A8 8 0 0 1 37 25v14z"/><path d="M24 15v13M19 19.5h10"/></svg>Manna</b><span>Food and workout tracker, demo with sample data</span></div>
     <nav class="nav" id="nav" aria-label="Sections"></nav>
   </aside>
 
@@ -628,7 +628,7 @@ input[type=text],input[type=number],select,textarea{
     </div>
     <div id="wel" role="status" aria-live="polite" hidden><div class="wel-in"><div class="wel-ic" id="wel-ic"></div><h2 id="wel-h"></h2><p>Let's take a quick look around.</p></div></div>
     <div id="tour" hidden><div id="tour-hl" aria-hidden="true"></div><div id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-t"><p class="eyebrow" id="tour-n"></p><h3 id="tour-t" tabindex="-1"></h3><p id="tour-p"></p><div class="tour-btns"><button class="btn" data-tour="back" id="tour-back">Back</button><button class="btn primary" data-tour="next" id="tour-next">Next</button><button class="btn" data-tour="exit" id="tour-exit">Exit tutorial</button></div></div></div>
-    <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M6 19v-6.3A3.6 3.6 0 0 1 4.5 9.6C4.5 7 7 5.5 9 5.5h6c2 0 4.5 1.5 4.5 4.1a3.6 3.6 0 0 1-1.5 3.1V19z"/><path pathLength="1" d="M9.5 9.5l1.2 2.2M13.3 9.5l1.2 2.2"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
+    <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M11 39V25a8 8 0 0 1-3.5-6.5C7.5 12 13.5 9 18.5 9h11c5 0 11 3 11 9.5A8 8 0 0 1 37 25v14z"/><path pathLength="1" d="M24 15v13M19 19.5h10"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
     <div class="clockbar" role="timer" aria-label="Current time"><span id="clk-time" class="clk-time"></span><span id="clk-date" class="clk-date"></span></div>
     <div class="subnav" id="subnav" hidden></div>
     <!-- TODAY -->
@@ -3225,6 +3225,24 @@ haInit();syncInputs();if(!S.onboarded)onbOpen(0);refresh();show();webLoad();usda
   var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,done=false;
   function end(){if(done)return;done=true;sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},900)}
   sp.addEventListener('click',end);setTimeout(end,rm?700:2600)})();setInterval(tickClock,15000);
+})();
+</script>
+<script>
+/* Favicon follows the theme: redraw the loaf in the current --bg and --accent */
+(function(){
+  var link=document.getElementById('manna-favicon');if(!link)return;
+  var LOAF='<path d="M11 39V25a8 8 0 0 1-3.5-6.5C7.5 12 13.5 9 18.5 9h11c5 0 11 3 11 9.5A8 8 0 0 1 37 25v14z"/><path d="M24 15v13M19 19.5h10"/>';
+  var last='';
+  function paint(){
+    var cs=getComputedStyle(document.documentElement);
+    var bg=cs.getPropertyValue('--bg').trim()||'#52101A',fg=cs.getPropertyValue('--accent').trim()||'#E9D2C7';
+    if(bg+fg===last)return;last=bg+fg;
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="'+bg+'"/><g transform="translate(8 7)" fill="none" stroke="'+fg+'" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">'+LOAF+'</g></svg>';
+    link.href='data:image/svg+xml,'+encodeURIComponent(svg);
+  }
+  paint();
+  new MutationObserver(paint).observe(document.documentElement,{attributes:true,attributeFilter:['data-vtheme','class','style']});
+  if(window.matchMedia){var mq=matchMedia('(prefers-color-scheme: dark)');if(mq.addEventListener)mq.addEventListener('change',paint);}
 })();
 </script>
 </body></html>
