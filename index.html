@@ -1757,12 +1757,12 @@ function onbResults(anim){
   (function tick(t){var p=Math.min(1,(t-t0)/900),e=1-Math.pow(1-p,3);ONB.shown=Math.round(from+(to-from)*e);el.textContent=fmt(ONB.shown);if(p<1)ONB.raf=requestAnimationFrame(tick)})(t0);
 }
 function onbWL(){
-  var all=allWorkouts(),cats=['all'].concat(TORDER.concat(SPORTS).filter(function(k){return all.some(function(w){return w.cat===k})}));
+  var all=allWorkouts(),cats=['all'].concat(TORDER.concat(SPORTS).filter(function(k){return all.some(function(w){return inCat(w,k)})}));
   $('#onb-wcats').innerHTML=cats.map(function(k){return '<button type="button" class="chip" data-onb="wcat" data-k="'+k+'" aria-pressed="'+(ONB.wc===k)+'">'+esc(k==='all'?'All':CATS[k])+'</button>'}).join('');
   $('#onb-weqs').innerHTML=['all'].concat(Object.keys(EQ)).map(function(k){return '<button type="button" class="chip" data-onb="weq" data-k="'+k+'" aria-pressed="'+(ONB.we===k)+'">'+esc(k==='all'?'Any':EQ[k])+'</button>'}).join('');
   var t=ONB.wq.toLowerCase().split(/\s+/).filter(Boolean);
   var L=sortLv(all.filter(function(w){
-    if(ONB.wc!=='all'&&w.cat!==ONB.wc)return false;
+    if(!inCat(w,ONB.wc))return false;
     if(ONB.we!=='all'&&(w.eq||[]).indexOf(ONB.we)<0)return false;
     var h=(w.name+' '+(w.focus||'')+' '+(CATS[w.cat]||'')+' '+w.level+' '+w.ex.map(function(e){return e[0]}).join(' ')).toLowerCase();
     return t.every(function(x){return h.indexOf(x)>-1})}));
@@ -1835,7 +1835,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='64';
+var heroLast='',APPV='65';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2402,10 +2402,12 @@ function allowedEq(m){
   var l=m==='gym'?EQ_GYM:m==='body'?['bodyweight']:m==='cali'?EQ_CALI:S.have.concat(['bodyweight']),o={};
   l.forEach(function(k){o[k]=1});return o;
 }
+var SPKW={soccer:/soccer/,ball:/basketball|hoops/,fball:/football/,base:/baseball|softball/,tennis:/tennis/,golf:/golf/,swim:/swim/,volley:/volleyball/,hockey:/hockey/,cycle:/cycling|cyclist|bicycle|\bbike\b|\bspin\b/};
+function inCat(w,c){if(c==='all')return true;if(w.cat===c)return true;var r=SPKW[c];return !!(r&&r.test((w.name+' '+(w.focus||'')).toLowerCase()))}
 function libList(f){
   f=f||S.wf;var ok=allowedEq(f.access);
   return allWorkouts().filter(function(w){
-    if(f.cat!=='all'&&w.cat!==f.cat)return false;
+    if(!inCat(w,f.cat))return false;
     if(ok&&w.cat!=='custom'&&!(Array.isArray(w.eq)?w.eq:[]).every(function(k){return ok[k]}))return false;
     if(f.mu!=='all'&&!wMuscles(w)[f.mu])return false;
     return true;
