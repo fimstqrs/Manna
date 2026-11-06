@@ -1736,7 +1736,6 @@ function targets(){
   var protein=S.cond.glp1?Math.max(M.protein,Math.round(S.weight*1.6)):M.protein;
   if(ov.p!=null)protein=ov.p;
   var carb=ov.c!=null?ov.c:M.carb,fat=ov.f!=null?ov.f:M.fat;
-  notes.push('Protein set at '+(Math.round(protein/S.weight*10)/10)+' g per kg'+(S.cond.glp1&&ov.p==null?' because of a GLP-1 medicine.':'.'));
   var sodium=S.cond.htn?1500:2300;
   if(S.cond.htn)notes.push('Sodium capped at 1,500 mg for high blood pressure.');
   var iron=S.mens?18:8;
@@ -1996,7 +1995,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='84';
+var heroLast='',APPV='85';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
