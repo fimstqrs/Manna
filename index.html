@@ -674,6 +674,14 @@ a,button,.chip,.btn,.wcard,.fcard,.onb-wt,.onb-opt,.tile,.scard,.action,label.ch
 /* Slower phones: shorter, lighter motion */
 html.lite .view:not([hidden])>*{animation-duration:.35s!important}
 html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
+.wdue{border:2px solid var(--accent)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent),0 10px 30px rgba(0,0,0,.18)!important}
+.pill.due{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.wdue-t{font-size:1.9rem!important;line-height:1.1}
+.wgo{font-size:1.02rem;padding:.7rem 1.4rem}
+.wdue .wdet{grid-template-columns:minmax(0,1fr) 200px}
+.wdue-act{margin-top:.2rem}
+@media (max-width:560px){.wdue .wdet{grid-template-columns:minmax(0,1fr)}.wdue .mumap{max-width:170px}.wdue-act .wgo{flex:1 1 100%;text-align:center}.wdue-act>*{flex:1 1 auto;text-align:center}}
+@media (prefers-reduced-motion:no-preference){.wdue:not([hidden]){animation:lg-in .55s cubic-bezier(.2,.8,.2,1) backwards}}
 .wrec{display:flex;flex-direction:column;gap:.35rem;min-width:0}
 .wrec>.wcard{flex:1}
 .wdone{font:500 .78rem var(--f-body);color:var(--muted);padding-left:.2rem}
@@ -766,6 +774,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <section class="view" id="v-workouts" hidden>
       <header class="vh"><p class="eyebrow">Fitness</p><h2>Workouts</h2>
         <p class="lede">Answer a few quick questions and pick a workout. You can go back at any step to change something.</p></header>
+      <div class="card stack wdue" id="w-due" hidden></div>
       <div class="card stack" id="w-recent"></div>
       <div class="card stack" id="w-saved"></div>
       <div class="card stack" id="w-sbox"><label class="f" for="w-q">Search workouts<input type="search" id="w-q" autocomplete="off" placeholder="Try soccer, legs, 20 minutes, plank"></label><div id="w-sres" aria-live="polite"></div></div>
@@ -812,7 +821,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <!-- HISTORY -->
     <section class="view" id="v-history" hidden>
       <header class="vh"><p class="eyebrow">Fitness</p><h2>Workout history</h2>
-        <p class="lede">Every finished session, with the sets you logged. The four sample sessions can be removed.</p></header>
+        <p class="lede">Every finished session, with the sets you logged.</p></header>
       <div id="hs-body" class="stack"></div>
     </section>
 
@@ -1067,6 +1076,13 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         <div class="card stack">
           <div class="sh"><h3>Food scoring</h3><p class="small muted">Pick what foods are scored on. The 1 to 10 score and the numbers on each food card follow these.</p></div>
           <div class="chips" id="p-track" role="group" aria-label="Food scoring targets"></div>
+        </div>
+        <div class="card stack" id="fb-card">
+          <div class="sh"><h3>Feedback</h3><p class="small muted">Found a bug or have an idea? Tell us. It opens your email app with your note ready to send.</p></div>
+          <label class="f" for="fb-type">What is it about?<select id="fb-type"><option>An idea</option><option>Something is broken</option><option>A question</option><option>Something else</option></select></label>
+          <label class="f" for="fb-text">Your feedback<textarea id="fb-text" maxlength="2000" placeholder="What happened, or what would make Manna better?"></textarea></label>
+          <div class="row"><button class="btn primary" data-act="fbsend">Send feedback</button></div>
+          <p class="small muted">Or email <a href="mailto:fimipopoola2011@gmail.com?subject=Manna%20feedback">fimipopoola2011@gmail.com</a> directly.</p>
         </div>
         <div class="card stack">
           <div class="sh"><h3>Bible and credits</h3></div>
@@ -1606,6 +1622,7 @@ function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
 var PSKIP=['est','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals}}catch(e){}
+  d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
   ['S1','S2','S3'].forEach(function(k){if(!Array.isArray(d.plans[k])||d.plans[k].length!==7)d.plans[k]=[null,null,null,null,null,null,null];if(typeof d.planNames[k]!=='string')d.planNames[k]=''});
   if(!d.plans[d.planId]||['S1','S2','S3'].indexOf(d.planId)<0)d.planId='S1';
   d.sched=schedFrom(d);return d}
@@ -1625,7 +1642,7 @@ function defaults0(){
     lang:'en',plain:false,scale:1,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
     name:'Friend',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wedit:false,tord:['actions','energy','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
-    sets:{},hist:sampleHist(),customW:[],selW:'g1',ai:null,notes:null,
+    sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
   SCHED_T.forEach(function(t){s.plans[t.id]=t.days.slice()});
@@ -1940,7 +1957,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='77';
+var heroLast='',APPV='78';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2539,7 +2556,33 @@ function savedSync(){
 function whenDone(ts){var d=new Date(ts),t=new Date();t.setHours(0,0,0,0);var day=new Date(ts);day.setHours(0,0,0,0);var n=Math.round((t-day)/86400000);
   var tm=d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
   if(n===0)return 'Today, '+tm;if(n===1)return 'Yesterday, '+tm;if(n<7)return d.toLocaleDateString('en-US',{weekday:'long'});return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})}
+/* Today's scheduled workout: same rules as the Home page */
+function dueToday(){
+  if(S.ill)return null;var s=sessionView(0);if(!s)return null;
+  var wid=s.w===s.orig?S.sched[0].wid:(s.w==='Steady cardio'?'r1':s.w==='Mobility and easy walk'?'m1':null),w=wid&&wById(wid);if(!w)return null;
+  var st=S.sched[0].st==='done'?'done':(S.sess&&S.sess.wid===wid?'prog':'plan');
+  return {w:w,st:st,why:s.why||'',swapped:s.w!==s.orig};
+}
+function renderDue(z){
+  var el=$('#w-due'),d=z!==4&&dueToday();el.hidden=!d;if(!d)return;
+  var w=d.w,lv=wMuscles(w),other=S.sess&&sessW()&&S.sess.wid!==w.id,st=d.st;
+  var pill='<span class="pill '+(st==='plan'?'due':st)+'">'+(st==='done'?'Done':st==='prog'?'In progress':'Due today')+'</span>';
+  var act;
+  if(st==='prog')act='<a class="btn primary wgo" href="#session" style="text-decoration:none">Resume workout</a>';
+  else if(st==='done')act='<p class="small muted">Nice work. Today’s workout is done.</p><button class="btn" data-act="wsel" data-id="'+w.id+'">See the workout</button>';
+  else if(other)act='<p class="small muted">Finish or cancel your current session first.</p><a class="btn" href="#session" style="text-decoration:none">Go to session</a>';
+  else act='<button class="btn primary wgo" data-act="wstart" data-id="'+w.id+'">Start workout</button><button class="btn" data-act="wsel" data-id="'+w.id+'">See exercises</button>';
+  var pn=(S.planNames&&S.planNames[S.planId]||'').trim();
+  el.innerHTML='<div class="row spread"><span class="eyebrow">'+(pn?'Today · '+esc(pn):'Today’s workout')+'</span>'+pill+'</div>'
+    +'<div class="wdet"><div class="stack" style="gap:.5rem">'+catTag(w.cat)+'<h3 class="wdue-t">'+esc(w.name)+'</h3>'
+    +'<p class="small muted">'+w.mins+' min · '+esc(w.level)+' · '+w.ex.length+(w.ex.length===1?' exercise':' exercises')+(d.why?'<br>'+esc(d.why):'')+'</p>'
+    +'<span class="eyebrow" style="margin-top:.4rem">Muscles worked</span><div class="muchips" style="justify-content:flex-start">'+muChips(lv)+'</div>'
+    +'</div>'
+    +'<div class="mumapwrap">'+muscleSvg(lv)+'<div class="mulegend"><span><i class="m2"></i>Main</span><span><i class="m1"></i>Helping</span></div></div></div>'
+    +'<div class="row wdue-act">'+act+'</div>';
+}
 function renderRecentSaved(z){
+  renderDue(z);
   savedSync();
   var all=allWorkouts(),byId={};all.forEach(function(w){byId[w.id]=w});
   var show=z!==4;
@@ -2660,6 +2703,7 @@ function renderSchedule(){
 
 /* history */
 function renderHistory(){
+  if(!S.hist.length){$('#hs-body').innerHTML='<div class="card stack hempty"><h3>No workouts yet</h3><p class="muted">Finish your first workout and it shows up here, with the sets you logged and your week at a glance.</p><div class="row"><a class="btn primary" href="#workouts" style="text-decoration:none">Find a workout</a></div></div>';return}
   var H=S.hist.slice().sort(function(a,b){return b.ts-a.ts}),ws=weekStart().getTime(),wk=H.filter(function(h){return h.ts>=ws});
   var ms=wk.reduce(function(a,h){return a+(h.ms||0)},0),vol=wk.reduce(function(a,h){return a+(h.vol||0)},0),kc=wk.reduce(function(a,h){return a+(h.kcal||0)},0);
   var h='<div class="card stack"><div class="row spread"><h3>This week</h3><span class="small muted">Since Monday</span></div><div class="sstats">'
@@ -3081,6 +3125,13 @@ var ACT={
     var r=$('#sc-reader');if(r)r.scrollIntoView({block:'start'});
   },
   wsel:function(b){S.selW=b.dataset.id;S.wz=4;window.scrollTo(0,0)},
+  fbsend:function(){
+    var t=($('#fb-text').value||'').trim(),k=$('#fb-type').value;
+    if(!t){toast('Write your feedback first.');$('#fb-text').focus();return}
+    var body=t+'\n\n---\nManna Version '+APPV+' · '+navigator.userAgent;
+    location.href='mailto:fimipopoola2011@gmail.com?subject='+encodeURIComponent('Manna feedback: '+k)+'&body='+encodeURIComponent(body);
+    toast('Opening your email app.');
+  },
   wsave:function(b){var id=b.dataset.id,i=S.savedW.indexOf(id);if(i>-1){S.savedW.splice(i,1);toast('Removed from saved workouts.')}else{S.savedW.unshift(id);toast('Saved. Find it under Saved workouts.')}},
   wnext:function(){var q=wseq(),i=q.indexOf(S.wz);S.wz=q[Math.min(q.length-1,i+1)];window.scrollTo(0,0)},
   wback:function(){var q=wseq(),i=q.indexOf(S.wz);S.wz=i>0?q[i-1]:(S.wz>3?3:0);window.scrollTo(0,0)},
