@@ -1500,7 +1500,7 @@ function defaults0(){
     thread:[{me:false,text:'Your sleep was short two nights in a row, so I kept this week to three hard sessions. Tell me how the knee feels.'}],
     lang:'en',plain:false,scale:1,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Fimi',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wedit:false,tord:['actions','energy','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wedit:false,tord:['actions','energy','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:sampleHist(),customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -1658,7 +1658,7 @@ function onbSrc(){return ONB.in||(S.onboarded?{a:S.age,kg:S.weight,h:S.height}:{
 function onbOk(x){return isFinite(x)&&x>0}
 function onbH(){var h=onbSrc().h,i=onbOk(h)?Math.round(h/2.54):NaN;return S.units==='lb'?'<div class="onb-row"><label class="f" for="onb-ft">Height (ft)<input type="number" id="onb-ft" data-oi="1" min="3" max="7" inputmode="numeric" placeholder="ft" value="'+(onbOk(i)?Math.floor(i/12):'')+'"></label><label class="f" for="onb-in">(in)<input type="number" id="onb-in" data-oi="1" min="0" max="11" inputmode="numeric" placeholder="in" value="'+(onbOk(i)?i%12:'')+'"></label></div>':'<div class="onb-row"><label class="f" for="onb-cm">Height (cm)<input type="number" id="onb-cm" data-oi="1" min="120" max="230" inputmode="numeric" placeholder="e.g. 175" value="'+(onbOk(h)?Math.round(h):'')+'"></label><span></span></div>'}
 function onbPanel(n){
-  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you?<input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(S.onboarded||S.name!=='Fimi'?S.name:'')+'"></label></div>';
+  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you?<input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(!S.onboarded&&(S.name==='Fimi'||S.name==='Friend')?'':S.name)+'"></label></div>';
   if(n===1)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">What are your goals?</h2><p>Pick one or more. Manna blends them into one plan.</p><div class="onb-opts" role="group" aria-label="Goals">'+GOALS.map(function(g){return '<button type="button" class="onb-opt" data-onb="gtog" data-k="'+g[0]+'" aria-pressed="'+(goalSet().indexOf(g[0])>-1)+'"><b>'+g[1]+'</b><span>'+g[2]+'</span></button>'}).join('')+'</div></div>';
   if(n===2)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">About you</h2><p>These are used only to estimate how much energy your body needs.</p><div class="onb-seg" role="group" aria-label="Sex">'+[['female','Female'],['male','Male'],['other','Prefer not to say']].map(function(x){return '<button type="button" class="chip" data-onb="sex" data-k="'+x[0]+'" aria-pressed="'+(S.sex===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-seg" role="group" aria-label="Units">'+[['kg','kg and cm'],['lb','lb and ft']].map(function(x){return '<button type="button" class="chip" data-onb="unit" data-k="'+x[0]+'" aria-pressed="'+(S.units===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-row"><label class="f" for="onb-age">Age<input type="number" id="onb-age" data-oi="1" min="14" max="90" inputmode="numeric" placeholder="e.g. 30" value="'+(onbOk(onbSrc().a)?onbSrc().a:'')+'"></label><label class="f" for="onb-wt">Weight ('+S.units+')<input type="number" id="onb-wt" data-oi="1" step="0.1" inputmode="decimal" placeholder="e.g. '+(S.units==='lb'?'165':'75')+'" value="'+(onbOk(onbSrc().kg)?Math.round((S.units==='lb'?onbSrc().kg*2.20462:onbSrc().kg)*10)/10:'')+'"></label></div>'+onbH()+'</div>';
   if(n===3)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">How active are you?</h2><p>Think about a normal week, including work.</p><div class="onb-opts" role="radiogroup" aria-label="Activity level">'+ACTS.map(function(a){return '<button type="button" class="onb-opt" role="radio" data-onb="act" data-k="'+a[0]+'" aria-checked="'+(S.activity===a[0])+'" aria-pressed="'+(S.activity===a[0])+'"><b>'+a[1]+'</b><span>'+a[2]+'</span></button>'}).join('')+'</div></div>';
@@ -1701,7 +1701,7 @@ function onbValid(){var m='',x=ONB.in||{a:NaN,kg:NaN,h:NaN};
   $('#onb-msg').textContent=m;return !m}
 var ONBACT={
   next:function(){
-    if(ONB.step===0){var nm=($('#onb-name').value||'').trim().slice(0,20);if(nm)S.name=nm;else if(!S.name)S.name='Friend'}
+    if(ONB.step===0){var nm=($('#onb-name').value||'').trim().slice(0,20);if(nm)S.name=nm;else if(!S.onboarded&&S.name==='Fimi')S.name='Friend'}
     if(ONB.step===2){onbReadBody();if(!onbValid())return}
     if(ONB.step===ONBN-1){onbClose();toast('Setup saved. You can change everything in Settings.');return}
     ONB.step++;ONB.back=false;onbRender()},
@@ -1742,7 +1742,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4)ONBACT.next()}})})();
 
-var heroLast='',APPV='60';
+var heroLast='',APPV='61';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3125,7 +3125,7 @@ function yvSync(){
 }
 document.addEventListener('visibilitychange',function(){if(!document.hidden)yvSync()});
 haInit();syncInputs();if(!S.onboarded)onbOpen(0);refresh();show();webLoad();usdaLoad();tickClock();yvSync();
-(function(){var sp=document.getElementById('splash');if(!sp)return;var n=$('#sp-s');if(n)n.textContent='Welcome, '+(S.name||'friend');
+(function(){var sp=document.getElementById('splash');if(!sp)return;var n=$('#sp-s');if(n)n.textContent=S.onboarded?'Welcome, '+(S.name||'friend'):'Welcome';
   var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,done=false;
   function end(){if(done)return;done=true;sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},900)}
   sp.addEventListener('click',end);setTimeout(end,rm?700:2600)})();setInterval(tickClock,15000);
