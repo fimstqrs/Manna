@@ -704,6 +704,14 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .wpick[data-n="1"] .wpd i:nth-child(1),.wpick[data-n="2"] .wpd i:nth-child(-n+2),.wpick[data-n="3"] .wpd i{background:var(--accent)}
 .wpick[data-n="3"]{background:color-mix(in srgb,var(--accent) 20%,var(--bg))}
 @media (prefers-reduced-motion:no-preference){.wpick.bump{animation:wp-bump .35s cubic-bezier(.34,1.56,.64,1)}@keyframes wp-bump{50%{transform:scale(1.06)}}}
+.wncard{gap:.7rem}
+#wn-t:focus{outline:none}
+.wnl{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.35rem;line-height:1.45}
+.wnl.sm{font-size:.9rem;margin-top:.4rem}
+.wnall{display:flex;flex-direction:column;gap:.4rem}
+.wnall details{border:1px solid var(--line);border-radius:12px;padding:.55rem .75rem;background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.wnall summary{display:flex;justify-content:space-between;gap:.6rem;align-items:baseline;cursor:pointer;list-style:none;flex-wrap:wrap}
+.wnall summary::-webkit-details-marker{display:none}
 .wmeta{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem}
 .lvl{display:inline-flex;align-items:center;gap:3px;font:600 .74rem var(--f-body);letter-spacing:.02em;padding:.16rem .5rem .16rem .4rem;border-radius:999px;color:var(--ink);background:color-mix(in srgb,var(--lc) 20%,transparent);border:1px solid color-mix(in srgb,var(--lc) 60%,transparent);white-space:nowrap}
 .lvl i{display:block;width:4px;border-radius:2px;background:color-mix(in srgb,var(--ink) 22%,transparent)}
@@ -1063,7 +1071,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <label class="check" for="p-rm"><input type="checkbox" id="p-rm"><span>Reduce motion<small>Stops animations.</small></span></label>
           <label class="check" for="p-plain"><input type="checkbox" id="p-plain"><span>Plain words<small>Swaps terms like "sodium" for "salt" on the Today page.</small></span></label>
         </div>
-        <div class="card stack" id="tour-set"><div class="sh"><h3>Tutorial</h3><p class="small muted">A short walkthrough of every page. You can leave it at any time.</p></div><div class="row"><button class="btn" data-act="tourstart">Replay the tutorial</button></div></div>
+        <div class="card stack" id="tour-set"><div class="sh"><h3>Tutorial</h3><p class="small muted">A short walkthrough of every page. You can leave it at any time.</p></div><div class="row"><button class="btn" data-act="tourstart">Replay the tutorial</button><button class="btn" data-act="wnopen">What’s new</button></div></div>
         <div class="card stack" id="fv-card">
           <div class="sh"><h3>Your favorites</h3><p class="small muted">Top workouts show on your home page. Your favorite verse shows on the Scripture page.</p></div>
           <p class="small" id="fv-top"></p>
@@ -1118,7 +1126,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <p class="small muted">Or email <a href="mailto:fimipopoola2011@gmail.com?subject=Manna%20feedback">fimipopoola2011@gmail.com</a> directly.</p>
         </div>
         <div class="card stack">
-          <div class="sh"><h3>Bible and credits</h3></div>
+          <div class="sh"><h3>Credits</h3></div>
           <p><b>Bible version:</b> BSB</p>
           <p class="small muted">Scripture is from the Berean Standard Bible (BSB). The BSB is in the public domain; it was dedicated to the public domain on April 30, 2023 by Bible Hub and Berean.Bible. Food data comes from USDA FoodData Central and the chains' published nutrition, via fastfoodnutrition.org.</p>
         </div>
@@ -1139,6 +1147,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
   </main>
 </div>
 <button class="btn totop" id="totop" data-act="totop" aria-label="Back to top" hidden>↑</button>
+<div class="modal" id="wn" role="dialog" aria-modal="true" aria-labelledby="wn-t" hidden><div class="mback" data-act="wnclose"></div><div class="mcard wncard" id="wn-card"></div></div>
 <div class="modal" id="fm" role="dialog" aria-modal="true" aria-labelledby="fm-t" hidden><div class="mback" data-act="fclose"></div><div class="mcard" id="fm-card"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <nav class="tabs" id="tabs" aria-label="Main">
@@ -1665,7 +1674,7 @@ function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:true,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],useSched:true,addPlan:'',restDef:90,restPick:90,favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',restDef:90,restPick:90,favVerse:'',
     sleep:6.2,hrv:48,sore:3,
     meals:[],labs:{fe:22,vd:24,b12:410},
     override:false,coachMsg:null,imported:[],
@@ -1828,6 +1837,53 @@ function haInit(){
 
 
 /* ---------- welcome and tutorial ---------- */
+/* ===== Update log: newest first. Add an entry with every version. ===== */
+var CHANGES=[
+ {v:86,d:'Nov 6, 2026',t:'What’s new',s:['After each update, this screen shows what changed.','Scroll down for every past update, or open it any time from Settings.','The Bible and credits section in Settings is now just Credits.']},
+ {v:85,d:'Nov 6, 2026',t:'Simpler targets',s:['Your targets on Fuel no longer show the protein-per-kg line.']},
+ {v:84,d:'Nov 6, 2026',t:'Calmer setup',s:['Switching kg and lb in setup no longer replays the animation.','The top 3 workouts counter fills in three dots as you pick and stays in view.']},
+ {v:83,d:'Nov 6, 2026',t:'History at a glance and rest choice',s:['History shows date, time, workout and length, in the workout’s colour. Tap one for every detail.','Each set records how long it took.','Before you start asks how long to rest between sets, or no rest, and remembers it.']},
+ {v:82,d:'Nov 6, 2026',t:'Make your own workouts',s:['Build a workout from scratch, edit a copy of any ready-made one, or paste it as text.','Set sets, reps or time, and weight for every exercise.','Pick several muscles at once. If nothing fits, build one by hand or with AI.','Saved workouts come first when planning your schedule, and you choose which schedule to add to.','Turn schedules on or off in Settings, and see each workout’s difficulty at a glance.']},
+ {v:80,d:'Nov 6, 2026',t:'Cleaner menu',s:['Removed the line of text under the Manna logo.']},
+ {v:79,d:'Nov 6, 2026',t:'Quicker workout picking',s:['Tapping a workout type moves straight to the next question.']},
+ {v:78,d:'Nov 6, 2026',t:'Today’s workout first',s:['When a workout is due today, it opens Fitness with its muscles and a Start button.','Workout history starts empty and only shows workouts you finish.','Send feedback from Settings.']},
+ {v:77,d:'Nov 6, 2026',t:'Recent and saved workouts',s:['Fitness shows your last 3 workouts.','Save any workout to find it again quickly.']},
+ {v:76,d:'Nov 6, 2026',t:'Matching workout cards',s:['The setup top 3 picker uses the same cards as Fitness.']},
+ {v:75,d:'Nov 6, 2026',t:'Fitness, Fuel and Faith',s:['The app is now simply called Manna.','The tabs are Home, Fitness, Fuel, Faith and Settings.']},
+ {v:74,d:'Nov 6, 2026',t:'Faster and smoother',s:['Manna opens much faster and animations are smoother, especially on older phones.','Frosted Surfaces off now has a proper solid look and no longer breaks the welcome screens.']},
+ {v:73,d:'Nov 6, 2026',t:'Workout picker tiles',s:['Picking your top 3 workouts uses tiles instead of a text list.']},
+ {v:72,d:'Nov 6, 2026',t:'Icon fixes',s:['Fresh icon files so Safari shows the Manna loaf.']},
+ {v:71,d:'Nov 6, 2026',t:'Icon fixes',s:['Safari-friendly tab icons.']},
+ {v:70,d:'Nov 6, 2026',t:'Icon fixes',s:['Safari keeps the real tab icon.']},
+ {v:69,d:'Nov 6, 2026',t:'No red flash',s:['Manna opens straight into your theme.','The home page footer shows the current version.']},
+ {v:68,d:'Nov 6, 2026',t:'Home screen icon',s:['Add Manna to your iPhone home screen with its own icon.']},
+ {v:67,d:'Nov 6, 2026',t:'New logo',s:['A solid black and white loaf with a cross.']},
+ {v:66,d:'Nov 6, 2026',t:'New logo',s:['The scored-loaf logo arrives in the header and splash screen.']},
+ {v:65,d:'Nov 6, 2026',t:'Every sport workout',s:['Choosing a sport shows every workout for it.']},
+ {v:64,d:'Nov 6, 2026',t:'Verse of the day',s:['New verse of the day.']},
+ {v:63,d:'Nov 6, 2026',t:'Setup look',s:['Setup and the splash screen always use the Default theme.']},
+ {v:62,d:'Nov 6, 2026',t:'Welcome and tutorial',s:['A welcome screen, a guided tutorial, and workout filters in setup.']},
+ {v:61,d:'Nov 6, 2026',t:'Friendlier setup',s:['Setup no longer assumes your name.']},
+ {v:60,d:'Nov 6, 2026',t:'Live verse of the day',s:['The verse of the day updates live.']}
+];
+/* What's new popup: once per version, after the splash, setup, welcome and tutorial are out of the way */
+function wnRender(){
+  var c=CHANGES[0];
+  $('#wn-card').innerHTML='<div class="row spread"><p class="eyebrow">What’s new · Version '+c.v+'</p><button class="btn sm" data-act="wnclose" aria-label="Close">Close</button></div>'
+   +'<h3 id="wn-t" tabindex="-1">'+esc(c.t)+'</h3><ul class="wnl">'+c.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'
+   +'<button class="btn primary" data-act="wnclose">Got it</button>'
+   +'<p class="eyebrow" style="margin-top:.6rem">All updates</p><div class="wnall">'+CHANGES.map(function(u,i){return '<details><summary><span><b>Version '+u.v+'</b> · '+esc(u.t)+'</span><span class="small muted">'+esc(u.d)+'</span></summary><ul class="wnl sm">'+u.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></details>'}).join('')+'</div>';
+}
+function wnOpen(){wnRender();$('#wn').hidden=false;document.body.classList.add('modal-open');setTimeout(function(){var t=$('#wn-t');if(t)t.focus({preventScroll:true})},60)}
+function wnCheck(){
+  if(String(S.seenV)===String(APPV))return;
+  if(!S.onboarded){S.seenV=String(APPV);prefSave();return}
+  var busy=function(id){var e=document.getElementById(id);return e&&!e.hidden&&!(id==='splash'&&e.classList.contains('out'))};
+  if(busy('splash')||busy('onb')||busy('wel')||busy('tour')||busy('fm')||document.hidden){setTimeout(wnCheck,700);return}
+  wnOpen();
+}
+setTimeout(wnCheck,1200);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#wn').hidden)ACT.wnclose()});
 var TOUR=[
  {v:'today',sel:'.hero',t:'This is Home',p:'Your name, the verse of the day and the date. Tap "Read the chapter" to open it in the Bible reader.'},
  {v:'today',sel:'#t-energy',t:"Today's progress",p:'Calories, protein, water and workouts for the day in one place. Tap a number to change it, and choose which stats you want to see.'},
@@ -1995,7 +2051,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='85';
+var heroLast='',APPV='86';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3246,6 +3302,8 @@ var ACT={
     if(S.wf.mu!=='all')parts.push(muNames(S.wf.mu).toLowerCase());var AW={gym:'gym equipment',body:'bodyweight only',cali:'calisthenics, bodyweight'};if(AW[S.wf.access])parts.push(AW[S.wf.access]);else if(S.wf.access==='pick'&&S.have.length)parts.push(S.have.map(function(k){return (EQ[k]||k).toLowerCase()}).join(', '));
     var t=parts.join(', '),ta=$('#ai-text');if(ta)ta.value=t;S.ai=buildAI(t);
     setTimeout(function(){var o=$('#w-ai');if(o)o.scrollIntoView({behavior:'smooth',block:'start'})},60)},
+  wnclose:function(){$('#wn').hidden=true;document.body.classList.remove('modal-open');S.seenV=String(APPV)},
+  wnopen:function(){wnOpen()},
   schedon:function(){S.useSched=true;setTimeout(show,0);toast('Schedules are on.')},
   wtext:function(){var t=$('#nt-text');if(t){t.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(function(){t.focus()},350)}},
   wesave:function(){
