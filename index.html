@@ -729,6 +729,8 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+.grid2.vgrid{display:block}
+.vsec>.card{margin:0}
 .sempty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.6rem;padding:1.4rem .5rem}
 .sempty-ic{font-size:2.6rem}
 .scard.sadd{border-style:dashed;cursor:pointer}
@@ -1149,7 +1151,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         <p class="lede">Type it, snap it, or describe it. Tap a result to see its macros, change the amount in grams or ounces, and add it to today.</p>
 </header>
       <div class="card" id="t-targets"></div>
-      <div class="card stack">
+      <div class="card stack" aria-label="Find a food">
         <div class="row"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="What are you eating?" style="flex:1;min-width:12rem"><button class="btn" data-act="fcam">Camera</button><button class="btn" data-act="fup">Upload photo</button></div>
         <input type="file" id="f-cam" accept="image/*" capture="environment" hidden><input type="file" id="f-up" accept="image/*" hidden>
         <div id="f-ask-out" aria-live="polite"></div>
@@ -2088,6 +2090,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:117,d:'Nov 7, 2026',t:'Swipe up and down everywhere',s:['On phones, every page with several sections now works TikTok style: Settings pages, Saved workouts, What are you eating, Weekly schedule and more. Swipe up or down to move one section at a time.','Dots on the right show where you are. Long sections scroll normally first.']},
  {v:116,d:'Nov 7, 2026',t:'Make your own schedules',s:['Weekly schedule now starts empty. Tap Add a schedule to make one.','Free accounts get 1 schedule and Pro accounts up to 3. Schedules you already made are kept.','You can delete a schedule, and adding a workout to a schedule makes one if you have none.']},
  {v:115,d:'Nov 7, 2026',t:'Swipe up and down between sections',s:['On Workouts › Make your own, the three sections (Make your own, Build with AI, Import from text) are now full-height, TikTok style. Swipe up or down to move one section at a time.','Dots on the right show where you are, and a Next hint at the bottom shows what is below. Long sections scroll normally first.']},
  {v:114,d:'Nov 7, 2026',t:'Update from Settings',s:['Settings › About has a new Updates card: see your version and the latest one, check for updates, and update with one tap.','When a newer version is out, a reminder stays at the top of Home until you update.']},
@@ -2378,7 +2381,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='116';
+var heroLast='',APPV='117';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3583,7 +3586,7 @@ function tickClock(){
   dt.textContent=d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
 function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.textContent=t})}
-function refresh(){try{renderStreaks();upPaint()}catch(e){}setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
+function refresh(){try{renderStreaks();upPaint()}catch(e){}setTimeout(function(){try{vpSyncAll()}catch(e){}},0);setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   applyPrefs();renderToday();renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
@@ -4529,15 +4532,42 @@ function vpGo(v,i,instant){
   if(changed&&!instant){var r=v.root.getBoundingClientRect(),top=60;if(r.top<top-4||r.bottom>innerHeight)window.scrollTo({top:Math.max(0,scrollY+r.top-top),behavior:swCalm()?'auto':'smooth'})}
 }
 function vpSize(v){v.h=vpH();v.root.style.setProperty('--vph',v.h+'px');v.tr.classList.remove('anim');v.tr.style.transform='translateY('+(-v.i*v.h)+'px)'}
-function vpReveal(el){var sc=el&&el.closest&&el.closest('.vsec');if(!sc)return;var root=sc.closest('.vpg'),v=root&&VPG[root.id];if(!v)return;var k=v.secs.indexOf(sc);if(k>-1&&k!==v.i)vpGo(v,k,true)}
+var VPN={'acct-card':'Account','t-targets':'Your targets','e-water':'Water','sh-week':'This week','w-recent':'Recent','w-saved':'Saved','w-make':'Make your own','upd-card':'Updates'};
+function vpSync(v){
+  [].forEach.call(v.tr.children,function(sc){var c=sc.firstElementChild;sc.hidden=!!(c&&c.hidden&&sc.children.length===1);
+    if(c){var h=c.querySelector('h3,h2'),nm=(c.id&&VPN[c.id])||(h&&h.textContent.trim())||sc.dataset.name;if(nm)sc.dataset.name=nm.slice(0,28)}});
+  var secs=[].filter.call(v.tr.children,function(sc){return !sc.hidden}),sig=secs.map(function(x){return x.dataset.name}).join('|');
+  if(sig===v.sig)return;var cur=v.secs[v.i];v.secs=secs;v.sig=sig;
+  v.bar.innerHTML=secs.length>1?secs.map(function(sc,k){return '<button type="button" class="vdot" data-k="'+k+'" aria-label="'+esc(sc.dataset.name)+', section '+(k+1)+' of '+secs.length+'"><i></i></button>'}).join(''):'';
+  v.dots=[].slice.call(v.bar.children);var ni=v.touched?secs.indexOf(cur):0;if(v.h)vpGo(v,ni>-1?ni:Math.min(v.i,secs.length-1),true);
+}
+function vpSyncAll(){Object.keys(VPG).forEach(function(k){vpSync(VPG[k])})}
+/* Turn a list of cards into one-at-a-time sections (phones) */
+function vpWrap(cards,id){
+  if(cards.length<2||$('#'+id))return null;
+  var first=cards[0],root=document.createElement('div');root.className='vpg';root.id=id;
+  root.innerHTML='<div class="vbar" aria-label="Sections"></div><div class="vtrack"></div><button type="button" class="vnext" aria-hidden="true" tabindex="-1"></button>';
+  first.parentNode.insertBefore(root,first);var tr=root.querySelector('.vtrack');
+  cards.forEach(function(c){var sc=document.createElement('div');sc.className='vsec';var h=c.querySelector('h3,h2');sc.dataset.name=(h&&h.textContent.trim()||c.getAttribute('aria-label')||'Section').slice(0,28);sc.appendChild(c);tr.appendChild(sc)});
+  return root;
+}
+function vpAuto(){
+  if(!isPhone())return;
+  $$('.swpage').forEach(function(pg,k){if(pg.querySelector('.vpg'))return;var host=pg.querySelector(':scope > .grid2')||pg;
+    var cards=[].filter.call(host.children,function(c){return c.classList.contains('card')});
+    if(host!==pg)host.classList.add('vgrid');
+    vpWrap(cards,'vp-p'+k)});
+  ['v-eat','v-schedule','v-safeguards','v-labs','v-community'].forEach(function(vid){var v=$('#'+vid);if(!v)return;
+    vpWrap([].filter.call(v.children,function(c){return c.classList.contains('card')}),'vp-'+vid)});
+}
+function vpReveal(el){var sc=el&&el.closest&&el.closest('.vsec');if(!sc)return;var root=sc.closest('.vpg'),v=root&&VPG[root.id];if(!v)return;v.touched=1;var k=v.secs.indexOf(sc);if(k>-1&&k!==v.i)vpGo(v,k,true)}
 function vpInit(root){
   var tr=root.querySelector('.vtrack'),bar=root.querySelector('.vbar');
-  var v={root:root,tr:tr,secs:[].slice.call(tr.children),i:0,h:0,next:root.querySelector('.vnext')};VPG[root.id]=v;
-  bar.innerHTML=v.secs.map(function(sc,k){return '<button type="button" class="vdot" data-k="'+k+'" aria-label="'+esc(sc.dataset.name)+', section '+(k+1)+' of '+v.secs.length+'"><i></i></button>'}).join('');
-  v.dots=[].slice.call(bar.children);
-  bar.addEventListener('click',function(e){var b=e.target.closest('.vdot');if(b)vpGo(v,+b.dataset.k)});
-  v.next.addEventListener('click',function(){vpGo(v,v.i+1)});
-  var at=function(dir){var sc=v.secs[v.i];return dir>0?sc.scrollTop+sc.clientHeight>=sc.scrollHeight-2:sc.scrollTop<=1};
+  var v={root:root,tr:tr,bar:bar,secs:[],i:0,h:0,next:root.querySelector('.vnext'),sig:''};VPG[root.id]=v;
+  vpSync(v);
+  bar.addEventListener('click',function(e){var b=e.target.closest('.vdot');if(b){v.touched=1;vpGo(v,+b.dataset.k)}});
+  v.next.addEventListener('click',function(){v.touched=1;vpGo(v,v.i+1)});
+  var at=function(dir){var sc=v.secs[v.i];if(!sc)return false;return dir>0?sc.scrollTop+sc.clientHeight>=sc.scrollHeight-2:sc.scrollTop<=1};
   /* Touch: inside a section scroll normally; at its edge the swipe moves to the next or previous section */
   var T=null;
   root.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;var t=e.touches[0];T={x:t.clientX,y:t.clientY,t:e.timeStamp,mode:null,dy:0,v:0,lt:e.timeStamp,ly:t.clientY,top:at(-1),bot:at(1)}},{passive:true});
@@ -4551,13 +4581,13 @@ function vpInit(root){
     var dt=e.timeStamp-T.lt;if(dt>0)T.v=(t.clientY-T.ly)/dt;T.ly=t.clientY;T.lt=e.timeStamp},{passive:false});
   var end=function(e){if(!T)return;var m=T;T=null;if(m.mode!=='v')return;
     if(e.timeStamp-m.lt>120)m.v=0;
-    var to=v.i;if(m.dy<-v.h*.15||m.v<-.35)to=v.i+1;else if(m.dy>v.h*.15||m.v>.35)to=v.i-1;vpGo(v,to)};
+    v.touched=1;var to=v.i;if(m.dy<-v.h*.15||m.v<-.35)to=v.i+1;else if(m.dy>v.h*.15||m.v>.35)to=v.i-1;vpGo(v,to)};
   root.addEventListener('touchend',end);root.addEventListener('touchcancel',end);
   /* Mouse wheel / trackpad: past the edge of a section, one gesture = one section */
   root.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)<=Math.abs(e.deltaX))return;var dir=e.deltaY>0?1:-1;
     if(!at(dir)||(dir>0&&v.i===v.secs.length-1)||(dir<0&&v.i===0)){v.wacc=0;return}
     e.preventDefault();clearTimeout(v.wt);v.wt=setTimeout(function(){v.wlock=false;v.wacc=0},300);
-    if(v.wlock)return;v.wacc=(v.wacc||0)+e.deltaY;if(Math.abs(v.wacc)>40){v.wlock=true;v.wacc=0;vpGo(v,v.i+dir)}},{passive:false});
+    if(v.wlock)return;v.wacc=(v.wacc||0)+e.deltaY;if(Math.abs(v.wacc)>40){v.wlock=true;v.wacc=0;v.touched=1;vpGo(v,v.i+dir)}},{passive:false});
   root.addEventListener('focusin',function(e){vpReveal(e.target)});
   window.addEventListener('resize',function(){vpSize(v)});
   vpSize(v);vpGo(v,0,true);
@@ -4629,6 +4659,7 @@ function swInit(root){
   /* Anything that scrolls a card into view (the tutorial, "Build with AI", sign-in) opens its page first */
   var siv=Element.prototype.scrollIntoView;
   if(siv)Element.prototype.scrollIntoView=function(){try{swReveal(this);vpReveal(this)}catch(e){}return siv.apply(this,arguments)};
+  try{vpAuto()}catch(e){}
   $$('.swp').forEach(swInit);
   $$('.vpg').forEach(vpInit);
 })();
