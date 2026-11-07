@@ -729,6 +729,13 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+/* A verse in the empty space at the bottom of short pages, styled like the Saved workouts note */
+.dverse{display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 6px}
+.dverse .savedempty{max-width:30rem;margin:0}
+.dverse q{quotes:none;font-style:italic}
+.dverse cite{display:block;font-style:normal;margin-top:.3rem;color:var(--accent);font-weight:600;font-size:.82rem}
+@media (prefers-reduced-motion:no-preference){.dverse.in .savedempty{animation:dv-in .6s cubic-bezier(.2,.8,.2,1)}@keyframes dv-in{from{opacity:0;transform:translateY(6px)}}}
+
 @media (min-width:900px){.swtrack{margin-inline:-46px}.swpage{padding-inline:46px}}
 .swbar{position:relative;z-index:1}
 
@@ -1913,6 +1920,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:95,d:'Nov 7, 2026',t:'A verse in the quiet spaces',s:['When a page is shorter than your screen, the empty space now shows a short verse that matches your theme.','It uses the same colours as the Saved workouts note, and changes with your theme and each day.']},
  {v:94,d:'Nov 7, 2026',t:'A cleaner page bar',s:['The page bar on Workouts and Settings no longer says how many pages are left. The dots show where you are.']},
  {v:93,d:'Nov 7, 2026',t:'One swipe, one page',s:['Each swipe now moves exactly one page, like flicking a card, instead of scrolling through several.','A small nudge springs back to the page you were on.']},
 {v:92,d:'Nov 7, 2026',t:'Swipe through Workouts and Settings',s:['Workouts is now four pages you swipe between: Saved, Make your own, Templates and Search.','Ready-made workouts are now called template workouts.','Settings is split into five pages: You, Look, Body, Data and About.','The bar on top shows the page you are on and its icon. Tap a dot to jump to a page.','Pages tilt a little as you swipe, like flicking a card. Reduce motion turns this off.','Tapping a search result opens the workout again.']},
@@ -2136,7 +2144,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='94';
+var heroLast='',APPV='95';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3182,7 +3190,7 @@ function tickClock(){
   dt.textContent=d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
 function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.textContent=t})}
-function refresh(){setTimeout(aiLeftPaint,0);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
+function refresh(){setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   applyPrefs();renderToday();renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
@@ -3955,6 +3963,7 @@ function swSettle(st,user){
   st.pages.forEach(function(p,k){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin=''}p.setAttribute('aria-hidden',k===i?'false':'true');p.classList.toggle('swoff',k!==i)});
   SWMEM[st.root.id]=i;try{sessionStorage.setItem('manna.sw.v1',JSON.stringify(SWMEM))}catch(e){}
   if(changed&&user)swTopIn(st);
+  setTimeout(dvPaint,360);
 }
 /* After moving to another page, bring its top into view if the person had scrolled down */
 function swTopIn(st){
@@ -4048,6 +4057,41 @@ function swInit(root){
   if(siv)Element.prototype.scrollIntoView=function(){try{swReveal(this)}catch(e){}return siv.apply(this,arguments)};
   $$('.swp').forEach(swInit);
 })();
+
+/* ---------- Verses for empty space ----------
+   When a page is shorter than the screen, the space under it shows a short verse that
+   matches the current theme (from the same verse-to-theme list the themes use). */
+var DVICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 6.5C10.2 5 7.6 4.5 4 4.8v13c3.6-.3 6.2.2 8 1.7 1.8-1.5 4.4-2 8-1.7v-13c-3.6-.3-6.2.2-8 1.7zM12 6.5v13"/></svg>';
+function dvRefName(k){return k.replace(/(^|\s)([a-z])/g,function(m,a,b){return a+b.toUpperCase()})}
+function dvPick(vid){
+  var th=currentTheme().id,keys=Object.keys(REFMAP).filter(function(k){return th==='plain'?true:REFMAP[k]===th});
+  if(!keys.length)keys=Object.keys(REFMAP);
+  var h=0,id=vid+'|'+todayStamp();for(var i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))>>>0;
+  for(var n=0;n<keys.length;n++){var k=keys[(h+n)%keys.length],t=webLookup(k);if(t&&t.length<=170)return {ref:dvRefName(k),t:t}}
+  return null;
+}
+var dvRaf=0;
+function dvPaint(){if(dvRaf)return;dvRaf=requestAnimationFrame(function(){dvRaf=0;dvDo()})}
+function dvDo(){
+  var v=$('.view:not([hidden])');if(!v||v.id==='v-session')return;
+  var el=v.querySelector(':scope > .dverse');
+  if(!el){el=document.createElement('div');el.className='dverse';el.hidden=true;v.appendChild(el)}
+  var gap=16,own=el.hidden?0:el.offsetHeight+gap;
+  var bottom=v.getBoundingClientRect().bottom+scrollY-own;
+  var tb=$('#tabs'),reserve=24;
+  if(tb&&getComputedStyle(tb).position==='fixed'&&tb.offsetHeight)reserve=tb.offsetHeight+28;
+  var free=Math.floor(innerHeight-reserve-bottom-gap-18);
+  var pick=free>=130?dvPick(v.id):null;
+  if(!pick){if(!el.hidden){el.hidden=true;el.style.minHeight=''}return}
+  var key=pick.ref+'|'+currentTheme().id;
+  if(el.dataset.k!==key){el.dataset.k=key;
+    el.innerHTML='<p class="small muted savedempty"><span class="bmk">'+DVICON+'</span><span><q>'+esc(pick.t)+'</q><cite>'+esc(pick.ref)+' · BSB</cite></span></p>';
+    el.classList.remove('in');void el.offsetWidth;el.classList.add('in')}
+  var mh=free+'px';if(el.style.minHeight!==mh)el.style.minHeight=mh;
+  if(el.hidden)el.hidden=false;
+}
+window.addEventListener('resize',dvPaint);
+if(window.ResizeObserver){var dvRO=new ResizeObserver(function(){dvPaint()});$$('.view').forEach(function(v){if(v.id!=='v-session')dvRO.observe(v)})}
 function show(){
   var id=(location.hash||'').replace('#','');
   if(id==='privacy')id='settings';
@@ -4058,7 +4102,7 @@ function show(){
   sn.hidden=id==='session'||gv.length<2;
   sn.innerHTML=gv.map(function(v){return '<a href="#'+v+'"'+(v===id?' aria-current="page"':'')+'>'+VLABEL[v]+'</a>'}).join('');
   $$('#nav a').forEach(function(a){if(a.dataset.group===g){a.setAttribute('aria-current','page');try{a.scrollIntoView({block:'nearest',inline:'nearest'})}catch(e){}}else a.removeAttribute('aria-current')});
-  window.scrollTo(0,0);
+  window.scrollTo(0,0);setTimeout(dvPaint,0);
   if(id==='scripture')S.readD=todayStamp();
   if(id==='eat'&&window.matchMedia&&matchMedia('(hover:hover)').matches){var fq=$('#f-q');if(fq)fq.focus()}
 }
