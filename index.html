@@ -729,6 +729,23 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+/* Notifications, top left */
+.toasts{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:12px;z-index:90;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(calc(100vw - 24px),340px)}
+.mtoast{pointer-events:auto;cursor:pointer;display:flex;align-items:center;gap:.75rem;padding:.55rem .9rem .55rem .55rem;background:rgba(24,24,30,.94);color:#fff;border:2px solid #5d5d6b;border-radius:6px;
+  box-shadow:0 0 0 2px rgba(8,8,12,.9),0 12px 28px rgba(0,0,0,.35);transform:translateX(calc(-100% - 28px));transition:transform .5s cubic-bezier(.18,.9,.28,1.08)}
+.mtoast.in{transform:none}
+.mtoast.out{transform:translateX(calc(-100% - 28px));transition:transform .42s cubic-bezier(.6,0,.85,.35)}
+.mt-ic{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:4px;background:#2d2d37;border:2px solid #474756;font-size:1.15rem;font-weight:800;color:#fff}
+.mt-tx{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.mt-tx b{font-size:.84rem;font-weight:700;color:#ffde59;letter-spacing:.01em}
+.mt-tx span{font-size:.9rem;color:#f1f1f4}
+.k-ok .mt-ic{color:#7ee787}.k-ok .mt-tx b{color:#7ee787}
+.k-warn .mt-ic{color:#ffb547}.k-warn .mt-tx b{color:#ffb547}
+.k-del .mt-tx b{color:#ff8a8a}
+.k-info .mt-ic{color:var(--accent)}
+.rm .mtoast,html.lite .mtoast{transform:none;opacity:0;transition:opacity .25s}.rm .mtoast.in,html.lite .mtoast.in{opacity:1}
+@media (prefers-reduced-motion:reduce){.mtoast{transform:none;opacity:0;transition:opacity .25s}.mtoast.in{opacity:1}}
+
 /* Big Change theme tile */
 .thbtn{position:relative;display:flex;align-items:center;gap:.9rem;padding:1rem 1rem 1.35rem;border-radius:18px;text-decoration:none;color:var(--ink);overflow:hidden;
   background:linear-gradient(120deg,color-mix(in srgb,var(--thsw,var(--accent)) 30%,transparent),color-mix(in srgb,var(--accent) 12%,transparent));
@@ -1318,7 +1335,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 <div class="modal" id="fp" role="dialog" aria-modal="true" aria-labelledby="fp-t" hidden><div class="mback" data-act="fpclose"></div><div class="mcard fpcard" id="fp-card"></div></div>
 <div class="modal" id="wn" role="dialog" aria-modal="true" aria-labelledby="wn-t" hidden><div class="mback" data-act="wnclose"></div><div class="mcard wncard" id="wn-card"></div></div>
 <div class="modal" id="fm" role="dialog" aria-modal="true" aria-labelledby="fm-t" hidden><div class="mback" data-act="fclose"></div><div class="mcard" id="fm-card"></div></div>
-<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="toasts" id="toast" role="status" aria-live="polite" hidden></div>
 <nav class="tabs" id="tabs" aria-label="Main">
   <a href="#today" data-tab="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>
   <a href="#workouts" data-tab="workouts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 6.5v11M3.5 9v6M17.5 6.5v11M20.5 9v6M6.5 12h11"/></svg><span>Fitness</span></a>
@@ -2013,6 +2030,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:111,d:'Nov 7, 2026',t:'New notifications',s:['Notifications now slide in at the top left, stay a moment, and slide back out, like Minecraft’s. Each has an icon and a heading: Done, Heads up, Removed.','Tap one to dismiss it early. Up to three stack at once.','Automatic sync no longer shows a notification.']},
  {v:110,d:'Nov 7, 2026',t:'Easier to change your theme',s:['Change theme in Settings › Look is now a big, colourful button showing your current theme and every theme’s colour.','The Change theme button on your profile stands out too.']},
  {v:109,d:'Nov 7, 2026',t:'Display size for phones and computers',s:['Settings › Look now has two display size sliders: one for phones and one for laptops and computers.','Each device uses the one that fits its screen, and both sync to your other devices.','Sizes now go down to 80%.']},
  {v:108,d:'Nov 7, 2026',t:'Tour after setup',s:['Finishing setup now always starts the tutorial, including when you run setup again from Settings.','The last setup screen says the tour is next, and the button reads Finish and take the tour.']},
@@ -2297,7 +2315,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='110';
+var heroLast='',APPV='111';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3517,9 +3535,25 @@ function renderOrder(){
   else h='<div class="card stack"><div class="row spread"><h3>Reorder widgets</h3><button class="btn primary" data-act="tedit">Done</button></div><ul class="list">'+ord.map(function(k,i){var n=TW.filter(function(t){return t[0]===k})[0][1];return '<li><div>'+esc(n)+(S.thide[k]?' <span class="badge">Hidden</span>':'')+'</div><span class="row"><button class="btn sm" data-act="thide" data-id="'+k+'" aria-label="'+(S.thide[k]?'Show ':'Hide ')+esc(n)+'">'+(S.thide[k]?'Show':'Hide')+'</button><button class="btn sm" data-act="tmove" data-id="'+k+'" data-d="-1" aria-label="Move '+esc(n)+' up"'+(i===0?' disabled':'')+'>▲</button><button class="btn sm" data-act="tmove" data-id="'+k+'" data-d="1" aria-label="Move '+esc(n)+' down"'+(i===ord.length-1?' disabled':'')+'>▼</button></span></li>'}).join('')+'</ul><div class="row"><button class="btn" data-act="treset">Reset order and show all</button></div></div>';
   if(r.dataset.h!==h){r.innerHTML=h;r.dataset.h=h}
 }
-function toast(msg){
-  var t=$('#toast');t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){t.hidden=true},3200);
+/* Notifications: slide in at the top left, stay a moment, slide back out (like Minecraft's) */
+var TOASTK=[[/^(enter|type|give|add at least|write|tick|a session is already|that is the maximum|could not|choose|pick)/i,'warn','Heads up','!'],
+  [/^(removed|deleted|session discarded|schedule cleared|saved meal removed|sample sessions removed|all demo data deleted)/i,'del','Removed','🗑'],
+  [/^(saved|added|imported|loaded|signed in|synced|copied|workout saved|goal set|schedules are on|sent|selected)/i,'ok','Done','✓']];
+function toast(msg,o){
+  o=o||{};msg=String(msg||'');var box=$('#toast');if(!box)return;
+  var k=['info','Manna','✦'];for(var i=0;i<TOASTK.length;i++)if(TOASTK[i][0].test(msg)){k=TOASTK[i].slice(1);break}
+  var last=box.lastElementChild;
+  if(last&&last.dataset.m===msg&&!last.classList.contains('out')){clearTimeout(last._t);last._t=setTimeout(function(){toastOut(last)},3600);return}
+  var el=document.createElement('div');el.className='mtoast k-'+(o.kind||k[0]);el.dataset.m=msg;
+  el.innerHTML='<span class="mt-ic" aria-hidden="true">'+esc(o.icon||k[2])+'</span><span class="mt-tx"><b>'+esc(o.title||k[1])+'</b><span>'+esc(msg)+'</span></span>';
+  box.hidden=false;box.appendChild(el);
+  while(box.children.length>3)box.removeChild(box.firstElementChild);
+  void el.offsetWidth;el.classList.add('in');
+  el.addEventListener('click',function(){toastOut(el)});
+  el._t=setTimeout(function(){toastOut(el)},3600);
 }
+function toastOut(el){if(!el||el.classList.contains('out'))return;clearTimeout(el._t);el.classList.remove('in');el.classList.add('out');
+  setTimeout(function(){var box=el.parentNode;if(box){box.removeChild(el);if(!box.children.length)box.hidden=true}},460)}
 
 /* ---------- logging ---------- */
 function parseText(txt){
@@ -3882,7 +3916,7 @@ function syncStart(fromLogin){
       if(localIsFresh())return cloudApply(row);
       /* This device has its own data: combine it with the account instead of asking */
       ACC.conflict=null;syncLocal(mergeData(localData(),row.data||{},{}),true);
-      return cloudPush().then(function(){toast('This device is now synced with your account.');if(fromLogin)accSay('Signed in. This device and your account are now combined.')});
+      return cloudPush().then(function(){if(fromLogin)accSay('Signed in. This device and your account are now combined.')});
     }
     ACC.sync='';return syncNow();
   }).catch(function(e){ACC.sync='error';ACC.syncErr=syncErrText(e);refresh()});
@@ -3936,7 +3970,6 @@ function syncLocal(d,quiet){
   var keep={};['wz','wq','selW','fsel','fq','fshow','fcat','wf','addDay','msel','hf','sess','edit','wedit','tedit','pedit'].forEach(function(k){if(k in S)keep[k]=S[k]});
   prefLast='';S=defaults();try{var pm=JSON.parse(lsGet('manna.prefs.v1')||'{}');if(pm&&pm._mt)S._mt=pm._mt}catch(e){}Object.keys(keep).forEach(function(k){S[k]=keep[k]});
   try{syncInputs()}catch(e){}refresh();prefSave();
-  if(!quiet)toast('Updated from your other device.');
 }
 /* Busy typing or mid-workout: wait before changing things on screen */
 var syncTyped=0;document.addEventListener('input',function(){syncTyped=Date.now()},true);
