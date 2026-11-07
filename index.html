@@ -1990,6 +1990,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:102,d:'Nov 7, 2026',t:'Plan your sets before you start',s:['Before you start now lets you set the sets, reps (or time) and weight for every exercise.','During the workout, change reps and weight on any set, and add or remove sets with + and −.']},
  {v:101,d:'Nov 7, 2026',t:'Log a whole meal with AI',s:['Describe a meal or snap your plate and AI adds every food at once, for one AI use.','A pop-up shows your calories eaten against today’s goal, with protein, carbs and fat rings, then each food to swipe through. Change the amount or remove a food right there.','Every food gets an emoji.','Today’s meals shows the same rings and a simple list. Tap a food to see what is in it.','The Today’s meals button on What are you eating is gone, since it has its own page.']},
  {v:100,d:'Nov 7, 2026',t:'Workout streak',s:['A Duolingo-style streak counter is now on Home and on Workouts: a flame, your days in a row, and this week’s workout days.','The flame grows when you finish a workout and it pops when your streak goes up.','Turn it off any time under Settings › Data › Extras.']},
  {v:99,d:'Nov 7, 2026',t:'Updates and Pro',s:['When a newer version of Manna is out, a message asks you to relaunch so you get it.','Pro accounts have no daily AI limit.','The verse in empty space now sits just above the footer.']},
@@ -2221,7 +2222,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='101';
+var heroLast='',APPV='102';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2810,6 +2811,9 @@ function exKind(name,rx){
   if(/^(Walking|Running|Easy cycling|Swimming)$/.test(name)&&!/^\d+\s*[×x]/.test(rx))return 'min';
   return 'reps';
 }
+function repTarget(kind,rx){if(kind!=='reps')return preFill(kind,rx);var m=String(rx).match(/[×x]\s*(\d+)/);return m?m[1]:''}
+/* Planned sets and reps for exercise i of the running workout, set before starting and changeable during it */
+function sessTg(w,i){var t=S.sess&&S.sess.tg&&S.sess.tg[i];return {s:t&&t.s>0?t.s:setTarget(w.ex[i][1]),r:t&&t.r?t.r:repTarget(exKind(w.ex[i][0],w.ex[i][1]),w.ex[i][1])}}
 function setTarget(rx){var m=String(rx).match(/^(\d+)\s*[×x]/);return m?parseInt(m[1],10):1}
 function preFill(kind,rx){rx=String(rx);var m=kind==='min'?rx.match(/(\d+)\s*min\b/):kind==='sec'?rx.match(/(\d+)\s*s\b/):kind==='dist'?rx.match(/(\d+)\s*m\b/):null;return m?m[1]:''}
 function setLabel(s,kind,u){return kind==='min'?s.r+' min':kind==='sec'?s.r+' s':kind==='dist'?s.r+' m':(s.w?s.w+' '+u+' × ':'')+s.r+' reps'}
@@ -3131,10 +3135,15 @@ function renderSession(){
   $$('#ss-body input').forEach(function(i){if(i.id&&i.value!=='')draft[i.id]=i.value});
   if(S.prep&&!S.sess&&wById(S.prep.wid)){
     var pwk=wById(S.prep.wid),rows=wRows(pwk);
-    h+='<header class="vh"><p class="eyebrow">Before you start</p><h2>'+esc(pwk.name)+'</h2><p class="lede">'+(rows.length?'Enter the weight you will use for each lift. Tick Bodyweight if you will not add any load. These carry into your set logging.':'Choose how long to rest between sets, then start.')+'</p></header>';
-    h+='<div class="card stack">'+rows.map(function(i){
-      var d=S.pd[i]||{},last=lastTop(pwk.id,i,'reps');
-      return '<div class="ex exb"><div class="exh"><div><b>'+esc(pwk.ex[i][0])+'</b><div class="small muted">'+esc(pwk.ex[i][1])+(last?' · Last time: '+esc(last):'')+'</div></div></div><div class="setform"><label class="f small muted" for="pw-'+i+'">Weight ('+S.units+')<input type="number" inputmode="decimal" min="0" step="any" id="pw-'+i+'" value="'+esc(d.v||'')+'" placeholder="0"></label><label class="check" for="pb-'+i+'"><input type="checkbox" id="pb-'+i+'"'+(d.b?' checked':'')+'> Bodyweight</label></div></div>';
+    h+='<header class="vh"><p class="eyebrow">Before you start</p><h2>'+esc(pwk.name)+'</h2><p class="lede">Set your sets, reps and weight for each exercise. You can still change them during the workout.</p></header>';
+    h+='<div class="card stack">'+pwk.ex.map(function(e,i){
+      var d=S.pd[i]||{},kind=exKind(e[0],e[1]),last=lastTop(pwk.id,i,kind),lift=rows.indexOf(i)>-1;
+      var sv=d.s!=null?d.s:setTarget(e[1]),rv=d.r!=null?d.r:repTarget(kind,e[1]);
+      return '<div class="ex exb"><div class="exh"><div><b>'+esc(e[0])+'</b><div class="small muted">'+esc(e[1])+(last?' · Last time: '+esc(last):'')+'</div></div></div><div class="setform">'
+        +'<label class="f small muted" for="ps-'+i+'">Sets<input type="number" inputmode="numeric" min="1" max="20" step="1" id="ps-'+i+'" value="'+esc(String(sv))+'"></label>'
+        +'<label class="f small muted" for="pr-'+i+'">'+KLAB[kind]+'<input type="number" inputmode="numeric" min="0" step="1" id="pr-'+i+'" value="'+esc(String(rv))+'" placeholder="0"></label>'
+        +(lift?'<label class="f small muted" for="pw-'+i+'">Weight ('+S.units+')<input type="number" inputmode="decimal" min="0" step="any" id="pw-'+i+'" value="'+esc(d.v||'')+'" placeholder="0"></label><label class="check" for="pb-'+i+'"><input type="checkbox" id="pb-'+i+'"'+(d.b?' checked':'')+'> Bodyweight</label>':'')
+        +'</div></div>';
     }).join('')+(S.prepMsg?'<div class="note warn" role="alert">'+esc(S.prepMsg)+'</div>':'')
       +'<div class="stack restpick"><b>Rest between sets</b><div class="chips" role="group" aria-label="Rest between sets">'+[0,30,60,90,120,180].map(function(r){return '<button type="button" class="chip" data-act="restpick" data-s="'+r+'" aria-pressed="'+(S.restPick===r)+'">'+(r?restLabel(r):'No rest')+'</button>'}).join('')+'</div><p class="small muted">'+(S.restPick?'A countdown starts after each set you log. You can skip it any time.':'No countdown between sets.')+' Your choice is remembered for next time.</p></div>'
       +'<div class="row spread">'+(rows.length?'<button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button>':'<span></span>')+'<div class="row"><button class="btn" data-act="pcancel">Cancel</button><button class="btn primary" data-act="pstart">Start workout</button></div></div></div>';
@@ -3147,15 +3156,15 @@ function renderSession(){
     h+='<div class="card">'+(S.showBurn?'<p class="small muted">Calories are an estimate from your weight, the type of workout and the time spent. Pausing stops the clock.</p>':'<p class="small muted">Calorie burn is hidden by your eating safeguards. <button class="chip" data-act="sburn">Show it</button></p>');
     if(S.area!=='none')h+='<p class="small muted">Checked against your '+AREAS.filter(function(a){return a[0]===S.area})[0][1].toLowerCase()+' (stage '+st+'). Stop if pain goes above 3.</p>';
     h+=w.ex.map(function(e,i){
-      var kind=exKind(e[0],e[1]),tg=setTarget(e[1]),k=w.id+'|'+i,logged=S.sets[k]||[],last=logged[logged.length-1],prev=lastTop(w.id,i,kind),state=exState(e[0],S.area,st),done=logged.length>=tg;
+      var kind=exKind(e[0],e[1]),TG=sessTg(w,i),tg=TG.s,k=w.id+'|'+i,logged=S.sets[k]||[],last=logged[logged.length-1],prev=lastTop(w.id,i,kind),state=exState(e[0],S.area,st),done=logged.length>=tg;
       var sl=logged.map(function(x,j){return '<li><span class="mono">Set '+(j+1)+': '+esc(setLabel(x,kind,S.units))+(x.t?' · '+secLabel(x.t):'')+'</span><button class="btn sm" data-act="setdel" data-i="'+i+'" data-j="'+j+'" aria-label="Remove set '+(j+1)+' of '+esc(e[0])+'">Remove</button></li>'}).join('');
-      var pre=last?last.r:preFill(kind,e[1]),preW=last&&last.w?last.w:(S.pw[k]||'');
+      var pre=last?last.r:TG.r,preW=last&&last.w?last.w:(S.pw[k]||'');
       var form='<div class="setform">'+(kind==='reps'?'<label class="f small muted" for="sw-'+i+'">Weight ('+S.units+')<input type="number" inputmode="decimal" min="0" step="any" id="sw-'+i+'" value="'+preW+'" placeholder="0"></label>':'')
         +'<label class="f small muted" for="sr-'+i+'">'+KLAB[kind]+'<input type="number" inputmode="numeric" min="0" step="1" id="sr-'+i+'" value="'+pre+'" placeholder="0"></label>'
         +'<button class="btn primary" data-act="setadd" data-i="'+i+'">Log set '+(logged.length+1)+'</button></div>';
       var m=muOf(e[0])[0].map(function(x){return MUS[x]}).join(' · ');
       return '<div class="ex exb"><div class="exh"><div><b>'+esc(e[0])+'</b> '+exBadge(state)+(done?' <span class="pill done">Done</span>':'')+(m?'<div class="small muted">'+esc(m)+'</div>':'')+(state!=='ok'?'<div class="small muted">'+(state==='modify'?'Lower the load and stop at pain 3.':'Swap: '+esc(ALT[e[0]]||'skip it for now')+'.')+'</div>':'')+'</div><span class="mono">'+esc(e[1])+'</span></div>'
-        +'<div class="sprog'+(done?' full':logged.length?' part':'')+'">'+logged.length+' of '+tg+' sets</div>'
+        +'<div class="row" style="gap:.5rem;align-items:center"><div class="sprog'+(done?' full':logged.length?' part':'')+'">'+logged.length+' of '+tg+' sets</div><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="-1" aria-label="One set fewer"'+(tg<=1?' disabled':'')+'>−</button><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="1" aria-label="One set more">+</button></div>'
         +(prev?'<div class="small muted">Last time: '+esc(prev)+'</div>':'')+(sl?'<ul class="setlist">'+sl+'</ul>':'')+form+'</div>';
     }).join('');
     h+='</div><div class="row spread"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="btn" data-act="scancel">'+(S.cancelAsk?'Tap again to discard':'Cancel session')+'</button></div>';
@@ -3625,15 +3634,18 @@ var ACT={
   },
   pstart:function(){
     var w=S.prep&&wById(S.prep.wid);if(!w)return;
-    var rows=wRows(w),bad=[];
+    var rows=wRows(w),bad=[],tg={};
+    w.ex.forEach(function(e,i){var ps=$('#ps-'+i),pr=$('#pr-'+i),sv=ps?parseInt(ps.value,10):NaN,rv=pr?parseFloat(pr.value):NaN;
+      S.pd[i]=Object.assign(S.pd[i]||{},{s:sv>0?Math.min(20,sv):setTarget(e[1]),r:rv>0?String(rv):repTarget(exKind(e[0],e[1]),e[1])});
+      tg[i]={s:S.pd[i].s,r:S.pd[i].r}});
     rows.forEach(function(i){
       var inp=$('#pw-'+i),cb=$('#pb-'+i),v=inp?parseFloat(inp.value):NaN,bw=!!(cb&&cb.checked);
-      S.pd[i]={v:inp?inp.value:'',b:bw};
+      S.pd[i]=Object.assign(S.pd[i]||{},{v:inp?inp.value:'',b:bw});
       if(!bw&&!(v>0))bad.push(w.ex[i][0]);
     });
     if(bad.length){S.prepMsg='Enter a weight, or tick Bodyweight, for: '+bad.join(', ')+'.';return}
     rows.forEach(function(i){var d=S.pd[i];S.pw[w.id+'|'+i]=d.b?0:parseFloat(d.v)});
-    S.prep=null;S.prepMsg='';beginSess(w);
+    S.prep=null;S.prepMsg='';beginSess(w);S.sess.tg=tg;
   },
   pcancel:function(){S.prep=null;S.prepMsg='';location.hash='workouts'},
   spause:function(){var a=S.sess;if(!a)return;if(a.paused){a.paused=false;a.last=Date.now()}else{a.acc+=Date.now()-a.last;a.paused=true}},
@@ -3647,9 +3659,10 @@ var ACT={
     var i=b.dataset.i,w=sessW();if(!w)return;
     var swEl=$('#sw-'+i),wt=swEl?parseFloat(swEl.value):0,r=parseFloat($('#sr-'+i).value);
     if(!(r>0)||(wt<0)){toast('Enter the reps, seconds or minutes first.');return}
-    var k=w.id+'|'+i,a=S.sess,now=Date.now(),t=Math.max(1,Math.round((now-(a.mark||a.last||now))/1000));(S.sets[k]=S.sets[k]||[]).push({w:wt>0?wt:0,r:r,t:t});S.cancelAsk=false;
+    var k=w.id+'|'+i,a=S.sess,now=Date.now(),t=Math.max(1,Math.round((now-(a.mark||a.last||now))/1000));(S.sets[k]=S.sets[k]||[]).push({w:wt>0?wt:0,r:r,t:t});S.sess.tg=S.sess.tg||{};S.sess.tg[i]={s:sessTg(w,+i).s,r:String(r)};S.cancelAsk=false;
     if(a.rest>0){S.rest={until:now+a.rest*1000};a.mark=now+a.rest*1000}else{S.rest=null;a.mark=now}
   },
+  tgset:function(b){var w=sessW();if(!w)return;var i=+b.dataset.i,cur=sessTg(w,i);S.sess.tg=S.sess.tg||{};S.sess.tg[i]={s:Math.max(1,Math.min(20,cur.s+parseInt(b.dataset.d,10))),r:cur.r}},
   setdel:function(b){
     var w=sessW();if(!w)return;var k=w.id+'|'+b.dataset.i;
     (S.sets[k]||[]).splice(parseInt(b.dataset.j,10),1);if(S.sets[k]&&!S.sets[k].length)delete S.sets[k];
