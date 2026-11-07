@@ -729,6 +729,13 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+/* Update reminder on Home */
+.updchip{align-self:flex-start;display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1rem .55rem .8rem;border-radius:999px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:.92rem;
+  background:var(--accent);color:var(--accent-ink);box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 40%,transparent);position:relative}
+.updchip svg{width:18px;height:18px}
+.updot{position:absolute;top:-3px;right:-3px;width:12px;height:12px;border-radius:50%;background:#ff4d4f;box-shadow:0 0 0 2px var(--bg)}
+@media (prefers-reduced-motion:no-preference){.updchip svg{animation:upd-spin 3s ease-in-out infinite}@keyframes upd-spin{0%,70%{transform:none}100%{transform:rotate(360deg)}}}
+
 /* Notifications, top left */
 .toasts{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:12px;z-index:90;display:flex;flex-direction:column;gap:8px;pointer-events:none;width:min(calc(100vw - 24px),340px)}
 .mtoast{pointer-events:auto;cursor:pointer;display:flex;align-items:center;gap:.75rem;padding:.55rem .9rem .55rem .55rem;background:rgba(24,24,30,.94);color:#fff;border:2px solid #5d5d6b;border-radius:6px;
@@ -912,6 +919,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <div class="subnav" id="subnav" hidden></div>
     <!-- TODAY -->
     <section class="view" id="v-today" hidden>
+      <button type="button" class="updchip" id="t-upd" data-act="uprelaunch" hidden></button>
       <div class="hero">
         <div class="heart" id="hero-art"></div>
         <div class="scrap" aria-hidden="true"></div>
@@ -1317,6 +1325,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         </div>
       </div></div>
       <div class="swpage" data-name="About" data-ic="about"><div class="grid2">
+        <div class="card stack" id="upd-card"><div class="sh"><h3>Updates</h3><p class="small muted">Get the newest version of Manna.</p></div><div id="upd-body"></div></div>
         <div class="card stack" id="fb-card">
           <div class="sh"><h3>Feedback</h3><p class="small muted">Found a bug or have an idea? Tell us. It opens your email app with your note ready to send.</p></div>
           <label class="f" for="fb-type">What is it about?<select id="fb-type"><option>An idea</option><option>Something is broken</option><option>A question</option><option>Something else</option></select></label>
@@ -2037,6 +2046,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:114,d:'Nov 7, 2026',t:'Update from Settings',s:['Settings › About has a new Updates card: see your version and the latest one, check for updates, and update with one tap.','When a newer version is out, a reminder stays at the top of Home until you update.']},
  {v:113,d:'Nov 7, 2026',t:'Import a schedule from text',s:['Weekly schedule has a new Import a schedule from text card. Paste a plan like Monday: Push Day, Tue/Thu - run or Sunday: rest.','Each day is matched to your workouts, and exercises listed under a day become a new workout.','You see a preview and can change any day before it is added to the selected schedule.']},
  {v:112,d:'Nov 7, 2026',t:'Build with AI is AI only',s:['Build with AI no longer shows a ready-made template first. You only see the workout the AI builds.','If AI is unavailable or you are out of AI uses, it says so instead of showing a template.']},
  {v:111,d:'Nov 7, 2026',t:'New notifications',s:['Notifications now slide in at the top left, stay a moment, and slide back out, like Minecraft’s. Each has an icon and a heading: Done, Heads up, Removed.','Tap one to dismiss it early. Up to three stack at once.','Automatic sync no longer shows a notification.']},
@@ -2324,7 +2334,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='113';
+var heroLast='',APPV='114';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3524,7 +3534,7 @@ function tickClock(){
   dt.textContent=d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
 function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.textContent=t})}
-function refresh(){try{renderStreaks()}catch(e){}setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
+function refresh(){try{renderStreaks();upPaint()}catch(e){}setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   applyPrefs();renderToday();renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
@@ -4275,6 +4285,7 @@ function apCheck(){
 function apHide(){$('#ap').hidden=true;document.body.classList.remove('modal-open');S.acctAsked=true}
 Object.assign(ACT,{
   uprelaunch:function(){try{if(typeof syncNow==='function'&&signedIn())syncNow()}catch(e){}setTimeout(function(){location.reload()},300)},
+  upcheck:function(){UPV.busy=true;upPaint();fetch('/version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){UPV.latest=+j.v||0;UPV.at=Date.now();UPV.busy=false;upPaint();toast(upNew()?'Version '+UPV.latest+' is ready. Tap Update now.':'You are on the latest version.')}).catch(function(){UPV.busy=false;upPaint();toast('Could not check for updates. Check your connection.')})},
   uplater:function(){UPV.later=UPV.shown;$('#up').hidden=true},
   apclose:function(){apHide()},
   apemail:function(){apHide();ACC.mode='signup';ACC.msg='';ACC.sig='';location.hash='settings';setTimeout(function(){var c=$('#acct-card');if(c)c.scrollIntoView({block:'start'});var e=$('#ac-email');if(e)e.focus()},350)},
@@ -4562,11 +4573,20 @@ if(window.ResizeObserver){var dvRO=new ResizeObserver(function(){dvPaint()});$$(
 /* ---------- New version available ----------
    version.json on the server always holds the newest version number. If it is newer than
    this copy of the app, ask the person to relaunch so they get it. */
-var UPV={later:0,shown:0};
+var UPV={later:0,shown:0,latest:0,at:0,busy:false};
+function upNew(){return !!UPV&&UPV.latest>+APPV}
+function upPaint(){if(!UPV)return;
+  var c=$('#t-upd');if(c){c.hidden=!upNew();if(upNew())c.innerHTML='<span class="updot" aria-hidden="true"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v5h-5"/></svg><span>Update to Version '+UPV.latest+'</span>'}
+  var b=$('#upd-body');if(!b)return;
+  var h='<div class="kv"><span>This device</span><span class="mono">Version '+esc(APPV)+'</span></div><div class="kv"><span>Latest</span><span class="mono">'+(UPV.latest?'Version '+UPV.latest:'Not checked yet')+'</span></div>'
+    +(upNew()?'<p class="note warn small">A newer version is ready. Update to get the latest features and fixes. Your data stays as it is.</p><div class="row"><button class="btn primary" data-act="uprelaunch">Update now</button></div>'
+      :'<p class="small muted">'+(UPV.busy?'Checking…':UPV.latest?'You are up to date'+(UPV.at?' · checked '+fmtT(new Date(UPV.at).toTimeString().slice(0,5)):'')+'.':'')+'</p><div class="row"><button class="btn" data-act="upcheck"'+(UPV.busy?' disabled':'')+'>Check for updates</button></div>');
+  if(b.dataset.h!==h){b.dataset.h=h;b.innerHTML=h}
+}
 function upCheck(){
   if(location.protocol==='file:')return;
   fetch('/version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
-    var v=+j.v||0;if(v<=+APPV||v===UPV.later||v===UPV.shown)return;
+    var v=+j.v||0;UPV.latest=v;UPV.at=Date.now();upPaint();if(v<=+APPV||v===UPV.later||v===UPV.shown)return;
     if(!$('#wn').hidden||!$('#ap').hidden||($('#onb')&&!$('#onb').hidden)){setTimeout(upCheck,20000);return}
     UPV.shown=v;
     $('#up-card').innerHTML='<div class="upic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v5h-5"/></svg></div>'
