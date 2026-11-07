@@ -729,6 +729,40 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+/* Rings and the logged-food pop-up */
+.crw{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.cring,.mr{position:relative;display:grid;place-items:center}
+.cring{width:min(200px,56vw);aspect-ratio:1}
+.cring .rg,.mr .rg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 10px color-mix(in srgb,currentColor 35%,transparent))}
+.rgv{transition:stroke-dasharray .8s cubic-bezier(.2,.8,.2,1)}
+.cin{position:relative;display:flex;flex-direction:column;align-items:center;line-height:1.05;text-align:center}
+.cin b{font-size:2.3rem;font-weight:800;font-variant-numeric:tabular-nums;color:currentColor}
+.cin span{font-size:.8rem;color:var(--muted);margin-top:.2rem}
+.cic{width:30px;height:30px;margin-bottom:.25rem}
+.clab{font-weight:700;margin-top:.4rem}
+.mrings{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1rem;text-align:center}
+.mring{display:flex;flex-direction:column;align-items:center}
+.mr{width:min(96px,25vw);aspect-ratio:1}
+.mr .cin b{font-size:1.05rem}
+.mic{width:20px;height:20px;margin-bottom:.15rem}
+.mlab{font-weight:700;margin-top:.45rem}
+.mring .small{margin-top:0}
+.fpcard{max-width:30rem;width:100%;display:flex;flex-direction:column;gap:.6rem;max-height:92vh;overflow:auto}
+.fpg{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:.4rem 0 .6rem;text-align:center}
+.femo{font-size:3.4rem;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:0 0 24px color-mix(in srgb,var(--accent) 22%,transparent)}
+.fkc b{font-size:1.6rem;font-weight:800;color:var(--accent)}
+.fq{display:flex;align-items:center;gap:.6rem}.fq span{min-width:8rem;font-size:.9rem}
+.msum{padding:.4rem 0}
+#m-list li{padding:0}
+.mrow{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:.8rem;width:100%;padding:.6rem .2rem;cursor:pointer;border-radius:12px}
+.mrow:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.mrow:focus-visible{outline:2px solid var(--accent)}
+.memo{font-size:1.6rem;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 12%,transparent);flex:none}
+.mname{flex:1;min-width:0;display:flex;flex-direction:column;font-weight:600}
+.mname small{font-weight:400;color:var(--muted);font-size:.8rem}
+.mkc{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (prefers-reduced-motion:no-preference){.femo{animation:sw-pop .5s cubic-bezier(.34,1.56,.64,1)}}
+
 /* Workout streak, Duolingo style */
 .stk{display:flex;flex-direction:column;gap:.8rem}
 .stk-top{display:flex;align-items:center;gap:.9rem}
@@ -1034,7 +1068,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <section class="view" id="v-eat" hidden>
       <header class="vh"><p class="eyebrow">Fuel</p><h2>What are you eating?</h2>
         <p class="lede">Type it, snap it, or describe it. Tap a result to see its macros, change the amount in grams or ounces, and add it to today.</p>
-        <div class="row"><a class="btn sm" href="#meals" id="e-mealsbtn">Today's meals</a></div></header>
+</header>
       <div class="card" id="t-targets"></div>
       <div class="card stack">
         <div class="row"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="What are you eating?" style="flex:1;min-width:12rem"><button class="btn" data-act="fcam">Camera</button><button class="btn" data-act="fup">Upload photo</button></div>
@@ -1263,6 +1297,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 <button class="btn totop" id="totop" data-act="totop" aria-label="Back to top" hidden>↑</button>
 <div class="modal" id="ap" role="dialog" aria-modal="true" aria-labelledby="ap-t" hidden><div class="mback" data-act="apclose"></div><div class="mcard apcard" id="ap-card"></div></div>
 <div class="modal" id="up" role="dialog" aria-modal="true" aria-labelledby="up-t" hidden><div class="mback" data-act="uplater"></div><div class="mcard upcard" id="up-card"></div></div>
+<div class="modal" id="fp" role="dialog" aria-modal="true" aria-labelledby="fp-t" hidden><div class="mback" data-act="fpclose"></div><div class="mcard fpcard" id="fp-card"></div></div>
 <div class="modal" id="wn" role="dialog" aria-modal="true" aria-labelledby="wn-t" hidden><div class="mback" data-act="wnclose"></div><div class="mcard wncard" id="wn-card"></div></div>
 <div class="modal" id="fm" role="dialog" aria-modal="true" aria-labelledby="fm-t" hidden><div class="mback" data-act="fclose"></div><div class="mcard" id="fm-card"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -1955,6 +1990,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:101,d:'Nov 7, 2026',t:'Log a whole meal with AI',s:['Describe a meal or snap your plate and AI adds every food at once, for one AI use.','A pop-up shows your calories eaten against today’s goal, with protein, carbs and fat rings, then each food to swipe through. Change the amount or remove a food right there.','Every food gets an emoji.','Today’s meals shows the same rings and a simple list. Tap a food to see what is in it.','The Today’s meals button on What are you eating is gone, since it has its own page.']},
  {v:100,d:'Nov 7, 2026',t:'Workout streak',s:['A Duolingo-style streak counter is now on Home and on Workouts: a flame, your days in a row, and this week’s workout days.','The flame grows when you finish a workout and it pops when your streak goes up.','Turn it off any time under Settings › Data › Extras.']},
  {v:99,d:'Nov 7, 2026',t:'Updates and Pro',s:['When a newer version of Manna is out, a message asks you to relaunch so you get it.','Pro accounts have no daily AI limit.','The verse in empty space now sits just above the footer.']},
  {v:98,d:'Nov 7, 2026',t:'Automatic sync',s:['When you are logged in, everything syncs on its own: your theme and settings, workouts done, food logged, your own and saved workouts, schedules, checklist and AI estimates.','Changes are saved to your account within a few seconds, and changes from your other devices show up within about 30 seconds, without reloading.','If two devices change things at the same time, both sets of changes are kept.','Feedback now goes to themorningfallcorp@gmail.com.','The minimum age is now 10, with no maximum shown.']},
@@ -2185,7 +2221,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='100';
+var heroLast='',APPV='101';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2405,14 +2441,11 @@ var SERVER_AI={
     var tokP=accOn()&&typeof authToken==='function'?authToken():Promise.resolve(null);
     return tokP.then(function(t){tok=t;return img?blobUrl(img):null}).then(function(u){
       var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
-      return fetch('/api/ai',{method:'POST',headers:h,body:JSON.stringify({prompt:inst,image:u||undefined,per:opts&&opts.per||undefined})});
+      return fetch('/api/ai',{method:'POST',headers:h,body:JSON.stringify({prompt:inst,image:u||undefined})});
     }).then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})}).then(function(j){
       if(j&&j.usage&&accOn())ACC.usage=j.usage;
       if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};
-      if(!tok){var k=1,d=j.data;
-        /* One use per food: keep only as many foods as there are uses left today */
-        if(opts&&opts.per==='food'&&d&&Array.isArray(d.foods)){d.found=Math.max(+d.found||0,d.foods.length);k=Math.max(1,Math.min(d.foods.length,aiLeft()));d.foods=d.foods.slice(0,k)}
-        aiCount(k)}
+      if(!tok)aiCount();
       return j.data;
     },function(e){throw (e&&e.code)?e:{code:'offline'}});
   },
@@ -2428,7 +2461,54 @@ function readAmt(){
   var e=$('#e-amt'),v=e?parseFloat(e.value):NaN;
   return isFinite(v)&&v>0?Math.max(1,Math.round(S.fu==='oz'?v*28.3495:v)):null;
 }
-var FOODSPEC='{"name": string, "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg)}';
+/* ---------- Food emoji ---------- */
+function emojiOk(e){e=String(e||'').trim();if(!e||e.length>12||/[A-Za-z0-9<>&"]/.test(e))return '';return e}
+var EMO=[['egg','🍳'],['toast','🍞'],['bread','🍞'],['bagel','🥯'],['croissant','🥐'],['pancake','🥞'],['waffle','🧇'],['oat','🥣'],['cereal','🥣'],['yogurt','🥣'],['milk','🥛'],['coffee','☕'],['latte','☕'],['tea','🍵'],['juice','🧃'],['soda','🥤'],['cola','🥤'],['water','💧'],['beer','🍺'],['wine','🍷'],['smoothie','🥤'],['shake','🥤'],
+ ['apple','🍎'],['banana','🍌'],['orange','🍊'],['grape','🍇'],['strawberr','🍓'],['blueberr','🫐'],['mango','🥭'],['pineapple','🍍'],['watermelon','🍉'],['peach','🍑'],['pear','🍐'],['cherr','🍒'],['lemon','🍋'],['avocado','🥑'],['coconut','🥥'],
+ ['salad','🥗'],['broccoli','🥦'],['carrot','🥕'],['corn','🌽'],['potato','🥔'],['fries','🍟'],['tomato','🍅'],['cucumber','🥒'],['pepper','🫑'],['mushroom','🍄'],['spinach','🥬'],['lettuce','🥬'],['bean','🫘'],
+ ['pizza','🍕'],['burger','🍔'],['big mac','🍔'],['whopper','🍔'],['hot dog','🌭'],['sandwich','🥪'],['sub','🥪'],['taco','🌮'],['burrito','🌯'],['wrap','🌯'],['nugget','🍗'],['chicken','🍗'],['wing','🍗'],['turkey','🦃'],['steak','🥩'],['beef','🥩'],['pork','🥓'],['bacon','🥓'],['ham','🍖'],['sausage','🌭'],
+ ['salmon','🐟'],['tuna','🐟'],['fish','🐟'],['shrimp','🍤'],['sushi','🍣'],['rice','🍚'],['noodle','🍜'],['ramen','🍜'],['pasta','🍝'],['spaghetti','🍝'],['soup','🍲'],['curry','🍛'],['stew','🍲'],['dumpling','🥟'],
+ ['cheese','🧀'],['butter','🧈'],['peanut','🥜'],['almond','🥜'],['nut','🥜'],['chocolate','🍫'],['cookie','🍪'],['cake','🍰'],['donut','🍩'],['doughnut','🍩'],['ice cream','🍨'],['candy','🍬'],['popcorn','🍿'],['chip','🥨'],['pretzel','🥨'],['honey','🍯'],['protein bar','🍫'],['bar','🍫'],['tofu','🥢']];
+function emojiFor(name){var n=String(name||'').toLowerCase();for(var i=0;i<EMO.length;i++)if(n.indexOf(EMO[i][0])>-1)return EMO[i][1];return '🍽️'}
+function mealEmoji(m){return m.em||emojiFor(m.name)}
+/* ---------- Rings (Cal+ style) ---------- */
+var RIC={kcal:'<path d="M12 2c1.5 4.5 7.5 7.5 7.5 15a7.5 7.5 0 0 1-15 0c0-3.5 1.5-5.5 3-7 0 2.5 1 4 2.5 4.5C9 10 10.5 5.5 12 2z" fill="currentColor"/>',
+  p:'<path d="M6.5 6.5l11 11M4 9l5-5M15 20l5-5M3 10.5L10.5 3M13.5 21L21 13.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/>',
+  c:'<g fill="currentColor"><circle cx="8" cy="7" r="1.8"/><circle cx="14" cy="5.5" r="1.8"/><circle cx="11" cy="11" r="1.8"/><circle cx="17" cy="10" r="1.8"/><circle cx="7" cy="14" r="1.8"/><circle cx="13" cy="16.5" r="1.8"/><circle cx="18" cy="15.5" r="1.8"/></g>',
+  f:'<path d="M12 3c3 4.5 6 8 6 11.5a6 6 0 0 1-12 0C6 11 9 7.5 12 3z" fill="currentColor"/>'};
+function ringSvg(frac,col,size,w){var r=(size-w)/2,c=2*Math.PI*r,f=Math.max(0,Math.min(1,frac||0));
+  return '<svg class="rg" viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="'+w+'"/><circle class="rgv" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')"/></svg>'}
+function gfmt(n,u){return S.hideNums?'•••':Math.round(n)+(u||' g')}
+var MC={kcal:'var(--accent)',p:'#ff5d5d',c:'#3fbf6a',f:'#4a9dff'};
+function bigRing(eaten,goal,sub){
+  return '<div class="crw"><div class="cring" style="color:'+MC.kcal+'">'+ringSvg(goal?eaten/goal:0,MC.kcal,200,14)+'<div class="cin"><svg viewBox="0 0 24 24" class="cic" aria-hidden="true">'+RIC.kcal+'</svg><b>'+kc(Math.round(eaten))+'</b><span>of '+kc(Math.round(goal))+' kcal</span></div></div><p class="clab">Calories eaten today</p>'+(sub?'<p class="small muted">'+sub+'</p>':'')+'</div>'}
+function macroRings(v,T,label){
+  return '<div class="mrings">'+[['p','Protein',T.protein],['c','Carbs',T.carb],['f','Fat',T.fat]].map(function(x){
+    return '<div class="mring"><div class="mr" style="color:'+MC[x[0]]+'">'+ringSvg(x[2]?v[x[0]]/x[2]:0,MC[x[0]],96,9)+'<div class="cin"><svg viewBox="0 0 24 24" class="mic" aria-hidden="true">'+RIC[x[0]]+'</svg><b>'+gfmt(v[x[0]])+'</b></div></div><p class="mlab">'+x[1]+'</p><p class="small muted">'+(label==='of'?'of '+gfmt(x[2]):label)+'</p></div>'}).join('')+'</div>'}
+/* Today's totals as rings: used on Today's meals and in the pop-up */
+function todayRings(extra){var t=totals(),T=targets();return bigRing(t.kcal,T.kcal,extra)+macroRings(t,T,'of')}
+/* ---------- Pop-up: the foods just logged (or one food from Today's meals) ---------- */
+var FP={list:[],mode:''};
+function fpFind(id){for(var i=0;i<S.meals.length;i++){var m=S.meals[i];if(String(m.k||m.id)===String(id))return m}return null}
+function fpOpen(list,mode){FP.list=list.map(function(m){return m.k||m.id});FP.mode=mode;SWMEM['fp-sw']=0;fpRender();$('#fp').hidden=false}
+function fpRender(){
+  var ms=FP.list.map(fpFind).filter(Boolean),card=$('#fp-card');
+  if(!ms.length){$('#fp').hidden=true;return}
+  var T=targets(),add={kcal:0};ms.forEach(function(m){add.kcal+=m.n.kcal});
+  var pages=[];
+  if(FP.mode==='logged')pages.push('<div class="swpage" data-name="Today" data-ic="kcal"><div class="fpg">'+todayRings(S.hideNums?'':'+'+kc(Math.round(add.kcal))+' kcal from '+(ms.length>1?'these '+ms.length+' foods':'this food'))+'</div></div>');
+  ms.forEach(function(m){var pct=T.kcal?Math.round(m.n.kcal/T.kcal*100):0;
+    pages.push('<div class="swpage" data-name="'+esc(m.name.split(',')[0].slice(0,22))+'" data-ic="food"><div class="fpg fpfood">'
+      +'<div class="femo">'+esc(mealEmoji(m))+'</div><h3>'+esc(m.name)+'</h3>'
+      +'<div class="fkc"><b>'+kc(Math.round(m.n.kcal))+'</b> kcal'+(S.hideNums?'':' · '+pct+'% of today')+'</div>'
+      +'<div class="fq"><button class="btn sm" data-act="fpq" data-id="'+esc(m.k||m.id)+'" data-d="-0.25" aria-label="Less">−</button><span>'+(Math.round(m.q*100)/100)+' × '+esc((find(m.fid)||{}).serv||'serving')+'</span><button class="btn sm" data-act="fpq" data-id="'+esc(m.k||m.id)+'" data-d="0.25" aria-label="More">+</button></div>'
+      +macroRings(m.n,T,'in this food')
+      +'<div class="row" style="justify-content:center"><button class="btn sm" data-act="fpdel" data-id="'+esc(m.k||m.id)+'">Remove from today</button></div></div></div>')});
+  card.innerHTML='<div class="row spread"><h3 id="fp-t">'+(FP.mode==='logged'?'Logged '+ms.length+' food'+(ms.length>1?'s':''):esc(ms[0].name))+'</h3><button class="btn sm" data-act="fpclose">Done</button></div>'
+    +'<div class="swp" id="fp-sw"><div class="swbar" aria-label="Foods"></div><div class="swtrack">'+pages.join('')+'</div></div>';
+  swInit($('#fp-sw'));
+}
+var FOODSPEC='{"emoji": one emoji that best shows this food, "name": string, "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg)}';
 /* Turn one AI item into a food: a database match with the right amount, or a saved estimate */
 function aiFoodItem(r,amt,blob){
   var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000);
@@ -2454,18 +2534,14 @@ function askFood(text,file){
           +(amt?' It is one food. The portion is exactly '+amt+' g ('+Math.round(amt/28.3495*10)/10+' oz). Every number you return must be for exactly that amount.':' List every separate food or drink they mention (or the photo shows) as its own item, up to 8, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs). Do not split one dish into its ingredients.')
           +' For each item, if one entry in this list is clearly the same food, give its id as matchId, otherwise null:\n'+ids
           +'\nReturn JSON only: {"foods": [ '+FOODSPEC+' ]}. If you cannot tell what any of it is, return {"foods": []}.';
-        return sample.json(inst,blob?{images:[blob],modelTier:'quick',per:'food'}:{modelTier:'quick',per:'food'}).then(function(r){
+        return sample.json(inst,blob?{images:[blob],modelTier:'quick'}:{modelTier:'quick'}).then(function(r){
           var L=r&&Array.isArray(r.foods)?r.foods:(r&&r.name?[r]:[]);
           L=L.filter(function(x){return x&&x.name}).slice(0,8);
           if(!L.length){ASK={busy:false,msg:'Could not tell what that is. Try again, or type the food name.',img:''};refresh();return}
-          var made=L.map(function(x){return aiFoodItem(x,amt,blob)});
-          var found=Math.max(L.length,+(r&&r.found)||0),cut=found>L.length;
-          if(made.length===1&&!cut){S.fsel=made[0].f.id;S.fq=made[0].q;ASK={busy:false,msg:'',img:''};refresh();return}
-          made.forEach(function(m){S.meals.push(mkMeal(m.f,m.q,'AI'))});
-          var names=made.map(function(m){return m.f.name}),uses=made.length+' AI use'+(made.length>1?'s':'');
-          var hit=[];made.forEach(function(m){(m.f.al||[]).forEach(function(a){if(S.allergy[a]&&hit.indexOf(a)<0)hit.push(a)})});
-          ASK={busy:false,ok:true,msg:'Added '+made.length+' food'+(made.length>1?'s':'')+' to today: '+names.join(', ')+'. Used '+uses+', one per food.'+(cut?' You ran out of AI uses, so '+(found-made.length)+' more '+(found-made.length>1?'were':'was')+' not added. Search for '+(found-made.length>1?'them':'it')+' instead.':'')+(hit.length?' Heads up: this contains '+hit.join(', ')+'.':''),img:''};
-          toast('Added '+names.length+' food'+(names.length>1?'s':'')+'.');refresh();
+          var added=L.map(function(x){var m=aiFoodItem(x,amt,blob),meal=mkMeal(m.f,m.q,'AI');meal.em=emojiOk(x.emoji)||emojiFor(m.f.name);S.meals.push(meal);return meal});
+          var hit=[];added.forEach(function(m){(m.al||[]).forEach(function(a){if(S.allergy[a]&&hit.indexOf(a)<0)hit.push(a)})});
+          ASK={busy:false,ok:true,msg:'Added '+added.length+' food'+(added.length>1?'s':'')+' to today.'+(hit.length?' Heads up: this contains '+hit.join(', ')+'.':''),img:''};
+          refresh();fpOpen(added,'logged');
         });
       };
       return (blob?Promise.resolve(sample.limits()).then(function(l){if(!l||!l.images)throw {code:'noimg'}}):Promise.resolve()).then(go);
@@ -2487,7 +2563,7 @@ function renderFoods(){
   $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try What are you eating? to search or estimate it.</p>';
   var qq=($('#f-q').value||'').trim(),el=foodList(qq,'all');
   var multi=qq&&/,|&|\+|\band\b|\bwith\b/i.test(qq);
-  $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">One AI use per food.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">One AI use per food.</p>':'')+'</div>'):'';
+  $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">AI adds each food. One AI use for the whole list.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">AI adds each food. One AI use for the whole list.</p>':'')+'</div>'):'';
   var _se=S.est.length?'<details><summary class="small">Saved AI estimates ('+S.est.length+')</summary><p class="small muted">Every food AI estimates is saved here on this device, so you can search and add it again without asking.</p><ul class="list" style="margin-top:.5rem">'+S.est.slice(0,50).map(function(o){return '<li><div>'+esc(o.name)+'<div class="small muted mono">'+esc(o.serv)+' · '+kc(o.kcal)+' kcal</div></div><button class="btn sm" data-act="estdel" data-id="'+o.id+'" aria-label="Remove saved estimate '+esc(o.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
   $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking AI. This takes a few seconds.</div>':(ASK.msg?'<div class="note '+(ASK.ok?'ok':'warn')+'">'+esc(ASK.msg)+'</div>':''));
   renderFoodModal();
@@ -2548,8 +2624,9 @@ document.addEventListener('keydown',function(e){
 function renderMeals(){
   var ms=S.meals.slice().sort(function(a,b){return a.t<b.t?-1:(a.t>b.t?1:a.id-b.id)}),T={kcal:0,p:0,c:0,f:0};
   ms.forEach(function(m){T.kcal+=m.n.kcal;T.p+=m.n.p;T.c+=m.n.c;T.f+=m.n.f});
-  $('#m-sum').innerHTML=ms.length?'<div class="row spread"><h3>'+ms.length+' item'+(ms.length>1?'s':'')+' logged</h3><span class="badge">'+kc(T.kcal)+' kcal</span></div><p class="small muted mono">Protein '+Math.round(T.p)+' g · Carbs '+Math.round(T.c)+' g · Fat '+Math.round(T.f)+' g · First '+fmtT(ms[0].t)+' · Last '+fmtT(ms[ms.length-1].t)+'</p>':'<h3>Nothing logged yet</h3><p class="muted">Foods you add today will be listed here with the time.</p>';
-  $('#m-list').innerHTML=ms.map(function(m){return '<li><div><span class="mono" style="margin-right:.5rem">'+esc(fmtT(m.t))+'</span>'+esc(m.name)+(m.q!==1?' ×'+(Math.round(m.q*100)/100):'')+' <span class="badge">'+esc(m.via)+'</span><div class="small muted mono">'+kc(m.n.kcal)+' kcal · P '+Math.round(m.n.p)+' g · C '+Math.round(m.n.c)+' g · F '+Math.round(m.n.f)+' g</div></div><button class="btn sm" data-act="delmeal" data-id="'+m.id+'" aria-label="Remove '+esc(m.name)+'">Remove</button></li>'}).join('');
+  var mh='<div class="row spread"><h3>'+(ms.length?ms.length+' item'+(ms.length>1?'s':'')+' logged':'Nothing logged yet')+'</h3><span class="badge">'+kc(Math.round(T.kcal))+' / '+kc(Math.round(targets().kcal))+' kcal</span></div><div class="msum">'+todayRings('')+'</div>';
+  if($('#m-sum').dataset.h!==mh){$('#m-sum').dataset.h=mh;$('#m-sum').innerHTML=mh}
+  $('#m-list').innerHTML=ms.length?ms.map(function(m){return '<li><button type="button" class="mrow" data-act="mealinfo" data-id="'+esc(m.k||m.id)+'"><span class="memo">'+esc(mealEmoji(m))+'</span><span class="mname">'+esc(m.name)+'<small>'+esc(fmtT(m.t))+'</small></span><span class="mkc">'+kc(Math.round(m.n.kcal))+' kcal</span></button></li>'}).join(''):'<li><span class="muted small">Foods you add today will show here. Tap one to see what is in it.</span></li>';
 }
 function renderLog(){
   var rec=S.recipes.slice().reverse(),seen={},recent=[],i;
@@ -3415,7 +3492,11 @@ var ACT={
   fadd:function(){var f=find(S.fsel);if(!f)return;S.meals.push(mkMeal(f,S.fq,'food menu'));var hit=f.al.filter(function(a){return S.allergy[a]});S.fsel=null;toast(hit.length?'Added '+f.name+'. It contains '+hit.join(', ')+'.':'Added '+f.name+' to today.')},
   addfood:function(b){var f=find(b.dataset.id);S.meals.push(mkMeal(f,1,'tap'));var hit=f.al.filter(function(a){return S.allergy[a]});toast(hit.length?'Added '+f.name+'. It contains '+hit.join(', ')+'.':'Added '+f.name+'.')},
   estdel:function(b){S.est=S.est.filter(function(o){return o.id!==b.dataset.id});estSave();if(S.fsel===b.dataset.id)S.fsel=null},
-  delmeal:function(b){S.meals=S.meals.filter(function(m){return String(m.id)!==b.dataset.id})},
+  delmeal:function(b){var id=b.dataset.id;S.meals=S.meals.filter(function(m){return String(m.k||m.id)!==id&&String(m.id)!==id})},
+  mealinfo:function(b){var m=fpFind(b.dataset.id);if(m)fpOpen([m],'view')},
+  fpclose:function(){$('#fp').hidden=true},
+  fpdel:function(b){var id=b.dataset.id,m=fpFind(id);S.meals=S.meals.filter(function(x){return String(x.k||x.id)!==id});FP.list=FP.list.filter(function(x){return String(x)!==id});if(m)toast('Removed '+m.name+'.');setTimeout(fpRender,0)},
+  fpq:function(b){var m=fpFind(b.dataset.id),f=m&&find(m.fid);if(!m||!f)return;var q=Math.max(.25,Math.min(30,Math.round((m.q+parseFloat(b.dataset.d))*4)/4));m.q=q;KEYS.forEach(function(k){m.n[k]=+(f[k]*q).toFixed(2)});setTimeout(fpRender,0)},
   voice:function(){t0=performance.now();$('#l-text').value='two eggs and whole wheat toast with butter';doLog('two eggs and whole wheat toast with butter','voice');$('#l-text').value='';toast('Voice capture is simulated in this demo.')},
   'photo-open':function(){$('#ph-box').hidden=!$('#ph-box').hidden},
   photopick:function(b){S.photo=b.dataset.id;$('#ph-portion').value=1},
@@ -4070,7 +4151,9 @@ var SWIC={
   look:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
   body:'<circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r=".9"/>',
   data:'<ellipse cx="12" cy="6" rx="7" ry="2.6"/><path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6"/>',
-  about:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.2M12 7.8h.01"/>'};
+  about:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.2M12 7.8h.01"/>',
+  kcal:'<path d="M12 3c1.4 4.2 7 7 7 13.5a7 7 0 0 1-14 0c0-3.2 1.4-5 2.8-6.4 0 2.3 1 3.7 2.3 4.2C9.4 10 10.6 6 12 3z"/>',
+  food:'<path d="M4 11h16a8 8 0 0 1-16 0zM9 7c0-1.5 1-2 1-3.5M13 7c0-1.5 1-2 1-3.5"/>'};
 var SWP={},SWMEM={};
 try{SWMEM=JSON.parse(sessionStorage.getItem('manna.sw.v1')||'{}')||{}}catch(e){}
 function swCalm(){var d=document.documentElement;return d.classList.contains('rm')||d.classList.contains('lite')||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
