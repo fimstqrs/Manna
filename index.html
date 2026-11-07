@@ -1020,6 +1020,13 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         <p class="lede">You have three schedules. Give each one a name and choose a workout for every day. The schedule you select is the one used for Today and the home page.</p></header>
       <div class="scards" id="sh-plans"></div>
       <div class="card stack" id="sh-week"></div>
+      <div class="card stack" id="sh-imp">
+        <h3>Import a schedule from text</h3>
+        <p class="small muted">Paste a weekly plan from your notes or a coach. One day per line, like <span class="mono">Monday: Push Day</span>, <span class="mono">Tue/Thu - 5k run</span> or <span class="mono">Sunday: rest</span>. Exercises listed under a day, like <span class="mono">Squat 3x8</span>, become a new workout.</p>
+        <textarea id="si-text" aria-label="Paste your weekly schedule" placeholder="Monday: Push Day&#10;Tuesday: rest&#10;Wednesday: Legs&#10;  Squat 4x8&#10;  Lunges 3x10&#10;Thu/Sat: 30 min run&#10;Friday: Pull Day"></textarea>
+        <div class="row"><button class="btn primary" data-act="siread">Read schedule</button><button class="btn sm" data-act="sisample">Try an example</button></div>
+        <div id="si-out" aria-live="polite"></div>
+      </div>
     </section>
 
     <!-- HISTORY -->
@@ -1848,7 +1855,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals}}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
   try{(d.customW||[]).concat(d.hist).forEach(function(x){var n=parseInt(String(x&&x.id||'').replace(/^[a-z]+/,''),10);if(n>=uid)uid=n+1})}catch(e){}
@@ -2030,6 +2037,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:113,d:'Nov 7, 2026',t:'Import a schedule from text',s:['Weekly schedule has a new Import a schedule from text card. Paste a plan like Monday: Push Day, Tue/Thu - run or Sunday: rest.','Each day is matched to your workouts, and exercises listed under a day become a new workout.','You see a preview and can change any day before it is added to the selected schedule.']},
  {v:112,d:'Nov 7, 2026',t:'Build with AI is AI only',s:['Build with AI no longer shows a ready-made template first. You only see the workout the AI builds.','If AI is unavailable or you are out of AI uses, it says so instead of showing a template.']},
  {v:111,d:'Nov 7, 2026',t:'New notifications',s:['Notifications now slide in at the top left, stay a moment, and slide back out, like Minecraft’s. Each has an icon and a heading: Done, Heads up, Removed.','Tap one to dismiss it early. Up to three stack at once.','Automatic sync no longer shows a notification.']},
  {v:110,d:'Nov 7, 2026',t:'Easier to change your theme',s:['Change theme in Settings › Look is now a big, colourful button showing your current theme and every theme’s colour.','The Change theme button on your profile stands out too.']},
@@ -2316,7 +2324,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='112';
+var heroLast='',APPV='113';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3155,6 +3163,76 @@ function dayStatus(wid,di){
   return 'plan';
 }
 var PILL={done:['done','Done'],prog:['prog','In progress'],miss:['miss','Not done'],today:['plan','Today'],plan:['plan','Planned'],rest:['rest','Rest']};
+
+/* ---------- Import a schedule from text ---------- */
+var SI_SAMPLE='Monday: Push Day\nTuesday: rest\nWednesday: Leg day\n  Back squat 4x8\n  Walking lunges 3x10\n  Calf raises 3x15\nThu/Sat: Easy run 30 min\nFriday: Pull Day\nSunday: rest';
+var SIDAY=[['mon','monday'],['tue','tues','tuesday'],['wed','weds','wednesday'],['thu','thur','thurs','thursday'],['fri','friday'],['sat','saturday'],['sun','sunday']];
+function siDayIdx(w){w=w.toLowerCase().replace(/\.$/,'');for(var i=0;i<7;i++)if(SIDAY[i].indexOf(w)>-1)return i;return -1}
+/* "Mon/Wed/Fri: ...", "Monday - ...", "Weekdays: ...", "Every day: ..." */
+function siHead(ln){
+  var m=ln.replace(/^[\-*•]+\s*/,'').match(/^((?:(?:monday|mon|tuesday|tues|tue|wednesday|weds|wed|thursday|thurs|thur|thu|friday|fri|saturday|sat|sunday|sun)|weekdays|weekends?|every ?day|daily)(?:\s*(?:\/|,|&|and|\+|-(?=\s*(?:monday|mon|tuesday|tues|tue|wednesday|weds|wed|thursday|thurs|thur|thu|friday|fri|saturday|sat|sunday|sun)\b))\s*(?:monday|mon|tuesday|tues|tue|wednesday|weds|wed|thursday|thurs|thur|thu|friday|fri|saturday|sat|sunday|sun))*)\b\.?\s*(?:[:\-–—|]\s*|\s+|$)(.*)$/i);
+  if(!m)return null;
+  var days=[],spec=m[1].toLowerCase();
+  if(/^weekdays/.test(spec))days=[0,1,2,3,4];else if(/^weekends?/.test(spec))days=[5,6];else if(/^(every ?day|daily)/.test(spec))days=[0,1,2,3,4,5,6];
+  else{var range=spec.match(/^(\w+)\s*-\s*(\w+)$/);
+    if(range){var a=siDayIdx(range[1]),b=siDayIdx(range[2]);if(a>-1&&b>-1)for(var k=a;k!==(b+1)%7;k=(k+1)%7){days.push(k);if(days.length>7)break}}
+    else spec.split(/\s*(?:\/|,|&|and|\+)\s*/).forEach(function(w){var d=siDayIdx(w);if(d>-1)days.push(d)})}
+  return days.length?{days:days,rest:m[2].trim()}:null;
+}
+function siDur(t){var m=String(t).match(/(\d+(?:\.\d+)?)\s*(minutes|mins|min|hours|hrs|hr|h|km|k|miles|mi)\b/i);if(!m)return '';var u=m[2].toLowerCase();return m[1]+(/^h/.test(u)?' hr':/^(km|k)$/.test(u)?' km':/^mi/.test(u)?' mi':' min')}
+function siClean(t){return String(t).replace(/(\d+(?:\.\d+)?)\s*(minutes|mins|min|hours|hrs|hr|h|km|k|miles|mi)\b/ig,' ').replace(/\s+/g,' ').trim()}
+function siNorm(t){return siClean(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\b(day|workout|session|the|a|my)\b/g,' ').replace(/\s+/g,' ').trim()}
+/* Best existing workout for a name: saved ones first, then exact, contains, shared words */
+function siMatch(name){
+  var n=siNorm(name);if(!n)return null;var best=null,score=0;
+  allWorkouts().forEach(function(w){var wn=siNorm(w.name),sc=0;
+    if(wn===n)sc=1;else if(wn.indexOf(n)>-1||n.indexOf(wn)>-1)sc=.8;
+    else{var a=n.split(' '),b=wn.split(' '),hit=a.filter(function(x){return x.length>2&&b.indexOf(x)>-1}).length;sc=hit?hit/Math.max(a.length,b.length)*.75:0}
+    if(isSaved(w.id))sc+=.05;if(w.cat==='custom')sc+=.02;
+    if(sc>score){score=sc;best=w}});
+  return score>=.45?best:null;
+}
+function siParse(text){
+  var lines=String(text||'').split(/\r?\n/),out=[null,null,null,null,null,null,null],seen=[],cur=null,notes=[];
+  var flush=function(){if(!cur)return;var e;
+    if(cur.items.length){e={kind:'new',name:cur.label||(DAYN[cur.days[0]]+' workout'),items:cur.items}}
+    else if(!cur.label||/^(rest|off|recovery|none|rest day|day off|-)$/i.test(cur.label)){e={kind:'rest'}}
+    else{var w=siMatch(cur.label);e=w?{kind:'match',id:w.id,label:cur.label}:{kind:'none',label:cur.label,sel:'__new'}}
+    cur.days.forEach(function(d){out[d]=e;if(seen.indexOf(d)<0)seen.push(d)});cur=null};
+  lines.forEach(function(raw){var ln=raw.trim();if(!ln)return;
+    var h=siHead(ln);
+    if(h){flush();cur={days:h.days,label:h.rest.replace(/[:.]$/,''),items:[]};
+      var one=parseNotes(h.rest);if(one.items.length&&!/^rest/i.test(h.rest)&&!siMatch(h.rest)){cur.items=one.items;cur.label=siClean(h.rest).replace(/\s*\d+\s*[x×]\s*\d+.*$/i,'')}return}
+    if(cur){var p=parseNotes(ln);if(p.items.length){cur.items=cur.items.concat(p.items);return}}
+    notes.push(ln)});
+  flush();
+  return {days:out,found:seen.length,skipped:notes.slice(0,5)};
+}
+function siOpts(sel,label){
+  var o=(label?'<option value="__new"'+(sel==='__new'?' selected':'')+'>Create: '+esc(siClean(label)||label)+'</option>':'')+'<option value=""'+(sel?'':' selected')+'>Rest day</option>';
+  o+=allWorkouts().map(function(w){return '<option value="'+w.id+'"'+(w.id===sel?' selected':'')+'>'+esc(w.name)+'</option>'}).join('');
+  return o;
+}
+function renderSchedImport(){
+  var el=$('#sh-imp');if(!el)return;el.hidden=S.useSched===false;
+  var o=S.siRes,h='';
+  if(o){
+    if(!o.found)h='<p class="note warn small">Could not find any days in that text. Start each line with a day, like Monday: Push Day.</p>';
+    else{
+      h='<div class="note stack"><b>Preview for '+esc(schedName())+'</b><ul class="dayrows">'+o.days.map(function(e,d){
+        var main;
+        if(!e)main='<span class="muted small">Not in your text: stays as it is</span>';
+        else if(e.kind==='new')main='<b>New workout: '+esc(e.name)+'</b><div class="small muted">'+e.items.map(function(i){return esc(i.name)+' '+esc(i.rx)}).join(' · ')+'</div>';
+        else main='<label class="vh-only" for="si-'+d+'">Workout for '+DAYN[d]+'</label><select id="si-'+d+'" data-si="'+d+'">'+siOpts(e.kind==='match'?e.id:e.sel||'',e.kind==='none'?e.label:'')+'</select>'+(e.kind==='none'?'<div class="small muted">No workout called “'+esc(e.label)+'” yet, so a new one will be made. Or pick another.</div>':e.kind==='match'&&siNorm(wById(e.id).name)!==siNorm(e.label)?'<div class="small muted">Matched “'+esc(e.label)+'”</div>':'');
+        return '<li class="dayrow"><div class="dayname"><b>'+DAYN[d]+'</b></div><div class="daymain">'+main+'</div></li>'}).join('')+'</ul>'
+        +(o.skipped.length?'<p class="small muted">Skipped: '+o.skipped.map(esc).join('; ')+'</p>':'')
+        +'<div class="row"><button class="btn primary" data-act="siapply">Use this for '+esc(schedName())+'</button><button class="btn sm" data-act="siclear">Cancel</button></div></div>';
+    }
+  }
+  var out=$('#si-out');if(out.dataset.h!==h){out.dataset.h=h;out.innerHTML=h}
+}
+/* Remember changes made in the preview */
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.dataset||t.dataset.si==null||!S.siRes)return;var d=+t.dataset.si;var prev=S.siRes.days[d]||{};S.siRes.days[d]=t.value==='__new'?{kind:'none',label:prev.label,sel:'__new'}:t.value?{kind:'match',id:t.value,label:prev.label||wById(t.value).name}:{kind:'rest',label:prev.label}});
 function renderSchedule(){
   if(S.useSched===false){$('#sh-plans').innerHTML='';$('#sh-week').innerHTML='<h3>Schedules are off</h3><p class="muted">Turn them on to plan a workout for each day of the week.</p><div class="row"><button class="btn primary" data-act="schedon">Turn schedules on</button></div>';return}
   $('#sh-plans').innerHTML=SCHED_T.map(function(t,ti2){
@@ -3182,6 +3260,7 @@ function renderSchedule(){
     +'<div class="legend"><span class="pill plan">Planned</span><span class="pill prog">In progress</span><span class="pill done">Done</span><span class="pill miss">Not done</span><span class="pill rest">Rest</span></div>'
     +'<div class="row spread"><p class="small muted">Pick a workout for each day, or leave it as a rest day.</p><button class="btn sm" data-act="sreset">Clear this schedule</button></div>';
   $('#sh-week').innerHTML=h;
+  renderSchedImport();
 }
 
 /* history */
@@ -3741,6 +3820,21 @@ var ACT={
     if(S.selW===id){S.selW='g1';S.wz=3}syncSched();toast('Deleted.');
   },
   splan:function(b){S.planId=b.dataset.id;syncSched()},
+  siread:function(){S.siRes=siParse($('#si-text').value)},
+  sisample:function(){$('#si-text').value=SI_SAMPLE;S.siRes=siParse(SI_SAMPLE)},
+  siclear:function(){S.siRes=null},
+  siapply:function(){var o=S.siRes;if(!o)return;var made=0,set=0,plan=S.plans[S.planId].slice(),mk={};
+    o.days.forEach(function(e,d){if(!e)return;
+      if(e.kind==='new'){var key=e.name+'|'+JSON.stringify(e.items);if(!mk[key]){var id='c'+(uid++);S.customW.push({id:id,name:String(e.name).slice(0,60),mins:Math.max(10,e.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:e.items.map(function(i){return [i.name,i.rx]})});mk[key]=id;made++}plan[d]=mk[key]}
+      else if(e.kind==='rest')plan[d]=null;
+      else{var sel=$('#si-'+d),v=sel?sel.value:(e.kind==='match'?e.id:e.sel||'');
+        if(v==='__new'){var nm=siClean(e.label)||e.label,dur=siDur(e.label)||'30 min',key2='n|'+nm.toLowerCase();
+          if(!mk[key2]){var nid='c'+(uid++),cap=nm.charAt(0).toUpperCase()+nm.slice(1);S.customW.push({id:nid,name:cap.slice(0,60),mins:/min/.test(dur)?Math.max(10,parseInt(dur,10)):30,level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'cardio',ex:[[cap.slice(0,50),dur]]});mk[key2]=nid;made++}
+          plan[d]=mk[key2]}
+        else plan[d]=v||null}
+      set++});
+    S.plans[S.planId]=plan;syncSched();S.siRes=null;$('#si-text').value='';
+    toast('Imported '+set+' day'+(set===1?'':'s')+' into '+schedName()+(made?', with '+made+' new workout'+(made===1?'':'s'):'')+'.')},
   sreset:function(){S.plans[S.planId]=[null,null,null,null,null,null,null];S.planNames[S.planId]='';syncSched();toast('Schedule cleared.')},
   hfilter:function(b){S.hf=b.dataset.k},
   hdel:function(b){S.hist=S.hist.filter(function(x){return x.id!==b.dataset.id});syncSched();toast('Removed from history.')},
