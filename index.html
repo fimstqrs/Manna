@@ -708,6 +708,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swp{display:flex;flex-direction:column;gap:10px;min-width:0}
 .swbar{display:flex;align-items:center;gap:.5rem;min-height:38px}
 .swdots{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+.swdot.on>span b{max-width:60vw;overflow:hidden;text-overflow:ellipsis}
 .swdot{appearance:none;-webkit-appearance:none;border:0;background:none;padding:0;margin:0;height:36px;min-width:18px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:inherit;font:inherit;-webkit-tap-highlight-color:transparent}
 .swdot>span{display:inline-flex;align-items:center;gap:.4rem;width:8px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 22%,transparent);overflow:hidden;white-space:nowrap;transition:background .3s ease}
 .swdot>span svg{width:16px;height:16px;flex:none}
@@ -718,7 +719,6 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swdot.on>span{width:auto;height:30px;padding:0 .8rem 0 .6rem;background:var(--accent);color:var(--accent-ink)}
 .swdot.on>span svg,.swdot.on>span b{display:inline-block}
 .swdot:focus-visible{outline:none}.swdot:focus-visible>span{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 45%,transparent)}
-.swleft{font-size:.82rem;color:var(--muted);white-space:nowrap}
 .swnav{width:34px;height:34px;padding:0;border-radius:50%;font-size:1.1rem;line-height:1;flex:none}
 .swnav:disabled{opacity:.35}
 @media (hover:none){.swnav{display:none}}
@@ -1913,8 +1913,9 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:94,d:'Nov 7, 2026',t:'A cleaner page bar',s:['The page bar on Workouts and Settings no longer says how many pages are left. The dots show where you are.']},
  {v:93,d:'Nov 7, 2026',t:'One swipe, one page',s:['Each swipe now moves exactly one page, like flicking a card, instead of scrolling through several.','A small nudge springs back to the page you were on.']},
-{v:92,d:'Nov 7, 2026',t:'Swipe through Workouts and Settings',s:['Workouts is now four pages you swipe between: Saved, Make your own, Templates and Search.','Ready-made workouts are now called template workouts.','Settings is split into five pages: You, Look, Body, Data and About.','The bar on top shows the page you are on, its icon, and how many pages are left. Tap a dot to jump to a page.','Pages tilt a little as you swipe, like flicking a card. Reduce motion turns this off.','Tapping a search result opens the workout again.']},
+{v:92,d:'Nov 7, 2026',t:'Swipe through Workouts and Settings',s:['Workouts is now four pages you swipe between: Saved, Make your own, Templates and Search.','Ready-made workouts are now called template workouts.','Settings is split into five pages: You, Look, Body, Data and About.','The bar on top shows the page you are on and its icon. Tap a dot to jump to a page.','Pages tilt a little as you swipe, like flicking a card. Reduce motion turns this off.','Tapping a search result opens the workout again.']},
 {v:91,d:'Nov 7, 2026',t:'Your sign-in at a glance',s:['Settings › Account shows how you signed in: Google, Apple or email, with your name from Google.','Sign in with Google is now switched on.','Setup’s first screen lets you sign in to bring your data back, or create an account.','Switch to a different account from Settings › Account.','The Signed out message is now red so it is easy to spot.']},
  {v:90,d:'Nov 7, 2026',t:'Sign in your way',s:['The first time you open Manna after this update, you are invited to create a free account.','Sign in with email today. Apple and Google sign-in appear as soon as they are switched on.','You can skip it and sign in later from Settings › Account.']},
  {v:89,d:'Nov 7, 2026',t:'Accounts',s:['Create an account in Settings to keep your data safe and use Manna on all your devices.','Your data syncs automatically while you are logged in.','AI uses are counted on your account, so they follow you between devices.','Settings now explains clearly where your data is kept.']},
@@ -2135,7 +2136,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='93';
+var heroLast='',APPV='94';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3928,10 +3929,9 @@ try{SWMEM=JSON.parse(sessionStorage.getItem('manna.sw.v1')||'{}')||{}}catch(e){}
 function swCalm(){var d=document.documentElement;return d.classList.contains('rm')||d.classList.contains('lite')||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
 function swIco(k){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(SWIC[k]||'')+'</svg>'}
 function swBar(st){
-  var n=st.pages.length,i=st.i,left=n-1-i;
+  var n=st.pages.length,i=st.i;
   st.dots.forEach(function(d,k){var on=k===i;if(d.classList.contains('on')!==on){d.classList.toggle('on',on);if(on){var sp=d.firstChild;d.replaceChild(sp.cloneNode(true),sp)}}
     if(on)d.setAttribute('aria-current','page');else d.removeAttribute('aria-current')});
-  st.left.textContent=left?left+' to go':'Last page';
   st.prev.disabled=i===0;st.next.disabled=i===n-1;
 }
 function swW(st){return st.tr.clientWidth||0}
@@ -3986,8 +3986,8 @@ function swInit(root){
   SWP[root.id]=st;
   bar.innerHTML='<button type="button" class="btn sm swnav" data-sw="-1" aria-label="Previous page">‹</button><div class="swdots">'
     +st.pages.map(function(p,k){var nm=p.dataset.name;return '<button type="button" class="swdot" data-swi="'+k+'" aria-label="'+esc(nm)+', page '+(k+1)+' of '+st.pages.length+'"><span>'+swIco(p.dataset.ic)+'<b>'+esc(nm)+'</b></span></button>'}).join('')
-    +'</div><span class="swleft" aria-live="polite"></span><button type="button" class="btn sm swnav" data-sw="1" aria-label="Next page">›</button>';
-  st.dots=[].slice.call(bar.querySelectorAll('.swdot'));st.left=bar.querySelector('.swleft');st.prev=bar.querySelector('[data-sw="-1"]');st.next=bar.querySelector('[data-sw="1"]');
+    +'</div><button type="button" class="btn sm swnav" data-sw="1" aria-label="Next page">›</button>';
+  st.dots=[].slice.call(bar.querySelectorAll('.swdot'));st.prev=bar.querySelector('[data-sw="-1"]');st.next=bar.querySelector('[data-sw="1"]');
   bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
     if(b.dataset.swi!=null)swGo(st,+b.dataset.swi);else if(b.dataset.sw)swGo(st,st.i+(+b.dataset.sw))});
   bar.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();swGo(st,st.i+(e.key==='ArrowRight'?1:-1));var d=st.dots[st.i];if(d)d.focus()}});
