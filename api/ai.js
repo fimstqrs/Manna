@@ -12,7 +12,7 @@
 const MAX_PROMPT = 8000;          // characters
 const MAX_IMAGE = 1_600_000;      // characters of base64 (about 1.2 MB)
 const PER_IP_DAY = 40;
-const TIMEOUT_MS = 20_000;      // per model call; then the next model is tried            // safety net per server instance, not the user-facing limit
+const TIMEOUT_MS = 15_000;      // per model call; then the next model is tried            // safety net per server instance, not the user-facing limit
 const hits = new Map();
 
 const SYSTEM = 'You are the assistant inside Manna, a food, workout and faith app. ' +
@@ -51,8 +51,8 @@ function splitImage(dataUrl) {
   return m ? { type: m[1], data: m[2] } : null;
 }
 
-// Newest first. If a model is retired, rejects the settings, is overloaded or times out, the next one is tried.
-const GEMINI_MODELS = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+// Fastest reliable first. If a model is retired, rejects the settings, is overloaded or times out, the next one is tried.
+const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-3.5-flash-lite'];
 
 async function askGemini(key, prompt, img) {
   const parts = [{ text: prompt }];
