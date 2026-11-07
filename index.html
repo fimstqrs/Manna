@@ -722,9 +722,9 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swnav{width:34px;height:34px;padding:0;border-radius:50%;font-size:1.1rem;line-height:1;flex:none}
 .swnav:disabled{opacity:.35}
 @media (hover:none){.swnav{display:none}}
-.swtrack{display:flex;align-items:flex-start;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;margin:-24px -16px -50px;-webkit-overflow-scrolling:touch;transition:height .32s cubic-bezier(.2,.8,.2,1)}
+.swtrack{display:flex;align-items:flex-start;overflow:hidden;touch-action:pan-y;scrollbar-width:none;margin:-24px -16px -50px;-webkit-overflow-scrolling:touch;transition:height .32s cubic-bezier(.2,.8,.2,1)}
 .swtrack::-webkit-scrollbar{display:none}
-.swpage{flex:0 0 100%;min-width:0;scroll-snap-align:center;scroll-snap-stop:always;padding:24px 16px 50px;display:flex;flex-direction:column;gap:16px;will-change:auto}
+.swpage{flex:0 0 100%;min-width:0;padding:24px 16px 50px;display:flex;flex-direction:column;gap:16px;will-change:auto}
 .swtrack.moving .swpage{will-change:transform}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
@@ -1913,7 +1913,8 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:92,d:'Nov 7, 2026',t:'Swipe through Workouts and Settings',s:['Workouts is now four pages you swipe between: Saved, Make your own, Templates and Search.','Ready-made workouts are now called template workouts.','Settings is split into five pages: You, Look, Body, Data and About.','The bar on top shows the page you are on, its icon, and how many pages are left. Tap a dot to jump to a page.','Pages tilt a little as you swipe, like flicking a card. Reduce motion turns this off.','Tapping a search result opens the workout again.']},
+ {v:93,d:'Nov 7, 2026',t:'One swipe, one page',s:['Each swipe now moves exactly one page, like flicking a card, instead of scrolling through several.','A small nudge springs back to the page you were on.']},
+{v:92,d:'Nov 7, 2026',t:'Swipe through Workouts and Settings',s:['Workouts is now four pages you swipe between: Saved, Make your own, Templates and Search.','Ready-made workouts are now called template workouts.','Settings is split into five pages: You, Look, Body, Data and About.','The bar on top shows the page you are on, its icon, and how many pages are left. Tap a dot to jump to a page.','Pages tilt a little as you swipe, like flicking a card. Reduce motion turns this off.','Tapping a search result opens the workout again.']},
 {v:91,d:'Nov 7, 2026',t:'Your sign-in at a glance',s:['Settings › Account shows how you signed in: Google, Apple or email, with your name from Google.','Sign in with Google is now switched on.','Setup’s first screen lets you sign in to bring your data back, or create an account.','Switch to a different account from Settings › Account.','The Signed out message is now red so it is easy to spot.']},
  {v:90,d:'Nov 7, 2026',t:'Sign in your way',s:['The first time you open Manna after this update, you are invited to create a free account.','Sign in with email today. Apple and Google sign-in appear as soon as they are switched on.','You can skip it and sign in later from Settings › Account.']},
  {v:89,d:'Nov 7, 2026',t:'Accounts',s:['Create an account in Settings to keep your data safe and use Manna on all your devices.','Your data syncs automatically while you are logged in.','AI uses are counted on your account, so they follow you between devices.','Settings now explains clearly where your data is kept.']},
@@ -2134,7 +2135,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='92';
+var heroLast='',APPV='93';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3992,13 +3993,47 @@ function swInit(root){
   bar.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();swGo(st,st.i+(e.key==='ArrowRight'?1:-1));var d=st.dots[st.i];if(d)d.focus()}});
   tr.addEventListener('scroll',function(){
     if(!st.raf)st.raf=requestAnimationFrame(function(){st.raf=0;swFrame(st)});
-    clearTimeout(st.t);if(!st.animating)st.t=setTimeout(function(){swSettle(st,true)},110)},{passive:true});
+    clearTimeout(st.t);if(!st.animating&&!st.drag)st.t=setTimeout(function(){if(!st.drag&&!st.animating)swSettle(st,true)},110)},{passive:true});
   /* Tabbing or jumping to something on another page moves to that page */
   tr.addEventListener('focusin',function(e){swReveal(e.target)});
-  tr.addEventListener('touchstart',function(){tr.classList.add('moving')},{passive:true});
-  tr.addEventListener('pointerdown',function(e){if(e.pointerType!=='touch')return;tr.classList.add('moving')});
-  tr.addEventListener('touchend',function(){setTimeout(function(){var w=swW(st);if(!st.animating&&w&&Math.abs(tr.scrollLeft-st.i*w)<2)tr.classList.remove('moving')},260)},{passive:true});
-  tr.addEventListener('wheel',function(e){if(Math.abs(e.deltaX)>Math.abs(e.deltaY))tr.classList.add('moving')},{passive:true});
+  /* One swipe = one page. The finger drags the pages (at most one page either way);
+     letting go moves to the next or previous page, or springs back if it was a small nudge. */
+  tr.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse'||!e.isPrimary)return;
+    if(e.target.closest&&e.target.closest('input[type=range],textarea,pre,select'))return;
+    var w=swW(st);if(!w)return;
+    if(st.animating){cancelAnimationFrame(st.anim);st.animating=false;tr.classList.remove('anim')}
+    var base=Math.round(tr.scrollLeft/w);
+    st.drag={id:e.pointerId,x:e.clientX,y:e.clientY,base:base,on:false,lx:e.clientX,lt:e.timeStamp,v:0};
+  });
+  tr.addEventListener('pointermove',function(e){
+    var d=st.drag;if(!d||e.pointerId!==d.id)return;
+    var dx=e.clientX-d.x,dy=e.clientY-d.y,w=swW(st);
+    if(!d.on){
+      if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.1){d.on=true;d.x=e.clientX;dx=0;tr.classList.add('moving');try{tr.setPointerCapture(e.pointerId)}catch(x){}}
+      else if(Math.abs(dy)>10){st.drag=null}
+      return}
+    var n=st.pages.length,m=Math.max(-w,Math.min(w,dx));
+    if((d.base===0&&m>0)||(d.base===n-1&&m<0))m=0;
+    tr.scrollLeft=d.base*w-m;
+    var dt=e.timeStamp-d.lt;if(dt>0)d.v=(e.clientX-d.lx)/dt;d.lx=e.clientX;d.lt=e.timeStamp;
+  });
+  var swEnd=function(e){
+    var d=st.drag;if(!d||e.pointerId!==d.id)return;st.drag=null;if(!d.on)return;
+    var w=swW(st),dx=e.clientX-d.x,t=d.base;
+    if(e.timeStamp-d.lt>120)d.v=0;
+    if(dx<-w*.2||d.v<-.35)t=d.base+1;else if(dx>w*.2||d.v>.35)t=d.base-1;
+    st.noclick=Date.now();swGo(st,t);
+  };
+  tr.addEventListener('pointerup',swEnd);tr.addEventListener('pointercancel',swEnd);
+  tr.addEventListener('click',function(e){if(st.noclick&&Date.now()-st.noclick<350){e.preventDefault();e.stopPropagation()}},true);
+  /* Trackpads: one sideways swipe moves one page */
+  tr.addEventListener('wheel',function(e){
+    if(Math.abs(e.deltaX)<=Math.abs(e.deltaY))return;e.preventDefault();
+    clearTimeout(st.wt);st.wt=setTimeout(function(){st.wlock=false;st.wacc=0},280);
+    if(st.wlock)return;st.wacc=(st.wacc||0)+e.deltaX;
+    if(Math.abs(st.wacc)>36){var dir=st.wacc>0?1:-1;st.wacc=0;st.wlock=true;swGo(st,st.i+dir)}
+  },{passive:false});
   if(window.ResizeObserver){
     var ro=new ResizeObserver(function(ents){var w=swW(st);
       ents.forEach(function(en){if(en.target===tr){if(w&&Math.abs(tr.scrollLeft-st.i*w)>2)tr.scrollLeft=st.i*w;if(st.last<0&&w)swSettle(st,false)}});
