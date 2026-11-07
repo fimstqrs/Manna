@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><script>/* Apply the last-used theme before first paint so the default red never flashes */var de=document.documentElement;de.setAttribute('data-vtheme','plain');try{var mt=JSON.parse(localStorage.getItem('manna.theme.v1')||'null');if(mt&&/^[a-z]+$/.test(mt.id)){de.setAttribute('data-vtheme',mt.id);if(mt.fs)de.style.fontSize=mt.fs+'px';if(mt.hc)de.classList.add('hc');if(mt.rm)de.classList.add('rm');if(mt.ng)de.classList.add('noglass')}}catch(e){}try{var nv=navigator,lite=localStorage.getItem('manna.lite.v1')==='1'||(nv.connection&&nv.connection.saveData)||(nv.deviceMemory&&nv.deviceMemory<=2)||(window.matchMedia&&matchMedia('(prefers-reduced-transparency: reduce)').matches);if(lite)de.classList.add('lite')}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manna</title><meta name="description" content="Manna is a free food, calorie and workout tracker with personalized targets and a daily Bible verse."><link rel="canonical" href="https://manna-beta-five.vercel.app/"><meta name="theme-color" content="#ffffff"><link rel="preload" href="/data/food-5541a484b6.bin" as="fetch" crossorigin><link rel="preload" href="/data/web-3216f216be.bin" as="fetch" crossorigin><link rel="apple-touch-icon" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="32x32" href="/icons/manna-icon-32.png?v=72"><meta property="og:type" content="website"><meta property="og:title" content="Manna"><meta property="og:description" content="Track food and workouts with personalized targets and a daily Bible verse."><meta property="og:url" content="https://manna-beta-five.vercel.app/"><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box}</style></head><body><title>Manna</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><script>/* Email sign-in links */try{var hh=location.hash||'';if(/(^#|&)(access_token|error_description)=/.test(hh)){var q={};hh.slice(1).split('&').forEach(function(kv){var i=kv.indexOf('=');if(i>0)q[decodeURIComponent(kv.slice(0,i))]=decodeURIComponent(kv.slice(i+1).replace(/\+/g,' '))});localStorage.setItem('manna.auth.pending',JSON.stringify({access_token:q.access_token,refresh_token:q.refresh_token,expires_in:q.expires_in,type:q.type,error:q.error_description}));history.replaceState(null,'',location.pathname+location.search+'#settings')}}catch(e){}/* Apply the last-used theme before first paint so the default red never flashes */var de=document.documentElement;de.setAttribute('data-vtheme','plain');try{var mt=JSON.parse(localStorage.getItem('manna.theme.v1')||'null');if(mt&&/^[a-z]+$/.test(mt.id)){de.setAttribute('data-vtheme',mt.id);if(mt.fs)de.style.fontSize=mt.fs+'px';if(mt.hc)de.classList.add('hc');if(mt.rm)de.classList.add('rm');if(mt.ng)de.classList.add('noglass')}}catch(e){}try{var nv=navigator,lite=localStorage.getItem('manna.lite.v1')==='1'||(nv.connection&&nv.connection.saveData)||(nv.deviceMemory&&nv.deviceMemory<=2)||(window.matchMedia&&matchMedia('(prefers-reduced-transparency: reduce)').matches);if(lite)de.classList.add('lite')}catch(e){}</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Manna</title><meta name="description" content="Manna is a free food, calorie and workout tracker with personalized targets and a daily Bible verse."><link rel="canonical" href="https://manna-beta-five.vercel.app/"><meta name="theme-color" content="#ffffff"><link rel="preload" href="/data/food-5541a484b6.bin" as="fetch" crossorigin><link rel="preload" href="/data/web-3216f216be.bin" as="fetch" crossorigin><link rel="apple-touch-icon" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="180x180" href="/icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="32x32" href="/icons/manna-icon-32.png?v=72"><meta property="og:type" content="website"><meta property="og:title" content="Manna"><meta property="og:description" content="Track food and workouts with personalized targets and a daily Bible verse."><meta property="og:url" content="https://manna-beta-five.vercel.app/"><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box}</style></head><body><title>Manna</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1052,8 +1052,9 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <!-- SETTINGS -->
     <section class="view" id="v-settings" hidden>
       <header class="vh"><p class="eyebrow">Your account</p><h2>Settings</h2>
-        <p class="lede">Changes apply straight away. In this demo nothing leaves the page.</p></header>
+        <p class="lede">Changes apply straight away.</p></header>
       <div class="grid2">
+        <div class="card stack" id="acct-card" hidden></div>
         <div class="card stack">
           <div class="sh"><h3>Profile</h3><p class="small muted">How Manna greets you and measures.</p></div>
           <label class="f" for="p-name">Your name on the home screen<input type="text" id="p-name" maxlength="20" autocomplete="off"></label>
@@ -1137,9 +1138,9 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <div class="row"><a class="btn sm" href="#community" style="text-decoration:none">Open Community</a></div>
         </div>
         <div class="card stack" style="grid-column:1/-1">
-          <div class="sh"><h3>Your data</h3><p class="small muted">Everything stays on this page and is never sent anywhere.</p></div>
+          <div class="sh"><h3>Your data</h3><p class="small muted">Your data is kept on this device. If you log in, it is also saved to your account. What you type into AI features is sent to the AI to get an answer.</p></div>
           <pre class="json" id="p-json" tabindex="0" aria-label="Your data as JSON"></pre>
-          <div class="row"><button class="btn" data-act="copy">Copy my data</button><button class="btn" id="p-reset" data-act="reset">Delete all my data</button></div>
+          <div class="row"><button class="btn" data-act="copy">Copy my data</button><button class="btn" id="p-reset" data-act="reset">Delete data on this device</button></div>
         </div>
       </div>
       <div class="card stack" id="vl-card"><div class="sh"><h3>Version log</h3><p class="small muted" id="vl-now"></p></div><div class="wnall" id="vl-list"></div></div>
@@ -1839,6 +1840,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:89,d:'Nov 7, 2026',t:'Accounts',s:['Create an account in Settings to keep your data safe and use Manna on all your devices.','Your data syncs automatically while you are logged in.','AI uses are counted on your account, so they follow you between devices.','Settings now explains clearly where your data is kept.']},
  {v:88,d:'Nov 6, 2026',t:'AI switched on',s:['AI features now use Google’s current Gemini model, so Build with AI and food estimates work.','AI answers faster, and a slow answer stops after 25 seconds instead of hanging.']},
  {v:87,d:'Nov 6, 2026',t:'Real AI',s:['Build with AI and food estimates now use a real AI model, including food photos.','You get 5 AI uses a day. After that, workouts are built from Manna’s own rules.','Settings has a Version log of every update. The All pages list is gone.','Removed the Or describe it in words button from Fitness.']},
  {v:86,d:'Nov 6, 2026',t:'What’s new',s:['After each update, this screen shows what changed.','Scroll down for every past update, or open it any time from Settings.','The Bible and credits section in Settings is now just Credits.']},
@@ -2056,7 +2058,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='88';
+var heroLast='',APPV='89';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2263,22 +2265,27 @@ function shrink(file){
 var AI_DAY=5;
 function aiUsed(){try{var o=JSON.parse(localStorage.getItem('manna.ai.v1')||'{}');return o.d===dk(Date.now())?(o.n||0):0}catch(e){return 0}}
 function aiCount(){try{localStorage.setItem('manna.ai.v1',JSON.stringify({d:dk(Date.now()),n:aiUsed()+1}))}catch(e){}}
-function aiLeft(){return Math.max(0,AI_DAY-aiUsed())}
-function aiLeftText(){var n=aiLeft();return n?n+' of '+AI_DAY+' AI uses left today':'No AI uses left today. They reset at midnight.'}
+function accOn(){return typeof ACC!=='undefined'&&ACC&&ACC.cfg&&ACC.cfg.accounts}
+function aiLoginNeeded(){return accOn()&&ACC.cfg.aiNeedsLogin&&!signedIn()}
+function aiLeft(){if(accOn()&&signedIn())return ACC.usage?Math.max(0,ACC.usage.limit-ACC.usage.used):1;if(aiLoginNeeded())return 0;return Math.max(0,AI_DAY-aiUsed())}
+function aiLeftText(){if(aiLoginNeeded())return 'Log in under Settings › Account to use AI.';var n=aiLeft(),lim=accOn()&&signedIn()&&ACC.usage?ACC.usage.limit:AI_DAY;if(accOn()&&signedIn()&&!ACC.usage)return '';return n?n+' of '+lim+' AI uses left today':'No AI uses left today. They reset at midnight.'}
 function blobUrl(b){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(r.result)};r.onerror=no;r.readAsDataURL(b)})}
 var SERVER_AI={
   json:function(inst,opts){
-    if(aiLeft()<=0)return Promise.reject({code:'limit'});
-    var img=opts&&opts.images&&opts.images[0];
-    return (img?blobUrl(img):Promise.resolve(null)).then(function(u){
-      return fetch('/api/ai',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt:inst,image:u||undefined})});
+    if(aiLeft()<=0)return Promise.reject({code:aiLoginNeeded()?'login':'limit'});
+    var img=opts&&opts.images&&opts.images[0],tok=null;
+    var tokP=accOn()&&typeof authToken==='function'?authToken():Promise.resolve(null);
+    return tokP.then(function(t){tok=t;return img?blobUrl(img):null}).then(function(u){
+      var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
+      return fetch('/api/ai',{method:'POST',headers:h,body:JSON.stringify({prompt:inst,image:u||undefined})});
     }).then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})}).then(function(j){
-      if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};aiCount();return j.data;
+      if(j&&j.usage&&accOn())ACC.usage=j.usage;
+      if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};if(!tok)aiCount();return j.data;
     },function(e){throw (e&&e.code)?e:{code:'offline'}});
   },
   limits:function(){return {images:true}}
 };
-function aiErr(code){return code==='limit'?'You have used today’s '+AI_DAY+' AI uses. They reset at midnight.':code==='nokey'?'AI is not switched on for Manna yet.':code==='rate_limited'?'AI is busy right now. Try again in a minute.':code==='offline'?'You seem to be offline.':code==='too_big'?'That photo is too large. Try another.':code==='timeout'?'AI took too long to answer. Try again.':'AI could not do that right now. Try again.'}
+function aiErr(code){return code==='login'?'Log in under Settings › Account to use AI.':code==='limit'?'You have used today’s '+AI_DAY+' AI uses. They reset at midnight.':code==='nokey'?'AI is not switched on for Manna yet.':code==='rate_limited'?'AI is busy right now. Try again in a minute.':code==='offline'?'You seem to be offline.':code==='too_big'?'That photo is too large. Try another.':code==='timeout'?'AI took too long to answer. Try again.':'AI could not do that right now. Try again.'}
 function getSample(){
   try{if(typeof claude!=='undefined'&&claude.use)return Promise.resolve(claude.use('sample')).catch(function(){return location.protocol==='file:'?null:SERVER_AI})}catch(e){}
   return Promise.resolve(location.protocol==='file:'?null:SERVER_AI);
@@ -2313,7 +2320,7 @@ function askFood(text,file){
       return (blob?Promise.resolve(sample.limits()).then(function(l){if(!l||!l.images)throw {code:'noimg'}}):Promise.resolve()).then(go);
     }).catch(function(e){
       var code=e&&e.code;
-      ASK={busy:false,msg:['limit','nokey','rate_limited','offline','too_big','timeout'].indexOf(code)>-1?aiErr(code):code==='noimg'?'Photos cannot be sent from here. Type the food name instead.':code==='not_granted'?'Claude access was declined, so photo and estimate lookups are off. You can still search the list.':code==='rate_limited'?'Too many requests. Wait a moment and try again.':'AI could not look that up. Try again, or search the list.',img:''};refresh();
+      ASK={busy:false,msg:['limit','nokey','rate_limited','offline','too_big','timeout','login'].indexOf(code)>-1?aiErr(code):code==='noimg'?'Photos cannot be sent from here. Type the food name instead.':code==='not_granted'?'Claude access was declined, so photo and estimate lookups are off. You can still search the list.':code==='rate_limited'?'Too many requests. Wait a moment and try again.':'AI could not look that up. Try again, or search the list.',img:''};refresh();
     });
   });
 }
@@ -3097,7 +3104,7 @@ function tickClock(){
   dt.textContent=d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
 function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.textContent=t})}
-function refresh(){setTimeout(aiLeftPaint,0);
+function refresh(){setTimeout(aiLeftPaint,0);setTimeout(function(){if(typeof accRender==='function')accRender()},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   applyPrefs();renderToday();renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
@@ -3464,6 +3471,193 @@ var ACT={
     delConfirm=false;try{['manna.prefs.v1','manna.est.v1','manna.cl.v1'].forEach(function(k){localStorage.removeItem(k)})}catch(e){}prefLast='x';S=defaults();seedMeals();syncInputs();$$('.chips').forEach(function(c){c.innerHTML=''});$('#l-res').innerHTML='';toast('All demo data deleted.');
   }
 };
+/* ===== Accounts (Supabase). Off until /api/config says accounts are set up. ===== */
+var ACC={cfg:null,busy:false,msg:'',err:false,mode:'login',usage:null,sync:'',syncAt:0,conflict:null,sig:''};
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
+function authGet(){try{return JSON.parse(lsGet('manna.auth.v1')||'null')}catch(e){return null}}
+function authSet(a){lsSet('manna.auth.v1',a?JSON.stringify(a):null)}
+function signedIn(){var a=authGet();return !!(ACC.cfg&&ACC.cfg.accounts&&a&&a.id)}
+function sbHeaders(tok){var h={apikey:ACC.cfg.anonKey,'content-type':'application/json'};h.authorization='Bearer '+(tok||ACC.cfg.anonKey);if(!tok&&String(ACC.cfg.anonKey).indexOf('eyJ')!==0)delete h.authorization;return h}
+function sbJson(r){return r.text().then(function(t){var j=null;try{j=t?JSON.parse(t):null}catch(e){}if(!r.ok)throw {status:r.status,msg:(j&&(j.msg||j.error_description||j.message||j.error))||'',code:j&&(j.error_code||j.code)};return j})}
+function sessionFrom(j,prev){return {at:j.access_token,rt:j.refresh_token||(prev&&prev.rt),exp:Date.now()+((j.expires_in||3600)*1000),id:(j.user&&j.user.id)||(prev&&prev.id),email:(j.user&&j.user.email)||(prev&&prev.email)||''}}
+/* A valid access token, refreshed when it is about to expire. Null when signed out. */
+function authToken(){
+  var a=authGet();if(!a||!ACC.cfg||!ACC.cfg.accounts)return Promise.resolve(null);
+  if(a.exp-Date.now()>60000)return Promise.resolve(a.at);
+  return fetch(ACC.cfg.url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:sbHeaders(),body:JSON.stringify({refresh_token:a.rt})}).then(sbJson)
+    .then(function(j){var s=sessionFrom(j,a);authSet(s);return s.at})
+    .catch(function(e){if(e&&e.status&&e.status<500){authSet(null);ACC.usage=null;refresh()}return null});
+}
+function authErr(e){
+  var m=String(e&&e.msg||'').toLowerCase();
+  if(!e||e instanceof TypeError)return 'Could not reach the account service. Check your connection.';
+  if(m.indexOf('invalid login')>-1||m.indexOf('invalid_credentials')>-1)return 'That email and password do not match an account.';
+  if(m.indexOf('not confirmed')>-1)return 'Confirm your email first. Check your inbox for the link.';
+  if(m.indexOf('already registered')>-1||m.indexOf('already been registered')>-1||(e&&e.code==='user_already_exists'))return 'An account with that email already exists. Log in instead.';
+  if(m.indexOf('password')>-1&&m.indexOf('least')>-1)return 'Use a longer password, at least 8 characters.';
+  if(e&&e.status===429)return 'Too many tries. Wait a minute and try again.';
+  return e&&e.msg?String(e.msg).slice(0,160):'Something went wrong. Try again.';
+}
+function accSay(msg,err){ACC.msg=msg||'';ACC.err=!!err;ACC.busy=false;refresh()}
+function accFields(){var e=$('#ac-email'),p=$('#ac-pass');return {email:e?e.value.trim():'',pass:p?p.value:''}}
+
+/* ---- Sync: the three things Manna keeps on the device ---- */
+var SYNC_KEYS=['manna.prefs.v1','manna.cl.v1','manna.est.v1'];
+function snap(){return JSON.stringify(SYNC_KEYS.map(lsGet))}
+function hashStr(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return String(h)}
+function syncMeta(){try{return JSON.parse(lsGet('manna.sync.v1')||'{}')}catch(e){return {}}}
+function syncMetaSet(m){lsSet('manna.sync.v1',JSON.stringify(m))}
+function localData(){var o={v:APPV};SYNC_KEYS.forEach(function(k,i){var v=lsGet(k);try{o[['prefs','cl','est'][i]]=v?JSON.parse(v):null}catch(e){}});return o}
+function cloudPull(){
+  return authToken().then(function(tok){if(!tok)throw {status:401};var a=authGet();
+    return fetch(ACC.cfg.url+'/rest/v1/profiles?select=data,updated_at,plan&id=eq.'+encodeURIComponent(a.id),{headers:sbHeaders(tok)}).then(sbJson).then(function(rows){return rows&&rows[0]||null})});
+}
+function cloudPush(){
+  return authToken().then(function(tok){if(!tok)throw {status:401};var a=authGet(),now=new Date().toISOString(),s=snap();
+    ACC.sync='saving';
+    return fetch(ACC.cfg.url+'/rest/v1/profiles?on_conflict=id',{method:'POST',headers:Object.assign(sbHeaders(tok),{prefer:'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({id:a.id,data:localData(),updated_at:now})})
+      .then(sbJson).then(function(){syncMetaSet({uid:a.id,h:hashStr(s),at:Date.parse(now),lc:0});ACC.sync='saved';ACC.syncAt=Date.now()});
+  }).catch(function(e){ACC.sync='error';throw e});
+}
+/* Put the account's data on this device, then restart the app so everything reloads from it. */
+function cloudApply(row){
+  var d=row&&row.data||{},a=authGet();
+  [['prefs','manna.prefs.v1'],['cl','manna.cl.v1'],['est','manna.est.v1']].forEach(function(p){if(d[p[0]]!=null)lsSet(p[1],JSON.stringify(d[p[0]]))});
+  syncMetaSet({uid:a&&a.id,h:hashStr(snap()),at:Date.parse(row.updated_at)||Date.now(),lc:0});
+  lsSet('manna.sync.note','Your account’s data is now on this device.');
+  location.reload();
+}
+function localIsFresh(){return !S.onboarded&&!S.hist.length&&!S.customW.length}
+/* After signing in, and when the app opens while signed in */
+function syncStart(fromLogin){
+  if(!signedIn())return;var a=authGet(),m=syncMeta(),h=hashStr(snap());
+  ACC.sync='checking';refresh();
+  cloudPull().then(function(row){
+    if(!row){return cloudPush().then(function(){if(fromLogin)accSay('Signed in. Your data is now saved to your account.')})}
+    var cloudAt=Date.parse(row.updated_at)||0;
+    if(m.uid!==a.id){
+      if(localIsFresh())return cloudApply(row);
+      ACC.conflict=row;ACC.sync='';accSay('');return;
+    }
+    if(h===m.h){if(cloudAt>(m.at||0))return cloudApply(row);ACC.sync='saved';ACC.syncAt=Date.now();refresh();return}
+    /* Changed here and maybe elsewhere: the most recent change wins */
+    if(cloudAt>(m.at||0)&&cloudAt>(m.lc||0))return cloudApply(row);
+    return cloudPush().then(function(){refresh()});
+  }).catch(function(e){ACC.sync='error';refresh()});
+}
+var syncT=null;
+function syncTick(){
+  if(!signedIn()||ACC.conflict||ACC.sync==='checking')return;var m=syncMeta(),a=authGet();if(m.uid!==a.id)return;
+  var h=hashStr(snap());if(h===m.h)return;
+  if(!m.lc){m.lc=Date.now();syncMetaSet(m)}
+  clearTimeout(syncT);syncT=setTimeout(function(){cloudPush().then(function(){refresh()},function(){refresh()})},3000);
+}
+setInterval(syncTick,15000);
+document.addEventListener('visibilitychange',function(){if(document.hidden)syncTick();else if(signedIn())syncStart(false)});
+
+function usageLoad(){authToken().then(function(tok){if(!tok)return;return fetch('/api/ai',{headers:{authorization:'Bearer '+tok}}).then(function(r){return r.json()}).then(function(j){if(j&&j.usage){ACC.usage=j.usage;refresh()}})}).catch(function(){})}
+
+/* ---- Startup: read config, pick up an email link's sign-in, resume sync ---- */
+function accInit(){
+  if(location.protocol==='file:'){ACC.cfg={accounts:false};return}
+  fetch('/api/config').then(function(r){return r.json()}).catch(function(){return {accounts:false}}).then(function(c){
+    ACC.cfg=c||{accounts:false};
+    var note=lsGet('manna.sync.note');if(note){lsSet('manna.sync.note',null);setTimeout(function(){toast(note)},1500)}
+    if(!ACC.cfg.accounts){refresh();return}
+    var p=null;try{p=JSON.parse(lsGet('manna.auth.pending')||'null')}catch(e){}lsSet('manna.auth.pending',null);
+    if(p&&p.error){ACC.mode='login';accSay(p.error.indexOf('expired')>-1?'That link has expired. Ask for a new one.':'That link did not work. Try again.',true);return}
+    if(p&&p.access_token){
+      fetch(ACC.cfg.url+'/auth/v1/user',{headers:sbHeaders(p.access_token)}).then(sbJson).then(function(u){
+        authSet({at:p.access_token,rt:p.refresh_token,exp:Date.now()+((+p.expires_in||3600)*1000),id:u.id,email:u.email||''});
+        if(p.type==='recovery'){ACC.mode='newpass';accSay('Choose a new password.')}
+        else{accSay('Your email is confirmed. You are signed in.');syncStart(true)}
+        usageLoad();
+      }).catch(function(e){accSay(authErr(e),true)});
+      return;
+    }
+    refresh();if(signedIn()){syncStart(false);usageLoad()}
+  });
+}
+
+/* ---- Settings card ---- */
+function accRender(){
+  var el=$('#acct-card');if(!el)return;
+  var on=!!(ACC.cfg&&ACC.cfg.accounts);el.hidden=!on;if(!on)return;
+  var a=authGet(),m=syncMeta();
+  var sig=JSON.stringify([ACC.mode,ACC.busy,ACC.msg,ACC.err,a&&a.email,ACC.usage,ACC.sync,Math.floor(ACC.syncAt/60000),!!ACC.conflict,!!ACC.delAsk]);
+  if(sig===ACC.sig)return;ACC.sig=sig;
+  var f=accFields(),h='<div class="sh"><h3>Account</h3>';
+  var note=ACC.msg?'<p class="note small'+(ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
+  if(signedIn()&&ACC.mode!=='newpass'){
+    var u=ACC.usage,plan=u&&u.plan==='paid'?'Paid':'Free';
+    h+='<p class="small muted">Signed in as <b>'+esc(a.email)+'</b></p></div>'+note;
+    if(ACC.conflict){
+      h+='<div class="note stack"><b>This device and your account both have Manna data.</b><p class="small">Which one should Manna keep? The other is replaced.</p><div class="row"><button class="btn primary" data-act="acuse">Use my account’s data</button><button class="btn" data-act="acmine">Keep this device’s data</button></div></div>';
+    }
+    h+='<div class="kv"><span>Plan</span><span class="badge">'+plan+'</span></div>'
+      +(u?'<div class="kv"><span>AI uses today</span><span class="mono">'+u.used+' of '+u.limit+'</span></div>':'')
+      +'<div class="kv"><span>Sync</span><span class="small">'+(ACC.sync==='saving'||ACC.sync==='checking'?'Saving…':ACC.sync==='error'?'Not saved. Will retry.':ACC.syncAt?'Saved to your account':'Up to date')+'</span></div>'
+      +'<div class="row"><button class="btn" data-act="acsync">Sync now</button><button class="btn" data-act="acout">Log out</button></div>'
+      +(ACC.delAsk?'<div class="note warn stack"><b>Delete your account?</b><p class="small">This permanently deletes your account and everything saved to it. Data on this device stays until you clear it.</p><div class="row"><button class="btn primary" data-act="acdel2">Yes, delete it</button><button class="btn" data-act="acdelno">Cancel</button></div></div>'
+        :'<button class="linkbtn small" data-act="acdel">Delete account</button>');
+  }else if(ACC.mode==='newpass'){
+    h+='<p class="small muted">Set a new password for your account.</p></div>'+note
+      +'<label class="f" for="ac-pass">New password<input type="password" id="ac-pass" autocomplete="new-password" minlength="8"></label>'
+      +'<div class="row"><button class="btn primary" data-act="acnewpass"'+(ACC.busy?' disabled':'')+'>Save password</button></div>';
+  }else{
+    var su=ACC.mode==='signup',rs=ACC.mode==='reset';
+    h+='<p class="small muted">'+(su?'Create an account to keep your Manna data safe and use it on all your devices.':rs?'We will email you a link to choose a new password.':'Log in to sync your Manna data across your devices.')+'</p></div>'+note
+      +'<label class="f" for="ac-email">Email<input type="email" id="ac-email" autocomplete="email" inputmode="email" value="'+esc(f.email)+'"></label>'
+      +(rs?'':'<label class="f" for="ac-pass">Password<input type="password" id="ac-pass" autocomplete="'+(su?'new-password':'current-password')+'" minlength="8"></label>')
+      +'<div class="row"><button class="btn primary" data-act="'+(su?'acsignup':rs?'acreset':'aclogin')+'"'+(ACC.busy?' disabled':'')+'>'+(ACC.busy?'Please wait…':su?'Create account':rs?'Send reset link':'Log in')+'</button></div>'
+      +'<div class="row small">'+(su||rs?'<button class="linkbtn" data-act="acmode" data-k="login">I have an account</button>':'<button class="linkbtn" data-act="acmode" data-k="signup">Create an account</button><span class="muted">·</span><button class="linkbtn" data-act="acmode" data-k="reset">Forgot password?</button>')+'</div>'
+      +(su?'<p class="small muted">Your data stays on this device too. Signing in copies it to your account.</p>':'');
+  }
+  el.innerHTML=h;
+  var pe=$('#ac-pass');if(pe&&f.pass)pe.value=f.pass;
+}
+Object.assign(ACT,{
+  acmode:function(b){ACC.mode=b.dataset.k;ACC.msg='';ACC.err=false},
+  aclogin:function(){var f=accFields();if(!f.email||!f.pass){ACC.msg='Enter your email and password.';ACC.err=true;return}
+    ACC.busy=true;ACC.msg='';
+    fetch(ACC.cfg.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:sbHeaders(),body:JSON.stringify({email:f.email,password:f.pass})}).then(sbJson)
+      .then(function(j){authSet(sessionFrom(j));ACC.mode='login';accSay('');syncStart(true);usageLoad()})
+      .catch(function(e){accSay(authErr(e),true)})},
+  acsignup:function(){var f=accFields();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)){ACC.msg='Enter a valid email.';ACC.err=true;return}
+    if(f.pass.length<8){ACC.msg='Use a password of at least 8 characters.';ACC.err=true;return}
+    ACC.busy=true;ACC.msg='';
+    fetch(ACC.cfg.url+'/auth/v1/signup',{method:'POST',headers:sbHeaders(),body:JSON.stringify({email:f.email,password:f.pass})}).then(sbJson)
+      .then(function(j){if(j&&j.access_token){authSet(sessionFrom(j));ACC.mode='login';accSay('Account created.');syncStart(true);usageLoad()}
+        else{ACC.mode='login';accSay('Almost done. Check your email and tap the link to confirm your account.')}})
+      .catch(function(e){accSay(authErr(e),true)})},
+  acreset:function(){var f=accFields();if(!f.email){ACC.msg='Enter your email.';ACC.err=true;return}
+    ACC.busy=true;
+    fetch(ACC.cfg.url+'/auth/v1/recover',{method:'POST',headers:sbHeaders(),body:JSON.stringify({email:f.email})}).then(sbJson)
+      .then(function(){ACC.mode='login';accSay('If that email has an account, a reset link is on its way.')})
+      .catch(function(e){accSay(authErr(e),true)})},
+  acnewpass:function(){var f=accFields();if(f.pass.length<8){ACC.msg='Use a password of at least 8 characters.';ACC.err=true;return}
+    ACC.busy=true;
+    authToken().then(function(tok){if(!tok)throw {status:401,msg:'Your reset link expired. Ask for a new one.'};
+      return fetch(ACC.cfg.url+'/auth/v1/user',{method:'PUT',headers:sbHeaders(tok),body:JSON.stringify({password:f.pass})}).then(sbJson)})
+      .then(function(){ACC.mode='login';accSay('Password saved. You are signed in.');syncStart(true)})
+      .catch(function(e){accSay(authErr(e),true)})},
+  acout:function(){var a=authGet();syncTick();
+    authToken().then(function(tok){if(tok)return fetch(ACC.cfg.url+'/auth/v1/logout',{method:'POST',headers:sbHeaders(tok)})}).catch(function(){}).then(function(){
+      authSet(null);ACC.usage=null;ACC.conflict=null;ACC.sync='';accSay('Signed out. Your data stays on this device.')})},
+  acsync:function(){syncStart(false)},
+  acuse:function(){var r=ACC.conflict;ACC.conflict=null;if(r)cloudApply(r)},
+  acmine:function(){ACC.conflict=null;cloudPush().then(function(){accSay('This device’s data is now saved to your account.')},function(e){accSay(authErr(e),true)})},
+  acdel:function(){ACC.delAsk=true},
+  acdelno:function(){ACC.delAsk=false},
+  acdel2:function(){ACC.delAsk=false;ACC.busy=true;
+    authToken().then(function(tok){if(!tok)throw {status:401};return fetch('/api/account',{method:'DELETE',headers:{authorization:'Bearer '+tok}}).then(function(r){return r.json()})})
+      .then(function(j){if(!j||!j.ok)throw {msg:'Could not delete the account. Try again.'};authSet(null);syncMetaSet({});ACC.usage=null;ACC.mode='login';accSay('Your account has been deleted.')})
+      .catch(function(e){accSay(authErr(e),true)})}
+});
+setTimeout(accInit,0);
+/* Delete all my data clears this device only: sign out first so the account keeps its copy */
+var _resetAll=ACT.reset;ACT.reset=function(b){if(delConfirm&&signedIn()){authSet(null);syncMetaSet({});ACC.usage=null}return _resetAll(b)};
 function setDay(i,t){S.plans[S.planId][i]=t.value||null;syncSched()}
 var INPUT={
   'w-day':function(t){S.addDay=parseInt(t.value,10)},

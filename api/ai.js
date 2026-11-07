@@ -6,8 +6,11 @@
 //   ANTHROPIC_API_KEY  Anthropic Claude (console.anthropic.com)
 // Optional: AI_MODEL to choose a specific model name for that provider.
 //
-// The daily limit of 5 uses is counted on each device for now. Accounts will
-// move that count here later so it can't be reset by clearing the browser.
+// Signed-in people: uses are counted here in the database (5 a day free, 100 paid),
+// so clearing the browser can't reset them. Signed-out people: the app counts 5 a
+// day on the device. Set AI_REQUIRE_LOGIN=1 to make AI need an account.
+
+import { supaEnv, bearer, getUser, rpc } from './_supa.js';
 
 const MAX_PROMPT = 8000;          // characters
 const MAX_IMAGE = 1_600_000;      // characters of base64 (about 1.2 MB)
@@ -99,15 +102,22 @@ async function askClaude(key, prompt, img) {
 
 export default async function handler(req, res) {
   res.setHeader('cache-control', 'no-store');
+  const env = supaEnv();
+  const token = bearer(req);
+  const user = env.ready && token ? await getUser(env, token).catch(() => null) : null;
   if (req.method === 'GET') {
-    // Lets the app know whether AI is switched on, without revealing anything else.
-    return res.status(200).json({ ok: true, ready: !!(process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY) });
+    // Whether AI is switched on, and for a signed-in person, today's uses.
+    let usage = null;
+    if (user) usage = await rpc(env, 'ai_today', { p_user: user.id }).catch(() => null);
+    return res.status(200).json({ ok: true, ready: !!(process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY), usage });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, code: 'method' });
   if (!allowedOrigin(req)) return res.status(403).json({ ok: false, code: 'origin' });
 
   const gem = process.env.GEMINI_API_KEY, ant = process.env.ANTHROPIC_API_KEY;
   if (!gem && !ant) return res.status(503).json({ ok: false, code: 'nokey' });
+
+  if (process.env.AI_REQUIRE_LOGIN === '1' && env.ready && !user) return res.status(401).json({ ok: false, code: 'login' });
 
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
   if (overLimit(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
@@ -123,10 +133,19 @@ export default async function handler(req, res) {
     if (!img) return res.status(400).json({ ok: false, code: 'bad_image' });
   }
 
+  // Count this use against the person's account before calling the AI.
+  let usage = null;
+  if (user) {
+    try { usage = await rpc(env, 'use_ai', { p_user: user.id }); }
+    catch (e) { console.error('ai usage counter unavailable (run supabase/schema.sql?)', e.status || '', e.message); return res.status(503).json({ ok: false, code: 'failed' }); }
+    if (!usage || !usage.allowed) return res.status(429).json({ ok: false, code: 'limit', usage });
+  }
+
   try {
     const text = ant ? await askClaude(ant, prompt, img) : await askGemini(gem, prompt, img);
-    return res.status(200).json({ ok: true, data: parseJson(text) });
+    return res.status(200).json({ ok: true, data: parseJson(text), usage });
   } catch (e) {
+    if (user) await rpc(env, 'refund_ai', { p_user: user.id }).catch(() => {});
     const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 || e.status === 503 ? 'rate_limited' : e.status === 401 || e.status === 403 ? 'badkey' : 'failed';
     console.error('ai error', e.status || '', e.message);
     return res.status(code === 'rate_limited' ? 429 : 502).json({ ok: false, code });
