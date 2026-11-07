@@ -50,22 +50,30 @@ function splitImage(dataUrl) {
   return m ? { type: m[1], data: m[2] } : null;
 }
 
+// Newest first. If Google retires a model (404), the next one is tried.
+const GEMINI_MODELS = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+
 async function askGemini(key, prompt, img) {
-  const model = process.env.AI_MODEL || 'gemini-2.5-flash';
   const parts = [{ text: prompt }];
   if (img) parts.push({ inline_data: { mime_type: img.type, data: img.data } });
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM }] },
-      contents: [{ role: 'user', parts }],
-      generationConfig: { responseMimeType: 'application/json', temperature: 0.4, maxOutputTokens: 2000 },
-    }),
-  });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw Object.assign(new Error(j.error?.message || 'Gemini error ' + r.status), { status: r.status });
-  return (j.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('');
+  const models = process.env.AI_MODEL ? [process.env.AI_MODEL] : GEMINI_MODELS;
+  let last;
+  for (const model of models) {
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM }] },
+        contents: [{ role: 'user', parts }],
+        generationConfig: { responseMimeType: 'application/json', temperature: 0.4, maxOutputTokens: 2000 },
+      }),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) return (j.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('');
+    last = Object.assign(new Error(model + ': ' + (j.error?.message || 'Gemini error ' + r.status)), { status: r.status });
+    if (r.status !== 404) throw last;
+  }
+  throw last;
 }
 
 async function askClaude(key, prompt, img) {

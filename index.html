@@ -1839,6 +1839,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:88,d:'Nov 6, 2026',t:'AI switched on',s:['AI features now use Google’s current Gemini model, so Build with AI and food estimates work.']},
  {v:87,d:'Nov 6, 2026',t:'Real AI',s:['Build with AI and food estimates now use a real AI model, including food photos.','You get 5 AI uses a day. After that, workouts are built from Manna’s own rules.','Settings has a Version log of every update. The All pages list is gone.','Removed the Or describe it in words button from Fitness.']},
  {v:86,d:'Nov 6, 2026',t:'What’s new',s:['After each update, this screen shows what changed.','Scroll down for every past update, or open it any time from Settings.','The Bible and credits section in Settings is now just Credits.']},
  {v:85,d:'Nov 6, 2026',t:'Simpler targets',s:['Your targets on Fuel no longer show the protein-per-kg line.']},
@@ -2055,7 +2056,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='87';
+var heroLast='',APPV='88';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
