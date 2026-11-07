@@ -12,7 +12,7 @@
 const MAX_PROMPT = 8000;          // characters
 const MAX_IMAGE = 1_600_000;      // characters of base64 (about 1.2 MB)
 const PER_IP_DAY = 40;
-const TIMEOUT_MS = 25_000;      // per model call; the app falls back if it runs out            // safety net per server instance, not the user-facing limit
+const TIMEOUT_MS = 20_000;      // per model call; then the next model is tried            // safety net per server instance, not the user-facing limit
 const hits = new Map();
 
 const SYSTEM = 'You are the assistant inside Manna, a food, workout and faith app. ' +
@@ -51,7 +51,7 @@ function splitImage(dataUrl) {
   return m ? { type: m[1], data: m[2] } : null;
 }
 
-// Newest first. If Google retires a model (404), the next one is tried.
+// Newest first. If a model is retired, rejects the settings, is overloaded or times out, the next one is tried.
 const GEMINI_MODELS = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'];
 
 async function askGemini(key, prompt, img) {
@@ -61,7 +61,8 @@ async function askGemini(key, prompt, img) {
   let last;
   for (const model of models) {
     const t0 = Date.now();
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+    let r;
+    try { r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST', signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
@@ -70,11 +71,12 @@ async function askGemini(key, prompt, img) {
         // Low thinking keeps replies fast; the output budget includes thinking tokens.
         generationConfig: { responseMimeType: 'application/json', temperature: 0.4, maxOutputTokens: 4096, thinkingConfig: { thinkingLevel: 'low' } },
       }),
-    });
+    }); } catch (e) { last = e; console.error('ai skip', model, e.name); continue; }
     const j = await r.json().catch(() => ({}));
     if (r.ok) { console.log('ai ok', model, (Date.now() - t0) + 'ms'); return (j.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join(''); }
     last = Object.assign(new Error(model + ': ' + (j.error?.message || 'Gemini error ' + r.status)), { status: r.status });
-    if (r.status !== 404 && r.status !== 400) throw last;
+    if (![400, 404, 500, 503].includes(r.status)) throw last;
+    console.error('ai skip', model, r.status);
   }
   throw last;
 }
@@ -125,7 +127,7 @@ export default async function handler(req, res) {
     const text = ant ? await askClaude(ant, prompt, img) : await askGemini(gem, prompt, img);
     return res.status(200).json({ ok: true, data: parseJson(text) });
   } catch (e) {
-    const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 ? 'rate_limited' : e.status === 401 || e.status === 403 ? 'badkey' : 'failed';
+    const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 || e.status === 503 ? 'rate_limited' : e.status === 401 || e.status === 403 ? 'badkey' : 'failed';
     console.error('ai error', e.status || '', e.message);
     return res.status(code === 'rate_limited' ? 429 : 502).json({ ok: false, code });
   }
