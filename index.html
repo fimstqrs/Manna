@@ -1820,12 +1820,17 @@ function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem(
   ['S1','S2','S3'].forEach(function(k){if(!Array.isArray(d.plans[k])||d.plans[k].length!==7)d.plans[k]=[null,null,null,null,null,null,null];if(typeof d.planNames[k]!=='string')d.planNames[k]=''});
   if(!d.plans[d.planId]||['S1','S2','S3'].indexOf(d.planId)<0)d.planId='S1';
   d.sched=schedFrom(d);return d}
-function prefSave(){try{var o={};Object.keys(S).forEach(function(k){if(PSKIP.indexOf(k)<0)o[k]=S[k]});o.meals=S.meals;o.mealsD=todayStamp();var j=JSON.stringify(o);if(j!==prefLast){prefLast=j;localStorage.setItem('manna.prefs.v1',j);if(typeof syncTick==='function')setTimeout(syncTick,0)}}catch(e){}}
+function prefSave(){try{var o={};Object.keys(S).forEach(function(k){if(PSKIP.indexOf(k)<0&&k!=='_mt')o[k]=S[k]});o.meals=S.meals;o.mealsD=todayStamp();
+  /* Note the time each setting changes, so sync can keep the newest change from any device */
+  var prev=null;try{prev=JSON.parse(prefLast||localStorage.getItem('manna.prefs.v1')||'null')}catch(e){}
+  if(prev){var now=Date.now(),mt=S._mt&&typeof S._mt==='object'?S._mt:(S._mt={});Object.keys(o).forEach(function(k){if(k==='mealsD')return;if(JSON.stringify(o[k])!==JSON.stringify(prev[k]))mt[k]=now})}
+  o._mt=S._mt||{};
+  var j=JSON.stringify(o);if(j!==prefLast){prefLast=j;localStorage.setItem('manna.prefs.v1',j);if(typeof syncTick==='function')setTimeout(syncTick,0)}}catch(e){}}
 function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:true,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
     sleep:6.2,hrv:48,sore:3,
     meals:[],labs:{fe:22,vd:24,b12:410},
     override:false,coachMsg:null,imported:[],
@@ -1990,6 +1995,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:104,d:'Nov 7, 2026',t:'Sync fixes',s:['Your theme and other settings now sync reliably: the most recent change from any device wins.','Sync now in Settings works and tells you when it is done. The Sync line shows when it last synced.','The rest timer only runs between sets of the same exercise. Workouts without sets, like a run, have no rest timer.','During a workout, tap + Add set to add a set to any exercise. Logging an extra set counts it too.']},
  {v:103,d:'Nov 7, 2026',t:'Test update',s:['A small test release to try the relaunch-to-update message. Nothing else changed.']},
  {v:102,d:'Nov 7, 2026',t:'Plan your sets before you start',s:['Before you start now lets you set the sets, reps (or time) and weight for every exercise.','During the workout, change reps and weight on any set, and add or remove sets with + and −.']},
  {v:101,d:'Nov 7, 2026',t:'Log a whole meal with AI',s:['Describe a meal or snap your plate and AI adds every food at once, for one AI use.','A pop-up shows your calories eaten against today’s goal, with protein, carbs and fat rings, then each food to swipe through. Change the amount or remove a food right there.','Every food gets an emoji.','Today’s meals shows the same rings and a simple list. Tap a food to see what is in it.','The Today’s meals button on What are you eating is gone, since it has its own page.']},
@@ -2223,7 +2229,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='103';
+var heroLast='',APPV='104';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3146,7 +3152,7 @@ function renderSession(){
         +(lift?'<label class="f small muted" for="pw-'+i+'">Weight ('+S.units+')<input type="number" inputmode="decimal" min="0" step="any" id="pw-'+i+'" value="'+esc(d.v||'')+'" placeholder="0"></label><label class="check" for="pb-'+i+'"><input type="checkbox" id="pb-'+i+'"'+(d.b?' checked':'')+'> Bodyweight</label>':'')
         +'</div></div>';
     }).join('')+(S.prepMsg?'<div class="note warn" role="alert">'+esc(S.prepMsg)+'</div>':'')
-      +'<div class="stack restpick"><b>Rest between sets</b><div class="chips" role="group" aria-label="Rest between sets">'+[0,30,60,90,120,180].map(function(r){return '<button type="button" class="chip" data-act="restpick" data-s="'+r+'" aria-pressed="'+(S.restPick===r)+'">'+(r?restLabel(r):'No rest')+'</button>'}).join('')+'</div><p class="small muted">'+(S.restPick?'A countdown starts after each set you log. You can skip it any time.':'No countdown between sets.')+' Your choice is remembered for next time.</p></div>'
+      +(!pwk.ex.some(function(e,i){var d=S.pd[i];return (d&&d.s!=null?d.s:setTarget(e[1]))>1})?'<p class="small muted">No rest timer: every exercise here is done once.</p>':'<div class="stack restpick"><b>Rest between sets</b><div class="chips" role="group" aria-label="Rest between sets">'+[0,30,60,90,120,180].map(function(r){return '<button type="button" class="chip" data-act="restpick" data-s="'+r+'" aria-pressed="'+(S.restPick===r)+'">'+(r?restLabel(r):'No rest')+'</button>'}).join('')+'</div><p class="small muted">'+(S.restPick?'A countdown starts after each set you log. You can skip it any time.':'No countdown between sets.')+' Your choice is remembered for next time.</p></div>')
       +'<div class="row spread">'+(rows.length?'<button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button>':'<span></span>')+'<div class="row"><button class="btn" data-act="pcancel">Cancel</button><button class="btn primary" data-act="pstart">Start workout</button></div></div></div>';
   }else if(S.sess&&w){
     var ms=sessMs(),t=sessTotals(w),st=stageCalc(),paused=S.sess.paused;
@@ -3165,7 +3171,7 @@ function renderSession(){
         +'<button class="btn primary" data-act="setadd" data-i="'+i+'">Log set '+(logged.length+1)+'</button></div>';
       var m=muOf(e[0])[0].map(function(x){return MUS[x]}).join(' · ');
       return '<div class="ex exb"><div class="exh"><div><b>'+esc(e[0])+'</b> '+exBadge(state)+(done?' <span class="pill done">Done</span>':'')+(m?'<div class="small muted">'+esc(m)+'</div>':'')+(state!=='ok'?'<div class="small muted">'+(state==='modify'?'Lower the load and stop at pain 3.':'Swap: '+esc(ALT[e[0]]||'skip it for now')+'.')+'</div>':'')+'</div><span class="mono">'+esc(e[1])+'</span></div>'
-        +'<div class="row" style="gap:.5rem;align-items:center"><div class="sprog'+(done?' full':logged.length?' part':'')+'">'+logged.length+' of '+tg+' sets</div><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="-1" aria-label="One set fewer"'+(tg<=1?' disabled':'')+'>−</button><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="1" aria-label="One set more">+</button></div>'
+        +'<div class="row" style="gap:.5rem;align-items:center"><div class="sprog'+(done?' full':logged.length?' part':'')+'">'+logged.length+' of '+tg+' sets</div><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="-1" aria-label="One set fewer"'+(tg<=Math.max(1,logged.length)?' disabled':'')+'>−</button><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="1">+ Add set</button></div>'
         +(prev?'<div class="small muted">Last time: '+esc(prev)+'</div>':'')+(sl?'<ul class="setlist">'+sl+'</ul>':'')+form+'</div>';
     }).join('');
     h+='</div><div class="row spread"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="btn" data-act="scancel">'+(S.cancelAsk?'Tap again to discard':'Cancel session')+'</button></div>';
@@ -3660,10 +3666,11 @@ var ACT={
     var i=b.dataset.i,w=sessW();if(!w)return;
     var swEl=$('#sw-'+i),wt=swEl?parseFloat(swEl.value):0,r=parseFloat($('#sr-'+i).value);
     if(!(r>0)||(wt<0)){toast('Enter the reps, seconds or minutes first.');return}
-    var k=w.id+'|'+i,a=S.sess,now=Date.now(),t=Math.max(1,Math.round((now-(a.mark||a.last||now))/1000));(S.sets[k]=S.sets[k]||[]).push({w:wt>0?wt:0,r:r,t:t});S.sess.tg=S.sess.tg||{};S.sess.tg[i]={s:sessTg(w,+i).s,r:String(r)};S.cancelAsk=false;
-    if(a.rest>0){S.rest={until:now+a.rest*1000};a.mark=now+a.rest*1000}else{S.rest=null;a.mark=now}
+    var k=w.id+'|'+i,a=S.sess,now=Date.now(),t=Math.max(1,Math.round((now-(a.mark||a.last||now))/1000));(S.sets[k]=S.sets[k]||[]).push({w:wt>0?wt:0,r:r,t:t});S.sess.tg=S.sess.tg||{};S.sess.tg[i]={s:Math.max(sessTg(w,+i).s,S.sets[k].length),r:String(r)};S.cancelAsk=false;
+    var more=(S.sets[k]||[]).length<sessTg(w,+i).s;
+    if(a.rest>0&&more){S.rest={until:now+a.rest*1000};a.mark=now+a.rest*1000}else{S.rest=null;a.mark=now}
   },
-  tgset:function(b){var w=sessW();if(!w)return;var i=+b.dataset.i,cur=sessTg(w,i);S.sess.tg=S.sess.tg||{};S.sess.tg[i]={s:Math.max(1,Math.min(20,cur.s+parseInt(b.dataset.d,10))),r:cur.r}},
+  tgset:function(b){var w=sessW();if(!w)return;var i=+b.dataset.i,cur=sessTg(w,i);S.sess.tg=S.sess.tg||{};var have=(S.sets[w.id+'|'+i]||[]).length;S.sess.tg[i]={s:Math.max(1,have,Math.min(20,cur.s+parseInt(b.dataset.d,10))),r:cur.r}},
   setdel:function(b){
     var w=sessW();if(!w)return;var k=w.id+'|'+b.dataset.i;
     (S.sets[k]||[]).splice(parseInt(b.dataset.j,10),1);if(S.sets[k]&&!S.sets[k].length)delete S.sets[k];
@@ -3818,12 +3825,17 @@ function mergePrefs(L,C,B){
     if(k in o)return;
     if(k==='meals'||k==='mealsD')return;
     if(MKEY[k]&&(Array.isArray(L[k])||Array.isArray(C[k]))){o[k]=setMerge(L[k],C[k],B[k],MKEY[k]);return}
+    if(k==='_mt')return;
     if(!(k in C))o[k]=L[k];else if(!(k in L))o[k]=C[k];
-    else o[k]=jeq(L[k],B[k])?C[k]:L[k];                                           /* the side that changed it wins */
+    else if(jeq(L[k],C[k]))o[k]=L[k];
+    else{var lt=(L._mt||{})[k]||0,ct=(C._mt||{})[k]||0;
+      if(lt||ct)o[k]=lt>ct?L[k]:C[k];                                              /* the newest change wins */
+      else o[k]=B&&(k in B)&&!jeq(L[k],B[k])?L[k]:C[k]}
   });
   /* Food logged today: merge when both are for the same day, otherwise keep the newer day */
   if(L.mealsD===C.mealsD){o.mealsD=L.mealsD;o.meals=setMerge(L.meals,C.meals,B.mealsD===L.mealsD?B.meals:[],MKEY.meals)}
   else if((C.mealsD||'')>(L.mealsD||'')){o.mealsD=C.mealsD;o.meals=C.meals||[]}else{o.mealsD=L.mealsD;o.meals=L.meals||[]}
+  var mt={};[L._mt||{},C._mt||{}].forEach(function(m){Object.keys(m).forEach(function(k){if(!(mt[k]>=m[k]))mt[k]=m[k]})});o._mt=mt;
   if(Array.isArray(o.hist))o.hist.sort(function(a,b){return (a&&a.ts||0)-(b&&b.ts||0)});
   return o;
 }
@@ -3836,7 +3848,7 @@ function mergeData(L,C,B){
 function syncLocal(d,quiet){
   [['prefs','manna.prefs.v1'],['cl','manna.cl.v1'],['est','manna.est.v1']].forEach(function(p){if(d[p[0]]!=null)lsSet(p[1],JSON.stringify(d[p[0]]))});
   var keep={};['wz','wq','selW','fsel','fq','fshow','fcat','wf','addDay','msel','hf','sess','edit','wedit','tedit','pedit'].forEach(function(k){if(k in S)keep[k]=S[k]});
-  prefLast='';S=defaults();Object.keys(keep).forEach(function(k){S[k]=keep[k]});
+  prefLast='';S=defaults();try{var pm=JSON.parse(lsGet('manna.prefs.v1')||'{}');if(pm&&pm._mt)S._mt=pm._mt}catch(e){}Object.keys(keep).forEach(function(k){S[k]=keep[k]});
   try{syncInputs()}catch(e){}refresh();prefSave();
   if(!quiet)toast('Updated from your other device.');
 }
@@ -3852,7 +3864,7 @@ function syncNow(){
     var local=localData(),h=hashStr(snap()),localChanged=h!==m.h;
     if(!row)return cloudPush();
     var cloudAt=Date.parse(row.updated_at)||0,cloudChanged=cloudAt>(m.at||0);
-    if(!cloudChanged&&!localChanged){ACC.sync='saved';return}
+    if(!cloudChanged&&!localChanged){ACC.sync='saved';ACC.syncAt=Date.now();return}
     if(cloudChanged&&!localChanged){
       if(syncBusy()){syncAgain=true;return}
       syncLocal(row.data||{},false);syncBaseSet(row.data||{});
@@ -3924,7 +3936,7 @@ function accRender(){
     }
     h+='<div class="kv"><span>Plan</span><span class="badge">'+plan+'</span></div>'
       +(u?'<div class="kv"><span>AI uses today</span><span class="mono">'+(u.limit==null?'Unlimited':u.used+' of '+u.limit)+'</span></div>':'')
-      +'<div class="kv"><span>Sync</span><span class="small">'+(ACC.sync==='saving'||ACC.sync==='checking'?'Syncing…':ACC.sync==='error'?'Not synced yet. Will retry.':'On, syncs automatically')+'</span></div>'
+      +'<div class="kv"><span>Sync</span><span class="small">'+(ACC.sync==='saving'||ACC.sync==='checking'?'Syncing…':ACC.sync==='error'?'Not synced yet. Will retry.':'On, automatic'+(ACC.syncAt?' · last synced '+fmtT(new Date(ACC.syncAt).toTimeString().slice(0,5)):''))+'</span></div>'
       +'<div class="row"><button class="btn" data-act="acsync">Sync now</button><button class="btn" data-act="acswitch">Use a different account</button><button class="btn" data-act="acout">Log out</button></div>'
       +(ACC.delAsk?'<div class="note warn stack"><b>Delete your account?</b><p class="small">This permanently deletes your account and everything saved to it. Data on this device stays until you clear it.</p><div class="row"><button class="btn primary" data-act="acdel2">Yes, delete it</button><button class="btn" data-act="acdelno">Cancel</button></div></div>'
         :'<button class="linkbtn small" data-act="acdel">Delete account</button>');
@@ -3973,7 +3985,9 @@ Object.assign(ACT,{
   acout:function(){var a=authGet();
     syncNow().catch(function(){}).then(function(){return authToken()}).then(function(tok){if(tok)return fetch(ACC.cfg.url+'/auth/v1/logout',{method:'POST',headers:sbHeaders(tok)})}).catch(function(){}).then(function(){
       authSet(null);ACC.usage=null;ACC.conflict=null;ACC.sync='';accSay('Signed out. Your data stays on this device.','out')})},
-  acsync:function(){syncStart(false)},
+  acsync:function(){if(!signedIn())return;var m=syncMeta(),a=authGet();
+    if(m.uid!==a.id){syncStart(false);return}
+    ACC.sync='checking';syncNow().then(function(){toast(ACC.sync==='error'?'Could not sync. Check your connection.':'Synced. Everything is up to date.')})},
   acswitch:function(){var a=authGet(),was=a&&a.email;
     /* Save this account first; the next account's data is offered on login */
     var done=function(){authToken().then(function(tok){if(tok)return fetch(ACC.cfg.url+'/auth/v1/logout',{method:'POST',headers:sbHeaders(tok)})}).catch(function(){}).then(function(){
