@@ -729,6 +729,22 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+/* Big Change theme tile */
+.thbtn{position:relative;display:flex;align-items:center;gap:.9rem;padding:1rem 1rem 1.35rem;border-radius:18px;text-decoration:none;color:var(--ink);overflow:hidden;
+  background:linear-gradient(120deg,color-mix(in srgb,var(--thsw,var(--accent)) 30%,transparent),color-mix(in srgb,var(--accent) 12%,transparent));
+  border:2px solid color-mix(in srgb,var(--thsw,var(--accent)) 70%,transparent);box-shadow:0 6px 22px color-mix(in srgb,var(--thsw,var(--accent)) 30%,transparent);transition:transform .2s ease,box-shadow .2s ease}
+.thbtn:hover{transform:translateY(-1px);box-shadow:0 10px 28px color-mix(in srgb,var(--thsw,var(--accent)) 40%,transparent)}
+.thbtn:active{transform:scale(.98)}
+.thb-sw{width:46px;height:46px;border-radius:50%;flex:none;box-shadow:0 0 0 3px var(--card,#fff),0 0 0 5px color-mix(in srgb,var(--thsw,var(--accent)) 80%,transparent)}
+.thb-t{flex:1;min-width:0;display:flex;flex-direction:column}
+.thb-t b{font-size:1.2rem;font-weight:800}
+.thb-t span{font-size:.85rem;color:var(--muted)}
+.thb-go{font-size:1.8rem;line-height:1;font-weight:300}
+.thb-strip{position:absolute;left:0;right:0;bottom:0;height:7px;display:flex}
+.thb-strip i{flex:1}
+@media (prefers-reduced-motion:no-preference){.thb-sw{animation:thb-glow 2.6s ease-in-out infinite}@keyframes thb-glow{50%{box-shadow:0 0 0 3px var(--card,#fff),0 0 0 7px color-mix(in srgb,var(--thsw,var(--accent)) 45%,transparent)}}}
+.rm .thb-sw{animation:none}
+
 /* Rings and the logged-food pop-up */
 .crw{display:flex;flex-direction:column;align-items:center;gap:.2rem}
 .cring,.mr{position:relative;display:grid;place-items:center}
@@ -1202,14 +1218,14 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         <div class="card stack" id="fv-card">
           <div class="sh"><h3>Your favorites</h3><p class="small muted">Top workouts show on your home page. Your favorite verse shows on the Scripture page.</p></div>
           <p class="small" id="fv-top"></p>
-          <div class="row"><button class="btn sm" data-act="onbopen" data-s="6">Change top 3 workouts</button><a class="btn sm" href="#themes" style="text-decoration:none">Change theme</a></div>
+          <div class="row"><button class="btn sm" data-act="onbopen" data-s="6">Change top 3 workouts</button><a class="btn sm primary" href="#themes" style="text-decoration:none">🎨 Change theme</a></div>
           <label class="f" for="fv-ref">Favorite Bible verse<input type="text" id="fv-ref" data-chg="1" maxlength="80" autocomplete="off" placeholder="John 3:16"></label>
         </div>
       </div></div>
       <div class="swpage" data-name="Look" data-ic="look"><div class="grid2">
         <div class="card stack">
           <div class="sh"><h3>Appearance</h3><p class="small muted">Colour, size and motion.</p></div>
-          <div class="row spread"><span id="p-theme"></span><a class="btn sm" href="#themes" style="text-decoration:none">Choose a theme</a></div>
+          <a class="thbtn" href="#themes" id="p-theme" aria-label="Change theme"></a>
           <label class="f" for="p-scale"><span class="row spread"><span>Display size on phones</span><span class="row" style="gap:.6rem"><span class="mono" id="p-v1"></span><button type="button" class="chip" data-act="scalereset">Reset</button></span></span><input type="range" id="p-scale" min="0.8" max="1.4" step="0.05"></label>
           <label class="f" for="p-scaled"><span class="row spread"><span>Display size on laptops and computers</span><span class="row" style="gap:.6rem"><span class="mono" id="p-v2"></span><button type="button" class="chip" data-act="scalereset" data-d="1">Reset</button></span></span><input type="range" id="p-scaled" min="0.8" max="1.4" step="0.05"></label>
           <p class="small muted" id="p-scnote"></p>
@@ -1997,6 +2013,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:110,d:'Nov 7, 2026',t:'Easier to change your theme',s:['Change theme in Settings › Look is now a big, colourful button showing your current theme and every theme’s colour.','The Change theme button on your profile stands out too.']},
  {v:109,d:'Nov 7, 2026',t:'Display size for phones and computers',s:['Settings › Look now has two display size sliders: one for phones and one for laptops and computers.','Each device uses the one that fits its screen, and both sync to your other devices.','Sizes now go down to 80%.']},
  {v:108,d:'Nov 7, 2026',t:'Tour after setup',s:['Finishing setup now always starts the tutorial, including when you run setup again from Settings.','The last setup screen says the tour is next, and the button reads Finish and take the tour.']},
  {v:107,d:'Nov 7, 2026',t:'Sync fixed for real',s:['Saving to your account was being refused by the database (error 403), so nothing was syncing, including themes. That is fixed: your data now saves and syncs between devices.']},
@@ -2280,7 +2297,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='109';
+var heroLast='',APPV='110';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2803,7 +2820,9 @@ function renderPrivacy(){
   $('#p-scnote').textContent='This '+(isPhone()?'phone':'screen')+' uses the '+(isPhone()?'phone':'laptop and computer')+' size. Each syncs to your other devices.';
   $('#p-reset').textContent=delConfirm?'Click again to confirm':'Delete all my data';
   $('#p-units').value=S.units;$('#p-lang').value=S.lang;
-  $('#p-theme').innerHTML='<i class="sw" style="background:'+sw+'"></i><b>'+esc(th.name)+'</b><span class="small muted"> · '+(th.auto?'follows the verse':'chosen by you')+'</span>';
+  var plainTh=th.id==='plain',cols=THEMES.filter(function(t){return t.id!=='plain'}).map(function(t){return t.sw}),swbg=plainTh?'conic-gradient('+cols.concat(cols[0]).join(',')+')':sw;
+  var thh='<span class="thb-sw" style="background:'+swbg+'"></span><span class="thb-t"><b>Change theme</b><span>Now: '+esc(th.name)+' · '+(th.auto?'follows the verse':'chosen by you')+'</span></span><span class="thb-go" aria-hidden="true">›</span><span class="thb-strip" aria-hidden="true">'+THEMES.map(function(t){return '<i style="background:'+t.sw+'"></i>'}).join('')+'</span>';
+  if($('#p-theme').dataset.h!==thh){$('#p-theme').dataset.h=thh;$('#p-theme').innerHTML=thh;$('#p-theme').style.setProperty('--thsw',plainTh?'#9b7cf0':sw)}
   $('#p-share').innerHTML=[['workouts','Workouts'],['meals','Meals'],['weight','Weight']].map(function(x){return '<div class="row spread"><span>'+x[1]+'</span><span class="badge">'+esc(S.share[x[0]])+'</span></div>'}).join('');
   var ex={settings:{bible_version:ver(),theme:th.id,theme_mode:S.themeMode,units:S.units,language:S.lang,text_size:S.scale},profile:{goal:S.goal,weight_kg:S.weight,conditions:Object.keys(S.cond).filter(function(k){return S.cond[k]}),allergies:Object.keys(S.allergy).filter(function(k){return S.allergy[k]})},meals:S.meals.map(function(m){return {name:m.name,qty:m.q,time:m.t}}),labs:S.labs,sharing:S.share};
   $('#p-json').textContent=JSON.stringify(ex,null,2);
