@@ -636,7 +636,11 @@ input[type=text],input[type=number],select,textarea{
 .tour-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tour-btns #tour-exit{margin-left:auto}
 @media (prefers-reduced-motion:no-preference){.wel-in{animation:onb-up .8s cubic-bezier(.2,.8,.2,1) both}}
 @media (prefers-reduced-motion:reduce){#tour-hl{transition:none}}
-.onb-wf{margin:.2rem 0 .6rem}.onb-wf .eyebrow{margin:.5rem 0 .3rem}
+.onb-wf{margin:.2rem 0 .6rem}
+.onb-acct{margin-top:1.1rem}
+.onb-abox{display:flex;flex-direction:column;gap:.25rem;padding:.9rem 1rem;border-radius:18px;border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.onb-abox .small{color:var(--muted)}.onb-abox.done{border-color:var(--accent)}
+.onb-amsg{margin:.5rem 0 0;color:var(--muted)}.onb-amsg.err{color:var(--warn)}.onb-wf .eyebrow{margin:.5rem 0 .3rem}
 </style>
 
 <style id="perf-style">
@@ -713,6 +717,12 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .btn.oauth.google{background:#fff!important;color:#1f1f1f!important;border-color:#747775!important;background-image:none!important}
 .btn.apskip{background:transparent!important;border-color:transparent!important;box-shadow:none!important;color:var(--muted)}
 .oauthrow{gap:.5rem}
+.acwho{display:flex;align-items:center;gap:.75rem;padding:.7rem .8rem;border-radius:14px;border:1px solid var(--line);background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.acav{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:600 1.1rem var(--f-body);background:var(--accent);color:var(--accent-ink)}
+.acav[data-p=google]{background:#fff;color:#1f1f1f;border:1px solid #747775}.acav[data-p=apple]{background:#000;color:#fff}
+.acwt{display:flex;flex-direction:column;min-width:0;flex:1}.acwt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pbadge{display:inline-flex;align-items:center;font:600 .74rem var(--f-body);padding:.18rem .55rem;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.pbadge[data-p=google]{background:#fff;color:#1f1f1f;border-color:#747775}.pbadge[data-p=apple]{background:#000;color:#fff;border-color:#000}
 .orline{display:flex;align-items:center;gap:.6rem;margin:.2rem 0}.orline::before,.orline::after{content:"";flex:1;height:1px;background:var(--line)}
 #wn-t:focus{outline:none}
 .wnl{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.35rem;line-height:1.45}
@@ -1850,6 +1860,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:91,d:'Nov 7, 2026',t:'Your sign-in at a glance',s:['Settings › Account shows how you signed in: Google, Apple or email, with your name from Google.','Sign in with Google is now switched on.','Setup’s first screen lets you sign in to bring your data back, or create an account.','Switch to a different account from Settings › Account.','The Signed out message is now red so it is easy to spot.']},
  {v:90,d:'Nov 7, 2026',t:'Sign in your way',s:['The first time you open Manna after this update, you are invited to create a free account.','Sign in with email today. Apple and Google sign-in appear as soon as they are switched on.','You can skip it and sign in later from Settings › Account.']},
  {v:89,d:'Nov 7, 2026',t:'Accounts',s:['Create an account in Settings to keep your data safe and use Manna on all your devices.','Your data syncs automatically while you are logged in.','AI uses are counted on your account, so they follow you between devices.','Settings now explains clearly where your data is kept.']},
  {v:88,d:'Nov 6, 2026',t:'AI switched on',s:['AI features now use Google’s current Gemini model, so Build with AI and food estimates work.','AI answers faster, and a slow answer stops after 25 seconds instead of hanging.']},
@@ -1963,7 +1974,7 @@ function onbSrc(){return ONB.in||(S.onboarded?{a:S.age,kg:S.weight,h:S.height}:{
 function onbOk(x){return isFinite(x)&&x>0}
 function onbH(){var h=onbSrc().h,i=onbOk(h)?Math.round(h/2.54):NaN;return S.units==='lb'?'<div class="onb-row"><label class="f" for="onb-ft">Height (ft)<input type="number" id="onb-ft" data-oi="1" min="3" max="7" inputmode="numeric" placeholder="ft" value="'+(onbOk(i)?Math.floor(i/12):'')+'"></label><label class="f" for="onb-in">(in)<input type="number" id="onb-in" data-oi="1" min="0" max="11" inputmode="numeric" placeholder="in" value="'+(onbOk(i)?i%12:'')+'"></label></div>':'<div class="onb-row"><label class="f" for="onb-cm">Height (cm)<input type="number" id="onb-cm" data-oi="1" min="120" max="230" inputmode="numeric" placeholder="e.g. 175" value="'+(onbOk(h)?Math.round(h):'')+'"></label><span></span></div>'}
 function onbPanel(n){
-  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you?<input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(!S.onboarded&&(S.name==='Fimi'||S.name==='Friend')?'':S.name)+'"></label></div>';
+  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you?<input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(!S.onboarded&&(S.name==='Fimi'||S.name==='Friend')?'':S.name)+'"></label><div id="ob-acct" class="onb-acct"></div></div>';
   if(n===1)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">What are your goals?</h2><p>Pick one or more. Manna blends them into one plan.</p><div class="onb-opts" role="group" aria-label="Goals">'+GOALS.map(function(g){return '<button type="button" class="onb-opt" data-onb="gtog" data-k="'+g[0]+'" aria-pressed="'+(goalSet().indexOf(g[0])>-1)+'"><b>'+g[1]+'</b><span>'+g[2]+'</span></button>'}).join('')+'</div></div>';
   if(n===2)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">About you</h2><p>These are used only to estimate how much energy your body needs.</p><div class="onb-seg" role="group" aria-label="Sex">'+[['female','Female'],['male','Male'],['other','Prefer not to say']].map(function(x){return '<button type="button" class="chip" data-onb="sex" data-k="'+x[0]+'" aria-pressed="'+(S.sex===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-seg" role="group" aria-label="Units">'+[['kg','kg and cm'],['lb','lb and ft']].map(function(x){return '<button type="button" class="chip" data-onb="unit" data-k="'+x[0]+'" aria-pressed="'+(S.units===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-row"><label class="f" for="onb-age">Age<input type="number" id="onb-age" data-oi="1" min="14" max="90" inputmode="numeric" placeholder="e.g. 30" value="'+(onbOk(onbSrc().a)?onbSrc().a:'')+'"></label><label class="f" for="onb-wt">Weight ('+S.units+')<input type="number" id="onb-wt" data-oi="1" step="0.1" inputmode="decimal" placeholder="e.g. '+(S.units==='lb'?'165':'75')+'" value="'+(onbOk(onbSrc().kg)?Math.round((S.units==='lb'?onbSrc().kg*2.20462:onbSrc().kg)*10)/10:'')+'"></label></div>'+onbH()+'</div>';
   if(n===3)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">How active are you?</h2><p>Think about a normal week, including work.</p><div class="onb-opts" role="radiogroup" aria-label="Activity level">'+ACTS.map(function(a){return '<button type="button" class="onb-opt" role="radio" data-onb="act" data-k="'+a[0]+'" aria-checked="'+(S.activity===a[0])+'" aria-pressed="'+(S.activity===a[0])+'"><b>'+a[1]+'</b><span>'+a[2]+'</span></button>'}).join('')+'</div></div>';
@@ -1999,7 +2010,7 @@ function onbWL(){
   $('#onb-wl').innerHTML=L.length?L.map(function(w){return wcardHtml(w,S.topW.indexOf(w.id)>-1)}).join(''):'<p class="muted">No workouts match. Try fewer filters.</p>';
 }
 function wpLabel(n){return n>=3?'All 3 picked':n+' of 3 picked'}
-function onbRender(){
+function onbRender(){setTimeout(function(){if(typeof obAcct==='function'){ACC.obsig='';obAcct()}},0);
   /* Redrawing the same step (kg/lb, a chip) is instant and keeps the scroll; only moving between steps animates */
   var same=ONB.drawn===ONB.step,o=$('#onb'),keep=o?o.scrollTop:0;ONB.drawn=ONB.step;
   var b=$('#onb-body');b.innerHTML=onbPanel(ONB.step);var pn=$('.onb-panel',b);
@@ -2025,7 +2036,7 @@ function onbValid(){var m='',x=ONB.in||{a:NaN,kg:NaN,h:NaN};
   $('#onb-msg').textContent=m;return !m}
 var ONBACT={
   next:function(){
-    if(ONB.step===0){var nm=($('#onb-name').value||'').trim().slice(0,20);if(nm)S.name=nm;else if(!S.onboarded&&S.name==='Fimi')S.name='Friend'}
+    if(ONB.step===0){var nm=($('#onb-name').value||'').trim().slice(0,20);if(nm)S.name=nm;else if(!S.onboarded&&S.name==='Fimi')S.name='Friend';if($('#ob-acct')&&$('#ob-acct').innerHTML)S.acctAsked=true}
     if(ONB.step===2){onbReadBody();if(!onbValid())return}
     if(ONB.step===ONBN-1){onbClose();toast('Setup saved. You can change everything in Settings.');return}
     ONB.step++;ONB.back=false;onbRender()},
@@ -2069,7 +2080,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='90';
+var heroLast='',APPV='91';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3115,7 +3126,7 @@ function tickClock(){
   dt.textContent=d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
 function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.textContent=t})}
-function refresh(){setTimeout(aiLeftPaint,0);setTimeout(function(){if(typeof accRender==='function')accRender()},0);
+function refresh(){setTimeout(aiLeftPaint,0);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   applyPrefs();renderToday();renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
@@ -3491,7 +3502,11 @@ function authSet(a){lsSet('manna.auth.v1',a?JSON.stringify(a):null)}
 function signedIn(){var a=authGet();return !!(ACC.cfg&&ACC.cfg.accounts&&a&&a.id)}
 function sbHeaders(tok){var h={apikey:ACC.cfg.anonKey,'content-type':'application/json'};h.authorization='Bearer '+(tok||ACC.cfg.anonKey);if(!tok&&String(ACC.cfg.anonKey).indexOf('eyJ')!==0)delete h.authorization;return h}
 function sbJson(r){return r.text().then(function(t){var j=null;try{j=t?JSON.parse(t):null}catch(e){}if(!r.ok)throw {status:r.status,msg:(j&&(j.msg||j.error_description||j.message||j.error))||'',code:j&&(j.error_code||j.code)};return j})}
-function sessionFrom(j,prev){return {at:j.access_token,rt:j.refresh_token||(prev&&prev.rt),exp:Date.now()+((j.expires_in||3600)*1000),id:(j.user&&j.user.id)||(prev&&prev.id),email:(j.user&&j.user.email)||(prev&&prev.email)||''}}
+/* How the account signs in (email, google, apple) and the name the provider gave */
+function whoOf(u){var am=u&&u.app_metadata||{},um=u&&u.user_metadata||{};return {prov:String(am.provider||'email'),provs:Array.isArray(am.providers)?am.providers.map(String):[],name:String(um.full_name||um.name||'').slice(0,60)}}
+function sessionFrom(j,prev){var w=j.user?whoOf(j.user):prev||{};return {at:j.access_token,rt:j.refresh_token||(prev&&prev.rt),exp:Date.now()+((j.expires_in||3600)*1000),id:(j.user&&j.user.id)||(prev&&prev.id),email:(j.user&&j.user.email)||(prev&&prev.email)||'',prov:w.prov,provs:w.provs,name:w.name}}
+var PROVN={email:'Email',google:'Google',apple:'Apple'};
+function provBadge(k){return '<span class="pbadge" data-p="'+esc(k)+'">'+esc(PROVN[k]||k)+'</span>'}
 /* A valid access token, refreshed when it is about to expire. Null when signed out. */
 function authToken(){
   var a=authGet();if(!a||!ACC.cfg||!ACC.cfg.accounts)return Promise.resolve(null);
@@ -3510,8 +3525,8 @@ function authErr(e){
   if(e&&e.status===429)return 'Too many tries. Wait a minute and try again.';
   return e&&e.msg?String(e.msg).slice(0,160):'Something went wrong. Try again.';
 }
-function accSay(msg,err){ACC.msg=msg||'';ACC.err=!!err;ACC.busy=false;refresh()}
-function accFields(){var e=$('#ac-email'),p=$('#ac-pass');return {email:e?e.value.trim():'',pass:p?p.value:''}}
+function accSay(msg,err){ACC.msg=msg||'';ACC.err=err==='out'?'out':!!err;ACC.busy=false;refresh()}
+function accFields(){var ob=$('#onb'),inOb=ob&&!ob.hidden&&$('#ob-email'),e=inOb?$('#ob-email'):$('#ac-email'),p=inOb?$('#ob-pass'):$('#ac-pass');return {email:e?e.value.trim():'',pass:p?p.value:''}}
 
 /* ---- Sync: the three things Manna keeps on the device ---- */
 var SYNC_KEYS=['manna.prefs.v1','manna.cl.v1','manna.est.v1'];
@@ -3576,20 +3591,20 @@ function accInit(){
     ACC.cfg=c||{accounts:false};
     var note=lsGet('manna.sync.note');if(note){lsSet('manna.sync.note',null);setTimeout(function(){toast(note)},1500)}
     if(!ACC.cfg.accounts){refresh();return}
-    fetch(ACC.cfg.url+'/auth/v1/settings',{headers:{apikey:ACC.cfg.anonKey}}).then(function(r){return r.json()}).then(function(st){ACC.prov=st&&st.external||{};ACC.sig='';refresh()}).catch(function(){ACC.prov={}});
+    fetch(ACC.cfg.url+'/auth/v1/settings',{headers:{apikey:ACC.cfg.anonKey}}).then(function(r){return r.json()}).then(function(st){ACC.prov=st&&st.external||{};ACC.sig='';ACC.obsig='';refresh()}).catch(function(){ACC.prov={}});
     setTimeout(apCheck,1500);
     var p=null;try{p=JSON.parse(lsGet('manna.auth.pending')||'null')}catch(e){}lsSet('manna.auth.pending',null);
     if(p&&p.error){ACC.mode='login';accSay(p.error.indexOf('expired')>-1?'That link has expired. Ask for a new one.':'That link did not work. Try again.',true);return}
     if(p&&p.access_token){
       fetch(ACC.cfg.url+'/auth/v1/user',{headers:sbHeaders(p.access_token)}).then(sbJson).then(function(u){
-        authSet({at:p.access_token,rt:p.refresh_token,exp:Date.now()+((+p.expires_in||3600)*1000),id:u.id,email:u.email||''});
+        var w=whoOf(u);authSet({at:p.access_token,rt:p.refresh_token,exp:Date.now()+((+p.expires_in||3600)*1000),id:u.id,email:u.email||'',prov:w.prov,provs:w.provs,name:w.name});
         if(p.type==='recovery'){ACC.mode='newpass';accSay('Choose a new password.')}
         else{S.acctAsked=true;accSay(p.type==='signup'?'Your email is confirmed. You are signed in.':'You are signed in.');syncStart(true);if(!p.type)toast('Signed in. Your data now saves to your account.')}
         usageLoad();
       }).catch(function(e){accSay(authErr(e),true)});
       return;
     }
-    refresh();if(signedIn()){syncStart(false);usageLoad()}
+    refresh();if(signedIn()){syncStart(false);usageLoad();if(!authGet().prov)authToken().then(function(tok){if(!tok)return;return fetch(ACC.cfg.url+'/auth/v1/user',{headers:sbHeaders(tok)}).then(sbJson).then(function(u){var a=authGet();if(!a)return;var w=whoOf(u);a.prov=w.prov;a.provs=w.provs;a.name=w.name;authSet(a);ACC.sig='';refresh()})}).catch(function(){})}
   });
 }
 
@@ -3598,20 +3613,23 @@ function accRender(){
   var el=$('#acct-card');if(!el)return;
   var on=!!(ACC.cfg&&ACC.cfg.accounts);el.hidden=!on;if(!on)return;
   var a=authGet(),m=syncMeta();
-  var sig=JSON.stringify([ACC.prov,ACC.mode,ACC.busy,ACC.msg,ACC.err,a&&a.email,ACC.usage,ACC.sync,Math.floor(ACC.syncAt/60000),!!ACC.conflict,!!ACC.delAsk]);
+  var sig=JSON.stringify([ACC.prov,ACC.mode,ACC.busy,ACC.msg,ACC.err,a&&a.email,a&&a.prov,a&&a.name,a&&a.provs,ACC.usage,ACC.sync,Math.floor(ACC.syncAt/60000),!!ACC.conflict,!!ACC.delAsk]);
   if(sig===ACC.sig)return;ACC.sig=sig;
   var f=accFields(),h='<div class="sh"><h3>Account</h3>';
-  var note=ACC.msg?'<p class="note small'+(ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
+  var note=ACC.msg?'<p class="note small'+(ACC.err==='out'?' crit':ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
   if(signedIn()&&ACC.mode!=='newpass'){
     var u=ACC.usage,plan=u&&u.plan==='paid'?'Paid':'Free';
-    h+='<p class="small muted">Signed in as <b>'+esc(a.email)+'</b></p></div>'+note;
+    var pv=a.prov||'email',linked=(a.provs&&a.provs.length?a.provs:[pv]);
+    h+='<p class="small muted">Signed in as <b>'+esc(a.email)+'</b></p></div>'+note
+      +'<div class="acwho"><span class="acav" data-p="'+esc(pv)+'" aria-hidden="true">'+esc(((a.name||a.email||'?').trim()[0]||'?').toUpperCase())+'</span><div class="acwt">'+(a.name?'<b>'+esc(a.name)+'</b>':'')+'<span class="small">'+(pv==='email'?'Signed in with email and password':'Signed in with '+esc(PROVN[pv]||pv))+'</span></div>'+provBadge(pv)+'</div>'
+      +(linked.length>1?'<div class="kv"><span>Sign-in methods</span><span>'+linked.map(provBadge).join(' ')+'</span></div>':'');
     if(ACC.conflict){
       h+='<div class="note stack"><b>This device and your account both have Manna data.</b><p class="small">Which one should Manna keep? The other is replaced.</p><div class="row"><button class="btn primary" data-act="acuse">Use my account’s data</button><button class="btn" data-act="acmine">Keep this device’s data</button></div></div>';
     }
     h+='<div class="kv"><span>Plan</span><span class="badge">'+plan+'</span></div>'
       +(u?'<div class="kv"><span>AI uses today</span><span class="mono">'+u.used+' of '+u.limit+'</span></div>':'')
       +'<div class="kv"><span>Sync</span><span class="small">'+(ACC.sync==='saving'||ACC.sync==='checking'?'Saving…':ACC.sync==='error'?'Not saved. Will retry.':ACC.syncAt?'Saved to your account':'Up to date')+'</span></div>'
-      +'<div class="row"><button class="btn" data-act="acsync">Sync now</button><button class="btn" data-act="acout">Log out</button></div>'
+      +'<div class="row"><button class="btn" data-act="acsync">Sync now</button><button class="btn" data-act="acswitch">Use a different account</button><button class="btn" data-act="acout">Log out</button></div>'
       +(ACC.delAsk?'<div class="note warn stack"><b>Delete your account?</b><p class="small">This permanently deletes your account and everything saved to it. Data on this device stays until you clear it.</p><div class="row"><button class="btn primary" data-act="acdel2">Yes, delete it</button><button class="btn" data-act="acdelno">Cancel</button></div></div>'
         :'<button class="linkbtn small" data-act="acdel">Delete account</button>');
   }else if(ACC.mode==='newpass'){
@@ -3658,8 +3676,15 @@ Object.assign(ACT,{
       .catch(function(e){accSay(authErr(e),true)})},
   acout:function(){var a=authGet();syncTick();
     authToken().then(function(tok){if(tok)return fetch(ACC.cfg.url+'/auth/v1/logout',{method:'POST',headers:sbHeaders(tok)})}).catch(function(){}).then(function(){
-      authSet(null);ACC.usage=null;ACC.conflict=null;ACC.sync='';accSay('Signed out. Your data stays on this device.')})},
+      authSet(null);ACC.usage=null;ACC.conflict=null;ACC.sync='';accSay('Signed out. Your data stays on this device.','out')})},
   acsync:function(){syncStart(false)},
+  acswitch:function(){var a=authGet(),was=a&&a.email;
+    /* Save this account first; the next account's data is offered on login */
+    var done=function(){authToken().then(function(tok){if(tok)return fetch(ACC.cfg.url+'/auth/v1/logout',{method:'POST',headers:sbHeaders(tok)})}).catch(function(){}).then(function(){
+      authSet(null);ACC.usage=null;ACC.conflict=null;ACC.sync='';ACC.mode='login';
+      accSay('Signed out of '+(was||'your account')+'. Sign in with the other account below.');
+      setTimeout(function(){var e=$('#ac-email');if(e){e.value='';e.focus()}},60)})};
+    cloudPush().then(done,done)},
   acuse:function(){var r=ACC.conflict;ACC.conflict=null;if(r)cloudApply(r)},
   acmine:function(){ACC.conflict=null;cloudPush().then(function(){accSay('This device’s data is now saved to your account.')},function(e){accSay(authErr(e),true)})},
   acdel:function(){ACC.delAsk=true},
@@ -3675,6 +3700,33 @@ function oauthBtns(){var pv=ACC.prov||{},h='';
   if(pv.apple)h+='<button class="btn oauth apple" data-act="acoauth" data-k="apple">Continue with Apple</button>';
   if(pv.google)h+='<button class="btn oauth google" data-act="acoauth" data-k="google">Continue with Google</button>';
   return h?'<div class="stack oauthrow">'+h+'<p class="small muted orline"><span>or use your email</span></p></div>':''}
+/* ---- Account box on the first setup screen ---- */
+function obAcct(){
+  var el=$('#ob-acct');if(!el)return;
+  if(!ACC.cfg||!ACC.cfg.accounts||!ACC.prov){if(el.innerHTML)el.innerHTML='';return}
+  var a=authGet(),inn=signedIn();
+  if(inn&&a.name){var nmE=$('#onb-name');if(nmE&&!nmE.value&&!nmE.dataset.touched)nmE.value=a.name.split(' ')[0]}
+  var sig=JSON.stringify([inn,a&&a.email,ACC.prov,ACC.busy,ACC.msg,ACC.err,ACC.obmode]);if(sig===ACC.obsig)return;ACC.obsig=sig;
+  var keep={e:($('#ob-email')||{}).value||'',p:($('#ob-pass')||{}).value||''};
+  var msg=ACC.msg?'<p class="small onb-amsg'+(ACC.err?' err':'')+'" role="status">'+esc(ACC.msg)+'</p>':'';
+  if(inn){
+    el.innerHTML='<div class="onb-abox done"><b>Signed in'+(a.prov&&a.prov!=='email'?' with '+esc(PROVN[a.prov]||a.prov):'')+'</b><span class="small">'+esc(a.email)+'. Your setup will be saved to your account.</span></div>'+msg;
+    return;
+  }
+  var pv=ACC.prov,em=ACC.obmode==='email';
+  el.innerHTML='<div class="onb-abox"><b>Already use Manna?</b><span class="small">Sign in to bring your data back. New here? Create a free account to keep your progress safe, or skip this.</span>'
+    +'<div class="stack" style="gap:.5rem;margin-top:.4rem">'
+    +(pv.apple?'<button type="button" class="btn oauth apple" data-act="acoauth" data-k="apple">Continue with Apple</button>':'')
+    +(pv.google?'<button type="button" class="btn oauth google" data-act="acoauth" data-k="google">Continue with Google</button>':'')
+    +(em?'<label class="f" for="ob-email">Email<input type="email" id="ob-email" autocomplete="email" inputmode="email"></label>'
+        +'<label class="f" for="ob-pass">Password<input type="password" id="ob-pass" autocomplete="current-password" minlength="8"></label>'
+        +'<div class="row"><button type="button" class="btn primary" data-act="aclogin"'+(ACC.busy?' disabled':'')+'>Log in</button><button type="button" class="btn" data-act="acsignup"'+(ACC.busy?' disabled':'')+'>Create account</button></div>'
+       :'<button type="button" class="btn oauth" data-act="obemail">Continue with email</button>')
+    +'</div></div>'+msg;
+  if($('#ob-email')){$('#ob-email').value=keep.e;$('#ob-pass').value=keep.p}
+}
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='onb-name')e.target.dataset.touched='1'});
+ACT.obemail=function(){ACC.obmode='email';ACC.msg='';setTimeout(function(){var e=$('#ob-email');if(e)e.focus()},50)};
 /* ---- First-time sign-in popup: once, for people not signed in, after splash, setup and What's new ---- */
 function apRender(){var pv=ACC.prov||{},any=pv.apple||pv.google;
   $('#ap-card').innerHTML='<div class="apmark" aria-hidden="true">'+$('.brand b svg').outerHTML+'</div>'
