@@ -1995,6 +1995,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:107,d:'Nov 7, 2026',t:'Sync fixed for real',s:['Saving to your account was being refused by the database (error 403), so nothing was syncing, including themes. That is fixed: your data now saves and syncs between devices.']},
  {v:106,d:'Nov 7, 2026',t:'Sync that just works',s:['Signing in on a device that already has its own data no longer asks which copy to keep. Both are combined: workouts and meals from both are kept, and for each setting the most recent change wins.','Devices that were waiting on that question now sync straight away.','If sync ever fails, Settings › Account says why.']},
  {v:105,d:'Nov 7, 2026',t:'The full version history',s:['The version log now goes all the way back to Version 1.','Versions 1 to 52 are rebuilt from memory and marked approximate. Versions 1 to 59 came before the current site, so they are dated Before Nov 6, 2026.']},
  {v:104,d:'Nov 7, 2026',t:'Sync fixes',s:['Your theme and other settings now sync reliably: the most recent change from any device wins.','Sync now in Settings works and tells you when it is done. The Sync line shows when it last synced.','The rest timer only runs between sets of the same exercise. Workouts without sets, like a run, have no rest timer.','During a workout, tap + Add set to add a set to any exercise. Logging an extra set counts it too.']},
@@ -2275,7 +2276,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='106';
+var heroLast='',APPV='107';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3821,8 +3822,14 @@ function cloudPull(){
 function cloudPush(){
   return authToken().then(function(tok){if(!tok)throw {status:401};var a=authGet(),now=new Date().toISOString(),s=snap(),dat=localData();
     ACC.sync='saving';
-    return fetch(ACC.cfg.url+'/rest/v1/profiles?on_conflict=id',{method:'POST',headers:Object.assign(sbHeaders(tok),{prefer:'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({id:a.id,data:dat,updated_at:now})})
-      .then(sbJson).then(function(){syncMetaSet({uid:a.id,h:hashStr(s),at:Date.parse(now),lc:0});syncBaseSet(dat);ACC.sync='saved';ACC.syncErr='';ACC.syncAt=Date.now();return dat});
+    /* Update the row; only create it when there is none yet. (An upsert would also try to
+       rewrite the id column, which people are not allowed to change, so it is refused.) */
+    var row=ACC.cfg.url+'/rest/v1/profiles?id=eq.'+encodeURIComponent(a.id)+'&select=id';
+    return fetch(row,{method:'PATCH',headers:Object.assign(sbHeaders(tok),{prefer:'return=representation'}),body:JSON.stringify({data:dat,updated_at:now})})
+      .then(sbJson).then(function(rows){
+        if(Array.isArray(rows)&&rows.length)return rows;
+        return fetch(ACC.cfg.url+'/rest/v1/profiles',{method:'POST',headers:Object.assign(sbHeaders(tok),{prefer:'return=minimal'}),body:JSON.stringify({id:a.id,data:dat,updated_at:now})}).then(sbJson);
+      }).then(function(){syncMetaSet({uid:a.id,h:hashStr(s),at:Date.parse(now),lc:0});syncBaseSet(dat);ACC.sync='saved';ACC.syncErr='';ACC.syncAt=Date.now();return dat});
   }).catch(function(e){ACC.sync='error';ACC.syncErr=syncErrText(e);throw e});
 }
 /* Put the account's data on this device, then restart the app so everything reloads from it. */
