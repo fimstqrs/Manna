@@ -1215,7 +1215,9 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         <p class="lede">Type a sentence to log a meal. Foods you log, and meals you save, show up here for one-tap logging next time.</p></header>
       <div class="card stack">
         <form id="l-form" class="row" autocomplete="off"><input type="text" id="l-text" placeholder="2 eggs and whole wheat toast with butter" aria-label="What did you eat" style="flex:1;min-width:14rem"><button class="btn primary" type="submit">Log it</button></form>
-        <div class="row"><button class="btn sm" data-act="voice">Voice (simulated)</button><button class="btn sm" data-act="photo-open">Photo (simulated)</button><button class="btn sm" id="l-watch" data-act="watch">Import from watch</button></div>
+        <div class="row"><button class="btn sm" data-act="voice" id="l-voice">🎙 Speak it</button><button class="btn sm" data-act="lphoto">📷 Photo</button><button class="btn sm" data-act="lfile">⌚ Import workout file</button></div>
+        <input type="file" id="l-cam" accept="image/*" capture="environment" hidden><input type="file" id="l-wfile" accept=".gpx,.tcx,application/gpx+xml,application/vnd.garmin.tcx+xml,text/xml,application/xml" hidden>
+        <p class="small muted">Speak or snap a meal, and AI adds each food. Workout files (.gpx or .tcx) from Strava, Garmin, Apple Watch apps and others add a finished workout.</p>
         <div id="l-res" aria-live="polite"></div>
         <div id="ph-box" hidden class="note stack">
           <div><b>Photo recognition demo.</b> Pick a sample dish. A real app would analyze your own photo.</div>
@@ -1248,29 +1250,6 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     
 
     <!-- 10 COMMUNITY -->
-    <section class="view" id="v-community" hidden>
-      <header class="vh"><p class="eyebrow">Community</p><h2>Accountability and community</h2>
-        <p class="lede">Habit apps keep people through other people. Join a challenge, send kudos, message a coach, and decide exactly what each audience can see.</p></header>
-      <div class="grid2">
-        <div class="card"><h3>Challenges</h3><ul class="list" id="cm-ch"></ul></div>
-        <div class="card"><h3>Friends</h3><ul class="list" id="cm-feed"></ul></div>
-      </div>
-      <div class="grid2">
-        <div class="card stack">
-          <h3>Who sees what</h3>
-          <label class="f">Workouts<select data-share="workouts"><option value="private">Only me</option><option value="friends">Friends</option><option value="coach">Coach only</option></select></label>
-          <label class="f">Meals<select data-share="meals"><option value="private">Only me</option><option value="friends">Friends</option><option value="coach">Coach only</option></select></label>
-          <label class="f">Weight<select data-share="weight"><option value="private">Only me</option><option value="friends">Friends</option><option value="coach">Coach only</option></select></label>
-          <label class="f">Medical context<select disabled><option>Only me (locked)</option></select></label>
-          <div class="note" id="cm-preview"></div>
-        </div>
-        <div class="card stack">
-          <h3>Message your coach</h3>
-          <div class="thread" id="cm-thread"></div>
-          <form id="cm-form" class="stack" autocomplete="off"><textarea id="cm-msg" aria-label="Message to coach" placeholder="Ask about this week's plan"></textarea><div class="row"><button class="btn primary" type="submit">Send</button><span class="small muted">Demo only. Nothing leaves this page.</span></div></form>
-        </div>
-      </div>
-    </section>
 
     <!-- SETTINGS -->
     <section class="view" id="v-settings" hidden>
@@ -1352,12 +1331,6 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <div class="sh"><h3>Extras</h3><p class="small muted">Small additions made for you. Turn off any you do not want.</p></div>
           <div id="x-list" class="stack"></div>
           <div class="row"><button class="btn" data-act="xall" data-k="off">Turn all extras off</button><button class="btn" data-act="xall" data-k="on">Turn all on</button></div>
-        </div>
-        <div class="card stack">
-          <div class="sh"><h3>Privacy</h3><p class="small muted">What your friends can see.</p></div>
-          <div class="stack" id="p-share"></div>
-          <p class="small muted">Medical context is locked to private. Change the others under Community.</p>
-          <div class="row"><a class="btn sm" href="#community" style="text-decoration:none">Open Community</a></div>
         </div>
         <div class="card stack" style="grid-column:1/-1">
           <div class="sh"><h3>Your data</h3><p class="small muted">Your data is kept on this device. If you log in, it is also saved to your account. What you type into AI features is sent to the AI to get an answer.</p></div>
@@ -2123,6 +2096,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:121,d:'Nov 7, 2026',t:'Real fast logging, no Community',s:['Fast logging: Speak it uses your microphone to log a meal by voice.','Photo snaps your plate and AI adds each food.','Import workout file adds a finished run, ride, walk or swim from a .gpx or .tcx file (from Strava, Garmin, Apple Watch apps and more). It counts toward your history and streak.','Removed the Community page and its demo challenges and friends.']},
  {v:120,d:'Nov 7, 2026',t:'Polish pass',s:['Fixed the streak flame not showing on the Workouts page.','The small page tabs at the top (like Workouts, Schedule, History) are easier to read in dark themes.','The old, empty More page now opens Settings, and no longer leaves a box around the Settings tab.','Updated the Weekly schedule intro to match how schedules work now.']},
  {v:119,d:'Nov 7, 2026',t:'Muscles for every workout',s:['Imported and AI-built workouts now show their muscle groups on the body diagram, even when exercises are written differently, like Incline DB press or Tricep pushdowns.','The AI and import previews show the diagram too, before you save.','Removed the Change my picks button from Workouts. Templates has its own page.']},
  {v:118,d:'Nov 7, 2026',t:'Smarter text import',s:['Importing a routine or schedule from text understands many more ways of writing: 4x8 squats, 3 sets of 10 bench @ 135lb, 20 push ups, plank 1:30, 5k run, curls 3x8-12, 3 rounds of a list, numbered and bulleted lists, and more.','If some lines still cannot be read, tap Read it with AI (one AI use).','Tap the name of an imported routine, schedule or new workout in the preview to rename it before saving.']},
@@ -2264,7 +2238,6 @@ var TOUR=[
  {v:'schedule',sel:'#sh-plans',t:'Three schedules',p:'Name each schedule and pick a workout for every day. The selected schedule drives Today and your home page.'},
  {v:'history',sel:'#v-history .vh',t:'Workout history',p:'Every finished session with the sets you logged, plus your week at a glance.'},
  {v:'scripture',sel:'#sc-votd',t:'Word for today',p:'A new verse each day and the whole Bible to read. Your favorite verse shows here too.'},
- {v:'community',sel:'#v-community .vh',t:'Community',p:'Join a challenge, send kudos, message a coach, and choose exactly what each group can see.'},
  {v:'safeguards',sel:'#v-safeguards .vh',t:'Eating safeguards',p:'Controls that keep counting healthy: hide numbers, keep a calorie floor, and get a gentle check-in after a hard week.'},
  {v:'themes',sel:'#th-now',t:'Themes',p:'Default is plain white or black. The other twelve each match a mood in scripture. Leave it on the verse of the day, or pick one and keep it.'},
  {v:'settings',sel:'#g-card',t:'Goals and body',p:'Change your goals, age, height and activity any time. Your targets update, and you can type your own numbers.'},
@@ -2417,7 +2390,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='120';
+var heroLast='',APPV='121';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2838,8 +2811,6 @@ function renderLog(){
   $('#l-save').hidden=!S.meals.length;
   $('#l-savebtn').disabled=!S.msel.length;
   $('#l-selct').textContent=S.msel.length?S.msel.length+' selected. Name it and save.':'Tick the items that make up one meal, then save them to reuse.';
-  $('#l-watch').disabled=S.imported.length>0;
-  $('#l-watch').textContent=S.imported.length?'Watch imported':'Import from watch';
   $('#ph-tiles').innerHTML=PHOTOS.map(function(p){var f=find(p.id);return '<button class="tile" data-act="photopick" data-id="'+p.id+'" aria-pressed="'+(S.photo===p.id?'true':'false')+'">'+esc(f.name)+'<small>'+esc(f.region)+'</small></button>'}).join('');
   var p=PHOTOS.filter(function(x){return x.id===S.photo})[0];
   $('#ph-panel').hidden=!p;
@@ -2920,7 +2891,7 @@ function renderMind(){
   var T=targets();
   $('#n-out').innerHTML='<h3>What changes today</h3><ul class="list">'+o.map(function(x){return '<li><div>'+esc(x)+'</div></li>'}).join('')+'</ul><div class="kv" style="margin-top:.6rem"><span>Iron target</span><span class="mono">'+T.iron+' mg</span></div><div class="kv"><span>Calories</span><span class="mono">'+kc(T.kcal)+'</span></div>';
 }
-function renderCommunity(){
+function renderCommunity(){if(!$('#v-community'))return;
   $('#cm-ch').innerHTML=CHALL.map(function(c){var j=S.joined[c.id];return '<li><div><b>'+c.name+'</b><div class="small muted">'+(c.n+(j?1:0))+' people'+(j?' · you: '+c.prog:'')+'</div></div><button class="btn sm'+(j?'':' primary')+'" data-act="join" data-id="'+c.id+'">'+(j?'Leave':'Join')+'</button></li>'}).join('');
   $('#cm-feed').innerHTML=FEED.map(function(f){var on=S.kudos[f.id];return '<li><div><b>'+f.who+'</b> '+f.what+'<div class="small muted">'+f.t+'</div></div><button class="chip" data-act="kudos" data-id="'+f.id+'" aria-pressed="'+(on?'true':'false')+'">'+(f.k+(on?1:0))+' kudos</button></li>'}).join('');
   $$('select[data-share]').forEach(function(s){s.value=S.share[s.dataset.share]});
@@ -2943,7 +2914,7 @@ function renderPrivacy(){
   var plainTh=th.id==='plain',cols=THEMES.filter(function(t){return t.id!=='plain'}).map(function(t){return t.sw}),swbg=plainTh?'conic-gradient('+cols.concat(cols[0]).join(',')+')':sw;
   var thh='<span class="thb-sw" style="background:'+swbg+'"></span><span class="thb-t"><b>Change theme</b><span>Now: '+esc(th.name)+' · '+(th.auto?'follows the verse':'chosen by you')+'</span></span><span class="thb-go" aria-hidden="true">›</span><span class="thb-strip" aria-hidden="true">'+THEMES.map(function(t){return '<i style="background:'+t.sw+'"></i>'}).join('')+'</span>';
   if($('#p-theme').dataset.h!==thh){$('#p-theme').dataset.h=thh;$('#p-theme').innerHTML=thh;$('#p-theme').style.setProperty('--thsw',plainTh?'#9b7cf0':sw)}
-  $('#p-share').innerHTML=[['workouts','Workouts'],['meals','Meals'],['weight','Weight']].map(function(x){return '<div class="row spread"><span>'+x[1]+'</span><span class="badge">'+esc(S.share[x[0]])+'</span></div>'}).join('');
+  if($('#p-share'))$('#p-share').innerHTML=[['workouts','Workouts'],['meals','Meals'],['weight','Weight']].map(function(x){return '<div class="row spread"><span>'+x[1]+'</span><span class="badge">'+esc(S.share[x[0]])+'</span></div>'}).join('');
   var ex={settings:{bible_version:ver(),theme:th.id,theme_mode:S.themeMode,units:S.units,language:S.lang,text_size:S.scale},profile:{goal:S.goal,weight_kg:S.weight,conditions:Object.keys(S.cond).filter(function(k){return S.cond[k]}),allergies:Object.keys(S.allergy).filter(function(k){return S.allergy[k]})},meals:S.meals.map(function(m){return {name:m.name,qty:m.q,time:m.t}}),labs:S.labs,sharing:S.share};
   $('#p-json').textContent=JSON.stringify(ex,null,2);
 }
@@ -3386,7 +3357,7 @@ function renderHistory(){
   var shown=H.filter(function(x){return f==='all'||(x.cat||'custom')===f}),out='',last='',today=dk(Date.now()),yest=dk(Date.now()-86400000);
   shown.forEach(function(x){
     var key=dk(x.ts),d=new Date(x.ts),day=key===today?'Today':key===yest?'Yesterday':d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),tm=d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
-    var dur=x.ms?Math.max(1,Math.round(x.ms/60000))+' min':'';
+    var dur=(x.ms?Math.max(1,Math.round(x.ms/60000))+' min':'')+(x.km>=.1?(x.ms?' · ':'')+(S.units!=='kg'?Math.round(x.km*0.621371*10)/10+' mi':Math.round(x.km*10)/10+' km'):'');
     var timed=[];(x.log||[]).forEach(function(l){l.s.forEach(function(s){if(s.t>0)timed.push(s.t)})});
     var avg=timed.length?Math.round(timed.reduce(function(a,b){return a+b},0)/timed.length):0;
     var stats=[['Duration',x.ms?clockH(x.ms):'–'],['Sets',String(x.sets||0)],['Volume',x.vol?Math.round(x.vol).toLocaleString()+' '+esc(x.unit):'–'],['Rest',x.rest===0?'No rest':x.rest>0?restLabel(x.rest):'–']];
@@ -3860,7 +3831,10 @@ var ACT={
   fpclose:function(){$('#fp').hidden=true},
   fpdel:function(b){var id=b.dataset.id,m=fpFind(id);S.meals=S.meals.filter(function(x){return String(x.k||x.id)!==id});FP.list=FP.list.filter(function(x){return String(x)!==id});if(m)toast('Removed '+m.name+'.');setTimeout(fpRender,0)},
   fpq:function(b){var m=fpFind(b.dataset.id),f=m&&find(m.fid);if(!m||!f)return;var q=Math.max(.25,Math.min(30,Math.round((m.q+parseFloat(b.dataset.d))*4)/4));m.q=q;KEYS.forEach(function(k){m.n[k]=+(f[k]*q).toFixed(2)});setTimeout(fpRender,0)},
-  voice:function(){t0=performance.now();$('#l-text').value='two eggs and whole wheat toast with butter';doLog('two eggs and whole wheat toast with butter','voice');$('#l-text').value='';toast('Voice capture is simulated in this demo.')},
+  voice:function(){voiceLog()},
+  lphoto:function(){var c=$('#l-cam');if(c){c.value='';c.click()}},
+  lfile:function(){var f=$('#l-wfile');if(f){f.value='';f.click()}},
+  voiceOLD:function(){t0=performance.now();$('#l-text').value='two eggs and whole wheat toast with butter';doLog('two eggs and whole wheat toast with butter','voice');$('#l-text').value='';toast('Voice capture is simulated in this demo.')},
   'photo-open':function(){$('#ph-box').hidden=!$('#ph-box').hidden},
   photopick:function(b){S.photo=b.dataset.id;$('#ph-portion').value=1},
   photoclose:function(){S.photo=null;$('#ph-box').hidden=true},
@@ -4538,14 +4512,16 @@ function onInput(e){
 document.addEventListener('input',onInput);
 document.addEventListener('change',onInput);
 $('#l-text').addEventListener('input',function(){if(!t0)t0=performance.now()});
+if($('#l-cam'))$('#l-cam').addEventListener('change',function(){var f=this.files&&this.files[0];if(f)askFood('',f)});
+if($('#l-wfile'))$('#l-wfile').addEventListener('change',function(){var f=this.files&&this.files[0];if(f)wfImport(f)});
 $('#l-form').addEventListener('submit',function(e){e.preventDefault();var v=$('#l-text').value.trim();if(!t0)t0=performance.now();doLog(v,'typed');if(v)$('#l-text').value='';refresh()});
-$('#cm-form').addEventListener('submit',function(e){
+if($('#cm-form'))$('#cm-form').addEventListener('submit',function(e){
   e.preventDefault();var v=$('#cm-msg').value.trim();if(!v)return;
   S.thread.push({me:true,text:v});$('#cm-msg').value='';refresh();toast('Sent. A coach replies within 24 hours in a real app.');
 });
 
 /* ---------- navigation ---------- */
-var GROUPS=[['today','Today',['today']],['train','Fitness',['workouts','schedule','history','session']],['fuel','Fuel',['eat','meals','foods','log','safeguards']],['faith','Faith',['scripture']],['community','Community',['community']],['settings','Settings',['settings','themes']]];
+var GROUPS=[['today','Today',['today']],['train','Fitness',['workouts','schedule','history','session']],['fuel','Fuel',['eat','meals','foods','log','safeguards']],['faith','Faith',['scripture']],['settings','Settings',['settings','themes']]];
 var VLABEL={today:'Today',workouts:'Workouts',schedule:'Schedule',history:'History',session:'Session',log:'Fast logging',eat:'What are you eating?',meals:"Today's meals",foods:'Browse foods',labs:'Nutrients and labs',safeguards:'Eating safeguards',sleep:'Sleep and recovery',injury:'Injury and rehab',mind:'Mind and hormones',medical:'Medical context',coach:'Adaptive coaching',scripture:'Verse of the day',themes:'Themes',community:'Community',settings:'Settings'};
 var VGROUP={more:'more'},VALID={more:1};
 GROUPS.forEach(function(g){g[2].forEach(function(v){VGROUP[v]=g[0];VALID[v]=1})});
@@ -4852,9 +4828,57 @@ function renderStreaks(){
   if(on&&n>(S.stkSeen||0)){S.stkSeen=n;['#t-streak','#w-streak'].forEach(function(id){var el=$(id);if(el){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')}})}
   else if(n<(S.stkSeen||0))S.stkSeen=n;
 }
+
+/* ---------- Fast logging: speak a meal ---------- */
+var VREC=null;
+function voiceLog(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition,btn=$('#l-voice'),inp=$('#l-text');
+  if(!SR){if(inp)inp.focus();toast('Voice is not supported in this browser. Tap the microphone on your keyboard to dictate instead.');return}
+  if(VREC){try{VREC.stop()}catch(e){}return}
+  var r=new SR();VREC=r;r.lang=S.lang==='es'?'es-US':'en-US';r.interimResults=true;r.maxAlternatives=1;var fin='';
+  btn.textContent='● Listening… tap to stop';btn.classList.add('primary');
+  r.onresult=function(ev){var t='';for(var i=0;i<ev.results.length;i++){t+=ev.results[i][0].transcript;if(ev.results[i].isFinal)fin=t}inp.value=t};
+  r.onerror=function(ev){toast(ev.error==='not-allowed'||ev.error==='service-not-allowed'?'Allow microphone access for Manna to use voice.':'Could not hear that. Try again.')};
+  r.onend=function(){VREC=null;btn.textContent='🎙 Speak it';btn.classList.remove('primary');var t=(fin||inp.value||'').trim();
+    if(t){inp.value=t;t0=performance.now();doLog(t,'voice');inp.value='';refresh()}};
+  try{r.start()}catch(e){VREC=null;btn.textContent='🎙 Speak it';btn.classList.remove('primary')}
+}
+/* ---------- Fast logging: import a finished workout from a .gpx or .tcx file ---------- */
+function wfHav(a,b){var R=6371000,t=Math.PI/180,dl=(b[0]-a[0])*t,dn=(b[1]-a[1])*t,x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a[0]*t)*Math.cos(b[0]*t)*Math.sin(dn/2)*Math.sin(dn/2);return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+function wfParse(text,fname){
+  var doc=new DOMParser().parseFromString(text,'application/xml');if(doc.getElementsByTagName('parsererror').length)throw new Error('bad');
+  var q=function(el,tag){return el.getElementsByTagName(tag)},txt=function(el,tag){var x=q(el,tag)[0];return x?x.textContent.trim():''};
+  var sport='',start=0,end=0,secs=0,metres=0,name='';
+  if(q(doc,'Activity').length){                                      /* TCX */
+    var act=q(doc,'Activity')[0];sport=(act.getAttribute('Sport')||'').toLowerCase();start=Date.parse(txt(act,'Id'))||0;
+    [].forEach.call(q(act,'Lap'),function(l){secs+=parseFloat(txt(l,'TotalTimeSeconds'))||0;var d=[].filter.call(l.children,function(c){return c.tagName==='DistanceMeters'})[0];metres+=d?parseFloat(d.textContent)||0:0});
+    end=start+secs*1000;
+  }else{                                                              /* GPX */
+    name=txt(doc,'name');sport=(txt(doc,'type')||'').toLowerCase();var pts=[].slice.call(q(doc,'trkpt'));
+    var prev=null;pts.forEach(function(p){var c=[parseFloat(p.getAttribute('lat')),parseFloat(p.getAttribute('lon'))],tm=Date.parse(txt(p,'time'))||0;if(tm){if(!start)start=tm;end=tm}if(prev&&!isNaN(c[0]))metres+=wfHav(prev,c);prev=c});
+    secs=start&&end?(end-start)/1000:0;
+  }
+  if(!secs&&!metres)throw new Error('empty');
+  var kind=/run|jog/.test(sport+name.toLowerCase())?'run':/bik|cycl|ride/.test(sport+name.toLowerCase())?'ride':/walk|hik/.test(sport+name.toLowerCase())?'walk':/swim/.test(sport)?'swim':metres&&secs&&metres/secs>4.5?'ride':metres&&secs&&metres/secs>1.9?'run':metres?'walk':'workout';
+  var label={run:'Run',ride:'Ride',walk:'Walk',swim:'Swim',workout:'Workout'}[kind],km=metres/1000;
+  var title=name&&name.length<50?name:label+(km>=.1?', '+(Math.round(km*10)/10)+' km':'');
+  var kgw=S.weight||70,kcal=Math.round(kind==='run'?kgw*km*1.0:kind==='ride'?kgw*km*.28:kind==='walk'?kgw*km*.75:secs/60*7);
+  return {name:title,kind:kind,start:start||Date.now(),ms:Math.round(secs*1000),km:km,kcal:kcal,src:(fname||'file').replace(/\.[a-z]+$/i,'')};
+}
+function wfImport(file){
+  var rd=new FileReader();
+  rd.onload=function(){var w;try{w=wfParse(String(rd.result),file.name)}catch(e){toast('Could not read that file. Use a .gpx or .tcx workout file.');return}
+    var mins=Math.max(1,Math.round(w.ms/60000)),id='h'+(uid++)+Date.now().toString(36);
+    if(S.hist.some(function(h){return h.src===w.src&&Math.abs(h.ts-w.start)<60000})){toast('That workout is already imported.');return}
+    S.hist.push({id:id,wid:null,name:w.name,cat:'cardio',ts:w.start,ms:w.ms,sets:0,vol:0,unit:S.units,km:Math.round(w.km*100)/100,src:w.src,imported:true});
+    S.hist.sort(function(a,b){return a.ts-b.ts});
+    if(new Date(w.start).toDateString()===new Date().toDateString())S.imported.push({name:w.name,min:mins,kcal:w.kcal,src:'file'});
+    refresh();toast('Imported '+w.name+' · '+mins+' min'+(w.km>=.1?' · '+(Math.round(w.km*10)/10)+' km':'')+'.')};
+  rd.readAsText(file);
+}
 function show(){
   var id=(location.hash||'').replace('#','');
-  if(id==='privacy'||id==='more')id='settings';
+  if(id==='privacy'||id==='more')id='settings';if(id==='community')id='today';
   if(!VALID[id])id='today';
   $$('.view').forEach(function(s){s.hidden=s.id!=='v-'+id});
   curId=id;document.body.classList.remove('sheet');updateTabs();
