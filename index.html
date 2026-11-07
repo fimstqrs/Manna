@@ -976,7 +976,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
       <div class="card stack" id="w-make"></div>
       <div class="card stack" id="w-ai">
           <h3>Build with AI</h3>
-          <p class="small muted">Describe the session in your own words and AI builds it. After your daily AI uses, Manna builds it from its own rules instead.</p>
+          <p class="small muted">Describe the session in your own words and AI builds it. Each build uses one AI use.</p>
           <textarea id="ai-text" aria-label="Describe the workout you want" placeholder="30 minutes, dumbbells only, upper body, go easy on my knee"></textarea>
           <div class="chips" id="ai-ex"></div>
           <div class="row"><button class="btn primary" data-act="aigen">Build workout</button></div>
@@ -2030,6 +2030,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:112,d:'Nov 7, 2026',t:'Build with AI is AI only',s:['Build with AI no longer shows a ready-made template first. You only see the workout the AI builds.','If AI is unavailable or you are out of AI uses, it says so instead of showing a template.']},
  {v:111,d:'Nov 7, 2026',t:'New notifications',s:['Notifications now slide in at the top left, stay a moment, and slide back out, like Minecraft’s. Each has an icon and a heading: Done, Heads up, Removed.','Tap one to dismiss it early. Up to three stack at once.','Automatic sync no longer shows a notification.']},
  {v:110,d:'Nov 7, 2026',t:'Easier to change your theme',s:['Change theme in Settings › Look is now a big, colourful button showing your current theme and every theme’s colour.','The Change theme button on your profile stands out too.']},
  {v:109,d:'Nov 7, 2026',t:'Display size for phones and computers',s:['Settings › Look now has two display size sliders: one for phones and one for laptops and computers.','Each device uses the one that fits its screen, and both sync to your other devices.','Sizes now go down to 80%.']},
@@ -2315,7 +2316,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='111';
+var heroLast='',APPV='112';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3366,7 +3367,7 @@ function aiWorkout(t){
   if(!String(t).trim())return;
   getSample().then(function(sm){
     if(!sm)return;
-    if(sm===SERVER_AI&&aiLeft()<=0){S.aiMsg=aiErr('limit')+' Here is a quick build from Manna’s own rules.';refresh();return}
+    if(sm===SERVER_AI&&aiLeft()<=0){S.ai=null;S.aiMsg=aiErr('limit');refresh();return}
     S.aiBusy=true;S.aiMsg='';refresh();
     var pr=buildPrompt(t)+'\n\nReply with JSON only, in this shape: {"name": "short workout name", "mins": 30, "items": [{"name": "exercise name", "rx": "3×10" or "30 s" or "10 min"}], "notes": ["short note"]}. Use 4 to 8 items.';
     return sm.json(pr,{modelTier:'quick'}).then(function(r){
@@ -3375,14 +3376,14 @@ function aiWorkout(t){
       if(!items.length)throw {code:'failed'};
       S.ai={name:String(r.name||'AI workout').slice(0,60),mins:clamp(parseInt(r.mins,10)||30,5,180),focus:'Built by AI',pl:'strength',items:items,notes:(Array.isArray(r.notes)?r.notes:[]).slice(0,5).map(function(x){return String(x).slice(0,200)}),src:'ai'};
       S.aiBusy=false;refresh();
-    }).catch(function(e){S.aiBusy=false;S.aiMsg=aiErr(e&&e.code)+' Here is a quick build from Manna’s own rules.';refresh()});
+    }).catch(function(e){S.aiBusy=false;S.ai=null;S.aiMsg=aiErr(e&&e.code)+' Try again in a moment.';refresh()});
   });
 }
 function aiStatus(){
   var h='';
   if(S.aiBusy)h+='<p class="note small" role="status">Building with AI…</p>';
   else if(S.aiMsg)h+='<p class="note warn small" role="status">'+esc(S.aiMsg)+'</p>';
-  if(S.ai&&!S.aiBusy)h+='<p class="small muted">'+(S.ai.src==='ai'?'Built by AI':'Quick build from Manna’s rules')+'</p>';
+  if(S.ai&&!S.aiBusy)h+='<p class="small muted">Built by AI</p>';
   return h;
 }
 function renderAI(){
@@ -3718,7 +3719,7 @@ var ACT={
   wbuildhand:function(){var ml=muList(S.wf.mu),nm=!ml.length?'My workout':ml.length<3?muNames(S.wf.mu)+' workout':MUS[ml[0]]+', '+MUS[ml[1]]+' and more';S.edit={blank:true,id:null,name:nm.slice(0,40),mins:30,level:'Intermediate',focus:S.wf.mu!=='all'?muNames(S.wf.mu):'',cat:'custom',pl:'strength',eq:['bodyweight'],ex:[],back:S.wz};S.wz=4;window.scrollTo(0,0)},
   wbuildai:function(){var acc=ACCESS.filter(function(a){return a[0]===S.wf.access})[0],parts=['30 minutes'];
     if(S.wf.mu!=='all')parts.push(muNames(S.wf.mu).toLowerCase());var AW={gym:'gym equipment',body:'bodyweight only',cali:'calisthenics, bodyweight'};if(AW[S.wf.access])parts.push(AW[S.wf.access]);else if(S.wf.access==='pick'&&S.have.length)parts.push(S.have.map(function(k){return (EQ[k]||k).toLowerCase()}).join(', '));
-    var t=parts.join(', '),ta=$('#ai-text');if(ta)ta.value=t;S.ai=buildAI(t);S.ai.src='quick';aiWorkout(t);
+    var t=parts.join(', '),ta=$('#ai-text');if(ta)ta.value=t;S.ai=null;aiWorkout(t);
     setTimeout(function(){var o=$('#w-ai');if(o)o.scrollIntoView({behavior:'smooth',block:'start'})},60)},
   wnclose:function(){$('#wn').hidden=true;document.body.classList.remove('modal-open');S.seenV=String(APPV)},
   wnopen:function(){wnOpen()},
@@ -3802,8 +3803,8 @@ var ACT={
     w.ex.forEach(function(e,i){delete S.sets[w.id+'|'+i]});
     S.sess=null;S.cancelAsk=false;syncSched();toast('Workout saved.');
   },
-  aigen:function(){var t=$('#ai-text').value||'';S.ai=buildAI(t);S.ai.src='quick';aiWorkout(t)},
-  aiex:function(b){var t=AI_EX[parseInt(b.dataset.id,10)];$('#ai-text').value=t;S.ai=buildAI(t);S.ai.src='quick';aiWorkout(t)},
+  aigen:function(){var t=$('#ai-text').value||'';S.ai=null;aiWorkout(t)},
+  aiex:function(b){var t=AI_EX[parseInt(b.dataset.id,10)];$('#ai-text').value=t;S.ai=null;aiWorkout(t)},
   copyprompt:function(){copyText($('#ai-prompt').textContent,$('#ai-prompt'))},
   aisave:function(){var o=S.ai;if(!o)return;var id='c'+(uid++);S.customW.push({id:id,name:o.name,mins:o.mins,level:'Custom',cat:'custom',eq:['bodyweight'],focus:o.focus,pl:o.pl,ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved to your library.')},
   ntparse:function(){S.notes=parseNotes($('#nt-text').value||'')},
