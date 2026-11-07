@@ -7,6 +7,7 @@ Accounts stay hidden until these steps are done. About 5 minutes.
    `SUPABASE_URL`, `SUPABASE_ANON_KEY` (or publishable key) and `SUPABASE_SERVICE_ROLE_KEY` (or secret key), from Supabase > Project Settings > API.
 2. **Set up the tables.** In Supabase, open **SQL Editor > New query**, paste everything from `supabase/schema.sql`, and press **Run**.
 3. **Tell Supabase where Manna lives.** In Supabase, **Authentication > URL Configuration**: set **Site URL** to `https://manna-beta-five.vercel.app`. Email confirmation and password-reset links then open Manna.
+3b. **Turn on Friends.** In **SQL Editor > New query**, paste everything from `supabase/friends.sql` and press **Run**. (Run `schema.sql` first if you have not.)
 4. **Redeploy** the site in Vercel (or ask Claude to) so it picks up the new settings.
 
 ## Optional
