@@ -729,6 +729,24 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+/* Vertical one-at-a-time sections (TikTok style) */
+.vpg{position:relative;height:var(--vph,560px);overflow:hidden;border-radius:22px}
+.vtrack{height:100%;will-change:transform}
+.vtrack.anim{transition:transform .46s cubic-bezier(.2,.85,.25,1)}
+.vsec{height:100%;overflow-y:auto;overscroll-behavior-y:auto;scrollbar-width:none;padding:0 26px 0 0;display:flex;flex-direction:column}
+.vsec::-webkit-scrollbar{display:none}
+.vsec>.card{min-height:100%;flex:none;box-sizing:border-box}
+.vbar{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:4px}
+.vdot{appearance:none;border:0;background:none;padding:5px 6px;cursor:pointer;display:grid;place-items:center}
+.vdot i{display:block;width:7px;height:7px;border-radius:99px;background:color-mix(in srgb,var(--ink) 25%,transparent);transition:height .3s cubic-bezier(.34,1.56,.64,1),background .3s}
+.vdot.on i{height:24px;background:var(--accent)}
+.vdot:focus-visible{outline:2px solid var(--accent);border-radius:8px}
+.vnext{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:3;border:0;cursor:pointer;font:inherit;font-size:.8rem;font-weight:600;padding:.35rem .8rem;border-radius:99px;
+  background:color-mix(in srgb,var(--bg) 82%,transparent);color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);margin-left:-13px}
+.vnext[hidden]{display:none}
+@media (prefers-reduced-motion:no-preference){.vnext span{display:inline-block;animation:vn-bob 1.8s ease-in-out infinite}@keyframes vn-bob{50%{transform:translateY(-3px)}}}
+.rm .vtrack.anim,html.lite .vtrack.anim{transition:none}
+
 /* Update reminder on Home */
 .updchip{align-self:flex-start;display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1rem .55rem .8rem;border-radius:999px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:.92rem;
   background:var(--accent);color:var(--accent-ink);box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 40%,transparent);position:relative}
@@ -981,7 +999,11 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
       <div class="card stack" id="w-saved"></div>
       </div>
       <div class="swpage" data-name="Make your own" data-ic="make">
+      <div class="vpg" id="mk-vp"><div class="vbar" aria-label="Sections"></div><div class="vtrack">
+      <div class="vsec" data-name="Make your own">
       <div class="card stack" id="w-make"></div>
+      </div>
+      <div class="vsec" data-name="Build with AI">
       <div class="card stack" id="w-ai">
           <h3>Build with AI</h3>
           <p class="small muted">Describe the session in your own words and AI builds it. Each build uses one AI use.</p>
@@ -991,6 +1013,8 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <div id="ai-out" aria-live="polite"></div>
           <details><summary class="small">Prompt sent to the model</summary><pre class="json" id="ai-prompt" tabindex="0" style="margin-top:.5rem"></pre><div class="row" style="margin-top:.5rem"><button class="btn sm" data-act="copyprompt">Copy prompt</button></div></details>
         </div>
+      </div>
+      <div class="vsec" data-name="Import from text">
       <div class="card stack">
         <h3>Import a routine from text</h3>
         <p class="small muted">Paste the text of a routine from any notes app or message, or choose a text file. Lines like "squats 4x8" or "run 20 min" become exercises.</p>
@@ -998,6 +1022,8 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         <div class="row"><button class="btn primary" data-act="ntparse">Convert to routine</button><button class="btn" data-act="ntsample">Load an example</button><label class="btn" for="nt-file" style="cursor:pointer">Choose text file</label><input type="file" id="nt-file" accept=".txt,.md,text/plain" hidden></div>
         <div id="nt-out" aria-live="polite"></div>
       </div>
+      </div>
+      </div><button type="button" class="vnext" aria-hidden="true" tabindex="-1"></button></div>
       </div>
       <div class="swpage" data-name="Templates" data-ic="tpl">
       <div class="card stack" id="w-wiz">
@@ -2046,6 +2072,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:115,d:'Nov 7, 2026',t:'Swipe up and down between sections',s:['On Workouts › Make your own, the three sections (Make your own, Build with AI, Import from text) are now full-height, TikTok style. Swipe up or down to move one section at a time.','Dots on the right show where you are, and a Next hint at the bottom shows what is below. Long sections scroll normally first.']},
  {v:114,d:'Nov 7, 2026',t:'Update from Settings',s:['Settings › About has a new Updates card: see your version and the latest one, check for updates, and update with one tap.','When a newer version is out, a reminder stays at the top of Home until you update.']},
  {v:113,d:'Nov 7, 2026',t:'Import a schedule from text',s:['Weekly schedule has a new Import a schedule from text card. Paste a plan like Monday: Push Day, Tue/Thu - run or Sunday: rest.','Each day is matched to your workouts, and exercises listed under a day become a new workout.','You see a preview and can change any day before it is added to the selected schedule.']},
  {v:112,d:'Nov 7, 2026',t:'Build with AI is AI only',s:['Build with AI no longer shows a ready-made template first. You only see the workout the AI builds.','If AI is unavailable or you are out of AI uses, it says so instead of showing a template.']},
@@ -2334,7 +2361,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='114';
+var heroLast='',APPV='115';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4464,6 +4491,52 @@ function swReveal(el){
   var pg=el&&el.closest&&el.closest('.swpage');if(!pg)return;var root=pg.closest('.swp'),st=root&&SWP[root.id];if(!st)return;
   var k=st.pages.indexOf(pg);if(k>-1&&(k!==st.i||Math.abs(st.tr.scrollLeft-k*swW(st))>2))swGo(st,k,true,true);
 }
+
+/* ---------- Vertical sections: one swipe up or down moves one section ---------- */
+var VPG={};
+function vpH(){var tb=$('#tabs'),res=24;if(tb&&getComputedStyle(tb).position==='fixed'&&tb.offsetHeight)res=tb.offsetHeight+28;return Math.max(400,Math.min(820,innerHeight-res-70))}
+function vpGo(v,i,instant){
+  i=Math.max(0,Math.min(v.secs.length-1,i));var changed=i!==v.i;v.i=i;
+  v.tr.classList.toggle('anim',!instant&&!swCalm());v.tr.style.transform='translateY('+(-i*v.h)+'px)';
+  v.dots.forEach(function(d,k){d.classList.toggle('on',k===i);if(k===i)d.setAttribute('aria-current','true');else d.removeAttribute('aria-current')});
+  v.secs.forEach(function(sc,k){sc.setAttribute('aria-hidden',k===i?'false':'true')});
+  var nx=v.secs[i+1];v.next.hidden=!nx;if(nx)v.next.innerHTML='Next: '+esc(nx.dataset.name)+' <span>⌄</span>';
+  if(changed&&!instant){var r=v.root.getBoundingClientRect(),top=60;if(r.top<top-4||r.bottom>innerHeight)window.scrollTo({top:Math.max(0,scrollY+r.top-top),behavior:swCalm()?'auto':'smooth'})}
+}
+function vpSize(v){v.h=vpH();v.root.style.setProperty('--vph',v.h+'px');v.tr.classList.remove('anim');v.tr.style.transform='translateY('+(-v.i*v.h)+'px)'}
+function vpReveal(el){var sc=el&&el.closest&&el.closest('.vsec');if(!sc)return;var root=sc.closest('.vpg'),v=root&&VPG[root.id];if(!v)return;var k=v.secs.indexOf(sc);if(k>-1&&k!==v.i)vpGo(v,k,true)}
+function vpInit(root){
+  var tr=root.querySelector('.vtrack'),bar=root.querySelector('.vbar');
+  var v={root:root,tr:tr,secs:[].slice.call(tr.children),i:0,h:0,next:root.querySelector('.vnext')};VPG[root.id]=v;
+  bar.innerHTML=v.secs.map(function(sc,k){return '<button type="button" class="vdot" data-k="'+k+'" aria-label="'+esc(sc.dataset.name)+', section '+(k+1)+' of '+v.secs.length+'"><i></i></button>'}).join('');
+  v.dots=[].slice.call(bar.children);
+  bar.addEventListener('click',function(e){var b=e.target.closest('.vdot');if(b)vpGo(v,+b.dataset.k)});
+  v.next.addEventListener('click',function(){vpGo(v,v.i+1)});
+  var at=function(dir){var sc=v.secs[v.i];return dir>0?sc.scrollTop+sc.clientHeight>=sc.scrollHeight-2:sc.scrollTop<=1};
+  /* Touch: inside a section scroll normally; at its edge the swipe moves to the next or previous section */
+  var T=null;
+  root.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;var t=e.touches[0];T={x:t.clientX,y:t.clientY,t:e.timeStamp,mode:null,dy:0,v:0,lt:e.timeStamp,ly:t.clientY,top:at(-1),bot:at(1)}},{passive:true});
+  root.addEventListener('touchmove',function(e){if(!T)return;var t=e.touches[0],dx=t.clientX-T.x,dy=t.clientY-T.y;
+    if(!T.mode){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;
+      if(Math.abs(dx)>Math.abs(dy))T.mode='x';
+      else if((dy<0&&T.bot&&v.i<v.secs.length-1)||(dy>0&&T.top&&v.i>0)){T.mode='v';T.y=t.clientY;dy=0;tr.classList.remove('anim')}
+      else T.mode='s'}
+    if(T.mode!=='v')return;e.preventDefault();
+    var d=Math.max(-v.h,Math.min(v.h,dy));tr.style.transform='translateY('+(-v.i*v.h+d)+'px)';T.dy=d;
+    var dt=e.timeStamp-T.lt;if(dt>0)T.v=(t.clientY-T.ly)/dt;T.ly=t.clientY;T.lt=e.timeStamp},{passive:false});
+  var end=function(e){if(!T)return;var m=T;T=null;if(m.mode!=='v')return;
+    if(e.timeStamp-m.lt>120)m.v=0;
+    var to=v.i;if(m.dy<-v.h*.15||m.v<-.35)to=v.i+1;else if(m.dy>v.h*.15||m.v>.35)to=v.i-1;vpGo(v,to)};
+  root.addEventListener('touchend',end);root.addEventListener('touchcancel',end);
+  /* Mouse wheel / trackpad: past the edge of a section, one gesture = one section */
+  root.addEventListener('wheel',function(e){if(Math.abs(e.deltaY)<=Math.abs(e.deltaX))return;var dir=e.deltaY>0?1:-1;
+    if(!at(dir)||(dir>0&&v.i===v.secs.length-1)||(dir<0&&v.i===0)){v.wacc=0;return}
+    e.preventDefault();clearTimeout(v.wt);v.wt=setTimeout(function(){v.wlock=false;v.wacc=0},300);
+    if(v.wlock)return;v.wacc=(v.wacc||0)+e.deltaY;if(Math.abs(v.wacc)>40){v.wlock=true;v.wacc=0;vpGo(v,v.i+dir)}},{passive:false});
+  root.addEventListener('focusin',function(e){vpReveal(e.target)});
+  window.addEventListener('resize',function(){vpSize(v)});
+  vpSize(v);vpGo(v,0,true);
+}
 function swInit(root){
   var tr=root.querySelector('.swtrack'),bar=root.querySelector('.swbar');
   var st={root:root,tr:tr,pages:[].slice.call(tr.children),i:+SWMEM[root.id]||0,last:-1,t:0,raf:0};
@@ -4530,8 +4603,9 @@ function swInit(root){
 (function(){
   /* Anything that scrolls a card into view (the tutorial, "Build with AI", sign-in) opens its page first */
   var siv=Element.prototype.scrollIntoView;
-  if(siv)Element.prototype.scrollIntoView=function(){try{swReveal(this)}catch(e){}return siv.apply(this,arguments)};
+  if(siv)Element.prototype.scrollIntoView=function(){try{swReveal(this);vpReveal(this)}catch(e){}return siv.apply(this,arguments)};
   $$('.swp').forEach(swInit);
+  $$('.vpg').forEach(vpInit);
 })();
 
 /* ---------- Verses for empty space ----------
