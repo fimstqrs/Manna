@@ -18,6 +18,11 @@ const PER_IP_DAY = 40;
 const MAX_FOODS = 8;            // most foods one food lookup can return
 const TIMEOUT_MS = 15_000;      // per model call; then the next model is tried            // safety net per server instance, not the user-facing limit
 const hits = new Map();
+// Pro accounts: no daily AI limit. Add more emails in Vercel as PRO_EMAILS (comma separated).
+const PRO = new Set(['themorningfallcorp@gmail.com', ...String(process.env.PRO_EMAILS || '').split(',')]
+  .map(e => e.trim().toLowerCase()).filter(Boolean));
+const isPro = u => !!(u && u.email && PRO.has(String(u.email).toLowerCase()));
+const PRO_USAGE = { allowed: true, used: 0, limit: null, plan: 'pro' };
 
 const SYSTEM = 'You are the assistant inside Manna, a food, workout and faith app. ' +
   'Answer with one JSON object only: no markdown, no code fences, no text before or after it. ' +
@@ -109,7 +114,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     // Whether AI is switched on, and for a signed-in person, today's uses.
     let usage = null;
-    if (user) usage = await rpc(env, 'ai_today', { p_user: user.id }).catch(() => null);
+    if (user) usage = isPro(user) ? PRO_USAGE : await rpc(env, 'ai_today', { p_user: user.id }).catch(() => null);
     return res.status(200).json({ ok: true, ready: !!(process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY), usage });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, code: 'method' });
@@ -121,7 +126,8 @@ export default async function handler(req, res) {
   if (process.env.AI_REQUIRE_LOGIN === '1' && env.ready && !user) return res.status(401).json({ ok: false, code: 'login' });
 
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  if (overLimit(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
+  const pro = isPro(user);
+  if (!pro && overLimit(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
@@ -136,7 +142,8 @@ export default async function handler(req, res) {
 
   // Count this use against the person's account before calling the AI.
   let usage = null;
-  if (user) {
+  if (pro) usage = PRO_USAGE;
+  else if (user) {
     try { usage = await rpc(env, 'use_ai', { p_user: user.id }); }
     catch (e) { console.error('ai usage counter unavailable (run supabase/schema.sql?)', e.status || '', e.message); return res.status(503).json({ ok: false, code: 'failed' }); }
     if (!usage || !usage.allowed) return res.status(429).json({ ok: false, code: 'limit', usage });
@@ -150,7 +157,8 @@ export default async function handler(req, res) {
     if (body?.per === 'food' && data && Array.isArray(data.foods)) {
       const found = Math.min(data.foods.length, MAX_FOODS);
       let paid = 1;
-      if (user) {
+      if (pro) paid = found;
+      else if (user) {
         while (paid < found) {
           const u = await rpc(env, 'use_ai', { p_user: user.id }).catch(() => null);
           if (!u || !u.allowed) { if (u) usage = u; break; }
@@ -163,7 +171,7 @@ export default async function handler(req, res) {
     }
     return res.status(200).json({ ok: true, data, usage });
   } catch (e) {
-    if (user) await rpc(env, 'refund_ai', { p_user: user.id }).catch(() => {});
+    if (user && !pro) await rpc(env, 'refund_ai', { p_user: user.id }).catch(() => {});
     const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 || e.status === 503 ? 'rate_limited' : e.status === 401 || e.status === 403 ? 'badkey' : 'failed';
     console.error('ai error', e.status || '', e.message);
     return res.status(code === 'rate_limited' ? 429 : 502).json({ ok: false, code });

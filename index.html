@@ -729,8 +729,13 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+.upcard{text-align:center;display:flex;flex-direction:column;gap:.7rem;align-items:center;max-width:24rem}
+.upcard .upic{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink)}
+.upcard .upic svg{width:28px;height:28px}
+.upcard .row{justify-content:center}
+
 /* A verse in the empty space at the bottom of short pages, styled like the Saved workouts note */
-.dverse{display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 6px}
+.dverse{display:flex;align-items:flex-end;justify-content:center;min-height:0;padding:8px 6px 0}
 .dverse .savedempty{max-width:30rem;margin:0}
 .dverse q{quotes:none;font-style:italic}
 .dverse cite{display:block;font-style:normal;margin-top:.3rem;color:var(--accent);font-weight:600;font-size:.82rem}
@@ -1228,6 +1233,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 </div>
 <button class="btn totop" id="totop" data-act="totop" aria-label="Back to top" hidden>↑</button>
 <div class="modal" id="ap" role="dialog" aria-modal="true" aria-labelledby="ap-t" hidden><div class="mback" data-act="apclose"></div><div class="mcard apcard" id="ap-card"></div></div>
+<div class="modal" id="up" role="dialog" aria-modal="true" aria-labelledby="up-t" hidden><div class="mback" data-act="uplater"></div><div class="mcard upcard" id="up-card"></div></div>
 <div class="modal" id="wn" role="dialog" aria-modal="true" aria-labelledby="wn-t" hidden><div class="mback" data-act="wnclose"></div><div class="mcard wncard" id="wn-card"></div></div>
 <div class="modal" id="fm" role="dialog" aria-modal="true" aria-labelledby="fm-t" hidden><div class="mback" data-act="fclose"></div><div class="mcard" id="fm-card"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -1920,6 +1926,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:99,d:'Nov 7, 2026',t:'Updates and Pro',s:['When a newer version of Manna is out, a message asks you to relaunch so you get it.','Pro accounts have no daily AI limit.','The verse in empty space now sits just above the footer.']},
  {v:98,d:'Nov 7, 2026',t:'Automatic sync',s:['When you are logged in, everything syncs on its own: your theme and settings, workouts done, food logged, your own and saved workouts, schedules, checklist and AI estimates.','Changes are saved to your account within a few seconds, and changes from your other devices show up within about 30 seconds, without reloading.','If two devices change things at the same time, both sets of changes are kept.','Feedback now goes to themorningfallcorp@gmail.com.','The minimum age is now 10, with no maximum shown.']},
  {v:97,d:'Nov 7, 2026',t:'Footer on every page',s:['The Manna footer with the version number now sits at the bottom of every page, not just Home.']},
  {v:96,d:'Nov 7, 2026',t:'Log several foods at once',s:['Describe a whole meal, like "two eggs, toast and orange juice", or snap a photo of your plate, and AI adds each food to today.','Each food uses one AI use. If you run out partway, Manna adds what it can and tells you what is left.','A single food still opens so you can check the amount before adding it.']},
@@ -2147,7 +2154,8 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='98';
+/* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
+var heroLast='',APPV='99';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2356,8 +2364,9 @@ function aiUsed(){try{var o=JSON.parse(localStorage.getItem('manna.ai.v1')||'{}'
 function aiCount(k){try{localStorage.setItem('manna.ai.v1',JSON.stringify({d:dk(Date.now()),n:aiUsed()+(k||1)}))}catch(e){}}
 function accOn(){return typeof ACC!=='undefined'&&ACC&&ACC.cfg&&ACC.cfg.accounts}
 function aiLoginNeeded(){return accOn()&&ACC.cfg.aiNeedsLogin&&!signedIn()}
-function aiLeft(){if(accOn()&&signedIn())return ACC.usage?Math.max(0,ACC.usage.limit-ACC.usage.used):1;if(aiLoginNeeded())return 0;return Math.max(0,AI_DAY-aiUsed())}
-function aiLeftText(){if(aiLoginNeeded())return 'Log in under Settings › Account to use AI.';var n=aiLeft(),lim=accOn()&&signedIn()&&ACC.usage?ACC.usage.limit:AI_DAY;if(accOn()&&signedIn()&&!ACC.usage)return '';return n?n+' of '+lim+' AI uses left today':'No AI uses left today. They reset at midnight.'}
+function aiPro(){return !!(accOn()&&signedIn()&&ACC.usage&&ACC.usage.plan==='pro')}
+function aiLeft(){if(aiPro())return 999;if(accOn()&&signedIn())return ACC.usage?Math.max(0,ACC.usage.limit-ACC.usage.used):1;if(aiLoginNeeded())return 0;return Math.max(0,AI_DAY-aiUsed())}
+function aiLeftText(){if(aiLoginNeeded())return 'Log in under Settings › Account to use AI.';if(aiPro())return 'Pro: unlimited AI';var n=aiLeft(),lim=accOn()&&signedIn()&&ACC.usage?ACC.usage.limit:AI_DAY;if(accOn()&&signedIn()&&!ACC.usage)return '';return n?n+' of '+lim+' AI uses left today':'No AI uses left today. They reset at midnight.'}
 function blobUrl(b){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(r.result)};r.onerror=no;r.readAsDataURL(b)})}
 var SERVER_AI={
   json:function(inst,opts){
@@ -3779,7 +3788,7 @@ function accRender(){
   var f=accFields(),h='<div class="sh"><h3>Account</h3>';
   var note=ACC.msg?'<p class="note small'+(ACC.err==='out'?' crit':ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
   if(signedIn()&&ACC.mode!=='newpass'){
-    var u=ACC.usage,plan=u&&u.plan==='paid'?'Paid':'Free';
+    var u=ACC.usage,plan=u&&u.plan==='pro'?'Pro':u&&u.plan==='paid'?'Paid':'Free';
     var pv=a.prov||'email',linked=(a.provs&&a.provs.length?a.provs:[pv]);
     h+='<p class="small muted">Signed in as <b>'+esc(a.email)+'</b></p></div>'+note
       +'<div class="acwho"><span class="acav" data-p="'+esc(pv)+'" aria-hidden="true">'+esc(((a.name||a.email||'?').trim()[0]||'?').toUpperCase())+'</span><div class="acwt">'+(a.name?'<b>'+esc(a.name)+'</b>':'')+'<span class="small">'+(pv==='email'?'Signed in with email and password':'Signed in with '+esc(PROVN[pv]||pv))+'</span></div>'+provBadge(pv)+'</div>'
@@ -3788,7 +3797,7 @@ function accRender(){
       h+='<div class="note stack"><b>This device and your account both have Manna data.</b><p class="small">Which one should Manna keep? The other is replaced.</p><div class="row"><button class="btn primary" data-act="acuse">Use my account’s data</button><button class="btn" data-act="acmine">Keep this device’s data</button></div></div>';
     }
     h+='<div class="kv"><span>Plan</span><span class="badge">'+plan+'</span></div>'
-      +(u?'<div class="kv"><span>AI uses today</span><span class="mono">'+u.used+' of '+u.limit+'</span></div>':'')
+      +(u?'<div class="kv"><span>AI uses today</span><span class="mono">'+(u.limit==null?'Unlimited':u.used+' of '+u.limit)+'</span></div>':'')
       +'<div class="kv"><span>Sync</span><span class="small">'+(ACC.sync==='saving'||ACC.sync==='checking'?'Syncing…':ACC.sync==='error'?'Not synced yet. Will retry.':'On, syncs automatically')+'</span></div>'
       +'<div class="row"><button class="btn" data-act="acsync">Sync now</button><button class="btn" data-act="acswitch">Use a different account</button><button class="btn" data-act="acout">Log out</button></div>'
       +(ACC.delAsk?'<div class="note warn stack"><b>Delete your account?</b><p class="small">This permanently deletes your account and everything saved to it. Data on this device stays until you clear it.</p><div class="row"><button class="btn primary" data-act="acdel2">Yes, delete it</button><button class="btn" data-act="acdelno">Cancel</button></div></div>'
@@ -3911,6 +3920,8 @@ function apCheck(){
 }
 function apHide(){$('#ap').hidden=true;document.body.classList.remove('modal-open');S.acctAsked=true}
 Object.assign(ACT,{
+  uprelaunch:function(){try{if(typeof syncNow==='function'&&signedIn())syncNow()}catch(e){}setTimeout(function(){location.reload()},300)},
+  uplater:function(){UPV.later=UPV.shown;$('#up').hidden=true},
   apclose:function(){apHide()},
   apemail:function(){apHide();ACC.mode='signup';ACC.msg='';ACC.sig='';location.hash='settings';setTimeout(function(){var c=$('#acct-card');if(c)c.scrollIntoView({block:'start'});var e=$('#ac-email');if(e)e.focus()},350)},
   acoauth:function(b){var k=b.dataset.k;if(!ACC.cfg||!ACC.cfg.accounts)return;S.acctAsked=true;prefSave();
@@ -4190,6 +4201,25 @@ function dvDo(){
 }
 window.addEventListener('resize',dvPaint);
 if(window.ResizeObserver){var dvRO=new ResizeObserver(function(){dvPaint()});$$('.view').forEach(function(v){if(v.id!=='v-session')dvRO.observe(v)})}
+
+/* ---------- New version available ----------
+   version.json on the server always holds the newest version number. If it is newer than
+   this copy of the app, ask the person to relaunch so they get it. */
+var UPV={later:0,shown:0};
+function upCheck(){
+  if(location.protocol==='file:')return;
+  fetch('/version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+    var v=+j.v||0;if(v<=+APPV||v===UPV.later||v===UPV.shown)return;
+    if(!$('#wn').hidden||!$('#ap').hidden||($('#onb')&&!$('#onb').hidden)){setTimeout(upCheck,20000);return}
+    UPV.shown=v;
+    $('#up-card').innerHTML='<div class="upic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v5h-5"/></svg></div>'
+      +'<h3 id="up-t">A new version of Manna is ready</h3><p class="small muted">Version '+v+' is out. You are on Version '+esc(APPV)+'. Relaunch to update. Your data stays as it is.</p>'
+      +'<div class="row"><button class="btn primary" data-act="uprelaunch">Relaunch now</button><button class="btn" data-act="uplater">Later</button></div>';
+    $('#up').hidden=false;
+  }).catch(function(){});
+}
+setTimeout(upCheck,5000);setInterval(upCheck,10*60*1000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(upCheck,1500)});
 function show(){
   var id=(location.hash||'').replace('#','');
   if(id==='privacy')id='settings';
