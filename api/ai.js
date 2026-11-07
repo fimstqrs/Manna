@@ -15,6 +15,7 @@ import { supaEnv, bearer, getUser, rpc } from './_supa.js';
 const MAX_PROMPT = 8000;          // characters
 const MAX_IMAGE = 1_600_000;      // characters of base64 (about 1.2 MB)
 const PER_IP_DAY = 40;
+const MAX_FOODS = 8;            // most foods one food lookup can return
 const TIMEOUT_MS = 15_000;      // per model call; then the next model is tried            // safety net per server instance, not the user-facing limit
 const hits = new Map();
 
@@ -143,7 +144,24 @@ export default async function handler(req, res) {
 
   try {
     const text = ant ? await askClaude(ant, prompt, img) : await askGemini(gem, prompt, img);
-    return res.status(200).json({ ok: true, data: parseJson(text), usage });
+    const data = parseJson(text);
+    // Food lookups that find several foods cost one AI use per food. The first was
+    // counted above; charge the rest now, and keep only as many foods as were paid for.
+    if (body?.per === 'food' && data && Array.isArray(data.foods)) {
+      const found = Math.min(data.foods.length, MAX_FOODS);
+      let paid = 1;
+      if (user) {
+        while (paid < found) {
+          const u = await rpc(env, 'use_ai', { p_user: user.id }).catch(() => null);
+          if (!u || !u.allowed) { if (u) usage = u; break; }
+          usage = u; paid++;
+        }
+      } else paid = found; // signed out: the device counts its own uses
+      data.found = found;
+      data.foods = data.foods.slice(0, paid);
+      data.charged = user ? paid : undefined;
+    }
+    return res.status(200).json({ ok: true, data, usage });
   } catch (e) {
     if (user) await rpc(env, 'refund_ai', { p_user: user.id }).catch(() => {});
     const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 || e.status === 503 ? 'rate_limited' : e.status === 401 || e.status === 403 ? 'badkey' : 'failed';

@@ -1920,6 +1920,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:96,d:'Nov 7, 2026',t:'Log several foods at once',s:['Describe a whole meal, like "two eggs, toast and orange juice", or snap a photo of your plate, and AI adds each food to today.','Each food uses one AI use. If you run out partway, Manna adds what it can and tells you what is left.','A single food still opens so you can check the amount before adding it.']},
  {v:95,d:'Nov 7, 2026',t:'A verse in the quiet spaces',s:['When a page is shorter than your screen, the empty space now shows a short verse that matches your theme.','It uses the same colours as the Saved workouts note, and changes with your theme and each day.']},
  {v:94,d:'Nov 7, 2026',t:'A cleaner page bar',s:['The page bar on Workouts and Settings no longer says how many pages are left. The dots show where you are.']},
  {v:93,d:'Nov 7, 2026',t:'One swipe, one page',s:['Each swipe now moves exactly one page, like flicking a card, instead of scrolling through several.','A small nudge springs back to the page you were on.']},
@@ -2144,7 +2145,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='95';
+var heroLast='',APPV='96';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2350,7 +2351,7 @@ function shrink(file){
 /* AI: 5 uses a day per device for now (accounts will move this count to the server) */
 var AI_DAY=5;
 function aiUsed(){try{var o=JSON.parse(localStorage.getItem('manna.ai.v1')||'{}');return o.d===dk(Date.now())?(o.n||0):0}catch(e){return 0}}
-function aiCount(){try{localStorage.setItem('manna.ai.v1',JSON.stringify({d:dk(Date.now()),n:aiUsed()+1}))}catch(e){}}
+function aiCount(k){try{localStorage.setItem('manna.ai.v1',JSON.stringify({d:dk(Date.now()),n:aiUsed()+(k||1)}))}catch(e){}}
 function accOn(){return typeof ACC!=='undefined'&&ACC&&ACC.cfg&&ACC.cfg.accounts}
 function aiLoginNeeded(){return accOn()&&ACC.cfg.aiNeedsLogin&&!signedIn()}
 function aiLeft(){if(accOn()&&signedIn())return ACC.usage?Math.max(0,ACC.usage.limit-ACC.usage.used):1;if(aiLoginNeeded())return 0;return Math.max(0,AI_DAY-aiUsed())}
@@ -2363,10 +2364,15 @@ var SERVER_AI={
     var tokP=accOn()&&typeof authToken==='function'?authToken():Promise.resolve(null);
     return tokP.then(function(t){tok=t;return img?blobUrl(img):null}).then(function(u){
       var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
-      return fetch('/api/ai',{method:'POST',headers:h,body:JSON.stringify({prompt:inst,image:u||undefined})});
+      return fetch('/api/ai',{method:'POST',headers:h,body:JSON.stringify({prompt:inst,image:u||undefined,per:opts&&opts.per||undefined})});
     }).then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})}).then(function(j){
       if(j&&j.usage&&accOn())ACC.usage=j.usage;
-      if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};if(!tok)aiCount();return j.data;
+      if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};
+      if(!tok){var k=1,d=j.data;
+        /* One use per food: keep only as many foods as there are uses left today */
+        if(opts&&opts.per==='food'&&d&&Array.isArray(d.foods)){d.found=Math.max(+d.found||0,d.foods.length);k=Math.max(1,Math.min(d.foods.length,aiLeft()));d.foods=d.foods.slice(0,k)}
+        aiCount(k)}
+      return j.data;
     },function(e){throw (e&&e.code)?e:{code:'offline'}});
   },
   limits:function(){return {images:true}}
@@ -2381,6 +2387,17 @@ function readAmt(){
   var e=$('#e-amt'),v=e?parseFloat(e.value):NaN;
   return isFinite(v)&&v>0?Math.max(1,Math.round(S.fu==='oz'?v*28.3495:v)):null;
 }
+var FOODSPEC='{"name": string, "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg)}';
+/* Turn one AI item into a food: a database match with the right amount, or a saved estimate */
+function aiFoodItem(r,amt,blob){
+  var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000);
+  if(m&&num(r.confidence,1)>=.5)return {f:m,q:g>=1?Math.min(30,Math.max(.05,Math.round(g/servG(m).g*1000)/1000)):1};
+  var o=F('e'+(uid++),String(r.name).slice(0,60),'Estimate',(g>=1?Math.round(g)+' g':String(r.serving||'1 serving').slice(0,40)),Math.round(num(r.kcal,5000)),Math.round(num(r.protein,300)*10)/10,Math.round(num(r.carbs,600)*10)/10,Math.round(num(r.fat,400)*10)/10,Math.round(num(r.fiber,100)*10)/10,0,0,0,Math.round(num(r.sodium,10000)),0,[],'estimate',[String(r.name).toLowerCase()]);
+  o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how=blob?'photo':'description';
+  o.id='e'+Date.now().toString(36)+(uid++);o.saved=Date.now();var dk=o.name.toLowerCase()+'|'+o.serv;
+  S.est=S.est.filter(function(x){return (x.name.toLowerCase()+'|'+x.serv)!==dk});S.est.unshift(o);S.est=S.est.slice(0,300);estSave();
+  return {f:o,q:1};
+}
 function askFood(text,file){
   if(ASK.busy)return;
   var amt=readAmt();
@@ -2392,15 +2409,22 @@ function askFood(text,file){
       if(!sample){ASK={busy:false,msg:'AI estimates are not available here. Search the list or type a food name instead.',img:''};refresh();return}
       var go=function(){
         var ids=BASE.concat(CHAIN).map(function(f){return f.id+' = '+f.name+' ('+f.serv+')'}).join('\n');
-        var inst='You identify food for a calorie tracker. '+(blob?'The attached photo shows what the person is eating.':'The person says they are eating: "'+String(text).slice(0,200)+'".')+(amt?' The portion is exactly '+amt+' g ('+Math.round(amt/28.3495*10)/10+' oz). Every number you return must be for exactly that amount.':'')+' If one item in this list is clearly the same food, give its id as matchId, otherwise null:\n'+ids+'\nReturn JSON only: {"name": string or null, "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number}. Numbers are for the portion shown, or one typical serving. If it is not food, set name to null.';
-        return sample.json(inst,blob?{images:[blob],modelTier:'quick'}:{modelTier:'quick'}).then(function(r){
-          var img=ASK.img;
-          if(!r||!r.name){ASK={busy:false,msg:'Could not tell what that is. Try again, or type the food name.',img:''};refresh();return}
-          var m=r.matchId&&find(String(r.matchId));
-          if(m&&num(r.confidence,1)>=.5){S.fsel=m.id;S.fq=amt?Math.min(30,Math.max(.05,Math.round(amt/servG(m).g*1000)/1000)):1;ASK={busy:false,msg:'',img:''};refresh();return}
-          var o=F('e'+(uid++),String(r.name).slice(0,60),'Estimate',(amt||num(r.grams,5000)>=1?Math.round(amt||num(r.grams,5000))+' g':String(r.serving||'1 serving').slice(0,40)),Math.round(num(r.kcal,5000)),Math.round(num(r.protein,300)*10)/10,Math.round(num(r.carbs,600)*10)/10,Math.round(num(r.fat,400)*10)/10,Math.round(num(r.fiber,100)*10)/10,0,0,0,Math.round(num(r.sodium,10000)),0,[],'estimate',[String(r.name).toLowerCase()]);
-          o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how=blob?'photo':'description';
-          o.id='e'+Date.now().toString(36)+(uid++);o.saved=Date.now();var dk=o.name.toLowerCase()+'|'+o.serv;S.est=S.est.filter(function(x){return (x.name.toLowerCase()+'|'+x.serv)!==dk});S.est.unshift(o);S.est=S.est.slice(0,300);estSave();S.fsel=o.id;S.fq=1;ASK={busy:false,msg:'',img:''};refresh();
+        var inst='You identify food for a calorie tracker. '+(blob?'The attached photo shows what the person is eating.':'The person says they are eating: "'+String(text).slice(0,300)+'".')
+          +(amt?' It is one food. The portion is exactly '+amt+' g ('+Math.round(amt/28.3495*10)/10+' oz). Every number you return must be for exactly that amount.':' List every separate food or drink they mention (or the photo shows) as its own item, up to 8, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs). Do not split one dish into its ingredients.')
+          +' For each item, if one entry in this list is clearly the same food, give its id as matchId, otherwise null:\n'+ids
+          +'\nReturn JSON only: {"foods": [ '+FOODSPEC+' ]}. If you cannot tell what any of it is, return {"foods": []}.';
+        return sample.json(inst,blob?{images:[blob],modelTier:'quick',per:'food'}:{modelTier:'quick',per:'food'}).then(function(r){
+          var L=r&&Array.isArray(r.foods)?r.foods:(r&&r.name?[r]:[]);
+          L=L.filter(function(x){return x&&x.name}).slice(0,8);
+          if(!L.length){ASK={busy:false,msg:'Could not tell what that is. Try again, or type the food name.',img:''};refresh();return}
+          var made=L.map(function(x){return aiFoodItem(x,amt,blob)});
+          var found=Math.max(L.length,+(r&&r.found)||0),cut=found>L.length;
+          if(made.length===1&&!cut){S.fsel=made[0].f.id;S.fq=made[0].q;ASK={busy:false,msg:'',img:''};refresh();return}
+          made.forEach(function(m){S.meals.push(mkMeal(m.f,m.q,'AI'))});
+          var names=made.map(function(m){return m.f.name}),uses=made.length+' AI use'+(made.length>1?'s':'');
+          var hit=[];made.forEach(function(m){(m.f.al||[]).forEach(function(a){if(S.allergy[a]&&hit.indexOf(a)<0)hit.push(a)})});
+          ASK={busy:false,ok:true,msg:'Added '+made.length+' food'+(made.length>1?'s':'')+' to today: '+names.join(', ')+'. Used '+uses+', one per food.'+(cut?' You ran out of AI uses, so '+(found-made.length)+' more '+(found-made.length>1?'were':'was')+' not added. Search for '+(found-made.length>1?'them':'it')+' instead.':'')+(hit.length?' Heads up: this contains '+hit.join(', ')+'.':''),img:''};
+          toast('Added '+names.length+' food'+(names.length>1?'s':'')+'.');refresh();
         });
       };
       return (blob?Promise.resolve(sample.limits()).then(function(l){if(!l||!l.images)throw {code:'noimg'}}):Promise.resolve()).then(go);
@@ -2421,9 +2445,10 @@ function renderFoods(){
   $('#f-meta').textContent='Showing '+Math.min(list.length,S.fshow)+' of '+list.length+' matches. '+allFoods().length+' foods in the database.';
   $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try What are you eating? to search or estimate it.</p>';
   var qq=($('#f-q').value||'').trim(),el=foodList(qq,'all');
-  $('#e-res').innerHTML=qq?(el.length?el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">Ask AI to estimate "'+esc(qq.slice(0,40))+'"</button></div></div>'):'';
+  var multi=qq&&/,|&|\+|\band\b|\bwith\b/i.test(qq);
+  $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">One AI use per food.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">One AI use per food.</p>':'')+'</div>'):'';
   var _se=S.est.length?'<details><summary class="small">Saved AI estimates ('+S.est.length+')</summary><p class="small muted">Every food AI estimates is saved here on this device, so you can search and add it again without asking.</p><ul class="list" style="margin-top:.5rem">'+S.est.slice(0,50).map(function(o){return '<li><div>'+esc(o.name)+'<div class="small muted mono">'+esc(o.serv)+' · '+kc(o.kcal)+' kcal</div></div><button class="btn sm" data-act="estdel" data-id="'+o.id+'" aria-label="Remove saved estimate '+esc(o.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
-  $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking AI. This takes a few seconds.</div>':(ASK.msg?'<div class="note warn">'+esc(ASK.msg)+'</div>':''));
+  $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking AI. This takes a few seconds.</div>':(ASK.msg?'<div class="note '+(ASK.ok?'ok':'warn')+'">'+esc(ASK.msg)+'</div>':''));
   renderFoodModal();
   var sel=$('#r-ing'),cur=sel.value;
   var opts=BASE.filter(function(f){return f.src!=='community'&&f.src!=='chain'});
