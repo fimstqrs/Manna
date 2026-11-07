@@ -5,7 +5,7 @@ import { supaEnv } from './_supa.js';
 
 export default function handler(req, res) {
   const env = supaEnv();
-  res.setHeader('cache-control', 'public, max-age=300');
+  res.setHeader('cache-control', 'public, max-age=60');
   res.status(200).json({
     accounts: env.ready,
     url: env.ready ? env.url : null,

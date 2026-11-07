@@ -705,6 +705,15 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .wpick[data-n="3"]{background:color-mix(in srgb,var(--accent) 20%,var(--bg))}
 @media (prefers-reduced-motion:no-preference){.wpick.bump{animation:wp-bump .35s cubic-bezier(.34,1.56,.64,1)}@keyframes wp-bump{50%{transform:scale(1.06)}}}
 .wncard{gap:.7rem}
+.apcard{gap:.8rem;text-align:center;align-items:stretch}
+.apcard h3{font-size:1.7rem}#ap-t:focus{outline:none}
+.apmark{display:flex;justify-content:center;color:var(--logo)}.apmark svg{width:48px;height:48px}
+.btn.oauth{width:100%;min-height:48px;font-size:1rem;justify-content:center;display:flex;align-items:center}
+.btn.oauth.apple{background:#000!important;color:#fff!important;border-color:#000!important;background-image:none!important}
+.btn.oauth.google{background:#fff!important;color:#1f1f1f!important;border-color:#747775!important;background-image:none!important}
+.btn.apskip{background:transparent!important;border-color:transparent!important;box-shadow:none!important;color:var(--muted)}
+.oauthrow{gap:.5rem}
+.orline{display:flex;align-items:center;gap:.6rem;margin:.2rem 0}.orline::before,.orline::after{content:"";flex:1;height:1px;background:var(--line)}
 #wn-t:focus{outline:none}
 .wnl{margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:.35rem;line-height:1.45}
 .wnl.sm{font-size:.9rem;margin-top:.4rem}
@@ -1148,6 +1157,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
   </main>
 </div>
 <button class="btn totop" id="totop" data-act="totop" aria-label="Back to top" hidden>↑</button>
+<div class="modal" id="ap" role="dialog" aria-modal="true" aria-labelledby="ap-t" hidden><div class="mback" data-act="apclose"></div><div class="mcard apcard" id="ap-card"></div></div>
 <div class="modal" id="wn" role="dialog" aria-modal="true" aria-labelledby="wn-t" hidden><div class="mback" data-act="wnclose"></div><div class="mcard wncard" id="wn-card"></div></div>
 <div class="modal" id="fm" role="dialog" aria-modal="true" aria-labelledby="fm-t" hidden><div class="mback" data-act="fclose"></div><div class="mcard" id="fm-card"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -1675,7 +1685,7 @@ function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:true,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',restDef:90,restPick:90,favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',acctAsked:false,restDef:90,restPick:90,favVerse:'',
     sleep:6.2,hrv:48,sore:3,
     meals:[],labs:{fe:22,vd:24,b12:410},
     override:false,coachMsg:null,imported:[],
@@ -1840,6 +1850,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:90,d:'Nov 7, 2026',t:'Sign in your way',s:['The first time you open Manna after this update, you are invited to create a free account.','Sign in with email today. Apple and Google sign-in appear as soon as they are switched on.','You can skip it and sign in later from Settings › Account.']},
  {v:89,d:'Nov 7, 2026',t:'Accounts',s:['Create an account in Settings to keep your data safe and use Manna on all your devices.','Your data syncs automatically while you are logged in.','AI uses are counted on your account, so they follow you between devices.','Settings now explains clearly where your data is kept.']},
  {v:88,d:'Nov 6, 2026',t:'AI switched on',s:['AI features now use Google’s current Gemini model, so Build with AI and food estimates work.','AI answers faster, and a slow answer stops after 25 seconds instead of hanging.']},
  {v:87,d:'Nov 6, 2026',t:'Real AI',s:['Build with AI and food estimates now use a real AI model, including food photos.','You get 5 AI uses a day. After that, workouts are built from Manna’s own rules.','Settings has a Version log of every update. The All pages list is gone.','Removed the Or describe it in words button from Fitness.']},
@@ -2058,7 +2069,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='89';
+var heroLast='',APPV='90';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3565,13 +3576,15 @@ function accInit(){
     ACC.cfg=c||{accounts:false};
     var note=lsGet('manna.sync.note');if(note){lsSet('manna.sync.note',null);setTimeout(function(){toast(note)},1500)}
     if(!ACC.cfg.accounts){refresh();return}
+    fetch(ACC.cfg.url+'/auth/v1/settings',{headers:{apikey:ACC.cfg.anonKey}}).then(function(r){return r.json()}).then(function(st){ACC.prov=st&&st.external||{};ACC.sig='';refresh()}).catch(function(){ACC.prov={}});
+    setTimeout(apCheck,1500);
     var p=null;try{p=JSON.parse(lsGet('manna.auth.pending')||'null')}catch(e){}lsSet('manna.auth.pending',null);
     if(p&&p.error){ACC.mode='login';accSay(p.error.indexOf('expired')>-1?'That link has expired. Ask for a new one.':'That link did not work. Try again.',true);return}
     if(p&&p.access_token){
       fetch(ACC.cfg.url+'/auth/v1/user',{headers:sbHeaders(p.access_token)}).then(sbJson).then(function(u){
         authSet({at:p.access_token,rt:p.refresh_token,exp:Date.now()+((+p.expires_in||3600)*1000),id:u.id,email:u.email||''});
         if(p.type==='recovery'){ACC.mode='newpass';accSay('Choose a new password.')}
-        else{accSay('Your email is confirmed. You are signed in.');syncStart(true)}
+        else{S.acctAsked=true;accSay(p.type==='signup'?'Your email is confirmed. You are signed in.':'You are signed in.');syncStart(true);if(!p.type)toast('Signed in. Your data now saves to your account.')}
         usageLoad();
       }).catch(function(e){accSay(authErr(e),true)});
       return;
@@ -3585,7 +3598,7 @@ function accRender(){
   var el=$('#acct-card');if(!el)return;
   var on=!!(ACC.cfg&&ACC.cfg.accounts);el.hidden=!on;if(!on)return;
   var a=authGet(),m=syncMeta();
-  var sig=JSON.stringify([ACC.mode,ACC.busy,ACC.msg,ACC.err,a&&a.email,ACC.usage,ACC.sync,Math.floor(ACC.syncAt/60000),!!ACC.conflict,!!ACC.delAsk]);
+  var sig=JSON.stringify([ACC.prov,ACC.mode,ACC.busy,ACC.msg,ACC.err,a&&a.email,ACC.usage,ACC.sync,Math.floor(ACC.syncAt/60000),!!ACC.conflict,!!ACC.delAsk]);
   if(sig===ACC.sig)return;ACC.sig=sig;
   var f=accFields(),h='<div class="sh"><h3>Account</h3>';
   var note=ACC.msg?'<p class="note small'+(ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
@@ -3610,6 +3623,7 @@ function accRender(){
     h+='<p class="small muted">'+(su?'Create an account to keep your Manna data safe and use it on all your devices.':rs?'We will email you a link to choose a new password.':'Log in to sync your Manna data across your devices.')+'</p></div>'+note
       +'<label class="f" for="ac-email">Email<input type="email" id="ac-email" autocomplete="email" inputmode="email" value="'+esc(f.email)+'"></label>'
       +(rs?'':'<label class="f" for="ac-pass">Password<input type="password" id="ac-pass" autocomplete="'+(su?'new-password':'current-password')+'" minlength="8"></label>')
+      +(rs?'':oauthBtns())
       +'<div class="row"><button class="btn primary" data-act="'+(su?'acsignup':rs?'acreset':'aclogin')+'"'+(ACC.busy?' disabled':'')+'>'+(ACC.busy?'Please wait…':su?'Create account':rs?'Send reset link':'Log in')+'</button></div>'
       +'<div class="row small">'+(su||rs?'<button class="linkbtn" data-act="acmode" data-k="login">I have an account</button>':'<button class="linkbtn" data-act="acmode" data-k="signup">Create an account</button><span class="muted">·</span><button class="linkbtn" data-act="acmode" data-k="reset">Forgot password?</button>')+'</div>'
       +(su?'<p class="small muted">Your data stays on this device too. Signing in copies it to your account.</p>':'');
@@ -3656,6 +3670,40 @@ Object.assign(ACT,{
       .catch(function(e){accSay(authErr(e),true)})}
 });
 setTimeout(accInit,0);
+/* ---- Sign in with Apple / Google: buttons show only for providers switched on in Supabase ---- */
+function oauthBtns(){var pv=ACC.prov||{},h='';
+  if(pv.apple)h+='<button class="btn oauth apple" data-act="acoauth" data-k="apple">Continue with Apple</button>';
+  if(pv.google)h+='<button class="btn oauth google" data-act="acoauth" data-k="google">Continue with Google</button>';
+  return h?'<div class="stack oauthrow">'+h+'<p class="small muted orline"><span>or use your email</span></p></div>':''}
+/* ---- First-time sign-in popup: once, for people not signed in, after splash, setup and What's new ---- */
+function apRender(){var pv=ACC.prov||{},any=pv.apple||pv.google;
+  $('#ap-card').innerHTML='<div class="apmark" aria-hidden="true">'+$('.brand b svg').outerHTML+'</div>'
+    +'<h3 id="ap-t" tabindex="-1">Keep your progress safe</h3>'
+    +'<p class="muted">Create a free account to save your workouts, meals and settings, and use Manna on all your devices.</p>'
+    +'<div class="stack" style="gap:.6rem">'
+    +(pv.apple?'<button class="btn oauth apple" data-act="acoauth" data-k="apple">Continue with Apple</button>':'')
+    +(pv.google?'<button class="btn oauth google" data-act="acoauth" data-k="google">Continue with Google</button>':'')
+    +'<button class="btn '+(any?'':'primary ')+'oauth" data-act="apemail">Continue with email</button>'
+    +'<button class="btn apskip" data-act="apclose">Not now</button></div>'
+    +'<p class="small muted">You can sign in any time under Settings › Account. Without an account, your data stays on this device only.</p>';
+}
+function apOpen(){apRender();$('#ap').hidden=false;document.body.classList.add('modal-open');setTimeout(function(){var t=$('#ap-t');if(t)t.focus({preventScroll:true})},60)}
+function apCheck(){
+  if(!ACC.cfg||!ACC.cfg.accounts||S.acctAsked||signedIn())return;
+  if(!S.onboarded){setTimeout(apCheck,2500);return}
+  var busy=function(id){var e=document.getElementById(id);return e&&!e.hidden&&!(id==='splash'&&e.classList.contains('out'))};
+  if(busy('splash')||busy('onb')||busy('wel')||busy('tour')||busy('wn')||busy('fm')||document.hidden||String(S.seenV)!==String(APPV)){setTimeout(apCheck,800);return}
+  if(!ACC.prov){setTimeout(apCheck,800);return}
+  apOpen();
+}
+function apHide(){$('#ap').hidden=true;document.body.classList.remove('modal-open');S.acctAsked=true}
+Object.assign(ACT,{
+  apclose:function(){apHide()},
+  apemail:function(){apHide();ACC.mode='signup';ACC.msg='';ACC.sig='';location.hash='settings';setTimeout(function(){var c=$('#acct-card');if(c)c.scrollIntoView({block:'start'});var e=$('#ac-email');if(e)e.focus()},350)},
+  acoauth:function(b){var k=b.dataset.k;if(!ACC.cfg||!ACC.cfg.accounts)return;S.acctAsked=true;prefSave();
+    location.href=ACC.cfg.url+'/auth/v1/authorize?provider='+encodeURIComponent(k)+'&redirect_to='+encodeURIComponent(location.origin+'/')}
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#ap').hidden)apHide()});
 /* Delete all my data clears this device only: sign out first so the account keeps its copy */
 var _resetAll=ACT.reset;ACT.reset=function(b){if(delConfirm&&signedIn()){authSet(null);syncMetaSet({});ACC.usage=null}return _resetAll(b)};
 function setDay(i,t){S.plans[S.planId][i]=t.value||null;syncSched()}
