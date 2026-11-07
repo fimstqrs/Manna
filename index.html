@@ -704,6 +704,34 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .onb-panel.still,.onb-panel.still>*{animation:none!important}
 .wpick{position:sticky;top:8px;z-index:3;display:flex;width:max-content;max-width:100%;align-items:center;gap:.6rem;padding:.42rem .9rem .42rem .65rem;margin:.1rem 0 .8rem;border-radius:999px;font-size:.95rem;color:var(--ink);background:color-mix(in srgb,var(--bg) 88%,transparent);border:1.5px solid var(--accent);box-shadow:0 4px 16px rgba(0,0,0,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:background-color .3s ease}
 .wpick b{font-weight:600}
+/* Swipe pages (Workouts, Settings) */
+.swp{display:flex;flex-direction:column;gap:10px;min-width:0}
+.swbar{display:flex;align-items:center;gap:.5rem;min-height:38px}
+.swdots{display:flex;align-items:center;gap:2px;flex:1;min-width:0}
+.swdot{appearance:none;-webkit-appearance:none;border:0;background:none;padding:0;margin:0;height:36px;min-width:18px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:inherit;font:inherit;-webkit-tap-highlight-color:transparent}
+.swdot>span{display:inline-flex;align-items:center;gap:.4rem;width:8px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 22%,transparent);overflow:hidden;white-space:nowrap;transition:background .3s ease}
+.swdot>span svg{width:16px;height:16px;flex:none}
+.swdot>span b{font-size:.84rem;font-weight:600}
+.swdot>span svg,.swdot>span b{display:none}
+.swdot:hover>span{background:color-mix(in srgb,var(--ink) 40%,transparent)}
+.swdot.on{padding:0 4px}
+.swdot.on>span{width:auto;height:30px;padding:0 .8rem 0 .6rem;background:var(--accent);color:var(--accent-ink)}
+.swdot.on>span svg,.swdot.on>span b{display:inline-block}
+.swdot:focus-visible{outline:none}.swdot:focus-visible>span{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 45%,transparent)}
+.swleft{font-size:.82rem;color:var(--muted);white-space:nowrap}
+.swnav{width:34px;height:34px;padding:0;border-radius:50%;font-size:1.1rem;line-height:1;flex:none}
+.swnav:disabled{opacity:.35}
+@media (hover:none){.swnav{display:none}}
+.swtrack{display:flex;align-items:flex-start;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;margin:-24px -16px -50px;-webkit-overflow-scrolling:touch;transition:height .32s cubic-bezier(.2,.8,.2,1)}
+.swtrack::-webkit-scrollbar{display:none}
+.swpage{flex:0 0 100%;min-width:0;scroll-snap-align:center;scroll-snap-stop:always;padding:24px 16px 50px;display:flex;flex-direction:column;gap:16px;will-change:auto}
+.swtrack.moving .swpage{will-change:transform}
+.swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
+@media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
+.rm .swtrack,html.lite .swtrack{transition:none}
+@media (min-width:900px){.swtrack{margin-inline:-46px}.swpage{padding-inline:46px}}
+.swbar{position:relative;z-index:1}
+
 .wpd{display:flex;gap:5px}.wpd i{display:block;width:11px;height:11px;border-radius:50%;border:1.5px solid var(--accent);transition:background-color .25s ease,transform .3s cubic-bezier(.34,1.56,.64,1)}
 .wpick[data-n="1"] .wpd i:nth-child(1),.wpick[data-n="2"] .wpd i:nth-child(-n+2),.wpick[data-n="3"] .wpd i{background:var(--accent)}
 .wpick[data-n="3"]{background:color-mix(in srgb,var(--accent) 20%,var(--bg))}
@@ -828,26 +856,17 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <!-- WORKOUTS -->
     <section class="view" id="v-workouts" hidden>
       <header class="vh"><p class="eyebrow">Fitness</p><h2>Workouts</h2>
-        <p class="lede">Answer a few quick questions and pick a workout. You can go back at any step to change something.</p></header>
+        <p class="lede">Swipe between your saved workouts, making your own, templates and search.</p></header>
       <div class="card stack wdue" id="w-due" hidden></div>
+      <div class="swp" id="w-sw">
+      <div class="swbar" aria-label="Workout pages"></div>
+      <div class="swtrack">
+      <div class="swpage" data-name="Saved" data-ic="saved">
       <div class="card stack" id="w-recent"></div>
       <div class="card stack" id="w-saved"></div>
+      </div>
+      <div class="swpage" data-name="Make your own" data-ic="make">
       <div class="card stack" id="w-make"></div>
-      <div class="card stack" id="w-sbox"><label class="f" for="w-q">Search workouts<input type="search" id="w-q" autocomplete="off" placeholder="Try soccer, legs, 20 minutes, plank"></label><div id="w-sres" aria-live="polite"></div></div>
-      <div class="card stack" id="w-wiz">
-        <div class="row spread"><span class="eyebrow" id="w-step">Step 1 of 4</span><div class="chips" id="w-sum"></div></div>
-        <div class="stack" id="ws-0"><h3>What kind of workout?</h3><div class="chips" id="w-types"></div><div class="frow" id="w-sports-row"><span class="eyebrow">Sports</span><div class="chips" id="w-sports"></div></div></div>
-        <div class="stack" id="ws-1" hidden><h3 id="w-ah">What do you have access to?</h3><div class="chips" id="w-access"></div>
-          <div class="frow" id="w-equip-row" hidden><span class="eyebrow">Your equipment</span><div class="chips" id="w-equip"></div></div></div>
-        <div class="stack" id="ws-2" hidden><h3>Which muscles?</h3><p class="small muted">Pick as many as you like.</p><div class="chips" id="w-muscles"></div></div>
-        <div class="stack" id="ws-3" hidden><h3>Pick a workout</h3><p class="small muted" id="w-count" aria-live="polite"></p><div class="wgrid" id="w-grid"></div></div>
-        <div class="row" id="w-nav"><button class="btn" data-act="wback" id="w-back">‹ Back</button><button class="btn primary" data-act="wnext" id="w-next">Next</button></div>
-      </div>
-      <div class="stack" id="w-cur" hidden>
-        <div class="row"><button class="btn" data-act="wback">‹ Back to workouts</button><button class="btn" data-act="wgo" data-s="0">Change my picks</button></div>
-        <div class="card stack" id="w-detail"></div>
-        <div class="card stack" id="w-edit" hidden></div>
-      </div>
       <div class="card stack" id="w-ai">
           <h3>Build with AI</h3>
           <p class="small muted">Describe the session in your own words and AI builds it. After your daily AI uses, Manna builds it from its own rules instead.</p>
@@ -863,6 +882,28 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
         <textarea id="nt-text" aria-label="Routine text to import" placeholder="Leg day&#10;squats 4x8&#10;lunges 3x10&#10;plank 3x40s&#10;run 10 min"></textarea>
         <div class="row"><button class="btn primary" data-act="ntparse">Convert to routine</button><button class="btn" data-act="ntsample">Load an example</button><label class="btn" for="nt-file" style="cursor:pointer">Choose text file</label><input type="file" id="nt-file" accept=".txt,.md,text/plain" hidden></div>
         <div id="nt-out" aria-live="polite"></div>
+      </div>
+      </div>
+      <div class="swpage" data-name="Templates" data-ic="tpl">
+      <div class="card stack" id="w-wiz">
+        <div class="sh"><h3>Template workouts</h3><p class="small muted">Ready to go. Answer a few quick questions, or open one and edit a copy.</p></div>
+        <div class="row spread"><span class="eyebrow" id="w-step">Step 1 of 4</span><div class="chips" id="w-sum"></div></div>
+        <div class="stack" id="ws-0"><h3>What kind of workout?</h3><div class="chips" id="w-types"></div><div class="frow" id="w-sports-row"><span class="eyebrow">Sports</span><div class="chips" id="w-sports"></div></div></div>
+        <div class="stack" id="ws-1" hidden><h3 id="w-ah">What do you have access to?</h3><div class="chips" id="w-access"></div>
+          <div class="frow" id="w-equip-row" hidden><span class="eyebrow">Your equipment</span><div class="chips" id="w-equip"></div></div></div>
+        <div class="stack" id="ws-2" hidden><h3>Which muscles?</h3><p class="small muted">Pick as many as you like.</p><div class="chips" id="w-muscles"></div></div>
+        <div class="stack" id="ws-3" hidden><h3>Pick a workout</h3><p class="small muted" id="w-count" aria-live="polite"></p><div class="wgrid" id="w-grid"></div></div>
+        <div class="row" id="w-nav"><button class="btn" data-act="wback" id="w-back">‹ Back</button><button class="btn primary" data-act="wnext" id="w-next">Next</button></div>
+      </div>
+      </div>
+      <div class="swpage" data-name="Search" data-ic="search">
+      <div class="card stack" id="w-sbox"><label class="f" for="w-q">Search workouts<input type="search" id="w-q" autocomplete="off" placeholder="Try soccer, legs, 20 minutes, plank"></label><div id="w-sres" aria-live="polite"></div></div>
+      </div>
+      </div></div>
+      <div class="stack" id="w-cur" hidden>
+        <div class="row"><button class="btn" data-act="wback">‹ Back to workouts</button><button class="btn" data-act="wgo" data-s="0">Change my picks</button></div>
+        <div class="card stack" id="w-detail"></div>
+        <div class="card stack" id="w-edit" hidden></div>
       </div>
     </section>
 
@@ -1071,8 +1112,11 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <!-- SETTINGS -->
     <section class="view" id="v-settings" hidden>
       <header class="vh"><p class="eyebrow">Your account</p><h2>Settings</h2>
-        <p class="lede">Changes apply straight away.</p></header>
-      <div class="grid2">
+        <p class="lede">Swipe between pages. Changes apply straight away.</p></header>
+      <div class="swp" id="s-sw">
+      <div class="swbar" aria-label="Settings pages"></div>
+      <div class="swtrack">
+      <div class="swpage" data-name="You" data-ic="you"><div class="grid2">
         <div class="card stack" id="acct-card" hidden></div>
         <div class="card stack">
           <div class="sh"><h3>Profile</h3><p class="small muted">How Manna greets you and measures.</p></div>
@@ -1081,6 +1125,14 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <label class="f" for="p-units">Weight units<select id="p-units"><option value="kg">Kilograms</option><option value="lb">Pounds</option></select></label>
           <label class="f" for="p-lang">Language (Today page)<select id="p-lang"><option value="en">English</option><option value="es">Español</option></select></label>
         </div>
+        <div class="card stack" id="fv-card">
+          <div class="sh"><h3>Your favorites</h3><p class="small muted">Top workouts show on your home page. Your favorite verse shows on the Scripture page.</p></div>
+          <p class="small" id="fv-top"></p>
+          <div class="row"><button class="btn sm" data-act="onbopen" data-s="6">Change top 3 workouts</button><a class="btn sm" href="#themes" style="text-decoration:none">Change theme</a></div>
+          <label class="f" for="fv-ref">Favorite Bible verse<input type="text" id="fv-ref" data-chg="1" maxlength="80" autocomplete="off" placeholder="John 3:16"></label>
+        </div>
+      </div></div>
+      <div class="swpage" data-name="Look" data-ic="look"><div class="grid2">
         <div class="card stack">
           <div class="sh"><h3>Appearance</h3><p class="small muted">Colour, size and motion.</p></div>
           <div class="row spread"><span id="p-theme"></span><a class="btn sm" href="#themes" style="text-decoration:none">Choose a theme</a></div>
@@ -1092,12 +1144,8 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <label class="check" for="p-plain"><input type="checkbox" id="p-plain"><span>Plain words<small>Swaps terms like "sodium" for "salt" on the Today page.</small></span></label>
         </div>
         <div class="card stack" id="tour-set"><div class="sh"><h3>Tutorial</h3><p class="small muted">A short walkthrough of every page. You can leave it at any time.</p></div><div class="row"><button class="btn" data-act="tourstart">Replay the tutorial</button><button class="btn" data-act="wnopen">What’s new</button></div></div>
-        <div class="card stack" id="fv-card">
-          <div class="sh"><h3>Your favorites</h3><p class="small muted">Top workouts show on your home page. Your favorite verse shows on the Scripture page.</p></div>
-          <p class="small" id="fv-top"></p>
-          <div class="row"><button class="btn sm" data-act="onbopen" data-s="6">Change top 3 workouts</button><a class="btn sm" href="#themes" style="text-decoration:none">Change theme</a></div>
-          <label class="f" for="fv-ref">Favorite Bible verse<input type="text" id="fv-ref" data-chg="1" maxlength="80" autocomplete="off" placeholder="John 3:16"></label>
-        </div>
+      </div></div>
+      <div class="swpage" data-name="Body" data-ic="body"><div class="grid2">
         <div class="card stack" id="g-card">
           <div class="sh"><h3>Goals and body</h3><p class="small muted">Pick one or more goals. Your calorie and macro targets are worked out from these plus your age, height, weight and activity.</p></div>
           <div class="chips" id="g-chips" role="group" aria-label="Your goals"></div>
@@ -1125,11 +1173,6 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <label class="f" for="s-wg">Daily water goal (oz)<input type="number" id="s-wg" data-chg="1" min="16" max="300" step="1" inputmode="numeric"></label>
           <p class="small muted" id="t-bmsg" aria-live="polite"></p>
         </div>
-        <div class="card stack" id="x-card">
-          <div class="sh"><h3>Extras</h3><p class="small muted">Small additions made for you. Turn off any you do not want.</p></div>
-          <div id="x-list" class="stack"></div>
-          <div class="row"><button class="btn" data-act="xall" data-k="off">Turn all extras off</button><button class="btn" data-act="xall" data-k="on">Turn all on</button></div>
-        </div>
         <div class="card stack">
           <div class="sh"><h3>Food scoring</h3><p class="small muted">Pick what foods are scored on. The 1 to 10 score and the numbers on each food card follow these.</p></div>
           <div class="chips" id="p-track" role="group" aria-label="Food scoring targets"></div>
@@ -1138,17 +1181,12 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <div class="sh"><h3>Training</h3><p class="small muted">How Manna plans your workouts.</p></div>
           <label class="check" for="p-sched"><input type="checkbox" id="p-sched"><span>Use workout schedules<small>Plan a workout for each day, see it on Home and at the top of Fitness. Turn off to just pick a workout whenever you train. Your schedules are kept either way.</small></span></label>
         </div>
-        <div class="card stack" id="fb-card">
-          <div class="sh"><h3>Feedback</h3><p class="small muted">Found a bug or have an idea? Tell us. It opens your email app with your note ready to send.</p></div>
-          <label class="f" for="fb-type">What is it about?<select id="fb-type"><option>An idea</option><option>Something is broken</option><option>A question</option><option>Something else</option></select></label>
-          <label class="f" for="fb-text">Your feedback<textarea id="fb-text" maxlength="2000" placeholder="What happened, or what would make Manna better?"></textarea></label>
-          <div class="row"><button class="btn primary" data-act="fbsend">Send feedback</button></div>
-          <p class="small muted">Or email <a href="mailto:fimipopoola2011@gmail.com?subject=Manna%20feedback">fimipopoola2011@gmail.com</a> directly.</p>
-        </div>
-        <div class="card stack">
-          <div class="sh"><h3>Credits</h3></div>
-          <p><b>Bible version:</b> BSB</p>
-          <p class="small muted">Scripture is from the Berean Standard Bible (BSB). The BSB is in the public domain; it was dedicated to the public domain on April 30, 2023 by Bible Hub and Berean.Bible. Food data comes from USDA FoodData Central and the chains' published nutrition, via fastfoodnutrition.org.</p>
+      </div></div>
+      <div class="swpage" data-name="Data" data-ic="data"><div class="grid2">
+        <div class="card stack" id="x-card">
+          <div class="sh"><h3>Extras</h3><p class="small muted">Small additions made for you. Turn off any you do not want.</p></div>
+          <div id="x-list" class="stack"></div>
+          <div class="row"><button class="btn" data-act="xall" data-k="off">Turn all extras off</button><button class="btn" data-act="xall" data-k="on">Turn all on</button></div>
         </div>
         <div class="card stack">
           <div class="sh"><h3>Privacy</h3><p class="small muted">What your friends can see.</p></div>
@@ -1161,8 +1199,23 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <pre class="json" id="p-json" tabindex="0" aria-label="Your data as JSON"></pre>
           <div class="row"><button class="btn" data-act="copy">Copy my data</button><button class="btn" id="p-reset" data-act="reset">Delete data on this device</button></div>
         </div>
-      </div>
+      </div></div>
+      <div class="swpage" data-name="About" data-ic="about"><div class="grid2">
+        <div class="card stack" id="fb-card">
+          <div class="sh"><h3>Feedback</h3><p class="small muted">Found a bug or have an idea? Tell us. It opens your email app with your note ready to send.</p></div>
+          <label class="f" for="fb-type">What is it about?<select id="fb-type"><option>An idea</option><option>Something is broken</option><option>A question</option><option>Something else</option></select></label>
+          <label class="f" for="fb-text">Your feedback<textarea id="fb-text" maxlength="2000" placeholder="What happened, or what would make Manna better?"></textarea></label>
+          <div class="row"><button class="btn primary" data-act="fbsend">Send feedback</button></div>
+          <p class="small muted">Or email <a href="mailto:fimipopoola2011@gmail.com?subject=Manna%20feedback">fimipopoola2011@gmail.com</a> directly.</p>
+        </div>
+        <div class="card stack">
+          <div class="sh"><h3>Credits</h3></div>
+          <p><b>Bible version:</b> BSB</p>
+          <p class="small muted">Scripture is from the Berean Standard Bible (BSB). The BSB is in the public domain; it was dedicated to the public domain on April 30, 2023 by Bible Hub and Berean.Bible. Food data comes from USDA FoodData Central and the chains' published nutrition, via fastfoodnutrition.org.</p>
+        </div>
       <div class="card stack" id="vl-card"><div class="sh"><h3>Version log</h3><p class="small muted" id="vl-now"></p></div><div class="wnall" id="vl-list"></div></div>
+      </div></div>
+      </div></div>
     </section>
   </main>
 </div>
@@ -1860,7 +1913,8 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:91,d:'Nov 7, 2026',t:'Your sign-in at a glance',s:['Settings › Account shows how you signed in: Google, Apple or email, with your name from Google.','Sign in with Google is now switched on.','Setup’s first screen lets you sign in to bring your data back, or create an account.','Switch to a different account from Settings › Account.','The Signed out message is now red so it is easy to spot.']},
+ {v:92,d:'Nov 7, 2026',t:'Swipe through Workouts and Settings',s:['Workouts is now four pages you swipe between: Saved, Make your own, Templates and Search.','Ready-made workouts are now called template workouts.','Settings is split into five pages: You, Look, Body, Data and About.','The bar on top shows the page you are on, its icon, and how many pages are left. Tap a dot to jump to a page.','Pages tilt a little as you swipe, like flicking a card. Reduce motion turns this off.','Tapping a search result opens the workout again.']},
+{v:91,d:'Nov 7, 2026',t:'Your sign-in at a glance',s:['Settings › Account shows how you signed in: Google, Apple or email, with your name from Google.','Sign in with Google is now switched on.','Setup’s first screen lets you sign in to bring your data back, or create an account.','Switch to a different account from Settings › Account.','The Signed out message is now red so it is easy to spot.']},
  {v:90,d:'Nov 7, 2026',t:'Sign in your way',s:['The first time you open Manna after this update, you are invited to create a free account.','Sign in with email today. Apple and Google sign-in appear as soon as they are switched on.','You can skip it and sign in later from Settings › Account.']},
  {v:89,d:'Nov 7, 2026',t:'Accounts',s:['Create an account in Settings to keep your data safe and use Manna on all your devices.','Your data syncs automatically while you are logged in.','AI uses are counted on your account, so they follow you between devices.','Settings now explains clearly where your data is kept.']},
  {v:88,d:'Nov 6, 2026',t:'AI switched on',s:['AI features now use Google’s current Gemini model, so Build with AI and food estimates work.','AI answers faster, and a slow answer stops after 25 seconds instead of hanging.']},
@@ -2080,7 +2134,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='91';
+var heroLast='',APPV='92';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2754,9 +2808,9 @@ function renderRecentSaved(z){
   /* Saved workouts */
   var mk=$('#w-make');mk.hidden=!show;
   if(show){var lib={};LIB.forEach(function(w){(lib[w.cat]=lib[w.cat]||[]).push(w)});
-    mk.innerHTML='<div class="sh"><h3>Make your own workout</h3><p class="small muted">Start from nothing, or copy a ready-made workout and change anything: the name, exercises, sets, reps and weight.</p></div>'
+    mk.innerHTML='<div class="sh"><h3>Make your own workout</h3><p class="small muted">Start from nothing, or copy a template workout and change anything: the name, exercises, sets, reps and weight.</p></div>'
      +'<div class="row"><button class="btn primary" data-act="wnew">Start from scratch</button></div>'
-     +'<div class="row" style="align-items:flex-end"><label class="f" for="w-copyfrom" style="flex:1;min-width:12rem">Or start from a ready-made workout<select id="w-copyfrom">'+Object.keys(CATS).filter(function(c){return lib[c]}).map(function(c){return '<optgroup label="'+esc(CATS[c])+'">'+lib[c].map(function(w){return '<option value="'+w.id+'">'+esc(w.name)+' ('+w.mins+' min)</option>'}).join('')+'</optgroup>'}).join('')+'</select></label><button class="btn" data-act="wcopy">Edit a copy</button></div>'
+     +'<div class="row" style="align-items:flex-end"><label class="f" for="w-copyfrom" style="flex:1;min-width:12rem">Or start from a template workout<select id="w-copyfrom">'+Object.keys(CATS).filter(function(c){return lib[c]}).map(function(c){return '<optgroup label="'+esc(CATS[c])+'">'+lib[c].map(function(w){return '<option value="'+w.id+'">'+esc(w.name)+' ('+w.mins+' min)</option>'}).join('')+'</optgroup>'}).join('')+'</select></label><button class="btn" data-act="wcopy">Edit a copy</button></div>'
      +'<p class="small muted">Have a routine written down? <button class="linkbtn" data-act="wtext">Paste it as text</button>.</p>';}
   var sv=$('#w-saved'),L=S.savedW.map(function(id){return byId[id]}).filter(Boolean);
   sv.hidden=!show;
@@ -2770,8 +2824,8 @@ function renderWorkouts(){
   var z=S.wz,A=ACCESS.filter(function(a){return a[0]===S.wf.access})[0][1],T=S.wf.cat==='all'?'All types':CATS[S.wf.cat],M=S.wf.mu==='all'?'Any muscle':muNames(S.wf.mu);
   for(var zi=0;zi<4;zi++)$('#ws-'+zi).hidden=z!==zi;
   renderRecentSaved(z);
-  var SR=wSearch();$('#w-sres').innerHTML=SR?'<p class="small muted">'+SR.length+' of '+allWorkouts().length+' workouts, easiest first</p>'+(SR.length?'<div class="wgrid">'+SR.map(wcardHtml).join('')+'</div>':'<p class="muted">No workouts match. Try fewer words.</p>'):'';
-  $('#w-wiz').hidden=z===4||!!SR;$('#w-cur').hidden=z!==4;
+  var SR=wSearch();$('#w-sres').innerHTML=SR?'<p class="small muted">'+SR.length+' of '+allWorkouts().length+' workouts, easiest first</p>'+(SR.length?'<div class="wgrid">'+SR.map(function(w){return wcardHtml(w)}).join('')+'</div>':'<p class="muted">No workouts match. Try fewer words.</p>'):'';
+  $('#w-wiz').hidden=z===4;$('#w-sw').hidden=z===4;$('#w-cur').hidden=z!==4;
   var NA=needsAcc(),SQ=wseq(),tot=SQ.length,sn=Math.max(1,SQ.indexOf(z)+1);$('#w-step').textContent='Step '+sn+' of '+tot;
   $('#w-back').disabled=z===0;$('#w-next').hidden=z===3||z===0;
   $('#w-next').textContent=SQ[SQ.indexOf(z)+1]===3?'See workouts':'Next';
@@ -3853,6 +3907,112 @@ var VGROUP={more:'more'},VALID={more:1};
 GROUPS.forEach(function(g){g[2].forEach(function(v){VGROUP[v]=g[0];VALID[v]=1})});
 if($('#more-list'))$('#more-list').innerHTML='<h3 class="eyebrow" style="margin-top:.5rem">All pages</h3>'+GROUPS.filter(function(g){return g[0]!=='today'}).map(function(g){return '<div class="card stack"><h3>'+g[1]+'</h3><div class="morerows">'+g[2].filter(function(v){return v!=='session'&&v!=='settings'}).map(function(v){return '<a class="morerow" href="#'+v+'"><span>'+VLABEL[v]+'</span><span aria-hidden="true">›</span></a>'}).join('')+'</div></div>'}).join('');
 $('#nav').innerHTML=GROUPS.map(function(g){return '<a href="#'+g[2][0]+'" data-group="'+g[0]+'">'+g[1]+'</a>'}).join('');
+
+/* ---------- Swipe pages: Workouts and Settings ----------
+   Native scroll-snap does the swiping (smooth on every phone). On top of it the
+   leaving and arriving pages tilt a little like swiped cards, and the bar on top
+   shows the current page's icon and how many pages are left. */
+var SWIC={
+  saved:'<path d="M7 4h10v16l-5-3.8L7 20z"/>',
+  make:'<path d="M4 20l4.2-1 10.6-10.6a2.1 2.1 0 0 0-3-3L5.2 16z"/><path d="M14.5 6.5l3 3"/>',
+  tpl:'<rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.6"/>',
+  search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.6-4.6"/>',
+  you:'<circle cx="12" cy="8.2" r="3.6"/><path d="M5 20c1-4 3.8-6 7-6s6 2 7 6"/>',
+  look:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+  body:'<circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r=".9"/>',
+  data:'<ellipse cx="12" cy="6" rx="7" ry="2.6"/><path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6"/>',
+  about:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.2M12 7.8h.01"/>'};
+var SWP={},SWMEM={};
+try{SWMEM=JSON.parse(sessionStorage.getItem('manna.sw.v1')||'{}')||{}}catch(e){}
+function swCalm(){var d=document.documentElement;return d.classList.contains('rm')||d.classList.contains('lite')||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}
+function swIco(k){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(SWIC[k]||'')+'</svg>'}
+function swBar(st){
+  var n=st.pages.length,i=st.i,left=n-1-i;
+  st.dots.forEach(function(d,k){var on=k===i;if(d.classList.contains('on')!==on){d.classList.toggle('on',on);if(on){var sp=d.firstChild;d.replaceChild(sp.cloneNode(true),sp)}}
+    if(on)d.setAttribute('aria-current','page');else d.removeAttribute('aria-current')});
+  st.left.textContent=left?left+' to go':'Last page';
+  st.prev.disabled=i===0;st.next.disabled=i===n-1;
+}
+function swW(st){return st.tr.clientWidth||0}
+function swHeight(st,h){if(!swW(st)){st.tr.style.height='';return}var v=Math.ceil(h==null?st.pages[st.i].offsetHeight:h)+'px';if(st.tr.style.height!==v)st.tr.style.height=v}
+function swFrame(st){
+  var w=swW(st);if(!w)return;var f=st.tr.scrollLeft/w,n=st.pages.length;f=Math.max(0,Math.min(n-1,f));
+  var i=Math.round(f);if(i!==st.i){st.i=i;swBar(st)}
+  var a=Math.floor(f),b=Math.ceil(f);swHeight(st,Math.max(st.pages[a].offsetHeight,st.pages[b].offsetHeight));
+  var moving=Math.abs(f-i)>.002;if(moving)st.tr.classList.add('moving');
+  if(swCalm())return;
+  var r=st.tr.getBoundingClientRect(),oy=Math.max(0,Math.min(innerHeight*.92-r.top,r.height));
+  st.pages.forEach(function(p,k){var d=k-f,ad=Math.abs(d);
+    if(!moving||ad>=1){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin=''}return}
+    p.style.transformOrigin='50% '+Math.round(oy)+'px';
+    p.style.transform='rotate('+(d*6).toFixed(2)+'deg) scale('+(1-ad*.07).toFixed(3)+')';
+    p.style.opacity=(1-ad*.45).toFixed(3)});
+}
+function swSettle(st,user){
+  var w=swW(st);if(!w)return;var i=Math.max(0,Math.min(st.pages.length-1,Math.round(st.tr.scrollLeft/w)));
+  var changed=i!==st.last;st.i=i;st.last=i;swBar(st);swHeight(st);st.tr.classList.remove('moving');
+  st.pages.forEach(function(p,k){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin=''}p.setAttribute('aria-hidden',k===i?'false':'true');p.classList.toggle('swoff',k!==i)});
+  SWMEM[st.root.id]=i;try{sessionStorage.setItem('manna.sw.v1',JSON.stringify(SWMEM))}catch(e){}
+  if(changed&&user)swTopIn(st);
+}
+/* After moving to another page, bring its top into view if the person had scrolled down */
+function swTopIn(st){
+  var r=st.root.getBoundingClientRect(),off=12;
+  [$('.side'),$('.clockbar')].forEach(function(el){if(!el)return;var q=el.getBoundingClientRect();if(q.bottom>0&&q.top<=1&&q.width>innerWidth*.7&&q.bottom<innerHeight*.5)off=Math.max(off,q.bottom+8)});
+  if(r.top<off)window.scrollTo({top:Math.max(0,scrollY+r.top-off),behavior:swCalm()?'auto':'smooth'});
+}
+function swGo(st,i,instant,quiet){
+  i=Math.max(0,Math.min(st.pages.length-1,i));st.i=i;var w=swW(st);
+  if(!w){swBar(st);SWMEM[st.root.id]=i;return}
+  if(instant||swCalm()){st.tr.scrollLeft=i*w;swSettle(st,!quiet);return}
+  /* Animate it ourselves: smooth scrolling with snap points is unreliable across browsers */
+  var tr=st.tr,x0=tr.scrollLeft,x1=i*w,t0=0,dur=Math.min(560,300+Math.abs(x1-x0)/w*90);
+  if(Math.abs(x1-x0)<2){swSettle(st,!quiet);return}
+  cancelAnimationFrame(st.anim);tr.style.scrollSnapType='none';st.animating=true;tr.classList.add('anim');
+  var step=function(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/dur),e=1-Math.pow(1-k,3);
+    tr.scrollLeft=x0+(x1-x0)*e;swFrame(st);
+    if(k<1)st.anim=requestAnimationFrame(step);else{tr.style.scrollSnapType='';st.animating=false;tr.classList.remove('anim');tr.scrollLeft=x1;swSettle(st,!quiet)}};
+  st.anim=requestAnimationFrame(step);
+}
+function swReveal(el){
+  var pg=el&&el.closest&&el.closest('.swpage');if(!pg)return;var root=pg.closest('.swp'),st=root&&SWP[root.id];if(!st)return;
+  var k=st.pages.indexOf(pg);if(k>-1&&(k!==st.i||Math.abs(st.tr.scrollLeft-k*swW(st))>2))swGo(st,k,true,true);
+}
+function swInit(root){
+  var tr=root.querySelector('.swtrack'),bar=root.querySelector('.swbar');
+  var st={root:root,tr:tr,pages:[].slice.call(tr.children),i:+SWMEM[root.id]||0,last:-1,t:0,raf:0};
+  if(st.i>=st.pages.length)st.i=0;
+  SWP[root.id]=st;
+  bar.innerHTML='<button type="button" class="btn sm swnav" data-sw="-1" aria-label="Previous page">‹</button><div class="swdots">'
+    +st.pages.map(function(p,k){var nm=p.dataset.name;return '<button type="button" class="swdot" data-swi="'+k+'" aria-label="'+esc(nm)+', page '+(k+1)+' of '+st.pages.length+'"><span>'+swIco(p.dataset.ic)+'<b>'+esc(nm)+'</b></span></button>'}).join('')
+    +'</div><span class="swleft" aria-live="polite"></span><button type="button" class="btn sm swnav" data-sw="1" aria-label="Next page">›</button>';
+  st.dots=[].slice.call(bar.querySelectorAll('.swdot'));st.left=bar.querySelector('.swleft');st.prev=bar.querySelector('[data-sw="-1"]');st.next=bar.querySelector('[data-sw="1"]');
+  bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+    if(b.dataset.swi!=null)swGo(st,+b.dataset.swi);else if(b.dataset.sw)swGo(st,st.i+(+b.dataset.sw))});
+  bar.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();swGo(st,st.i+(e.key==='ArrowRight'?1:-1));var d=st.dots[st.i];if(d)d.focus()}});
+  tr.addEventListener('scroll',function(){
+    if(!st.raf)st.raf=requestAnimationFrame(function(){st.raf=0;swFrame(st)});
+    clearTimeout(st.t);if(!st.animating)st.t=setTimeout(function(){swSettle(st,true)},110)},{passive:true});
+  /* Tabbing or jumping to something on another page moves to that page */
+  tr.addEventListener('focusin',function(e){swReveal(e.target)});
+  tr.addEventListener('touchstart',function(){tr.classList.add('moving')},{passive:true});
+  tr.addEventListener('pointerdown',function(e){if(e.pointerType!=='touch')return;tr.classList.add('moving')});
+  tr.addEventListener('touchend',function(){setTimeout(function(){var w=swW(st);if(!st.animating&&w&&Math.abs(tr.scrollLeft-st.i*w)<2)tr.classList.remove('moving')},260)},{passive:true});
+  tr.addEventListener('wheel',function(e){if(Math.abs(e.deltaX)>Math.abs(e.deltaY))tr.classList.add('moving')},{passive:true});
+  if(window.ResizeObserver){
+    var ro=new ResizeObserver(function(ents){var w=swW(st);
+      ents.forEach(function(en){if(en.target===tr){if(w&&Math.abs(tr.scrollLeft-st.i*w)>2)tr.scrollLeft=st.i*w;if(st.last<0&&w)swSettle(st,false)}});
+      if(w&&!tr.classList.contains('moving'))swHeight(st)});
+    ro.observe(tr);st.pages.forEach(function(p){ro.observe(p)});
+  }else window.addEventListener('resize',function(){var w=swW(st);if(w){tr.scrollLeft=st.i*w;swSettle(st,false)}});
+  swBar(st);
+}
+(function(){
+  /* Anything that scrolls a card into view (the tutorial, "Build with AI", sign-in) opens its page first */
+  var siv=Element.prototype.scrollIntoView;
+  if(siv)Element.prototype.scrollIntoView=function(){try{swReveal(this)}catch(e){}return siv.apply(this,arguments)};
+  $$('.swp').forEach(swInit);
+})();
 function show(){
   var id=(location.hash||'').replace('#','');
   if(id==='privacy')id='settings';
