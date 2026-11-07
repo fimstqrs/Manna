@@ -1990,6 +1990,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:103,d:'Nov 7, 2026',t:'Test update',s:['A small test release to try the relaunch-to-update message. Nothing else changed.']},
  {v:102,d:'Nov 7, 2026',t:'Plan your sets before you start',s:['Before you start now lets you set the sets, reps (or time) and weight for every exercise.','During the workout, change reps and weight on any set, and add or remove sets with + and −.']},
  {v:101,d:'Nov 7, 2026',t:'Log a whole meal with AI',s:['Describe a meal or snap your plate and AI adds every food at once, for one AI use.','A pop-up shows your calories eaten against today’s goal, with protein, carbs and fat rings, then each food to swipe through. Change the amount or remove a food right there.','Every food gets an emoji.','Today’s meals shows the same rings and a simple list. Tap a food to see what is in it.','The Today’s meals button on What are you eating is gone, since it has its own page.']},
  {v:100,d:'Nov 7, 2026',t:'Workout streak',s:['A Duolingo-style streak counter is now on Home and on Workouts: a flame, your days in a row, and this week’s workout days.','The flame grows when you finish a workout and it pops when your streak goes up.','Turn it off any time under Settings › Data › Extras.']},
@@ -2222,7 +2223,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='102';
+var heroLast='',APPV='103';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
