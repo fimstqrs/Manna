@@ -1995,6 +1995,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:105,d:'Nov 7, 2026',t:'The full version history',s:['The version log now goes all the way back to Version 1.','Versions 1 to 52 are rebuilt from memory and marked approximate. Versions 1 to 59 came before the current site, so they are dated Before Nov 6, 2026.']},
  {v:104,d:'Nov 7, 2026',t:'Sync fixes',s:['Your theme and other settings now sync reliably: the most recent change from any device wins.','Sync now in Settings works and tells you when it is done. The Sync line shows when it last synced.','The rest timer only runs between sets of the same exercise. Workouts without sets, like a run, have no rest timer.','During a workout, tap + Add set to add a set to any exercise. Logging an extra set counts it too.']},
  {v:103,d:'Nov 7, 2026',t:'Test update',s:['A small test release to try the relaunch-to-update message. Nothing else changed.']},
  {v:102,d:'Nov 7, 2026',t:'Plan your sets before you start',s:['Before you start now lets you set the sets, reps (or time) and weight for every exercise.','During the workout, change reps and weight on any set, and add or remove sets with + and −.']},
@@ -2038,7 +2039,51 @@ var CHANGES=[
  {v:63,d:'Nov 6, 2026',t:'Setup look',s:['Setup and the splash screen always use the Default theme.']},
  {v:62,d:'Nov 6, 2026',t:'Welcome and tutorial',s:['A welcome screen, a guided tutorial, and workout filters in setup.']},
  {v:61,d:'Nov 6, 2026',t:'Friendlier setup',s:['Setup no longer assumes your name.']},
- {v:60,d:'Nov 6, 2026',t:'Live verse of the day',s:['The verse of the day updates live.']}
+ {v:60,d:'Nov 6, 2026',t:'Live verse of the day',s:['The verse of the day updates live.']},
+ {v:59,d:'Before Nov 6, 2026',t:'Sports, search and Build with AI',s:['Ten sports with 3+ workouts each, search on Workouts home, Build with AI on home, easy-to-hard sort, Configure with level and focus.', 'Released together with Version 60.']},
+ {v:58,d:'Before Nov 6, 2026',t:'Smarter workout wizard',s:['Workout wizard starts with type; equipment step only when needed (bodyweight skips it).']},
+ {v:57,d:'Before Nov 6, 2026',t:'Top 3 as workout cards',s:['Top 3 workouts shown as cards like the Workouts section.']},
+ {v:56,d:'Before Nov 6, 2026',t:'Live verse of the day',s:['Live verse-of-the-day hook (works on the Vercel site); Vercel package created.']},
+ {v:55,d:'Before Nov 6, 2026',t:'Blank setup fields',s:['Age, weight and height are blank on first run of setup.']},
+ {v:54,d:'Before Nov 6, 2026',t:'More setup choices',s:['Setup adds name, theme picker, top 3 workouts and favorite verse; removed site-theme card from Scripture.']},
+ {v:53,d:'Before Nov 6, 2026',t:'Goals and first-run setup',s:['Goals picker in Settings (cut, lean bulk, bulk, recomp, maintain, endurance, health) driving calorie and macro targets; first-run setup.']},
+ {v:52,ap:1,d:'Before Nov 6, 2026',t:'Cleanup',s:['Removed Nutrients and labs page.']},
+ {v:51,r:'50–51',ap:1,d:'Before Nov 6, 2026',t:'Fixes and refinements',s:['Incremental fixes and refinements.']},
+ {v:49,ap:1,d:'Before Nov 6, 2026',t:'Softer colours',s:['Palette update: iOS/macOS-style colors and softer blacks.']},
+ {v:48,r:'44–48',ap:1,d:'Before Nov 6, 2026',t:'Fixes and refinements',s:['Incremental fixes and refinements (theme consistency, widgets, settings).']},
+ {v:43,ap:1,d:'Before Nov 6, 2026',t:'Default theme polish',s:['Default theme refinements and consistency across pages.']},
+ {v:42,ap:1,d:'Before Nov 6, 2026',t:'Default theme',s:['Plain / Default theme work: iOS-style light look without the heart icon.']},
+ {v:41,r:'31–41',ap:1,d:'Before Nov 6, 2026',t:'Fixes and refinements',s:['Incremental fixes and refinements (layout, spacing, persistence of settings, small bug fixes).']},
+ {v:30,ap:1,d:'Before Nov 6, 2026',t:'Subtler clock',s:['Subtle clock with under-pill.']},
+ {v:29,ap:1,d:'Before Nov 6, 2026',t:'Launch splash',s:['Splash animation on launch.']},
+ {v:28,ap:1,d:'Before Nov 6, 2026',t:'Version footer',s:['Footer with version number and © 2026 fimstqrs.']},
+ {v:27,ap:1,d:'Before Nov 6, 2026',t:'Theme pictures',s:['Theme image per theme; bread icon for food.']},
+ {v:26,ap:1,d:'Before Nov 6, 2026',t:'Editable Today’s progress',s:['Editable Today\'s progress.']},
+ {v:25,ap:1,d:'Before Nov 6, 2026',t:'Read the verse checklist item',s:['Daily checklist item \'Read the verse of the day\'.']},
+ {v:24,ap:1,d:'Before Nov 6, 2026',t:'Verse of the day matches YouVersion',s:['Verse of the day matched to YouVersion via BSB text.']},
+ {v:23,ap:1,d:'Before Nov 6, 2026',t:'Frosted Surfaces setting',s:['Frosted Surfaces (glass) setting, renamed from Liquid Glass.']},
+ {v:22,ap:1,d:'Before Nov 6, 2026',t:'Glass animations',s:['Glass spring animations, pointer highlight on cards.']},
+ {v:21,ap:1,d:'Before Nov 6, 2026',t:'Liquid Glass look',s:['Liquid Glass look: frosted surfaces, glass tab bar, sheen and motion.']},
+ {v:20,ap:1,d:'Before Nov 6, 2026',t:'Settings and accessibility',s:['Settings gear tab; accessibility options (reduce motion, high contrast).']},
+ {v:19,ap:1,d:'Before Nov 6, 2026',t:'12 or 24-hour clock',s:['Clock bar with 24h / 12h clock setting.']},
+ {v:18,ap:1,d:'Before Nov 6, 2026',t:'Eat and Today’s meals pages',s:['Eat page with targets and Today\'s meals page.']},
+ {v:17,ap:1,d:'Before Nov 6, 2026',t:'Daily checklist',s:['Daily checklist with custom items.']},
+ {v:16,ap:1,d:'Before Nov 6, 2026',t:'Reorder Today',s:['Reorder and hide Today widgets.']},
+ {v:15,ap:1,d:'Before Nov 6, 2026',t:'Water goal',s:['Water goal with editable water intake.']},
+ {v:14,ap:1,d:'Before Nov 6, 2026',t:'Recommended targets',s:['Recommended calorie and macro targets from body inputs.']},
+ {v:13,ap:1,d:'Before Nov 6, 2026',t:'USDA food database',s:['USDA SR Legacy database (about 7,500 foods) searchable.']},
+ {v:12,ap:1,d:'Before Nov 6, 2026',t:'Your saved estimates',s:['Estimates from Ask Claude saved to a personal food database.']},
+ {v:11,ap:1,d:'Before Nov 6, 2026',t:'Ask Claude about food',s:['Ask Claude: describe or photograph food to get an estimate.']},
+ {v:10,ap:1,d:'Before Nov 6, 2026',t:'Daily calorie and macro tracking',s:['Add-to-log stepper and daily macro / calorie tracking.']},
+ {v:9,ap:1,d:'Before Nov 6, 2026',t:'Food cards and health score',s:['Food cards with emoji, macros, micronutrients and a health score.']},
+ {v:8,ap:1,d:'Before Nov 6, 2026',t:'Workout history',s:['History page with weekly bars and past workout details.']},
+ {v:7,ap:1,d:'Before Nov 6, 2026',t:'Weekly schedule',s:['Weekly schedule with per-day workout, done / missed / in-progress states.']},
+ {v:6,ap:1,d:'Before Nov 6, 2026',t:'Workout sessions',s:['Workout sessions with set logging, timer, pause/resume and status colors.']},
+ {v:5,ap:1,d:'Before Nov 6, 2026',t:'Workout library',s:['Workout library with categories, filters, level and equipment, plus a muscle map.']},
+ {v:4,ap:1,d:'Before Nov 6, 2026',t:'Twelve more themes',s:['Additional themes added (Dawn, Still, Garden, Counsel, Harvest, Grace, Vigil, Stone, Olive, Sky, Ember) with a theme picker.']},
+ {v:3,ap:1,d:'Before Nov 6, 2026',t:'Devotion theme',s:['Crimson \'Devotion\' theme: torn paper strip, engraved heart, script name, serif type.']},
+ {v:2,ap:1,d:'Before Nov 6, 2026',t:'Verse of the day',s:['Verse of the day on the home hero with reference and Bible reader.']},
+ {v:1,ap:1,d:'Before Nov 6, 2026',t:'First Manna build',s:['First Manna build: Today page with food log, workout and scripture sections, left rail / tab bar layout.']}
 ];
 /* What's new popup: once per version, after the splash, setup, welcome and tutorial are out of the way */
 function wnRender(){
@@ -2046,7 +2091,7 @@ function wnRender(){
   $('#wn-card').innerHTML='<div class="row spread"><p class="eyebrow">What’s new · Version '+c.v+'</p><button class="btn sm" data-act="wnclose" aria-label="Close">Close</button></div>'
    +'<h3 id="wn-t" tabindex="-1">'+esc(c.t)+'</h3><ul class="wnl">'+c.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>'
    +'<button class="btn primary" data-act="wnclose">Got it</button>'
-   +'<p class="eyebrow" style="margin-top:.6rem">All updates</p><div class="wnall">'+CHANGES.map(function(u,i){return '<details><summary><span><b>Version '+u.v+'</b> · '+esc(u.t)+'</span><span class="small muted">'+esc(u.d)+'</span></summary><ul class="wnl sm">'+u.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></details>'}).join('')+'</div>';
+   +'<p class="eyebrow" style="margin-top:.6rem">All updates</p><div class="wnall">'+CHANGES.map(function(u,i){return '<details><summary><span><b>Version'+(u.r?'s '+u.r:' '+u.v)+'</b> · '+esc(u.t)+'</span><span class="small muted">'+esc(u.d)+(u.ap?' · approximate':'')+'</span></summary><ul class="wnl sm">'+u.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></details>'}).join('')+'</div>';
 }
 function wnOpen(){wnRender();$('#wn').hidden=false;document.body.classList.add('modal-open');setTimeout(function(){var t=$('#wn-t');if(t)t.focus({preventScroll:true})},60)}
 function wnCheck(){
@@ -2057,7 +2102,7 @@ function wnCheck(){
   wnOpen();
 }
 function vlPaint(){var n=$('#vl-now'),l=$('#vl-list');if(!n||!l)return;n.textContent='You are on Version '+APPV+'. Tap any update to see what changed.';
-  l.innerHTML=CHANGES.map(function(u){return '<details><summary><span><b>Version '+u.v+'</b> · '+esc(u.t)+'</span><span class="small muted">'+esc(u.d)+'</span></summary><ul class="wnl sm">'+u.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></details>'}).join('')}
+  l.innerHTML=CHANGES.map(function(u){return '<details><summary><span><b>Version'+(u.r?'s '+u.r:' '+u.v)+'</b> · '+esc(u.t)+'</span><span class="small muted">'+esc(u.d)+(u.ap?' · approximate':'')+'</span></summary><ul class="wnl sm">'+u.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></details>'}).join('')}
 setTimeout(vlPaint,0);
 setTimeout(wnCheck,1200);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#wn').hidden)ACT.wnclose()});
@@ -2229,7 +2274,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='104';
+var heroLast='',APPV='105';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
