@@ -11,7 +11,8 @@
 
 const MAX_PROMPT = 8000;          // characters
 const MAX_IMAGE = 1_600_000;      // characters of base64 (about 1.2 MB)
-const PER_IP_DAY = 40;            // safety net per server instance, not the user-facing limit
+const PER_IP_DAY = 40;
+const TIMEOUT_MS = 25_000;      // per model call; the app falls back if it runs out            // safety net per server instance, not the user-facing limit
 const hits = new Map();
 
 const SYSTEM = 'You are the assistant inside Manna, a food, workout and faith app. ' +
@@ -59,19 +60,21 @@ async function askGemini(key, prompt, img) {
   const models = process.env.AI_MODEL ? [process.env.AI_MODEL] : GEMINI_MODELS;
   let last;
   for (const model of models) {
+    const t0 = Date.now();
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-      method: 'POST',
+      method: 'POST', signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM }] },
         contents: [{ role: 'user', parts }],
-        generationConfig: { responseMimeType: 'application/json', temperature: 0.4, maxOutputTokens: 2000 },
+        // Low thinking keeps replies fast; the output budget includes thinking tokens.
+        generationConfig: { responseMimeType: 'application/json', temperature: 0.4, maxOutputTokens: 4096, thinkingConfig: { thinkingLevel: 'low' } },
       }),
     });
     const j = await r.json().catch(() => ({}));
-    if (r.ok) return (j.candidates?.[0]?.content?.parts || []).map(p => p.text || '').join('');
+    if (r.ok) { console.log('ai ok', model, (Date.now() - t0) + 'ms'); return (j.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || '').join(''); }
     last = Object.assign(new Error(model + ': ' + (j.error?.message || 'Gemini error ' + r.status)), { status: r.status });
-    if (r.status !== 404) throw last;
+    if (r.status !== 404 && r.status !== 400) throw last;
   }
   throw last;
 }
@@ -83,6 +86,7 @@ async function askClaude(key, prompt, img) {
   content.push({ type: 'text', text: prompt });
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
+    signal: AbortSignal.timeout(TIMEOUT_MS),
     headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({ model, max_tokens: 2000, system: SYSTEM, messages: [{ role: 'user', content }] }),
   });
@@ -121,7 +125,7 @@ export default async function handler(req, res) {
     const text = ant ? await askClaude(ant, prompt, img) : await askGemini(gem, prompt, img);
     return res.status(200).json({ ok: true, data: parseJson(text) });
   } catch (e) {
-    const code = e.status === 429 ? 'rate_limited' : e.status === 401 || e.status === 403 ? 'badkey' : 'failed';
+    const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 ? 'rate_limited' : e.status === 401 || e.status === 403 ? 'badkey' : 'failed';
     console.error('ai error', e.status || '', e.message);
     return res.status(code === 'rate_limited' ? 429 : 502).json({ ok: false, code });
   }

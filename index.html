@@ -1839,7 +1839,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:88,d:'Nov 6, 2026',t:'AI switched on',s:['AI features now use Google’s current Gemini model, so Build with AI and food estimates work.']},
+ {v:88,d:'Nov 6, 2026',t:'AI switched on',s:['AI features now use Google’s current Gemini model, so Build with AI and food estimates work.','AI answers faster, and a slow answer stops after 25 seconds instead of hanging.']},
  {v:87,d:'Nov 6, 2026',t:'Real AI',s:['Build with AI and food estimates now use a real AI model, including food photos.','You get 5 AI uses a day. After that, workouts are built from Manna’s own rules.','Settings has a Version log of every update. The All pages list is gone.','Removed the Or describe it in words button from Fitness.']},
  {v:86,d:'Nov 6, 2026',t:'What’s new',s:['After each update, this screen shows what changed.','Scroll down for every past update, or open it any time from Settings.','The Bible and credits section in Settings is now just Credits.']},
  {v:85,d:'Nov 6, 2026',t:'Simpler targets',s:['Your targets on Fuel no longer show the protein-per-kg line.']},
@@ -2278,7 +2278,7 @@ var SERVER_AI={
   },
   limits:function(){return {images:true}}
 };
-function aiErr(code){return code==='limit'?'You have used today’s '+AI_DAY+' AI uses. They reset at midnight.':code==='nokey'?'AI is not switched on for Manna yet.':code==='rate_limited'?'AI is busy right now. Try again in a minute.':code==='offline'?'You seem to be offline.':code==='too_big'?'That photo is too large. Try another.':'AI could not do that right now. Try again.'}
+function aiErr(code){return code==='limit'?'You have used today’s '+AI_DAY+' AI uses. They reset at midnight.':code==='nokey'?'AI is not switched on for Manna yet.':code==='rate_limited'?'AI is busy right now. Try again in a minute.':code==='offline'?'You seem to be offline.':code==='too_big'?'That photo is too large. Try another.':code==='timeout'?'AI took too long to answer. Try again.':'AI could not do that right now. Try again.'}
 function getSample(){
   try{if(typeof claude!=='undefined'&&claude.use)return Promise.resolve(claude.use('sample')).catch(function(){return location.protocol==='file:'?null:SERVER_AI})}catch(e){}
   return Promise.resolve(location.protocol==='file:'?null:SERVER_AI);
@@ -2313,7 +2313,7 @@ function askFood(text,file){
       return (blob?Promise.resolve(sample.limits()).then(function(l){if(!l||!l.images)throw {code:'noimg'}}):Promise.resolve()).then(go);
     }).catch(function(e){
       var code=e&&e.code;
-      ASK={busy:false,msg:['limit','nokey','rate_limited','offline','too_big'].indexOf(code)>-1?aiErr(code):code==='noimg'?'Photos cannot be sent from here. Type the food name instead.':code==='not_granted'?'Claude access was declined, so photo and estimate lookups are off. You can still search the list.':code==='rate_limited'?'Too many requests. Wait a moment and try again.':'AI could not look that up. Try again, or search the list.',img:''};refresh();
+      ASK={busy:false,msg:['limit','nokey','rate_limited','offline','too_big','timeout'].indexOf(code)>-1?aiErr(code):code==='noimg'?'Photos cannot be sent from here. Type the food name instead.':code==='not_granted'?'Claude access was declined, so photo and estimate lookups are off. You can still search the list.':code==='rate_limited'?'Too many requests. Wait a moment and try again.':'AI could not look that up. Try again, or search the list.',img:''};refresh();
     });
   });
 }
