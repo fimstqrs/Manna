@@ -729,6 +729,11 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
+.sempty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.6rem;padding:1.4rem .5rem}
+.sempty-ic{font-size:2.6rem}
+.scard.sadd{border-style:dashed;cursor:pointer}
+.scard.slock{opacity:.7;cursor:default}
+
 /* Vertical one-at-a-time sections (TikTok style) */
 .vpg{position:relative;height:var(--vph,560px);overflow:hidden;border-radius:22px}
 .vtrack{height:100%;will-change:transform}
@@ -1727,6 +1732,17 @@ var SCHED_T=[
  {id:'S2',tag:'Untitled schedule',load:'',desc:'',days:[null,null,null,null,null,null,null]},
  {id:'S3',tag:'Untitled schedule',load:'',desc:'',days:[null,null,null,null,null,null,null]}
 ];
+/* Schedules people have made. Free: 1. Pro: up to 3. Schedules made before this keep working. */
+function schedList(){
+  if(!Array.isArray(S.schedList))S.schedList=SCHED_T.map(function(t){return t.id}).filter(function(id){return (S.plans[id]||[]).some(Boolean)||((S.planNames||{})[id]||'').trim()});
+  S.schedList=S.schedList.filter(function(id){return S.plans[id]});
+  if(S.schedList.length&&S.schedList.indexOf(S.planId)<0)S.planId=S.schedList[0];
+  return S.schedList;
+}
+function isPro(){return !!(typeof ACC!=='undefined'&&ACC.usage&&(ACC.usage.plan==='pro'||ACC.usage.plan==='paid'))}
+function schedMax(){return isPro()?3:1}
+function schedAdd(){var L=schedList();if(L.length>=schedMax())return null;var id=SCHED_T.map(function(t){return t.id}).filter(function(x){return L.indexOf(x)<0})[0];if(!id)return null;
+  S.plans[id]=[null,null,null,null,null,null,null];S.planNames[id]='';L.push(id);S.planId=id;syncSched();return id}
 function schedName(id){id=id||S.planId;var n=(S.planNames&&S.planNames[id]||'').trim();return n||'Untitled schedule'}
 function dk(ts){var d=new Date(ts);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
 function todayIdx(){return (new Date().getDay()+6)%7}
@@ -1890,7 +1906,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals}}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
   try{(d.customW||[]).concat(d.hist).forEach(function(x){var n=parseInt(String(x&&x.id||'').replace(/^[a-z]+/,''),10);if(n>=uid)uid=n+1})}catch(e){}
@@ -1919,7 +1935,7 @@ function defaults0(){
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
     name:'Friend',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
-    plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
+    plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
   SCHED_T.forEach(function(t){s.plans[t.id]=t.days.slice()});
   s.sched=schedFrom(s);
@@ -2072,6 +2088,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:116,d:'Nov 7, 2026',t:'Make your own schedules',s:['Weekly schedule now starts empty. Tap Add a schedule to make one.','Free accounts get 1 schedule and Pro accounts up to 3. Schedules you already made are kept.','You can delete a schedule, and adding a workout to a schedule makes one if you have none.']},
  {v:115,d:'Nov 7, 2026',t:'Swipe up and down between sections',s:['On Workouts › Make your own, the three sections (Make your own, Build with AI, Import from text) are now full-height, TikTok style. Swipe up or down to move one section at a time.','Dots on the right show where you are, and a Next hint at the bottom shows what is below. Long sections scroll normally first.']},
  {v:114,d:'Nov 7, 2026',t:'Update from Settings',s:['Settings › About has a new Updates card: see your version and the latest one, check for updates, and update with one tap.','When a newer version is out, a reminder stays at the top of Home until you update.']},
  {v:113,d:'Nov 7, 2026',t:'Import a schedule from text',s:['Weekly schedule has a new Import a schedule from text card. Paste a plan like Monday: Push Day, Tue/Thu - run or Sunday: rest.','Each day is matched to your workouts, and exercises listed under a day become a new workout.','You see a preview and can change any day before it is added to the selected schedule.']},
@@ -2361,7 +2378,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='115';
+var heroLast='',APPV='116';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3158,7 +3175,7 @@ function renderWorkouts(){
   else h+='<div class="row" style="margin-top:.8rem"><button class="btn primary" data-act="wstart" data-id="'+w.id+'">Start workout</button><button class="btn" data-act="wedit" data-id="'+w.id+'">'+(w.cat==='custom'?'Edit':'Make it my own')+'</button>'+(w.cat==='custom'?'<button class="btn" data-act="wdel" data-id="'+w.id+'">Delete</button>':'')+'</div>';
   if(S.useSched!==false){var ap=S.addPlan&&S.plans[S.addPlan]?S.addPlan:S.planId;
     h+='<div class="row wadd" style="margin-top:.6rem;align-items:flex-end"><span class="small muted" style="flex-basis:100%">Add to a schedule</span>'
-    +'<label class="f small muted" for="w-plan">Schedule<select id="w-plan">'+SCHED_T.map(function(t,i){return '<option value="'+t.id+'"'+(t.id===ap?' selected':'')+'>'+(i+1)+'. '+esc(schedName(t.id))+'</option>'}).join('')+'</select></label>'
+    +'<label class="f small muted" for="w-plan">Schedule<select id="w-plan">'+(schedList().length?schedList().map(function(id,i){return '<option value="'+id+'"'+(id===ap?' selected':'')+'>'+(i+1)+'. '+esc(schedName(id))+'</option>'}).join(''):'<option value="__new">New schedule</option>')+'</select></label>'
     +'<label class="f small muted" for="w-day">Day<select id="w-day">'+DAYN.map(function(d,i){return '<option value="'+i+'">'+d+'</option>'}).join('')+'</select></label>'
     +'<button class="btn sm" data-act="wsched" data-id="'+w.id+'">Add</button></div>'}
   $('#w-detail').innerHTML=h;if($('#w-day'))$('#w-day').value=String(S.addDay);$('#w-detail').hidden=!!S.edit;
@@ -3272,10 +3289,15 @@ function renderSchedImport(){
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.dataset||t.dataset.si==null||!S.siRes)return;var d=+t.dataset.si;var prev=S.siRes.days[d]||{};S.siRes.days[d]=t.value==='__new'?{kind:'none',label:prev.label,sel:'__new'}:t.value?{kind:'match',id:t.value,label:prev.label||wById(t.value).name}:{kind:'rest',label:prev.label}});
 function renderSchedule(){
   if(S.useSched===false){$('#sh-plans').innerHTML='';$('#sh-week').innerHTML='<h3>Schedules are off</h3><p class="muted">Turn them on to plan a workout for each day of the week.</p><div class="row"><button class="btn primary" data-act="schedon">Turn schedules on</button></div>';return}
-  $('#sh-plans').innerHTML=SCHED_T.map(function(t,ti2){
-    var n=S.plans[t.id].filter(Boolean).length;
-    return '<button class="scard" data-act="splan" data-id="'+t.id+'" aria-pressed="'+(S.planId===t.id?'true':'false')+'"><span class="sl">'+(ti2+1)+'</span><b data-sn="'+t.id+'">'+esc(schedName(t.id))+'</b><span class="mono small">'+n+(n===1?' workout':' workouts')+' a week</span></button>';
-  }).join('');
+  var SL=schedList(),max=schedMax();
+  if(!SL.length){$('#sh-plans').innerHTML='';
+    $('#sh-week').innerHTML='<div class="sempty"><div class="sempty-ic" aria-hidden="true">📅</div><h3>No schedules yet</h3><p class="muted">Make a weekly schedule to plan a workout for each day. It shows on Home and Today.</p><button class="btn primary" data-act="sadd">+ Add a schedule</button><p class="small muted">Free: 1 schedule. Pro: up to 3.</p></div>';
+    renderSchedImport();return}
+  $('#sh-plans').innerHTML=SL.map(function(id,ti2){
+    var n=S.plans[id].filter(Boolean).length;
+    return '<button class="scard" data-act="splan" data-id="'+id+'" aria-pressed="'+(S.planId===id?'true':'false')+'"><span class="sl">'+(ti2+1)+'</span><b data-sn="'+id+'">'+esc(schedName(id))+'</b><span class="mono small">'+n+(n===1?' workout':' workouts')+' a week</span></button>';
+  }).join('')+(SL.length<max?'<button class="scard sadd" data-act="sadd"><span class="sl">+</span><b>Add a schedule</b><span class="mono small">'+(max-SL.length)+' more '+(isPro()?'with Pro':'')+'</span></button>'
+    :!isPro()?'<div class="scard slock" aria-disabled="true"><span class="sl">🔒</span><b>More schedules</b><span class="small muted">Pro accounts get up to 3</span></div>':'');
   var days=planDays(),tpl=SCHED_T.filter(function(t){return t.id===S.planId})[0],ti=todayIdx(),done=0,total=0;
   var opts=function(sel){
     var o='<option value=""'+(sel?'':' selected')+'>Rest day</option>';
@@ -3292,10 +3314,10 @@ function renderSchedule(){
     if(w&&di===ti){if(stt==='prog')act='<a class="btn primary sm" href="#session" style="text-decoration:none">Resume</a>';else if(stt==='today'&&!S.sess)act='<button class="btn primary sm" data-act="wstart" data-id="'+wid+'">Start</button>'}
     return '<li class="dayrow" data-st="'+stt+'"'+(w?' data-cat="'+w.cat+'"':'')+'><div class="dayname"><b>'+DAYN[di]+'</b>'+(di===ti?' <span class="badge">Today</span>':'')+'</div><div class="daymain"><label class="vh-only" for="sch-'+di+'">Workout for '+DAYN[di]+'</label><select id="sch-'+di+'">'+opts(w?wid:'')+'</select>'+(w?'<div class="small muted">'+catTag(w.cat)+' · '+w.mins+' min'+(top?' · '+esc(top):'')+'</div>':'<div class="small muted">Nothing planned. Rest is part of the plan.</div>')+'</div><div class="dayact"><span class="pill '+p[0]+'">'+p[1]+'</span>'+act+'</div></li>';
   }).join('');
-  var h='<div class="row spread"><div><p class="eyebrow">Schedule '+(SCHED_T.map(function(x){return x.id}).indexOf(S.planId)+1)+'</p><h3 id="sch-title">'+esc(schedName())+'</h3></div><span class="mono small">'+done+' of '+total+' done this week</span></div>'+'<label class="f" for="sch-name">Schedule name<input type="text" id="sch-name" maxlength="30" autocomplete="off" placeholder="Untitled schedule" value="'+esc((S.planNames[S.planId]||''))+'"></label>'+bar(total?done/total*100:0,'ok')
+  var h='<div class="row spread"><div><p class="eyebrow">Schedule '+(SL.indexOf(S.planId)+1)+'</p><h3 id="sch-title">'+esc(schedName())+'</h3></div><span class="mono small">'+done+' of '+total+' done this week</span></div>'+'<label class="f" for="sch-name">Schedule name<input type="text" id="sch-name" maxlength="30" autocomplete="off" placeholder="Untitled schedule" value="'+esc((S.planNames[S.planId]||''))+'"></label>'+bar(total?done/total*100:0,'ok')
     +'<ul class="dayrows">'+rows+'</ul>'
     +'<div class="legend"><span class="pill plan">Planned</span><span class="pill prog">In progress</span><span class="pill done">Done</span><span class="pill miss">Not done</span><span class="pill rest">Rest</span></div>'
-    +'<div class="row spread"><p class="small muted">Pick a workout for each day, or leave it as a rest day.</p><button class="btn sm" data-act="sreset">Clear this schedule</button></div>';
+    +'<div class="row spread"><p class="small muted">Pick a workout for each day, or leave it as a rest day.</p><div class="row"><button class="btn sm" data-act="sreset">Clear days</button><button class="btn sm" data-act="sdel">'+(S.sdelAsk===S.planId?'Tap again to delete':'Delete schedule')+'</button></div></div>';
   $('#sh-week').innerHTML=h;
   renderSchedImport();
 }
@@ -3820,7 +3842,7 @@ var ACT={
   weq:function(b){var k=b.dataset.k,i=S.have.indexOf(k);if(i>-1)S.have.splice(i,1);else S.have.push(k)},
   wtype:function(b){S.wf.cat=b.dataset.k;if(isSport()){S.wf.mu='all';S.wz=3}else{var q=wseq(),i=q.indexOf(0);S.wz=q[Math.min(q.length-1,i+1)]}window.scrollTo(0,0)},
   wmu:function(b){var k=b.dataset.k;if(k==='all'){S.wf.mu='all';return}var l=muList(S.wf.mu),i=l.indexOf(k);if(i>-1)l.splice(i,1);else l.push(k);S.wf.mu=l.length?l.join(','):'all'},
-  wsched:function(b){var pid=$('#w-plan')&&S.plans[$('#w-plan').value]?$('#w-plan').value:S.planId;S.addPlan=pid;S.plans[pid][S.addDay]=b.dataset.id;syncSched();toast('Added to '+schedName(pid)+' on '+DAYN[S.addDay]+'.')},
+  wsched:function(b){var L=schedList();if(!L.length&&!schedAdd()){toast('Add a schedule first.');return}var pid=$('#w-plan')&&L.indexOf($('#w-plan').value)>-1?$('#w-plan').value:S.planId;S.addPlan=pid;S.plans[pid][S.addDay]=b.dataset.id;syncSched();toast('Added to '+schedName(pid)+' on '+DAYN[S.addDay]+'.')},
   wedit:function(b){
     var w=wById(b.dataset.id);if(!w)return;var mine=w.cat==='custom';
     S.edit={id:mine?w.id:null,name:mine?w.name:w.name+' (my version)',mins:w.mins,level:w.level==='Custom'?'Intermediate':w.level,focus:w.focus||'',cat:w.cat,pl:w.pl,eq:w.eq,focus:w.focus,ex:w.ex.map(function(x){return x.slice()}),back:S.wz};window.scrollTo(0,0)
@@ -3860,7 +3882,7 @@ var ACT={
   siread:function(){S.siRes=siParse($('#si-text').value)},
   sisample:function(){$('#si-text').value=SI_SAMPLE;S.siRes=siParse(SI_SAMPLE)},
   siclear:function(){S.siRes=null},
-  siapply:function(){var o=S.siRes;if(!o)return;var made=0,set=0,plan=S.plans[S.planId].slice(),mk={};
+  siapply:function(){var o=S.siRes;if(!o)return;if(!schedList().length&&!schedAdd())return;var made=0,set=0,plan=S.plans[S.planId].slice(),mk={};
     o.days.forEach(function(e,d){if(!e)return;
       if(e.kind==='new'){var key=e.name+'|'+JSON.stringify(e.items);if(!mk[key]){var id='c'+(uid++);S.customW.push({id:id,name:String(e.name).slice(0,60),mins:Math.max(10,e.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:e.items.map(function(i){return [i.name,i.rx]})});mk[key]=id;made++}plan[d]=mk[key]}
       else if(e.kind==='rest')plan[d]=null;
@@ -3872,7 +3894,10 @@ var ACT={
       set++});
     S.plans[S.planId]=plan;syncSched();S.siRes=null;$('#si-text').value='';
     toast('Imported '+set+' day'+(set===1?'':'s')+' into '+schedName()+(made?', with '+made+' new workout'+(made===1?'':'s'):'')+'.')},
-  sreset:function(){S.plans[S.planId]=[null,null,null,null,null,null,null];S.planNames[S.planId]='';syncSched();toast('Schedule cleared.')},
+  sreset:function(){S.plans[S.planId]=[null,null,null,null,null,null,null];syncSched();toast('Schedule cleared.')},
+  sadd:function(){var L=schedList();if(L.length>=schedMax()){toast(isPro()?'You have the most schedules: 3.':'Free accounts get 1 schedule. Pro gets up to 3.');return}schedAdd();toast('Added a schedule. Pick a workout for each day.')},
+  sdel:function(){var id=S.planId;if(S.sdelAsk!==id){S.sdelAsk=id;setTimeout(function(){if(S.sdelAsk===id){S.sdelAsk=null;refresh()}},4000);return}
+    S.sdelAsk=null;var nm=schedName(id);S.plans[id]=[null,null,null,null,null,null,null];S.planNames[id]='';S.schedList=schedList().filter(function(x){return x!==id});S.planId=S.schedList[0]||'S1';syncSched();toast('Deleted '+nm+'.')},
   hfilter:function(b){S.hf=b.dataset.k},
   hdel:function(b){S.hist=S.hist.filter(function(x){return x.id!==b.dataset.id});syncSched();toast('Removed from history.')},
   hsamples:function(){S.hist=S.hist.filter(function(x){return !x.sample});syncSched();toast('Sample sessions removed.')},
