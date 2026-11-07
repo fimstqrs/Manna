@@ -622,7 +622,7 @@ input[type=text],input[type=number],select,textarea{
 .onb-wt .tick{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:none;place-items:center}
 .onb-wt .tick svg{width:15px;height:15px}
 .onb-wt[aria-pressed=true] .tick{display:grid}
-[data-cat=soccer]{--cc:#58B368}[data-cat=fball]{--cc:#A0724A}[data-cat=base]{--cc:#D96C6C}[data-cat=tennis]{--cc:#C8D64A}[data-cat=golf]{--cc:#3FA66B}[data-cat=swim]{--cc:#3DA5E0}[data-cat=volley]{--cc:#E8B84A}[data-cat=hockey]{--cc:#7C8CF0}[data-cat=cycle]{--cc:#E27BC9}
+[data-cat=soccer]{--cc:#58B368}[data-cat=fball]{--cc:#A0724A}[data-cat=base]{--cc:#D96C6C}[data-cat=tennis]{--cc:#C8D64A}[data-cat=golf]{--cc:#3FA66B}[data-cat=swim]{--cc:#3DA5E0}[data-cat=volley]{--cc:#E8B84A}[data-cat=hockey]{--cc:#7C8CF0}[data-cat=wrestle]{--cc:#B565D9}[data-cat=cycle]{--cc:#E27BC9}
 /* welcome + tutorial */
 #wel{position:fixed;inset:0;z-index:9500;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--ink);text-align:center;padding:24px;opacity:1;transition:opacity .6s ease}
 #wel[hidden]{display:none}#wel.out{opacity:0}
@@ -1468,7 +1468,8 @@ var WICON={
   swim:ic('<circle cx="16.5" cy="6" r="2"/><path d="M6.5 12.5l4.5-4 3.5 3.5M3 16c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1M3 20c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/>'),
   volley:ic('<circle cx="12" cy="12" r="9"/><path d="M12 3v9l7.8 4.5M12 12l-7.8 4.5M7 4.6c1.3 4.7 4.6 8 10 9.4M5.6 18.6c3.4-2.7 7.7-3.4 12.6-2"/>'),
   hockey:ic('<path d="M15 3L9.5 17.6A2.2 2.2 0 0 1 7.4 19H4v-2.6h3"/><ellipse cx="17" cy="18.5" rx="3.5" ry="1.5"/>'),
-  cycle:ic('<circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l3.8-7h5.4L18 16M9.8 9l2.4 7H6M13.5 6h2.5"/>')
+  cycle:ic('<circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l3.8-7h5.4L18 16M9.8 9l2.4 7H6M13.5 6h2.5"/>'),
+  wrestle:ic('<circle cx="7.5" cy="4.5" r="2"/><circle cx="16.5" cy="4.5" r="2"/><path d="M4 21l1.8-7.5L9 10l3 2.5 3-2.5 3.2 3.5L20 21M9 10l-1 4M15 10l1 4"/>')
 };
 function rowCard(icon,title,sub,done){
   return '<div class="rowcard"><span class="ri">'+ICON[icon]+'</span><div><div class="rt">'+title+'</div><div class="rs">'+sub+'</div></div><span class="ck'+(done?' on':'')+'">'+(done?ICON.check:'')+'</span></div>';
@@ -1655,8 +1656,8 @@ function renderHeroVerse(){
 /* ---------- workout library ---------- */
 var MUS={chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',core:'Core',glutes:'Glutes',quads:'Quads',hamstrings:'Hamstrings',calves:'Calves'};
 var MKEYS=Object.keys(MUS);
-var CATS={gym:'Gym',home:'Home equipment',body:'Bodyweight',cali:'Calisthenics',run:'Running',ball:'Basketball',cardio:'Cardio and sport',mobility:'Mobility',custom:'My workouts',soccer:'Soccer',fball:'Football',base:'Baseball',tennis:'Tennis',golf:'Golf',swim:'Swimming',volley:'Volleyball',hockey:'Hockey',cycle:'Cycling'};
-var SPORTS=['soccer','ball','fball','base','tennis','golf','swim','volley','hockey','cycle'];
+var CATS={gym:'Gym',home:'Home equipment',body:'Bodyweight',cali:'Calisthenics',run:'Running',ball:'Basketball',cardio:'Cardio and sport',mobility:'Mobility',custom:'My workouts',soccer:'Soccer',fball:'Football',base:'Baseball',tennis:'Tennis',golf:'Golf',swim:'Swimming',volley:'Volleyball',hockey:'Hockey',cycle:'Cycling',wrestle:'Wrestling'};
+var SPORTS=['soccer','ball','fball','base','tennis','golf','swim','volley','hockey','cycle','wrestle'];
 var EQ={bodyweight:'Bodyweight',bar:'Pull-up bar',bands:'Bands',dumbbells:'Dumbbells',kettlebell:'Kettlebell',bench:'Bench',barbell:'Barbell and rack',machines:'Gym machines',rope:'Jump rope',hoop:'Basketball and hoop',bike:'Bike',pool:'Pool'};
 var ACCESS=[['all','Everything'],['gym','Gym access'],['body','Bodyweight only'],['cali','Calisthenics'],['pick','Pick my equipment']];
 var EQ_GYM=['bodyweight','bar','bands','dumbbells','kettlebell','bench','barbell','machines','rope','bike'],EQ_CALI=['bodyweight','bar','bands','rope'];
@@ -1713,6 +1714,7 @@ function wMuscles(w){
 function W(id,name,cat,mins,level,eq,focus,pl,ex){return {id:id,name:name,cat:cat,mins:mins,level:level,eq:eq,focus:focus,pl:pl,ex:ex}}
 var _exa={"Shuttle runs": "quads,calves|hamstrings,glutes", "High knees": "quads|core,calves", "Lateral shuffles": "glutes,quads|calves", "Interval sprints": "hamstrings,quads|glutes,calves", "Ladder footwork": "calves|quads", "Split-step and shuffle": "calves,quads|glutes", "Medicine ball rotational throw": "core|shoulders", "Russian twist": "core", "Shadow swings": "shoulders|core", "Band external rotation": "shoulders", "Band internal rotation": "shoulders", "Scapular push-ups": "shoulders|chest", "Side plank": "core", "Thoracic rotation": "back|core", "Hip 90/90": "glutes", "Cat-cow": "back|core", "Pallof press": "core", "Dead bug": "core", "Single-arm row": "back|biceps", "Farmer carry": "back,core|shoulders", "Band pull-apart": "back,shoulders", "Pull-ups": "back,biceps", "Flutter kicks": "core|quads", "Superman": "back|glutes", "Single-leg Romanian deadlift": "hamstrings,glutes|back,core", "Medicine ball slam": "core,shoulders|back", "Burpees": "quads,chest|core,shoulders", "Mountain climbers": "core|shoulders,quads", "Lateral lunge": "quads,glutes|hamstrings", "Wall sit": "quads|glutes", "Skater jumps": "glutes,quads|calves", "Copenhagen plank": "core|glutes", "Hard intervals": "quads|glutes,calves", "Steady ride": "quads|calves,glutes", "Easy ride": "quads", "Freestyle laps": "shoulders,back|core,quads", "Kick set with board": "quads,glutes|core", "Pull set": "back,shoulders|biceps", "Squat": "quads,glutes|hamstrings,core"};
 Object.keys(_exa).forEach(function(k){if(!EXM[k])EXM[k]=_exa[k]});
+var _wr={"Sprawls": "quads,core|chest,shoulders,glutes", "Stance and motion": "quads,glutes|calves,core", "Penetration steps": "quads,glutes|hamstrings,core", "Double-leg shots": "quads,glutes|back,core,shoulders", "Single-leg shots": "quads,glutes|back,core", "Sprawl-and-shot drill": "quads,core|glutes,chest,shoulders", "Hand fighting": "shoulders,back|biceps,core", "Stand-ups": "quads,core|glutes,back", "Sit-outs": "core|glutes,shoulders", "Granby rolls": "core,back|shoulders", "Hip heists": "core,glutes|shoulders", "Neck bridges": "back|core", "Neck isometrics": "back|shoulders", "Towel pull-ups": "back,biceps|shoulders,core", "Farmer carry": "back,core|shoulders,quads", "Plate pinch": "biceps|shoulders", "Bear crawls": "shoulders,core|quads", "Sandbag clean": "back,glutes,hamstrings|quads,shoulders,core", "Medicine ball slam": "core,shoulders|back,triceps", "Broad jumps": "quads,glutes|hamstrings,calves", "Box jumps": "quads,glutes|calves,hamstrings", "Short sprints": "quads,hamstrings|glutes,calves", "Live drilling": "quads,back,core|shoulders,glutes,biceps", "Hindu push-ups": "chest,shoulders,triceps|core,back", "Spin drill": "core|shoulders,quads", "Shoulder dislocates with band": "shoulders,back", "Neck circles": "back", "Partner carries": "quads,glutes,back|core", "Rope climb": "back,biceps|shoulders,core", "Bridge and roll": "glutes,back|core"};Object.keys(_wr).forEach(function(k){if(!EXM[k])EXM[k]=_wr[k]});
 var LIB=[
  W('g1','Push Day','gym',45,'Intermediate',['barbell','bench','dumbbells','machines'],'Chest, shoulders, triceps','strength',[['Bench press','4×8'],['Incline dumbbell press','3×10'],['Overhead press','3×8'],['Cable fly','3×12'],['Triceps pushdown','3×12'],['Lateral raise','3×12']]),
  W('g2','Pull Day','gym',45,'Intermediate',['barbell','machines','dumbbells'],'Back and biceps','strength',[['Deadlift','3×5'],['Lat pulldown','4×10'],['Seated cable row','3×10'],['Face pull','3×15'],['Barbell curl','3×10'],['Hammer curl','2×12']]),
@@ -1784,6 +1786,16 @@ var LIB=[
  W("cy1","Endurance Ride","cycle",60,"Beginner",["bike"],"Aerobic base","run",[["Easy ride", "10 min warm-up"], ["Steady ride", "40 min, conversational pace"], ["Easy ride", "10 min cool-down"]]),
  W("cy2","Interval Ride","cycle",45,"Advanced",["bike"],"Power and speed","intervals",[["Easy ride", "10 min warm-up"], ["Hard intervals", "6\u00d73 min, 3 min easy between"], ["Easy ride", "10 min cool-down"]]),
  W("cy3","Strength for Cyclists","cycle",35,"Intermediate",["bodyweight"],"Legs and core","strength",[["Squat", "3\u00d712"], ["Walking lunge", "3\u00d710 per side"], ["Single-leg Romanian deadlift", "3\u00d78 per side"], ["Glute bridge", "3\u00d712"], ["Standing calf raise", "3\u00d715"], ["Plank", "3\u00d740 s"]]),
+ W("wr1","Takedown Drill Session","wrestle",40,"Beginner",["bodyweight"],"Shots, sprawls and hand fighting","sport",[["Stance and motion", "5 min"], ["Penetration steps", "4×10 per side"], ["Double-leg shots", "5×5 per side"], ["Single-leg shots", "4×5 per side"], ["Sprawl-and-shot drill", "6×30 s"], ["Hand fighting", "4×1 min"]]),
+ W("wr2","Wrestling Conditioning Circuit","wrestle",30,"Intermediate",["bodyweight"],"Match-pace conditioning","intervals",[["Sprawls", "6×30 s"], ["Burpees", "4×10"], ["Penetration steps", "4×10 per side"], ["Bear crawls", "4×30 s"], ["Mountain climbers", "3×30 s"], ["Plank", "3×45 s"]]),
+ W("wr3","Bottom Escapes and Mat Returns","wrestle",35,"Intermediate",["bodyweight"],"Get out from bottom","sport",[["Stand-ups", "5×5"], ["Sit-outs", "4×8 per side"], ["Granby rolls", "4×6 per side"], ["Hip heists", "3×10 per side"], ["Bridge and roll", "3×8 per side"], ["Spin drill", "4×30 s"]]),
+ W("wr4","Neck and Grip Strength","wrestle",25,"Beginner",["bodyweight", "dumbbells"],"Neck, grip and hand strength","strength",[["Neck isometrics", "3×20 s each direction"], ["Neck bridges", "3×30 s"], ["Towel pull-ups", "3×5"], ["Farmer carry", "4×30 s"], ["Plate pinch", "3×20 s"], ["Neck circles", "2×10 each way"]]),
+ W("wr5","Wrestler Strength Day","wrestle",50,"Intermediate",["barbell", "bar"],"Full-body strength","strength",[["Back squat", "4×5"], ["Deadlift", "3×5"], ["Pull-ups", "4×6"], ["Overhead press", "3×6"], ["Farmer carry", "3×30 s"], ["Hanging knee raise", "3×12"]]),
+ W("wr6","Explosive Power for Wrestlers","wrestle",35,"Advanced",["bodyweight", "dumbbells"],"Speed and power on the shot","strength",[["Box jumps", "4×5"], ["Medicine ball slam", "4×8"], ["Broad jumps", "4×5"], ["Sandbag clean", "4×5"], ["Short sprints", "6×10 s"]]),
+ W("wr7","Match Simulation","wrestle",25,"Advanced",["bodyweight"],"Three hard periods","intervals",[["Live drilling", "3×2 min"], ["Sprawls", "3×30 s"], ["Burpees", "3×10"], ["Stand-ups", "3×5"], ["Hand fighting", "3×1 min"]]),
+ W("wr8","Aerobic Base for Wrestlers","wrestle",40,"Beginner",["bodyweight", "rope"],"Steady engine, no weight cutting","run",[["Easy run", "25 min"], ["Jump rope", "5×2 min"], ["Bear crawls", "3×30 s"]]),
+ W("wr9","Wrestler Mobility","wrestle",20,"Beginner",["bodyweight", "bands"],"Hips, shoulders and neck","mobility",[["Hip flexor stretch", "2×45 s per side"], ["World's greatest stretch", "2×5 per side"], ["Shoulder dislocates with band", "2×10"], ["Thoracic rotations", "2×8 per side"], ["Pigeon pose", "2×45 s per side"], ["Neck circles", "2×10 each way"]]),
+ W("wr10","No-Equipment Wrestler Circuit","wrestle",30,"Beginner",["bodyweight"],"Train anywhere","intervals",[["Hindu push-ups", "4×10"], ["Jump squats", "4×10"], ["Sprawls", "4×30 s"], ["Bear crawls", "4×30 s"], ["Sit-outs", "3×8 per side"], ["Plank", "3×40 s"]]),
 ];
 var DAYN=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 var SCHED_T=[
@@ -2147,6 +2159,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:123,d:'Nov 7, 2026',t:'Wrestling workouts',s:['Added a Wrestling category with 10 template workouts: takedown drills, conditioning, bottom escapes, neck and grip, strength, explosive power, match simulation, aerobic base, mobility and a no-equipment circuit.','Each shows its muscle groups on the body diagram, and you can pick Wrestling in setup and search.']},
  {v:122,d:'Nov 7, 2026',t:'Smoother, livelier pop-ups',s:['Pop-ups like What’s new, sign-in, updates and your logged foods now spring open, with their content cascading in and a soft shine, and slide away when closed.','New Graphics and animations setting in Settings › Look: Auto, Low, Medium or High, just for this device. Auto picks for you and switches to a lighter level if a device struggles.','Blurring behind a pop-up now waits until it has opened, which keeps the opening smooth.']},
  {v:121,d:'Nov 7, 2026',t:'Real fast logging, no Community',s:['Fast logging: Speak it uses your microphone to log a meal by voice.','Photo snaps your plate and AI adds each food.','Import workout file adds a finished run, ride, walk or swim from a .gpx or .tcx file (from Strava, Garmin, Apple Watch apps and more). It counts toward your history and streak.','Removed the Community page and its demo challenges and friends.']},
  {v:120,d:'Nov 7, 2026',t:'Polish pass',s:['Fixed the streak flame not showing on the Workouts page.','The small page tabs at the top (like Workouts, Schedule, History) are easier to read in dark themes.','The old, empty More page now opens Settings, and no longer leaves a box around the Settings tab.','Updated the Weekly schedule intro to match how schedules work now.']},
@@ -2469,7 +2482,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='122';
+var heroLast='',APPV='123';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3133,7 +3146,7 @@ function allowedEq(m){
   var l=m==='gym'?EQ_GYM:m==='body'?['bodyweight']:m==='cali'?EQ_CALI:S.have.concat(['bodyweight']),o={};
   l.forEach(function(k){o[k]=1});return o;
 }
-var SPKW={soccer:/soccer/,ball:/basketball|hoops/,fball:/football/,base:/baseball|softball/,tennis:/tennis/,golf:/golf/,swim:/swim/,volley:/volleyball/,hockey:/hockey/,cycle:/cycling|cyclist|bicycle|\bbike\b|\bspin\b/};
+var SPKW={soccer:/soccer/,ball:/basketball|hoops/,fball:/football/,base:/baseball|softball/,tennis:/tennis/,golf:/golf/,swim:/swim/,volley:/volleyball/,hockey:/hockey/,cycle:/cycling|cyclist|bicycle|\bbike\b|\bspin\b/,wrestle:/wrestl|grappl|\bbjj\b|jiu[ -]?jitsu|takedown/};
 function inCat(w,c){if(c==='all')return true;if(w.cat===c)return true;var r=SPKW[c];return !!(r&&r.test((w.name+' '+(w.focus||'')).toLowerCase()))}
 /* Muscle filter is 'all' or a comma list such as 'chest,back' */
 function muList(m){return !m||m==='all'?[]:String(m).split(',').filter(Boolean)}
