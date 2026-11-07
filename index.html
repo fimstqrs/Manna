@@ -737,6 +737,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .rnm.sm{flex-wrap:wrap;border-bottom-width:1px}.rnm.sm .rnm-in{font-size:1rem;font-weight:700}.rnm.sm>.small{flex-basis:100%}
 .rnm:focus-within{border-bottom-style:solid;border-color:var(--accent)}
 .rnm-ic{color:var(--accent);font-size:1rem}
+.mumapwrap.mini{margin-top:.6rem}
 .sempty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.6rem;padding:1.4rem .5rem}
 .sempty-ic{font-size:2.6rem}
 .scard.sadd{border-style:dashed;cursor:pointer}
@@ -1055,7 +1056,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
       </div>
       </div></div>
       <div class="stack" id="w-cur" hidden>
-        <div class="row"><button class="btn" data-act="wback">‹ Back to workouts</button><button class="btn" data-act="wgo" data-s="0">Change my picks</button></div>
+        <div class="row"><button class="btn" data-act="wback">‹ Back to workouts</button></div>
         <div class="card stack" id="w-detail"></div>
         <div class="card stack" id="w-edit" hidden></div>
       </div>
@@ -1651,7 +1652,32 @@ var EXM={
  'Jump rope':'calves|shoulders,core','Shadowboxing':'shoulders|core,triceps,back','Cycling warm-up':'quads|glutes,calves,hamstrings','Hard cycling intervals':'quads|glutes,calves,hamstrings','Easy cycling':'quads|glutes,calves','Swimming':'back,shoulders|core,triceps,quads','Kick drills':'quads,glutes|core','Cool-down swim':'back,shoulders','Dribbling drills':'quads|calves,glutes','Passing drills':'quads,glutes','Shuttle runs':'quads,hamstrings,calves','Small-sided game':'quads,calves,hamstrings|glutes,core',
  'Cat-cow':'back,core','Child\'s pose':'back|glutes','World\'s greatest stretch':'hamstrings,glutes|quads,back','Hip flexor stretch':'quads|glutes','Downward dog':'shoulders,hamstrings,calves|back','Pigeon pose':'glutes','Thoracic rotations':'back|core','Hamstring stretch':'hamstrings','Single-leg balance':'calves,glutes|core'
 };
-function muOf(name){var s=EXM[name];if(!s)return [[],[]];var a=s.split('|');return [a[0]?a[0].split(','):[],a[1]?a[1].split(','):[]]}
+/* Muscles for any exercise name: exact, then loose match, then by keywords (for imported and AI workouts) */
+var MUKW=[[/leg curl|hamstring curl|nordic/,'hamstrings'],[/tricep|pushdown|push-down|skull|close[ -]?grip/,'triceps'],[/lateral raise|front raise|rear delt|upright row|delt/,'shoulders'],[/leg press|hack squat/,'quads|glutes,hamstrings'],[/leg extension/,'quads'],[/calf|calves/,'calves'],
+ [/hip thrust|glute bridge|bridge|kickback|abduct|clamshell|donkey kick/,'glutes|hamstrings'],[/deadlift|rdl|good ?morning|hinge|swing/,'hamstrings,glutes|back,core'],
+ [/squat|lunge|step[ -]?up|split squat|wall sit|pistol|box jump|jump/,'quads,glutes|hamstrings,core'],
+ [/rowing|erg\b|rower/,'back,quads|glutes,biceps,core'],[/pull[ -]?up|chin[ -]?up|pull[ -]?down|lat\b|row\b|rows\b|face pull|shrug/,'back|biceps,shoulders'],
+ [/bench|chest press|push[ -]?up|press[ -]?up|fly|flye|pec|dip/,'chest,triceps|shoulders'],[/overhead|shoulder press|military|arnold|pike|handstand/,'shoulders|triceps'],
+ [/curl|bicep/,'biceps'],
+ [/plank|crunch|sit[ -]?up|\babs?\b|core|leg raise|knee raise|russian twist|hollow|v[ -]?up|dead ?bug|bird ?dog|mountain climber|flutter|toe touch/,'core'],
+ [/burpee/,'chest,quads|shoulders,core,triceps'],[/run|jog|sprint|treadmill|5k|10k/,'quads,calves|hamstrings,glutes'],[/cycl|bike|spin/,'quads|glutes,calves,hamstrings'],
+ [/swim/,'back,shoulders|core,triceps'],[/jump rope|skip/,'calves|shoulders,core'],[/walk|hike|stair/,'quads,glutes|calves,hamstrings'],[/box(ing)?|punch|shadow/,'shoulders|core,triceps,back'],
+ [/press/,'shoulders,chest|triceps']];
+var MUC={};
+function muOf(name){
+  if(MUC[name])return MUC[name];
+  var str=EXM[name];
+  if(!str){var n=String(name||'').toLowerCase().trim(),keys=Object.keys(EXM);
+    for(var i=0;i<keys.length&&!str;i++)if(keys[i].toLowerCase()===n)str=EXM[keys[i]];
+    if(!str){var sing=n.replace(/\b(db|dumbbells?|barbells?|bb|kettlebells?|kb|cable|machine|smith|band(ed)?|weighted|seated|standing|incline|decline|flat)\b/g,' ').replace(/s\b/g,'').replace(/\s+/g,' ').trim();
+      for(var j=0;j<keys.length&&!str;j++){var kk=keys[j].toLowerCase().replace(/s\b/g,'');if(kk===sing||(sing.indexOf(' ')>-1&&kk.indexOf(sing)>-1)||(kk.indexOf(' ')>-1&&kk.length>6&&sing.indexOf(kk)>-1))str=EXM[keys[j]]}}
+    if(!str)for(var m=0;m<MUKW.length;m++)if(MUKW[m][0].test(n)){str=MUKW[m][1];break}}
+  var r=[[],[]];if(str){var a=str.split('|');r=[a[0]?a[0].split(','):[],a[1]?a[1].split(','):[]]}
+  return MUC[name]=r;
+}
+/* Diagram for a list of exercises, used in the AI and import previews */
+function muPreview(items){var lv=wMuscles({ex:items.map(function(i){return [i.name,i.rx]})});if(!Object.keys(lv).length)return '';
+  return '<div class="mumapwrap mini">'+muscleSvg(lv)+'<div class="mulegend"><span><i class="m2"></i>Main</span><span><i class="m1"></i>Helping</span></div><div class="muchips">'+muChips(lv)+'</div></div>'}
 function wMuscles(w){
   var sc={},mx=0,lv={},k;
   w.ex.forEach(function(e){var m=muOf(e[0]);m[0].forEach(function(x){sc[x]=(sc[x]||0)+2});m[1].forEach(function(x){sc[x]=(sc[x]||0)+1})});
@@ -1784,7 +1810,7 @@ var POOL={
  cardio:[['Walking','bw'],['Easy cycling','gym'],['Running','bw'],['Jump rope','rope'],['Swimming','pool']],
  mobility:[['Cat-cow','bw'],['Hip flexor stretch','bw'],['Thoracic rotations','bw'],['Walking','bw']]
 };
-var ALIAS=[[/pull[\s-]?up|chin[\s-]?up/,'Pull-ups'],[/push[\s-]?up/,'Push-ups'],[/squat/,'Squat'],[/bench/,'Bench press'],[/overhead|ohp|shoulder press/,'Overhead press'],[/lat pull/,'Lat pulldown'],[/lateral raise/,'Lateral raise'],[/row/,'Bent-over row'],[/dead\s?lift/,'Deadlift'],[/lunge/,'Lunges'],[/calf/,'Calf raise'],[/plank/,'Plank'],[/glute bridge|hip thrust/,'Glute bridge'],[/bird dog/,'Bird dog'],[/kettlebell|kb swing|swing/,'Kettlebell swing'],[/leg press/,'Leg press'],[/jump rope|skipping/,'Jump rope'],[/run|jog/,'Running'],[/cycl|bike/,'Easy cycling'],[/swim/,'Swimming'],[/walk/,'Walking']];
+var ALIAS=[[/pull[\s-]?up|chin[\s-]?up/,'Pull-ups'],[/push[\s-]?up/,'Push-ups'],[/squat/,'Squat'],[/bench/,'Bench press'],[/overhead|ohp|shoulder press/,'Overhead press'],[/lat pull/,'Lat pulldown'],[/lateral raise/,'Lateral raise'],[/^(?!.*(upright|rowing|rower|machine|cable|seated|single|one[ -]?arm|db|dumbbell|kettlebell|band|inverted|t-bar|pendlay)).*\b(bent[ -]?over |barbell )?rows?\b/,'Bent-over row'],[/dead\s?lift/,'Deadlift'],[/lunge/,'Lunges'],[/calf/,'Calf raise'],[/plank/,'Plank'],[/glute bridge|hip thrust/,'Glute bridge'],[/bird dog/,'Bird dog'],[/kettlebell|kb swing|swing/,'Kettlebell swing'],[/leg press/,'Leg press'],[/jump rope|skipping/,'Jump rope'],[/run|jog/,'Running'],[/cycl|bike/,'Easy cycling'],[/swim/,'Swimming'],[/walk/,'Walking']];
 var NOTE_SAMPLE='Leg day (from my phone)\nsquats 4x8\nlunges 3 x 10\ndeadlift 3x6 @ 60kg\ncalf raises 3x15\nplank 3x40s\nrun 10 min easy\nstretch if time';
 var AI_EX=['30 minutes, dumbbells only, upper body','20 minutes, no equipment, core, easy on my back','45 minutes, cardio, gym bike, steady pace','Mobility session, 15 minutes, I slept badly'];
 
@@ -2096,6 +2122,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:119,d:'Nov 7, 2026',t:'Muscles for every workout',s:['Imported and AI-built workouts now show their muscle groups on the body diagram, even when exercises are written differently, like Incline DB press or Tricep pushdowns.','The AI and import previews show the diagram too, before you save.','Removed the Change my picks button from Workouts. Templates has its own page.']},
  {v:118,d:'Nov 7, 2026',t:'Smarter text import',s:['Importing a routine or schedule from text understands many more ways of writing: 4x8 squats, 3 sets of 10 bench @ 135lb, 20 push ups, plank 1:30, 5k run, curls 3x8-12, 3 rounds of a list, numbered and bulleted lists, and more.','If some lines still cannot be read, tap Read it with AI (one AI use).','Tap the name of an imported routine, schedule or new workout in the preview to rename it before saving.']},
  {v:117,d:'Nov 7, 2026',t:'Swipe up and down everywhere',s:['On phones, every page with several sections now works TikTok style: Settings pages, Saved workouts, What are you eating, Weekly schedule and more. Swipe up or down to move one section at a time.','Dots on the right show where you are. Long sections scroll normally first.']},
  {v:116,d:'Nov 7, 2026',t:'Make your own schedules',s:['Weekly schedule now starts empty. Tap Add a schedule to make one.','Free accounts get 1 schedule and Pro accounts up to 3. Schedules you already made are kept.','You can delete a schedule, and adding a workout to a schedule makes one if you have none.']},
@@ -2388,7 +2415,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='118';
+var heroLast='',APPV='119';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3544,7 +3571,7 @@ function renderAI(){
   $('#ai-prompt').textContent=buildPrompt(($('#ai-text').value||'').trim());
   var o=S.ai,h='';
   if(o){
-    h='<div class="note stack"><b>'+esc(o.name)+'</b><div>'+o.items.map(function(e){return '<div class="ex"><div><b>'+esc(e.name)+'</b> '+exBadge(e.state)+'</div><span class="mono">'+esc(e.rx)+'</span></div>'}).join('')+'</div><p class="small">Warm-up: 5 minutes of easy walking and joint circles. Cool-down: 3 minutes of slow breathing.</p>'+(o.notes.length?'<ul class="list">'+o.notes.map(function(n){return '<li><div class="small">'+esc(n)+'</div></li>'}).join('')+'</ul>':'')+'<div class="row"><button class="btn sm primary" data-act="aisave">Save to library</button></div></div>';
+    h='<div class="note stack"><b>'+esc(o.name)+'</b><div>'+o.items.map(function(e){return '<div class="ex"><div><b>'+esc(e.name)+'</b> '+exBadge(e.state)+'</div><span class="mono">'+esc(e.rx)+'</span></div>'}).join('')+'</div>'+muPreview(o.items)+'<p class="small">Warm-up: 5 minutes of easy walking and joint circles. Cool-down: 3 minutes of slow breathing.</p>'+(o.notes.length?'<ul class="list">'+o.notes.map(function(n){return '<li><div class="small">'+esc(n)+'</div></li>'}).join('')+'</ul>':'')+'<div class="row"><button class="btn sm primary" data-act="aisave">Save to library</button></div></div>';
   }
   $('#ai-out').innerHTML=aiStatus()+h+'<p class="small muted aileft"></p>';
 }
@@ -3619,6 +3646,7 @@ function renderNotes(){
   if(o){
     var st=stageCalc();
     h='<div class="note stack"><label class="rnm" for="nt-title"><span class="vh-only">Routine name</span><input id="nt-title" class="rnm-in" maxlength="60" value="'+esc(o.title)+'" autocomplete="off"><span class="rnm-ic" aria-hidden="true">✎</span></label><p class="small muted" style="margin:-.3rem 0 0">Tap the name to rename it.</p><div>'+(o.items.length?o.items.map(function(e){var state=exState(e.name,S.area,st);return '<div class="ex"><div><b>'+esc(e.name)+'</b> '+exBadge(state)+'</div><span class="mono">'+esc(e.rx)+'</span></div>'}).join(''):'<p>No exercises found. Try lines like "squats 4x8".</p>')+'</div>';
+    if(o.items.length)h+=muPreview(o.items);
     if(o.skipped.length||!o.items.length)h+='<p class="small muted">'+(o.skipped.length?'Could not read: '+o.skipped.map(esc).join('; '):'')+'</p><div class="row"><button class="btn sm" data-act="ntai"'+(S.ntBusy?' disabled':'')+'>'+(S.ntBusy?'Reading with AI…':'Read it with AI (1 AI use)')+'</button></div>'+(S.ntMsg?'<p class="note warn small">'+esc(S.ntMsg)+'</p>':'');
     if(o.items.length)h+='<div class="row"><button class="btn primary sm" data-act="ntsave">Save as routine</button></div>';
     h+='</div>';
