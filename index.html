@@ -822,7 +822,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <div class="frow" id="w-equip-row" hidden><span class="eyebrow">Your equipment</span><div class="chips" id="w-equip"></div></div></div>
         <div class="stack" id="ws-2" hidden><h3>Which muscles?</h3><p class="small muted">Pick as many as you like.</p><div class="chips" id="w-muscles"></div></div>
         <div class="stack" id="ws-3" hidden><h3>Pick a workout</h3><p class="small muted" id="w-count" aria-live="polite"></p><div class="wgrid" id="w-grid"></div></div>
-        <div class="row" id="w-nav"><button class="btn" data-act="wback" id="w-back">‹ Back</button><button class="btn primary" data-act="wnext" id="w-next">Next</button><button class="btn" data-act="aifocus" id="w-skip">Or describe it in words</button></div>
+        <div class="row" id="w-nav"><button class="btn" data-act="wback" id="w-back">‹ Back</button><button class="btn primary" data-act="wnext" id="w-next">Next</button></div>
       </div>
       <div class="stack" id="w-cur" hidden>
         <div class="row"><button class="btn" data-act="wback">‹ Back to workouts</button><button class="btn" data-act="wgo" data-s="0">Change my picks</button></div>
@@ -831,7 +831,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
       </div>
       <div class="card stack" id="w-ai">
           <h3>Build with AI</h3>
-          <p class="small muted">Describe the session in your own words. The demo builder uses simple rules. The full prompt a language model would receive is shown below it.</p>
+          <p class="small muted">Describe the session in your own words and AI builds it. After your daily AI uses, Manna builds it from its own rules instead.</p>
           <textarea id="ai-text" aria-label="Describe the workout you want" placeholder="30 minutes, dumbbells only, upper body, go easy on my knee"></textarea>
           <div class="chips" id="ai-ex"></div>
           <div class="row"><button class="btn primary" data-act="aigen">Build workout</button></div>
@@ -944,11 +944,11 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
       </div>
       <div class="card stack">
         <h3>Don't know what's in it?</h3>
-        <p class="small muted">Write it the way you would say it, like "two slices of pepperoni pizza and a cola". Claude estimates the calories, protein and more, and you can adjust the amount before adding it.</p>
+        <p class="small muted">Write it the way you would say it, like "two slices of pepperoni pizza and a cola". AI estimates the calories, protein and more, and you can adjust the amount before adding it.</p>
         <textarea id="e-ai" aria-label="Describe what you ate" placeholder="What did you eat, and about how much?"></textarea>
         <div class="row" style="align-items:flex-end"><label class="f" for="e-amt" style="flex:1;min-width:9rem">Amount, if you know it (optional)<input type="number" id="e-amt" min="0" step="any" inputmode="decimal" placeholder="e.g. 250"></label><div class="chips" id="e-unit" role="group" aria-label="Amount units"></div></div>
         <p class="small muted">If you enter an amount, the estimate is for exactly that much, and the amount carries over to the food's details.</p>
-        <div class="row"><button class="btn primary" data-act="eestimate">Estimate with Claude</button></div>
+        <div class="row"><button class="btn primary" data-act="eestimate">Estimate with AI</button><span class="small muted aileft"></span></div>
       </div>
       <div class="card stack" id="e-water" hidden>
         <div id="e-water-body" class="stack"></div>
@@ -1142,7 +1142,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
           <div class="row"><button class="btn" data-act="copy">Copy my data</button><button class="btn" id="p-reset" data-act="reset">Delete all my data</button></div>
         </div>
       </div>
-      <div id="more-list" class="stack"><h3 class="eyebrow" style="margin-top:.5rem">All pages</h3></div>
+      <div class="card stack" id="vl-card"><div class="sh"><h3>Version log</h3><p class="small muted" id="vl-now"></p></div><div class="wnall" id="vl-list"></div></div>
     </section>
   </main>
 </div>
@@ -1662,7 +1662,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['est','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals}}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
   try{(d.customW||[]).concat(d.hist).forEach(function(x){var n=parseInt(String(x&&x.id||'').replace(/^[a-z]+/,''),10);if(n>=uid)uid=n+1})}catch(e){}
@@ -1839,6 +1839,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:87,d:'Nov 6, 2026',t:'Real AI',s:['Build with AI and food estimates now use a real AI model, including food photos.','You get 5 AI uses a day. After that, workouts are built from Manna’s own rules.','Settings has a Version log of every update. The All pages list is gone.','Removed the Or describe it in words button from Fitness.']},
  {v:86,d:'Nov 6, 2026',t:'What’s new',s:['After each update, this screen shows what changed.','Scroll down for every past update, or open it any time from Settings.','The Bible and credits section in Settings is now just Credits.']},
  {v:85,d:'Nov 6, 2026',t:'Simpler targets',s:['Your targets on Fuel no longer show the protein-per-kg line.']},
  {v:84,d:'Nov 6, 2026',t:'Calmer setup',s:['Switching kg and lb in setup no longer replays the animation.','The top 3 workouts counter fills in three dots as you pick and stays in view.']},
@@ -1882,6 +1883,9 @@ function wnCheck(){
   if(busy('splash')||busy('onb')||busy('wel')||busy('tour')||busy('fm')||document.hidden){setTimeout(wnCheck,700);return}
   wnOpen();
 }
+function vlPaint(){var n=$('#vl-now'),l=$('#vl-list');if(!n||!l)return;n.textContent='You are on Version '+APPV+'. Tap any update to see what changed.';
+  l.innerHTML=CHANGES.map(function(u){return '<details><summary><span><b>Version '+u.v+'</b> · '+esc(u.t)+'</span><span class="small muted">'+esc(u.d)+'</span></summary><ul class="wnl sm">'+u.s.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></details>'}).join('')}
+setTimeout(vlPaint,0);
 setTimeout(wnCheck,1200);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#wn').hidden)ACT.wnclose()});
 var TOUR=[
@@ -1889,13 +1893,13 @@ var TOUR=[
  {v:'today',sel:'#t-energy',t:"Today's progress",p:'Calories, protein, water and workouts for the day in one place. Tap a number to change it, and choose which stats you want to see.'},
  {v:'today',sel:'#t-train',t:"Today's workout",p:'The workout from your schedule, plus your top 3 workouts. Tap one to open it.'},
  {v:'today',sel:'#t-check',t:'Daily checklist',p:'Small habits for the day. You can add your own items. Use the reorder button at the bottom of Home to move or hide any card.'},
- {v:'eat',sel:'#v-eat .vh',t:'Log what you eat',p:'Type a food, snap a photo or describe a meal. Tap a result to see its macros, change the amount and add it to today. Anything Claude estimates is saved so you can use it again.'},
+ {v:'eat',sel:'#v-eat .vh',t:'Log what you eat',p:'Type a food, snap a photo or describe a meal. Tap a result to see its macros, change the amount and add it to today. Anything AI estimates is saved so you can use it again.'},
  {v:'eat',sel:'#t-targets',t:'Your targets',p:'Your calorie and macro goals, worked out from your goals, age, height, weight and activity. You can change them in Settings.'},
  {v:'meals',sel:'#m-sum',t:"Today's meals",p:'Everything you logged today, in order, with the time you logged it.'},
  {v:'foods',sel:'#v-foods .vh',t:'Browse foods',p:'About 7,500 everyday foods plus fast food, scored against your targets. Search or filter, then tap a food for details.'},
  {v:'log',sel:'#v-log .vh',t:'Fast logging',p:'Type a sentence like "two eggs and toast" to log a meal. Foods you log often show up here for one tap.'},
  {v:'workouts',sel:'#w-sbox',t:'Find a workout',p:'Search by name, sport or exercise, or answer a few questions: what kind of workout, then the muscles. Sports go straight to a list from easy to hard.'},
- {v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and Claude builds it. Every workout can be changed with the Configure button.'},
+ {v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and AI builds it. Every workout can be changed with the Configure button.'},
  {v:'schedule',sel:'#sh-plans',t:'Three schedules',p:'Name each schedule and pick a workout for every day. The selected schedule drives Today and your home page.'},
  {v:'history',sel:'#v-history .vh',t:'Workout history',p:'Every finished session with the sets you logged, plus your week at a glance.'},
  {v:'scripture',sel:'#sc-votd',t:'Word for today',p:'A new verse each day and the whole Bible to read. Your favorite verse shows here too.'},
@@ -2051,7 +2055,7 @@ function onbInput(e){
   o.addEventListener('input',onbInput);
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
-var heroLast='',APPV='86';
+var heroLast='',APPV='87';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2254,8 +2258,29 @@ function shrink(file){
     return new Promise(function(res,rej){c.toBlob(function(b){b?res({blob:b,url:c.toDataURL('image/jpeg',.5)}):rej(new Error('image'))},'image/jpeg',.85)});
   });
 }
+/* AI: 5 uses a day per device for now (accounts will move this count to the server) */
+var AI_DAY=5;
+function aiUsed(){try{var o=JSON.parse(localStorage.getItem('manna.ai.v1')||'{}');return o.d===dk(Date.now())?(o.n||0):0}catch(e){return 0}}
+function aiCount(){try{localStorage.setItem('manna.ai.v1',JSON.stringify({d:dk(Date.now()),n:aiUsed()+1}))}catch(e){}}
+function aiLeft(){return Math.max(0,AI_DAY-aiUsed())}
+function aiLeftText(){var n=aiLeft();return n?n+' of '+AI_DAY+' AI uses left today':'No AI uses left today. They reset at midnight.'}
+function blobUrl(b){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(r.result)};r.onerror=no;r.readAsDataURL(b)})}
+var SERVER_AI={
+  json:function(inst,opts){
+    if(aiLeft()<=0)return Promise.reject({code:'limit'});
+    var img=opts&&opts.images&&opts.images[0];
+    return (img?blobUrl(img):Promise.resolve(null)).then(function(u){
+      return fetch('/api/ai',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt:inst,image:u||undefined})});
+    }).then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})}).then(function(j){
+      if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};aiCount();return j.data;
+    },function(e){throw (e&&e.code)?e:{code:'offline'}});
+  },
+  limits:function(){return {images:true}}
+};
+function aiErr(code){return code==='limit'?'You have used today’s '+AI_DAY+' AI uses. They reset at midnight.':code==='nokey'?'AI is not switched on for Manna yet.':code==='rate_limited'?'AI is busy right now. Try again in a minute.':code==='offline'?'You seem to be offline.':code==='too_big'?'That photo is too large. Try another.':'AI could not do that right now. Try again.'}
 function getSample(){
-  try{if(typeof claude==='undefined'||!claude.use)return Promise.resolve(null);return Promise.resolve(claude.use('sample')).catch(function(){return null})}catch(e){return Promise.resolve(null)}
+  try{if(typeof claude!=='undefined'&&claude.use)return Promise.resolve(claude.use('sample')).catch(function(){return location.protocol==='file:'?null:SERVER_AI})}catch(e){}
+  return Promise.resolve(location.protocol==='file:'?null:SERVER_AI);
 }
 function num(v,mx){v=parseFloat(v);return isFinite(v)?Math.max(0,Math.min(mx,v)):0}
 function readAmt(){
@@ -2270,7 +2295,7 @@ function askFood(text,file){
   prep.catch(function(){return null}).then(function(blob){
     if(file&&!blob){ASK={busy:false,msg:'That image could not be read. Try another photo.',img:''};refresh();return}
     return getSample().then(function(sample){
-      if(!sample){ASK={busy:false,msg:'Photo and estimate lookups need Claude, which is not available in this view. Search the list or type a food name instead.',img:''};refresh();return}
+      if(!sample){ASK={busy:false,msg:'AI estimates are not available here. Search the list or type a food name instead.',img:''};refresh();return}
       var go=function(){
         var ids=BASE.concat(CHAIN).map(function(f){return f.id+' = '+f.name+' ('+f.serv+')'}).join('\n');
         var inst='You identify food for a calorie tracker. '+(blob?'The attached photo shows what the person is eating.':'The person says they are eating: "'+String(text).slice(0,200)+'".')+(amt?' The portion is exactly '+amt+' g ('+Math.round(amt/28.3495*10)/10+' oz). Every number you return must be for exactly that amount.':'')+' If one item in this list is clearly the same food, give its id as matchId, otherwise null:\n'+ids+'\nReturn JSON only: {"name": string or null, "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number}. Numbers are for the portion shown, or one typical serving. If it is not food, set name to null.';
@@ -2287,11 +2312,11 @@ function askFood(text,file){
       return (blob?Promise.resolve(sample.limits()).then(function(l){if(!l||!l.images)throw {code:'noimg'}}):Promise.resolve()).then(go);
     }).catch(function(e){
       var code=e&&e.code;
-      ASK={busy:false,msg:code==='noimg'?'This view cannot send photos to Claude. Type the food name instead.':code==='not_granted'?'Claude access was declined, so photo and estimate lookups are off. You can still search the list.':code==='rate_limited'?'Too many requests. Wait a moment and try again.':'Claude could not look that up. Try again, or search the list.',img:''};refresh();
+      ASK={busy:false,msg:['limit','nokey','rate_limited','offline','too_big'].indexOf(code)>-1?aiErr(code):code==='noimg'?'Photos cannot be sent from here. Type the food name instead.':code==='not_granted'?'Claude access was declined, so photo and estimate lookups are off. You can still search the list.':code==='rate_limited'?'Too many requests. Wait a moment and try again.':'AI could not look that up. Try again, or search the list.',img:''};refresh();
     });
   });
 }
-var FCATS=[['all','All'],['fav','Favorites'],['protein','High protein'],['light','Light, under 150 cal'],['fast','Fast food'],['top','Top rated'],['mine','My Claude estimates'],['verified','Verified only']];
+var FCATS=[['all','All'],['fav','Favorites'],['protein','High protein'],['light','Light, under 150 cal'],['fast','Fast food'],['top','Top rated'],['mine','My AI estimates'],['verified','Verified only']];
 function renderFoods(){
   var FC=FCATS.filter(function(a){return a[0]!=='fav'||X('favs')});if(S.fcat==='fav'&&!X('favs'))S.fcat='all';
   chipGroup('f-cats',FC.map(function(a){return {k:a[0],label:a[1],on:S.fcat===a[0]}}),'fcat');
@@ -2302,9 +2327,9 @@ function renderFoods(){
   $('#f-meta').textContent='Showing '+Math.min(list.length,S.fshow)+' of '+list.length+' matches. '+allFoods().length+' foods in the database.';
   $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try What are you eating? to search or estimate it.</p>';
   var qq=($('#f-q').value||'').trim(),el=foodList(qq,'all');
-  $('#e-res').innerHTML=qq?(el.length?el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">Ask Claude to estimate "'+esc(qq.slice(0,40))+'"</button></div></div>'):'';
-  var _se=S.est.length?'<details><summary class="small">Saved Claude estimates ('+S.est.length+')</summary><p class="small muted">Every food Claude estimates is saved here on this device, so you can search and add it again without asking.</p><ul class="list" style="margin-top:.5rem">'+S.est.slice(0,50).map(function(o){return '<li><div>'+esc(o.name)+'<div class="small muted mono">'+esc(o.serv)+' · '+kc(o.kcal)+' kcal</div></div><button class="btn sm" data-act="estdel" data-id="'+o.id+'" aria-label="Remove saved estimate '+esc(o.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
-  $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking Claude. This takes a few seconds.</div>':(ASK.msg?'<div class="note warn">'+esc(ASK.msg)+'</div>':''));
+  $('#e-res').innerHTML=qq?(el.length?el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">Ask AI to estimate "'+esc(qq.slice(0,40))+'"</button></div></div>'):'';
+  var _se=S.est.length?'<details><summary class="small">Saved AI estimates ('+S.est.length+')</summary><p class="small muted">Every food AI estimates is saved here on this device, so you can search and add it again without asking.</p><ul class="list" style="margin-top:.5rem">'+S.est.slice(0,50).map(function(o){return '<li><div>'+esc(o.name)+'<div class="small muted mono">'+esc(o.serv)+' · '+kc(o.kcal)+' kcal</div></div><button class="btn sm" data-act="estdel" data-id="'+o.id+'" aria-label="Remove saved estimate '+esc(o.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
+  $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking AI. This takes a few seconds.</div>':(ASK.msg?'<div class="note warn">'+esc(ASK.msg)+'</div>':''));
   renderFoodModal();
   var sel=$('#r-ing'),cur=sel.value;
   var opts=BASE.filter(function(f){return f.src!=='community'&&f.src!=='chain'});
@@ -2344,7 +2369,7 @@ function renderFoodModal(){
   if(S.xp.favs)h+='<div class="row"><button class="chip" data-act="ffav" aria-pressed="'+(S.favs[f.id]?'true':'false')+'">'+(S.favs[f.id]?'★ Favorite':'☆ Add to favorites')+'</button></div>';
   h+='<div class="fadd"><div class="stepper" role="group" aria-label="Servings"><button class="btn sm" data-act="fqty" data-k="-" aria-label="Fewer servings">−</button><span class="mono" aria-live="polite">'+(Math.round(q*100)/100)+' serving'+(q===1?'':'s')+'</span><button class="btn sm" data-act="fqty" data-k="+" aria-label="More servings">+</button></div><button class="btn primary" data-act="fadd">Add to today</button></div>';
   if(f.src==='chain')h+='<p class="small muted">Allergen information is not included here, so check the restaurant\'s allergen guide. Numbers come from fastfoodnutrition.org, which cites each chain\'s published nutrition. Recipes change, so confirm with the restaurant.</p>';
-  if(f.src==='estimate')h+='<p class="small muted">Estimated by Claude from your '+(f.how||'description')+'. Treat it as a rough guess. Allergens are not checked.</p>';
+  if(f.src==='estimate')h+='<p class="small muted">Estimated by AI from your '+(f.how||'description')+'. Treat it as a rough guess. Allergens are not checked.</p>';
   h+='<p class="small muted">A simple estimate, not medical advice.</p>';
   $('#fm-card').innerHTML=h;
   m.hidden=false;document.body.classList.add('modal-open');
@@ -2718,7 +2743,7 @@ function renderWorkouts(){
   var SR=wSearch();$('#w-sres').innerHTML=SR?'<p class="small muted">'+SR.length+' of '+allWorkouts().length+' workouts, easiest first</p>'+(SR.length?'<div class="wgrid">'+SR.map(wcardHtml).join('')+'</div>':'<p class="muted">No workouts match. Try fewer words.</p>'):'';
   $('#w-wiz').hidden=z===4||!!SR;$('#w-cur').hidden=z!==4;
   var NA=needsAcc(),SQ=wseq(),tot=SQ.length,sn=Math.max(1,SQ.indexOf(z)+1);$('#w-step').textContent='Step '+sn+' of '+tot;
-  $('#w-back').disabled=z===0;$('#w-next').hidden=z===3||z===0;$('#w-skip').hidden=false;
+  $('#w-back').disabled=z===0;$('#w-next').hidden=z===3||z===0;
   $('#w-next').textContent=SQ[SQ.indexOf(z)+1]===3?'See workouts':'Next';
   $('#w-sum').innerHTML=[[T,0],[A,1],[M,2]].filter(function(x){return x[1]<Math.min(z,3)&&SQ.indexOf(x[1])>-1}).map(function(x){return '<button class="chip" data-act="wgo" data-s="'+x[1]+'" aria-label="Change: '+esc(x[0])+'">'+esc(x[0])+' ✎</button>'}).join('');
   chipGroup('w-access',ACCESS.map(function(a){return {k:a[0],label:a[1],on:S.wf.access===a[0]}}),'wacc');
@@ -2995,6 +3020,29 @@ function buildAI(text){
   var nm=named.length?muNames(named.join(',')):{full:'Full body',upper:'Upper body',lower:'Lower body',core:'Core',cardio:'Cardio',mobility:'Mobility'}[focus];
   return {name:nm+', '+mins+' min',mins:mins,focus:nm,items:items,notes:notes,pl:{full:'strength',upper:'strength',lower:'strength',core:'mobility',cardio:'cardio',mobility:'mobility'}[focus]};
 }
+function aiWorkout(t){
+  if(!String(t).trim())return;
+  getSample().then(function(sm){
+    if(!sm)return;
+    if(sm===SERVER_AI&&aiLeft()<=0){S.aiMsg=aiErr('limit')+' Here is a quick build from Manna’s own rules.';refresh();return}
+    S.aiBusy=true;S.aiMsg='';refresh();
+    var pr=buildPrompt(t)+'\n\nReply with JSON only, in this shape: {"name": "short workout name", "mins": 30, "items": [{"name": "exercise name", "rx": "3×10" or "30 s" or "10 min"}], "notes": ["short note"]}. Use 4 to 8 items.';
+    return sm.json(pr,{modelTier:'quick'}).then(function(r){
+      if(!r||!Array.isArray(r.items)||!r.items.length)throw {code:'failed'};
+      var st=stageCalc(),items=r.items.slice(0,12).map(function(i){var n=String(i&&i.name||'').trim().slice(0,50);return {name:n,rx:String(i&&i.rx||'3×10').slice(0,20),state:exState(n,S.area,st)}}).filter(function(x){return x.name&&x.state!=='avoid'});
+      if(!items.length)throw {code:'failed'};
+      S.ai={name:String(r.name||'AI workout').slice(0,40),mins:clamp(parseInt(r.mins,10)||30,5,180),focus:'Built by AI',pl:'strength',items:items,notes:(Array.isArray(r.notes)?r.notes:[]).slice(0,5).map(function(x){return String(x).slice(0,200)}),src:'ai'};
+      S.aiBusy=false;refresh();
+    }).catch(function(e){S.aiBusy=false;S.aiMsg=aiErr(e&&e.code)+' Here is a quick build from Manna’s own rules.';refresh()});
+  });
+}
+function aiStatus(){
+  var h='';
+  if(S.aiBusy)h+='<p class="note small" role="status">Building with AI…</p>';
+  else if(S.aiMsg)h+='<p class="note warn small" role="status">'+esc(S.aiMsg)+'</p>';
+  if(S.ai&&!S.aiBusy)h+='<p class="small muted">'+(S.ai.src==='ai'?'Built by AI':'Quick build from Manna’s rules')+'</p>';
+  return h;
+}
 function renderAI(){
   $('#ai-ex').innerHTML=AI_EX.map(function(t,i){return '<button class="chip" data-act="aiex" data-id="'+i+'">'+esc(t)+'</button>'}).join('');
   $('#ai-prompt').textContent=buildPrompt(($('#ai-text').value||'').trim());
@@ -3002,7 +3050,7 @@ function renderAI(){
   if(o){
     h='<div class="note stack"><b>'+esc(o.name)+'</b><div>'+o.items.map(function(e){return '<div class="ex"><div><b>'+esc(e.name)+'</b> '+exBadge(e.state)+'</div><span class="mono">'+esc(e.rx)+'</span></div>'}).join('')+'</div><p class="small">Warm-up: 5 minutes of easy walking and joint circles. Cool-down: 3 minutes of slow breathing.</p>'+(o.notes.length?'<ul class="list">'+o.notes.map(function(n){return '<li><div class="small">'+esc(n)+'</div></li>'}).join('')+'</ul>':'')+'<div class="row"><button class="btn sm primary" data-act="aisave">Save to library</button></div></div>';
   }
-  $('#ai-out').innerHTML=h;
+  $('#ai-out').innerHTML=aiStatus()+h+'<p class="small muted aileft"></p>';
 }
 function canon(s){var t=s.toLowerCase().trim();for(var i=0;i<ALIAS.length;i++){if(ALIAS[i][0].test(t))return ALIAS[i][1]}return t.replace(/\b\w/g,function(c){return c.toUpperCase()})}
 function parseNotes(text){
@@ -3047,7 +3095,8 @@ function tickClock(){
   t.textContent=d.toLocaleTimeString([],S.h24?{hour:'2-digit',minute:'2-digit',hourCycle:'h23'}:{hour:'numeric',minute:'2-digit',hourCycle:'h12'});
   dt.textContent=d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
-function refresh(){
+function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.textContent=t})}
+function refresh(){setTimeout(aiLeftPaint,0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   applyPrefs();renderToday();renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
@@ -3300,7 +3349,7 @@ var ACT={
   wbuildhand:function(){var ml=muList(S.wf.mu),nm=!ml.length?'My workout':ml.length<3?muNames(S.wf.mu)+' workout':MUS[ml[0]]+', '+MUS[ml[1]]+' and more';S.edit={blank:true,id:null,name:nm.slice(0,40),mins:30,level:'Intermediate',focus:S.wf.mu!=='all'?muNames(S.wf.mu):'',cat:'custom',pl:'strength',eq:['bodyweight'],ex:[],back:S.wz};S.wz=4;window.scrollTo(0,0)},
   wbuildai:function(){var acc=ACCESS.filter(function(a){return a[0]===S.wf.access})[0],parts=['30 minutes'];
     if(S.wf.mu!=='all')parts.push(muNames(S.wf.mu).toLowerCase());var AW={gym:'gym equipment',body:'bodyweight only',cali:'calisthenics, bodyweight'};if(AW[S.wf.access])parts.push(AW[S.wf.access]);else if(S.wf.access==='pick'&&S.have.length)parts.push(S.have.map(function(k){return (EQ[k]||k).toLowerCase()}).join(', '));
-    var t=parts.join(', '),ta=$('#ai-text');if(ta)ta.value=t;S.ai=buildAI(t);
+    var t=parts.join(', '),ta=$('#ai-text');if(ta)ta.value=t;S.ai=buildAI(t);S.ai.src='quick';aiWorkout(t);
     setTimeout(function(){var o=$('#w-ai');if(o)o.scrollIntoView({behavior:'smooth',block:'start'})},60)},
   wnclose:function(){$('#wn').hidden=true;document.body.classList.remove('modal-open');S.seenV=String(APPV)},
   wnopen:function(){wnOpen()},
@@ -3379,8 +3428,8 @@ var ACT={
     w.ex.forEach(function(e,i){delete S.sets[w.id+'|'+i]});
     S.sess=null;S.cancelAsk=false;syncSched();toast('Workout saved.');
   },
-  aigen:function(){S.ai=buildAI($('#ai-text').value||'')},
-  aiex:function(b){var t=AI_EX[parseInt(b.dataset.id,10)];$('#ai-text').value=t;S.ai=buildAI(t)},
+  aigen:function(){var t=$('#ai-text').value||'';S.ai=buildAI(t);S.ai.src='quick';aiWorkout(t)},
+  aiex:function(b){var t=AI_EX[parseInt(b.dataset.id,10)];$('#ai-text').value=t;S.ai=buildAI(t);S.ai.src='quick';aiWorkout(t)},
   copyprompt:function(){copyText($('#ai-prompt').textContent,$('#ai-prompt'))},
   aisave:function(){var o=S.ai;if(!o)return;var id='c'+(uid++);S.customW.push({id:id,name:o.name,mins:o.mins,level:'Custom',cat:'custom',eq:['bodyweight'],focus:o.focus,pl:o.pl,ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved to your library.')},
   ntparse:function(){S.notes=parseNotes($('#nt-text').value||'')},
@@ -3507,7 +3556,7 @@ var GROUPS=[['today','Today',['today']],['train','Fitness',['workouts','schedule
 var VLABEL={today:'Today',workouts:'Workouts',schedule:'Schedule',history:'History',session:'Session',log:'Fast logging',eat:'What are you eating?',meals:"Today's meals",foods:'Browse foods',labs:'Nutrients and labs',safeguards:'Eating safeguards',sleep:'Sleep and recovery',injury:'Injury and rehab',mind:'Mind and hormones',medical:'Medical context',coach:'Adaptive coaching',scripture:'Verse of the day',themes:'Themes',community:'Community',settings:'Settings'};
 var VGROUP={more:'more'},VALID={more:1};
 GROUPS.forEach(function(g){g[2].forEach(function(v){VGROUP[v]=g[0];VALID[v]=1})});
-$('#more-list').innerHTML='<h3 class="eyebrow" style="margin-top:.5rem">All pages</h3>'+GROUPS.filter(function(g){return g[0]!=='today'}).map(function(g){return '<div class="card stack"><h3>'+g[1]+'</h3><div class="morerows">'+g[2].filter(function(v){return v!=='session'&&v!=='settings'}).map(function(v){return '<a class="morerow" href="#'+v+'"><span>'+VLABEL[v]+'</span><span aria-hidden="true">›</span></a>'}).join('')+'</div></div>'}).join('');
+if($('#more-list'))$('#more-list').innerHTML='<h3 class="eyebrow" style="margin-top:.5rem">All pages</h3>'+GROUPS.filter(function(g){return g[0]!=='today'}).map(function(g){return '<div class="card stack"><h3>'+g[1]+'</h3><div class="morerows">'+g[2].filter(function(v){return v!=='session'&&v!=='settings'}).map(function(v){return '<a class="morerow" href="#'+v+'"><span>'+VLABEL[v]+'</span><span aria-hidden="true">›</span></a>'}).join('')+'</div></div>'}).join('');
 $('#nav').innerHTML=GROUPS.map(function(g){return '<a href="#'+g[2][0]+'" data-group="'+g[0]+'">'+g[1]+'</a>'}).join('');
 function show(){
   var id=(location.hash||'').replace('#','');
