@@ -317,7 +317,8 @@ input[type=text],input[type=number],select,textarea{background:var(--field);bord
 .wmu{font-size:.78rem}
 .vh-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .subnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.subnav a{font-size:.92rem;padding:.38rem .9rem;border-radius:999px;border:1px solid var(--line);color:var(--muted);text-decoration:none}
+.subnav a{font-size:.92rem;padding:.38rem .9rem;border-radius:999px;border:1px solid var(--line);color:var(--ink);opacity:.82;text-decoration:none}
+.subnav a[aria-current=page]{opacity:1}
 .subnav a[aria-current=page]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
 .nav a .n{display:none}
 /* filters */
@@ -1065,7 +1066,7 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
     <!-- SCHEDULE -->
     <section class="view" id="v-schedule" hidden>
       <header class="vh"><p class="eyebrow">Fitness</p><h2>Weekly schedule</h2>
-        <p class="lede">You have three schedules. Give each one a name and choose a workout for every day. The schedule you select is the one used for Today and the home page.</p></header>
+        <p class="lede">Plan a workout for each day of the week. The schedule you select is the one used on Home and Today.</p></header>
       <div class="scards" id="sh-plans"></div>
       <div class="card stack" id="sh-week"></div>
       <div class="card stack" id="sh-imp">
@@ -2122,6 +2123,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:120,d:'Nov 7, 2026',t:'Polish pass',s:['Fixed the streak flame not showing on the Workouts page.','The small page tabs at the top (like Workouts, Schedule, History) are easier to read in dark themes.','The old, empty More page now opens Settings, and no longer leaves a box around the Settings tab.','Updated the Weekly schedule intro to match how schedules work now.']},
  {v:119,d:'Nov 7, 2026',t:'Muscles for every workout',s:['Imported and AI-built workouts now show their muscle groups on the body diagram, even when exercises are written differently, like Incline DB press or Tricep pushdowns.','The AI and import previews show the diagram too, before you save.','Removed the Change my picks button from Workouts. Templates has its own page.']},
  {v:118,d:'Nov 7, 2026',t:'Smarter text import',s:['Importing a routine or schedule from text understands many more ways of writing: 4x8 squats, 3 sets of 10 bench @ 135lb, 20 push ups, plank 1:30, 5k run, curls 3x8-12, 3 rounds of a list, numbered and bulleted lists, and more.','If some lines still cannot be read, tap Read it with AI (one AI use).','Tap the name of an imported routine, schedule or new workout in the preview to rename it before saving.']},
  {v:117,d:'Nov 7, 2026',t:'Swipe up and down everywhere',s:['On phones, every page with several sections now works TikTok style: Settings pages, Saved workouts, What are you eating, Weekly schedule and more. Swipe up or down to move one section at a time.','Dots on the right show where you are. Long sections scroll normally first.']},
@@ -2415,7 +2417,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='119';
+var heroLast='',APPV='120';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4835,24 +4837,24 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)setT
 var FLAME='<svg viewBox="0 0 48 56" aria-hidden="true"><defs><linearGradient id="flo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc233"/><stop offset="1" stop-color="#ff5a00"/></linearGradient><linearGradient id="fli" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset="1" stop-color="#ffb000"/></linearGradient></defs><path d="M24 2c3 9 15 15 15 30a15 15 0 0 1-30 0c0-7 3-11 6-14 0 5 2 8 5 9-2-9 1-18 4-25z" fill="url(#flo)"/><path class="fl-in" d="M24 26c2 5 8 8 8 15a8 8 0 0 1-16 0c0-4 2-6 3-7 0 3 1 4 3 5-1-5 0-9 2-13z" fill="url(#fli)"/></svg>';
 var FLAME_S='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1.5 4.5 7.5 7.5 7.5 15a7.5 7.5 0 0 1-15 0c0-3.5 1.5-5.5 3-7 0 2.5 1 4 2.5 4.5C9 10 10.5 5.5 12 2z" fill="currentColor"/></svg>';
 function streakDone(d){var k=d.toDateString();return S.hist.some(function(h){return !h.sample&&new Date(h.ts).toDateString()===k})}
-function streakHtml(){
+function streakHtml(sfx){
   var n=streakDays(),now=new Date(),today=streakDone(now),best=n;
   var start=new Date(now);start.setDate(now.getDate()-now.getDay());
   var wk='';for(var i=0;i<7;i++){var d=new Date(start);d.setDate(start.getDate()+i);var isT=d.toDateString()===now.toDateString(),fut=d>now&&!isT,on=!fut&&streakDone(d);
     wk+='<div class="stk-d'+(on?' on':'')+(isT?' today':'')+(fut?' fut':'')+'"><i>'+(on?FLAME_S:'')+'</i>'+'SMTWTFS'[i]+'</div>'}
   var msg=n===0?'Finish a workout to start a streak.':today?(n===1?'Day one done. Come back tomorrow to keep it going.':'Nice work today. See you tomorrow.'):'Work out today to make it '+(n+1)+' days.';
   if(n>0&&!today&&now.getHours()>=18)msg='Still time today to make it '+(n+1)+' days.';
-  return '<div class="stk-top"><div class="stk-fl'+(n?'':' off')+'">'+FLAME+'</div><div><div class="stk-n"><b>'+n+'</b><span>day streak</span></div><p class="small muted stk-msg">'+msg+'</p></div></div><div class="stk-wk" aria-label="This week">'+wk+'</div>';
+  return '<div class="stk-top"><div class="stk-fl'+(n?'':' off')+'">'+FLAME.replace(/\b(flo|fli)\b/g,'$1'+(sfx||''))+'</div><div><div class="stk-n"><b>'+n+'</b><span>day streak</span></div><p class="small muted stk-msg">'+msg+'</p></div></div><div class="stk-wk" aria-label="This week">'+wk+'</div>';
 }
 function renderStreaks(){
-  var on=X('streak'),h=on?streakHtml():'',n=streakDays();
-  ['#t-streak','#w-streak'].forEach(function(id){var el=$(id);if(!el)return;el.hidden=!on;if(on&&el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;el.setAttribute('aria-label','Workout streak: '+n+' days')}});
+  var on=X('streak'),n=streakDays();
+  ['#t-streak','#w-streak'].forEach(function(id){var el=$(id);if(!el)return;el.hidden=!on;var h=on?streakHtml(id.charAt(1)):'';if(on&&el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;el.setAttribute('aria-label','Workout streak: '+n+' days')}});
   if(on&&n>(S.stkSeen||0)){S.stkSeen=n;['#t-streak','#w-streak'].forEach(function(id){var el=$(id);if(el){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')}})}
   else if(n<(S.stkSeen||0))S.stkSeen=n;
 }
 function show(){
   var id=(location.hash||'').replace('#','');
-  if(id==='privacy')id='settings';
+  if(id==='privacy'||id==='more')id='settings';
   if(!VALID[id])id='today';
   $$('.view').forEach(function(s){s.hidden=s.id!=='v-'+id});
   curId=id;document.body.classList.remove('sheet');updateTabs();
