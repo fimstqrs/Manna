@@ -1995,6 +1995,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:108,d:'Nov 7, 2026',t:'Tour after setup',s:['Finishing setup now always starts the tutorial, including when you run setup again from Settings.','The last setup screen says the tour is next, and the button reads Finish and take the tour.']},
  {v:107,d:'Nov 7, 2026',t:'Sync fixed for real',s:['Saving to your account was being refused by the database (error 403), so nothing was syncing, including themes. That is fixed: your data now saves and syncs between devices.']},
  {v:106,d:'Nov 7, 2026',t:'Sync that just works',s:['Signing in on a device that already has its own data no longer asks which copy to keep. Both are combined: workouts and meals from both are kept, and for each setting the most recent change wins.','Devices that were waiting on that question now sync straight away.','If sync ever fails, Settings › Account says why.']},
  {v:105,d:'Nov 7, 2026',t:'The full version history',s:['The version log now goes all the way back to Version 1.','Versions 1 to 52 are rebuilt from memory and marked approximate. Versions 1 to 59 came before the current site, so they are dated Before Nov 6, 2026.']},
@@ -2175,7 +2176,7 @@ function onbPanel(n){
   if(n===3)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">How active are you?</h2><p>Think about a normal week, including work.</p><div class="onb-opts" role="radiogroup" aria-label="Activity level">'+ACTS.map(function(a){return '<button type="button" class="onb-opt" role="radio" data-onb="act" data-k="'+a[0]+'" aria-checked="'+(S.activity===a[0])+'" aria-pressed="'+(S.activity===a[0])+'"><b>'+a[1]+'</b><span>'+a[2]+'</span></button>'}).join('')+'</div></div>';
   if(n===5){var order=THEMES.filter(function(t){return t.id==='plain'}).concat(THEMES.filter(function(t){return t.id!=='plain'}));return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Pick a look</h2><p>The Default theme is plain white or black and follows your device. Tap any theme to preview it right now.</p><div class="onb-themes" role="radiogroup" aria-label="Theme">'+order.map(function(t){return '<button type="button" class="onb-th" role="radio" data-onb="theme" data-k="'+t.id+'" aria-checked="'+(S.themeMode===t.id)+'" aria-pressed="'+(S.themeMode===t.id)+'"><i style="background:'+t.sw+'"></i><b>'+esc(t.name)+(t.id==='plain'?' (default)':'')+'</b><span>'+esc(t.mood)+'</span></button>'}).join('')+'</div></div>'}
   if(n===6)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your top 3 workouts</h2><p>Choose up to three you love. They show up on your home page.</p><div class="wpick" id="onb-wpk" data-n="'+S.topW.length+'"><span class="wpd" aria-hidden="true"><i></i><i></i><i></i></span><b id="onb-wc" aria-live="polite">'+wpLabel(S.topW.length)+'</b></div><label class="f" for="onb-wq">Search workouts<input type="search" id="onb-wq" data-oi="1" autocomplete="off" placeholder="Try soccer, legs, plank" value="'+esc(ONB.wq)+'"></label><div class="onb-wf"><p class="eyebrow">Type or sport</p><div class="onb-seg" id="onb-wcats" role="group" aria-label="Filter by type or sport"></div><p class="eyebrow">Equipment</p><div class="onb-seg" id="onb-weqs" role="group" aria-label="Filter by equipment"></div></div><p class="small muted" id="onb-wn" aria-live="polite"></p><div class="wgrid onb-wlist" id="onb-wl" role="group" aria-label="Workouts" tabindex="0"></div></div>';
-  if(n===7)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your favorite Bible verse</h2><p>Optional. Type a reference like John 3:16 or Philippians 4:13. You can change it any time in Settings.</p><label class="f" for="onb-v">Favorite verse<input type="text" id="onb-v" data-oi="1" maxlength="80" autocomplete="off" placeholder="John 3:16" value="'+esc(S.favVerse||'')+'"></label><div class="note" id="onb-vp" aria-live="polite" hidden></div></div>';
+  if(n===7)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your favorite Bible verse</h2><p>Optional. Type a reference like John 3:16 or Philippians 4:13. You can change it any time in Settings.</p><label class="f" for="onb-v">Favorite verse<input type="text" id="onb-v" data-oi="1" maxlength="80" autocomplete="off" placeholder="John 3:16" value="'+esc(S.favVerse||'')+'"></label><div class="note" id="onb-vp" aria-live="polite" hidden></div><p class="small muted onb-next-tour">Next: a quick tour of Manna, about a minute. You can exit it at any step.</p></div>';
   var C=2*Math.PI*52;
   return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your recommended targets</h2><p id="onb-note">These are the recommended numbers for your goals and body. You can change any of them.</p><div class="onb-ring"><svg viewBox="0 0 130 130" aria-hidden="true"><circle class="bg" cx="65" cy="65" r="52"/><circle class="seg" id="seg-p" cx="65" cy="65" r="52" stroke="var(--accent)" stroke-dasharray="0 '+C+'"/><circle class="seg" id="seg-c" cx="65" cy="65" r="52" stroke="var(--ok)" stroke-dasharray="0 '+C+'"/><circle class="seg" id="seg-f" cx="65" cy="65" r="52" stroke="var(--warn)" stroke-dasharray="0 '+C+'"/></svg><div class="mid"><b id="onb-kn">0</b><span>cal a day</span></div></div><div class="onb-leg"><span><i style="background:var(--accent)"></i>Protein <b id="lg-p"></b></span><span><i style="background:var(--ok)"></i>Carbs <b id="lg-c"></b></span><span><i style="background:var(--warn)"></i>Fat <b id="lg-f"></b></span></div><div class="onb-row"><label class="f" for="onb-k">Calories<input type="number" id="onb-k" data-oi="1" min="1200" max="5000" step="10" inputmode="numeric"></label><label class="f" for="onb-p">Protein (g)<input type="number" id="onb-p" data-oi="1" min="20" max="500" inputmode="numeric"></label><label class="f" for="onb-c">Carbs (g)<input type="number" id="onb-c" data-oi="1" min="0" max="1000" inputmode="numeric"></label><label class="f" for="onb-f">Fat (g)<input type="number" id="onb-f" data-oi="1" min="10" max="300" inputmode="numeric"></label></div><div class="row"><button type="button" class="btn sm" data-onb="reset" id="onb-reset" hidden>Reset to recommended</button></div><p class="small muted">A general estimate, not medical advice. Ask a clinician or dietitian if you have a health condition.</p></div>';
 }
@@ -2212,7 +2213,7 @@ function onbRender(){setTimeout(function(){if(typeof obAcct==='function'){ACC.ob
   if(same){if(pn){pn.classList.remove('go');pn.classList.add('still')}}else if(ONB.back&&pn)pn.classList.add('back');
   $('#onb-dots').innerHTML=Array.apply(null,Array(ONBN)).map(function(_,i){return '<i class="'+(i===ONB.step?'on':'')+'"></i>'}).join('');
   $('#onb-back').style.visibility=ONB.step===0?'hidden':'visible';
-  $('#onb-next').textContent=ONB.step===0?'Get started':(ONB.step===ONBN-1?'Finish':'Next');
+  $('#onb-next').textContent=ONB.step===0?'Get started':(ONB.step===ONBN-1?'Finish and take the tour':'Next');
   $('#onb-skip').hidden=ONB.step===ONBN-1;$('#onb-msg').textContent='';
   if(ONB.step===4){ONB.shown=0;requestAnimationFrame(function(){requestAnimationFrame(function(){onbResults(true)})})}
   if(ONB.step===6)onbWL();
@@ -2222,7 +2223,7 @@ function onbRender(){setTimeout(function(){if(typeof obAcct==='function'){ACC.ob
   $('#onb').scrollTop=0;
 }
 function onbOpen(step){ONB.wq='';ONB.wc='all';ONB.we='all';ONB.in=null;ONB.step=step||0;ONB.back=false;var o=$('#onb');o.hidden=false;o.classList.remove('closing');ONB.drawn=-1;onbRender()}
-function onbClose(){var first=!S.toured;S.onboarded=true;var o=$('#onb');o.classList.add('closing');setTimeout(function(){o.hidden=true;o.classList.remove('closing');if(first)welcomeThenTour()},520);refresh()}
+function onbClose(tour){var first=!S.toured||!!tour;S.onboarded=true;var o=$('#onb');o.classList.add('closing');setTimeout(function(){o.hidden=true;o.classList.remove('closing');if(first)welcomeThenTour()},520);refresh()}
 function onbValid(){var m='',x=ONB.in||{a:NaN,kg:NaN,h:NaN};
   if(!onbOk(x.a)||!onbOk(x.kg)||!onbOk(x.h))m='Fill in your age, weight and height to get your targets.';
   else if(!(x.a>=10&&x.a<=120))m='Enter an age of 10 or older.';
@@ -2233,7 +2234,7 @@ var ONBACT={
   next:function(){
     if(ONB.step===0){var nm=($('#onb-name').value||'').trim().slice(0,20);if(nm)S.name=nm;else if(!S.onboarded&&S.name==='Fimi')S.name='Friend';if($('#ob-acct')&&$('#ob-acct').innerHTML)S.acctAsked=true}
     if(ONB.step===2){onbReadBody();if(!onbValid())return}
-    if(ONB.step===ONBN-1){onbClose();toast('Setup saved. You can change everything in Settings.');return}
+    if(ONB.step===ONBN-1){onbClose(true);return}
     ONB.step++;ONB.back=false;onbRender()},
   back:function(){if(ONB.step>0){ONB.step--;ONB.back=true;onbRender()}},
   skip:function(){onbClose()},
@@ -2276,7 +2277,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='107';
+var heroLast='',APPV='108';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
