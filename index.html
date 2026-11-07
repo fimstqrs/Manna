@@ -731,6 +731,12 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .rm .swtrack,html.lite .swtrack{transition:none}
 .grid2.vgrid{display:block}
 .vsec>.card{margin:0}
+/* Tap-to-rename names in import previews */
+.rnm{display:flex;align-items:center;gap:.4rem;border-bottom:2px dashed color-mix(in srgb,var(--accent) 55%,transparent);padding-bottom:.15rem;cursor:text}
+.rnm .rnm-in{all:unset;flex:1;min-width:0;font-weight:800;font-size:1.15rem;color:var(--ink)}
+.rnm.sm{flex-wrap:wrap;border-bottom-width:1px}.rnm.sm .rnm-in{font-size:1rem;font-weight:700}.rnm.sm>.small{flex-basis:100%}
+.rnm:focus-within{border-bottom-style:solid;border-color:var(--accent)}
+.rnm-ic{color:var(--accent);font-size:1rem}
 .sempty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.6rem;padding:1.4rem .5rem}
 .sempty-ic{font-size:2.6rem}
 .scard.sadd{border-style:dashed;cursor:pointer}
@@ -1908,7 +1914,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals}}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
   try{(d.customW||[]).concat(d.hist).forEach(function(x){var n=parseInt(String(x&&x.id||'').replace(/^[a-z]+/,''),10);if(n>=uid)uid=n+1})}catch(e){}
@@ -2090,6 +2096,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:118,d:'Nov 7, 2026',t:'Smarter text import',s:['Importing a routine or schedule from text understands many more ways of writing: 4x8 squats, 3 sets of 10 bench @ 135lb, 20 push ups, plank 1:30, 5k run, curls 3x8-12, 3 rounds of a list, numbered and bulleted lists, and more.','If some lines still cannot be read, tap Read it with AI (one AI use).','Tap the name of an imported routine, schedule or new workout in the preview to rename it before saving.']},
  {v:117,d:'Nov 7, 2026',t:'Swipe up and down everywhere',s:['On phones, every page with several sections now works TikTok style: Settings pages, Saved workouts, What are you eating, Weekly schedule and more. Swipe up or down to move one section at a time.','Dots on the right show where you are. Long sections scroll normally first.']},
  {v:116,d:'Nov 7, 2026',t:'Make your own schedules',s:['Weekly schedule now starts empty. Tap Add a schedule to make one.','Free accounts get 1 schedule and Pro accounts up to 3. Schedules you already made are kept.','You can delete a schedule, and adding a workout to a schedule makes one if you have none.']},
  {v:115,d:'Nov 7, 2026',t:'Swipe up and down between sections',s:['On Workouts › Make your own, the three sections (Make your own, Build with AI, Import from text) are now full-height, TikTok style. Swipe up or down to move one section at a time.','Dots on the right show where you are, and a Next hint at the bottom shows what is below. Long sections scroll normally first.']},
@@ -2381,7 +2388,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='117';
+var heroLast='',APPV='118';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3263,7 +3270,8 @@ function siParse(text){
     if(cur){var p=parseNotes(ln);if(p.items.length){cur.items=cur.items.concat(p.items);return}}
     notes.push(ln)});
   flush();
-  return {days:out,found:seen.length,skipped:notes.slice(0,5)};
+  var ttl=lines.map(function(x){return x.trim()}).filter(Boolean)[0]||'';
+  return {days:out,found:seen.length,skipped:notes.slice(0,5),title:(!siHead(ttl)&&!/\d/.test(ttl)&&ttl.length<31)?ttl.replace(/:$/,''):''};
 }
 function siOpts(sel,label){
   var o=(label?'<option value="__new"'+(sel==='__new'?' selected':'')+'>Create: '+esc(siClean(label)||label)+'</option>':'')+'<option value=""'+(sel?'':' selected')+'>Rest day</option>';
@@ -3274,13 +3282,13 @@ function renderSchedImport(){
   var el=$('#sh-imp');if(!el)return;el.hidden=S.useSched===false;
   var o=S.siRes,h='';
   if(o){
-    if(!o.found)h='<p class="note warn small">Could not find any days in that text. Start each line with a day, like Monday: Push Day.</p>';
+    if(!o.found)h='<p class="note warn small">Could not find any days in that text. Start each line with a day, like Monday: Push Day, or let AI read it.</p><div class="row"><button class="btn sm" data-act="siai"'+(S.siBusy?' disabled':'')+'>'+(S.siBusy?'Reading with AI…':'Read it with AI (1 AI use)')+'</button></div>'+(S.siMsg?'<p class="note warn small">'+esc(S.siMsg)+'</p>':'');
     else{
-      h='<div class="note stack"><b>Preview for '+esc(schedName())+'</b><ul class="dayrows">'+o.days.map(function(e,d){
+      h='<div class="note stack"><label class="rnm" for="si-name"><span class="vh-only">Schedule name</span><input id="si-name" class="rnm-in" maxlength="30" value="'+esc(o.name!=null?o.name:(o.title||(schedList().length?schedName():'My schedule')))+'" autocomplete="off"><span class="rnm-ic" aria-hidden="true">✎</span></label><p class="small muted" style="margin:-.3rem 0 0">Tap the name to rename it. New workouts can be renamed too.</p><ul class="dayrows">'+o.days.map(function(e,d){
         var main;
         if(!e)main='<span class="muted small">Not in your text: stays as it is</span>';
-        else if(e.kind==='new')main='<b>New workout: '+esc(e.name)+'</b><div class="small muted">'+e.items.map(function(i){return esc(i.name)+' '+esc(i.rx)}).join(' · ')+'</div>';
-        else main='<label class="vh-only" for="si-'+d+'">Workout for '+DAYN[d]+'</label><select id="si-'+d+'" data-si="'+d+'">'+siOpts(e.kind==='match'?e.id:e.sel||'',e.kind==='none'?e.label:'')+'</select>'+(e.kind==='none'?'<div class="small muted">No workout called “'+esc(e.label)+'” yet, so a new one will be made. Or pick another.</div>':e.kind==='match'&&siNorm(wById(e.id).name)!==siNorm(e.label)?'<div class="small muted">Matched “'+esc(e.label)+'”</div>':'');
+        else if(e.kind==='new')main='<label class="rnm sm" for="sin-'+d+'"><span class="small muted">New workout</span><input id="sin-'+d+'" class="rnm-in" data-sin="'+d+'" maxlength="60" value="'+esc(e.name)+'" autocomplete="off"><span class="rnm-ic" aria-hidden="true">✎</span></label><div class="small muted">'+e.items.map(function(i){return esc(i.name)+' '+esc(i.rx)}).join(' · ')+'</div>';
+        else main='<label class="vh-only" for="si-'+d+'">Workout for '+DAYN[d]+'</label><select id="si-'+d+'" data-si="'+d+'">'+siOpts(e.kind==='match'?e.id:e.sel||'',e.kind==='none'?e.label:'')+'</select>'+(e.kind==='none'&&e.sel==='__new'?'<label class="rnm sm" for="sin-'+d+'"><span class="small muted">New workout name</span><input id="sin-'+d+'" class="rnm-in" data-sin="'+d+'" maxlength="60" value="'+esc(siClean(e.label)||e.label)+'" autocomplete="off"><span class="rnm-ic" aria-hidden="true">✎</span></label>':e.kind==='none'?'<div class="small muted">No workout called “'+esc(e.label)+'”. Pick one, or leave it as rest.</div>':e.kind==='match'&&siNorm(wById(e.id).name)!==siNorm(e.label)?'<div class="small muted">Matched “'+esc(e.label)+'”</div>':'');
         return '<li class="dayrow"><div class="dayname"><b>'+DAYN[d]+'</b></div><div class="daymain">'+main+'</div></li>'}).join('')+'</ul>'
         +(o.skipped.length?'<p class="small muted">Skipped: '+o.skipped.map(esc).join('; ')+'</p>':'')
         +'<div class="row"><button class="btn primary" data-act="siapply">Use this for '+esc(schedName())+'</button><button class="btn sm" data-act="siclear">Cancel</button></div></div>';
@@ -3289,6 +3297,10 @@ function renderSchedImport(){
   var out=$('#si-out');if(out.dataset.h!==h){out.dataset.h=h;out.innerHTML=h}
 }
 /* Remember changes made in the preview */
+document.addEventListener('input',function(e){var t=e.target;if(!t||!S.siRes)return;
+  if(t.id==='si-name'){S.siRes.name=t.value;return}
+  if(t.dataset&&t.dataset.sin!=null){var dd=S.siRes.days[+t.dataset.sin];if(dd){if(dd.kind==='new')dd.name=t.value;else dd.label=t.value}}});
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='nt-title'&&S.notes)S.notes.title=e.target.value});
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.dataset||t.dataset.si==null||!S.siRes)return;var d=+t.dataset.si;var prev=S.siRes.days[d]||{};S.siRes.days[d]=t.value==='__new'?{kind:'none',label:prev.label,sel:'__new'}:t.value?{kind:'match',id:t.value,label:prev.label||wById(t.value).name}:{kind:'rest',label:prev.label}});
 function renderSchedule(){
   if(S.useSched===false){$('#sh-plans').innerHTML='';$('#sh-week').innerHTML='<h3>Schedules are off</h3><p class="muted">Turn them on to plan a workout for each day of the week.</p><div class="row"><button class="btn primary" data-act="schedon">Turn schedules on</button></div>';return}
@@ -3537,29 +3549,81 @@ function renderAI(){
   $('#ai-out').innerHTML=aiStatus()+h+'<p class="small muted aileft"></p>';
 }
 function canon(s){var t=s.toLowerCase().trim();for(var i=0;i<ALIAS.length;i++){if(ALIAS[i][0].test(t))return ALIAS[i][1]}return t.replace(/\b\w/g,function(c){return c.toUpperCase()})}
+/* ---------- Reading workouts written in your own words ----------
+   Understands: "Squats 4x8", "4x8 squats", "Bench press - 3 sets of 10 @ 135lb", "3 sets 12 reps lunges",
+   "Push-ups x 20", "20 push ups", "Plank 3 x 45 sec", "plank 1:30", "Run 20 min", "20 min run", "5k run",
+   "Row 2000m", "Curls 3x8-12", "Lunges 3x10 each leg", "Pull-ups 3 x max", numbered/bulleted lists,
+   "A1." supersets, and "3 rounds:" followed by a list. */
+var NUMW={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,twelve:12,fifteen:15,twenty:20,thirty:30};
+function plNorm(ln){
+  var t=String(ln).replace(/[•·▪●–—]/g,function(c){return c==='–'||c==='—'?'-':'-'})
+    .replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,'').replace(/^\s*(?:[-*>+]+|\d+[.)]|[a-z]\d?[.)]|[A-Z]\d[.):]?)\s+/,'')
+    .replace(/\b(one|two|three|four|five|six|seven|eight|nine|ten|twelve|fifteen|twenty|thirty)\b/gi,function(w){return NUMW[w.toLowerCase()]})
+    .replace(/(\d)\s*[X×*]\s*(\d|max|amrap|failure)/gi,'$1x$2').replace(/\s+/g,' ').trim();
+  return t.replace(/[.;,]+$/,'');
+}
+function plName(n){n=String(n||'').replace(/^(?:of|x|sets?|reps?|with|and|-|:)\s+/i,'').replace(/\s*(?:[-:,@]|\bof\b|\bfor\b|\bx\b)\s*$/i,'').replace(/\s+(?:each|per)\s+(?:side|leg|arm)$/i,'').trim();return n.length>1&&/[a-z]/i.test(n)?canon(n):''}
+function plWeight(t){var m=String(t).match(/(?:@|at|with)?\s*(\d+(?:\.\d+)?)\s*(kg|kgs|kilos?|lbs?|pounds?)\b/i);return m?' @ '+m[1]+' '+(/^k/i.test(m[2])?'kg':'lb'):''}
+function plSide(t){return /\b(each|per)\s+(side|leg|arm)|\/(leg|side|arm)\b/i.test(t)?' each side':''}
+function plUnit(u){u=String(u||'').toLowerCase();return /^(s|sec|secs|second|seconds)$/.test(u)?' s':/^(m|min|mins|minute|minutes)$/.test(u)?' min':''}
+function parseLine(raw,rounds){
+  var t=plNorm(raw);if(!t||/^(rest|break|cool ?down|warm ?up)\b.*\d/i.test(t)&&!/[a-z]{3,}.*\d+\s*x\s*\d/i.test(t.replace(/^(rest|break)/i,'')))return null;
+  var w=plWeight(t),side=plSide(t),u,m;
+  var R='(\\d+(?:\\s*-\\s*\\d+)?|max|amrap|failure)';
+  /* name  sets x reps  (unit) */
+  if((m=t.match(new RegExp('^(.*?[a-z].*?)[\\s:,-]*(\\d+)\\s*(?:sets?\\s*(?:of|x)?\\s*|x\\s*)'+R+'\\s*(reps?)?\\s*(s|secs?|seconds?|m|mins?|minutes?)?\\b','i')))&&plName(m[1]))
+    return {name:plName(m[1]),rx:m[2]+'×'+m[3].replace(/\s/g,'')+plUnit(m[5])+side+w};
+  /* sets x reps  name */
+  if((m=t.match(new RegExp('^(\\d+)\\s*(?:sets?\\s*(?:of|x)?\\s*|x\\s*)'+R+'\\s*(reps?)?\\s*(s|secs?|seconds?|m|mins?|minutes?)?\\b\\s*(?:of\\s+)?(.*[a-z].*)$','i')))&&plName(m[5].replace(/(?:@|at|with)?\s*\d+(?:\.\d+)?\s*(?:kg|kgs|kilos?|lbs?|pounds?)\b.*/i,'')))
+    return {name:plName(m[5].replace(/(?:@|at|with)?\s*\d+(?:\.\d+)?\s*(?:kg|kgs|kilos?|lbs?|pounds?)\b.*/i,'')),rx:m[1]+'×'+m[2].replace(/\s/g,'')+plUnit(m[4])+side+w};
+  /* name  3 sets ... 10 reps   or   3 sets 10 reps name */
+  if(m=t.match(/(\d+)\s*sets?\b[^\d]*?(\d+(?:\s*-\s*\d+)?)\s*reps?\b/i)){var nm=plName(t.replace(m[0],' ').replace(/(?:@|at|with)?\s*\d+(?:\.\d+)?\s*(?:kg|lbs?|pounds?)\b/i,''));if(nm)return {name:nm,rx:m[1]+'×'+m[2].replace(/\s/g,'')+side+w}}
+  /* time: "plank 1:30", "run 20 min", "20 min run", "hold 45 sec" */
+  if((m=t.match(/^(.*?[a-z].*?)\s*[-:,]?\s*(\d+):(\d\d)\b(.*)$/i))&&plName(m[1]))return {name:plName(m[1]),rx:(rounds?rounds+'×':'')+(+m[2]*60+ +m[3])+' s'};
+  if((m=t.match(/^(.*?[a-z].*?)\s*[-:,]?\s*(?:for\s+)?(\d+(?:\.\d+)?)\s*(s|secs?|seconds?|mins?|minutes?|hrs?|hours?)\b/i))&&plName(m[1]))
+    return {name:plName(m[1]),rx:(rounds?rounds+'×'+m[2]+plUnit(m[3]):/^h/i.test(m[3])?m[2]+' hr':m[2]+(plUnit(m[3])||' min'))};
+  if((m=t.match(/^(\d+(?:\.\d+)?)\s*(s|secs?|seconds?|mins?|minutes?|hrs?|hours?)\b\s*(?:of\s+)?(.*[a-z].*)$/i))&&plName(m[3]))
+    return {name:plName(m[3]),rx:(rounds?rounds+'×':'')+m[1]+(/^h/i.test(m[2])?' hr':plUnit(m[2])||' min')};
+  /* distance: "5k run", "run 3 miles", "row 2000m" */
+  if(m=t.match(/(\d+(?:\.\d+)?)\s*(k|km|kms|mi|miles?|m|meters?|metres?|yds?|yards?)\b/i)){var nd=plName(t.replace(m[0],' '));if(/^bent-over row$/i.test(nd))nd='Rowing';if(nd){var du=m[2].toLowerCase();return {name:nd,rx:m[1]+(/^k/.test(du)?' km':/^mi/.test(du)?' mi':/^y/.test(du)?' yd':' m')}}}
+  /* reps only: "push-ups x 20", "20 push ups", "burpees 15 reps" */
+  if((m=t.match(/^(.*?[a-z].*?)\s*(?:x|-|:|,)?\s*(\d+(?:\s*-\s*\d+)?)\s*(reps?)?$/i))&&plName(m[1]))return {name:plName(m[1]),rx:(rounds||1)+'×'+m[2].replace(/\s/g,'')+side+w};
+  if((m=t.match(/^(\d+(?:\s*-\s*\d+)?)\s*(?:reps?\s*(?:of\s+)?)?(.*[a-z].*)$/i))&&plName(m[2].replace(/(?:@|at|with)?\s*\d+(?:\.\d+)?\s*(?:kg|lbs?|pounds?)\b.*/i,'')))
+    return {name:plName(m[2].replace(/(?:@|at|with)?\s*\d+(?:\.\d+)?\s*(?:kg|lbs?|pounds?)\b.*/i,'')),rx:(rounds||1)+'×'+m[1].replace(/\s/g,'')+side+w};
+  return null;
+}
 function parseNotes(text){
-  var lines=text.split(/\r?\n/).map(function(s){return s.trim()}).filter(Boolean),title=null,items=[],skipped=[];
-  lines.forEach(function(ln,idx){
-    var clean=ln.replace(/^[\-*•]+\s*/,'').replace(/^\d+[.)]\s+/,'');
-    var m=clean.match(/^([A-Za-z][A-Za-z '\-]*?)\s*[:\-–]?\s*(\d+)\s*[x×]\s*(\d+)\s*(seconds|secs|sec|min|s)?\b(?:\s*@\s*(\d+(?:\.\d+)?\s*(?:kg|lbs|lb)))?/i);
-    if(m){items.push({name:canon(m[1]),rx:m[2]+'×'+m[3]+(m[4]?(/^s/i.test(m[4])?' s':' min'):'')+(m[5]?' @ '+m[5]:'')});return}
-    var c=clean.match(/^([A-Za-z][A-Za-z '\-]*?)\s*[:\-–]?\s*(\d+)\s*(minutes|mins|min)\b/i);
-    if(c){items.push({name:canon(c[1]),rx:c[2]+' min'});return}
-    if(idx===0&&!/\d/.test(ln)){title=ln.replace(/\s*\(.*\)\s*$/,'').replace(/^#+\s*/,'').replace(/:$/,'');return}
-    skipped.push(ln);
-  });
+  var lines=String(text||'').split(/\r?\n/),title=null,items=[],skipped=[],rounds=0,first=true;
+  lines.forEach(function(raw){var ln=raw.trim();if(!ln){rounds=0;return}
+    var t=plNorm(ln),r=t.match(/^(\d+)\s*(?:rounds?|sets?|circuits?|times)\b\s*(?:of|:|-)?\s*(.*)$/i);
+    if(r&&!/\d/.test(r[2])&&!/[a-z]{3,}/i.test(r[2].replace(/\b(of|the|following|each|circuit|through)\b/gi,''))){rounds=+r[1];first=false;return}
+    var it=parseLine(ln,rounds);
+    if(it){items.push(it);first=false;return}
+    if(first&&!/\d/.test(ln)){title=ln.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,'').trim().replace(/\s*\(.*\)\s*$/,'').replace(/^#+\s*/,'').replace(/:$/,'');first=false;return}
+    first=false;if(/^(rest|break|warm|cool)/i.test(t))return;
+    skipped.push(ln)});
   return {title:title||'Imported routine',items:items,skipped:skipped};
+}
+/* AI reads text the rules could not (one AI use) */
+function aiReadText(kind,text,done){
+  getSample().then(function(sm){
+    if(!sm){done(null,'AI is not available right now.');return}
+    if(sm===SERVER_AI&&aiLeft()<=0){done(null,aiErr('limit'));return}
+    var pr=kind==='sched'?'Read this weekly workout schedule. For each day mentioned, give the workout name, or rest, and any exercises listed for it. Text:\n'+String(text).slice(0,3000)+'\n\nReply with JSON only: {"title": "schedule name or empty", "days": [{"day": "Monday", "rest": false, "workout": "name", "exercises": [{"name": "exercise", "rx": "3×10" or "30 s" or "20 min"}]}]}'
+      :'Read this workout routine written by a person. List every exercise with its sets and reps or time. Text:\n'+String(text).slice(0,3000)+'\n\nReply with JSON only: {"title": "short routine name", "items": [{"name": "exercise name", "rx": "3×10" or "3×45 s" or "20 min" or "5 km"}]}';
+    sm.json(pr,{modelTier:'quick'}).then(function(r){done(r)},function(e){done(null,aiErr(e&&e.code))});
+  });
 }
 function renderNotes(){
   var o=S.notes,h='';
   if(o){
     var st=stageCalc();
-    h='<div class="note stack"><b>'+esc(o.title)+'</b><div>'+(o.items.length?o.items.map(function(e){var state=exState(e.name,S.area,st);return '<div class="ex"><div><b>'+esc(e.name)+'</b> '+exBadge(state)+'</div><span class="mono">'+esc(e.rx)+'</span></div>'}).join(''):'<p>No exercises found. Try lines like "squats 4x8".</p>')+'</div>';
-    if(o.skipped.length)h+='<p class="small muted">Could not read: '+o.skipped.map(esc).join('; ')+'</p>';
+    h='<div class="note stack"><label class="rnm" for="nt-title"><span class="vh-only">Routine name</span><input id="nt-title" class="rnm-in" maxlength="60" value="'+esc(o.title)+'" autocomplete="off"><span class="rnm-ic" aria-hidden="true">✎</span></label><p class="small muted" style="margin:-.3rem 0 0">Tap the name to rename it.</p><div>'+(o.items.length?o.items.map(function(e){var state=exState(e.name,S.area,st);return '<div class="ex"><div><b>'+esc(e.name)+'</b> '+exBadge(state)+'</div><span class="mono">'+esc(e.rx)+'</span></div>'}).join(''):'<p>No exercises found. Try lines like "squats 4x8".</p>')+'</div>';
+    if(o.skipped.length||!o.items.length)h+='<p class="small muted">'+(o.skipped.length?'Could not read: '+o.skipped.map(esc).join('; '):'')+'</p><div class="row"><button class="btn sm" data-act="ntai"'+(S.ntBusy?' disabled':'')+'>'+(S.ntBusy?'Reading with AI…':'Read it with AI (1 AI use)')+'</button></div>'+(S.ntMsg?'<p class="note warn small">'+esc(S.ntMsg)+'</p>':'');
     if(o.items.length)h+='<div class="row"><button class="btn primary sm" data-act="ntsave">Save as routine</button></div>';
     h+='</div>';
   }
-  $('#nt-out').innerHTML=h;
+  var nt=$('#nt-out');if(nt.dataset.h!==h){nt.dataset.h=h;nt.innerHTML=h}
 }
 
 function copyText(txt,el){
@@ -3882,20 +3946,27 @@ var ACT={
     if(S.selW===id){S.selW='g1';S.wz=3}syncSched();toast('Deleted.');
   },
   splan:function(b){S.planId=b.dataset.id;syncSched()},
-  siread:function(){S.siRes=siParse($('#si-text').value)},
+  siread:function(){S.siMsg='';S.siRes=siParse($('#si-text').value)},
+  siai:function(){var txt=$('#si-text').value||'';if(!txt.trim())return;S.siBusy=true;S.siMsg='';
+    aiReadText('sched',txt,function(r,err){S.siBusy=false;
+      if(!r||!Array.isArray(r.days)||!r.days.length){S.siMsg=err||'AI could not read that either.';refresh();return}
+      var lines=[];r.days.forEach(function(d){var di=siDayIdx(String(d.day||'').trim());if(di<0)return;
+        if(d.rest||!d.workout&&!(d.exercises||[]).length){lines.push(DAYN[di]+': rest');return}
+        lines.push(DAYN[di]+': '+String(d.workout||DAYN[di]+' workout'));(d.exercises||[]).forEach(function(x){if(x&&x.name)lines.push('  '+x.name+' '+(x.rx||''))})});
+      var res=siParse(lines.join('\n'));if(r.title)res.title=String(r.title).slice(0,30);S.siRes=res;refresh()})},
   sisample:function(){$('#si-text').value=SI_SAMPLE;S.siRes=siParse(SI_SAMPLE)},
   siclear:function(){S.siRes=null},
   siapply:function(){var o=S.siRes;if(!o)return;if(!schedList().length&&!schedAdd())return;var made=0,set=0,plan=S.plans[S.planId].slice(),mk={};
     o.days.forEach(function(e,d){if(!e)return;
-      if(e.kind==='new'){var key=e.name+'|'+JSON.stringify(e.items);if(!mk[key]){var id='c'+(uid++);S.customW.push({id:id,name:String(e.name).slice(0,60),mins:Math.max(10,e.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:e.items.map(function(i){return [i.name,i.rx]})});mk[key]=id;made++}plan[d]=mk[key]}
+      if(e.kind==='new'){var nin=$('#sin-'+d),nm0=(nin&&nin.value.trim())||e.name,key=nm0+'|'+JSON.stringify(e.items);if(!mk[key]){var id='c'+(uid++);S.customW.push({id:id,name:String(nm0).slice(0,60),mins:Math.max(10,e.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:e.items.map(function(i){return [i.name,i.rx]})});mk[key]=id;made++}plan[d]=mk[key]}
       else if(e.kind==='rest')plan[d]=null;
       else{var sel=$('#si-'+d),v=sel?sel.value:(e.kind==='match'?e.id:e.sel||'');
-        if(v==='__new'){var nm=siClean(e.label)||e.label,dur=siDur(e.label)||'30 min',key2='n|'+nm.toLowerCase();
+        if(v==='__new'){var nin2=$('#sin-'+d),nm=(nin2&&nin2.value.trim())||siClean(e.label)||e.label,dur=siDur(e.label)||'30 min',key2='n|'+nm.toLowerCase();
           if(!mk[key2]){var nid='c'+(uid++),cap=nm.charAt(0).toUpperCase()+nm.slice(1);S.customW.push({id:nid,name:cap.slice(0,60),mins:/min/.test(dur)?Math.max(10,parseInt(dur,10)):30,level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'cardio',ex:[[cap.slice(0,50),dur]]});mk[key2]=nid;made++}
           plan[d]=mk[key2]}
         else plan[d]=v||null}
       set++});
-    S.plans[S.planId]=plan;syncSched();S.siRes=null;$('#si-text').value='';
+    S.plans[S.planId]=plan;var snm=$('#si-name')?$('#si-name').value.trim():(o.name||'');if(snm)S.planNames[S.planId]=snm.slice(0,30);syncSched();S.siRes=null;$('#si-text').value='';
     toast('Imported '+set+' day'+(set===1?'':'s')+' into '+schedName()+(made?', with '+made+' new workout'+(made===1?'':'s'):'')+'.')},
   sreset:function(){S.plans[S.planId]=[null,null,null,null,null,null,null];syncSched();toast('Schedule cleared.')},
   sadd:function(){var L=schedList();if(L.length>=schedMax()){toast(isPro()?'You have the most schedules: 3.':'Free accounts get 1 schedule. Pro gets up to 3.');return}schedAdd();toast('Added a schedule. Pick a workout for each day.')},
@@ -3966,9 +4037,13 @@ var ACT={
   aiex:function(b){var t=AI_EX[parseInt(b.dataset.id,10)];$('#ai-text').value=t;S.ai=null;aiWorkout(t)},
   copyprompt:function(){copyText($('#ai-prompt').textContent,$('#ai-prompt'))},
   aisave:function(){var o=S.ai;if(!o)return;var id='c'+(uid++);S.customW.push({id:id,name:o.name,mins:o.mins,level:'Custom',cat:'custom',eq:['bodyweight'],focus:o.focus,pl:o.pl,ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved to your library.')},
-  ntparse:function(){S.notes=parseNotes($('#nt-text').value||'')},
+  ntparse:function(){S.ntMsg='';S.notes=parseNotes($('#nt-text').value||'')},
+  ntai:function(){var txt=$('#nt-text').value||'';if(!txt.trim())return;S.ntBusy=true;S.ntMsg='';
+    aiReadText('routine',txt,function(r,err){S.ntBusy=false;
+      if(!r||!Array.isArray(r.items)||!r.items.length){S.ntMsg=err||'AI could not read that either. Try one exercise per line.';refresh();return}
+      S.notes={title:String(r.title||(S.notes&&S.notes.title)||'Imported routine').slice(0,60),items:r.items.slice(0,20).map(function(i){return {name:canon(String(i&&i.name||'').slice(0,50)),rx:String(i&&i.rx||'3×10').slice(0,24)}}).filter(function(i){return i.name}),skipped:[]};refresh()})},
   ntsample:function(){$('#nt-text').value=NOTE_SAMPLE;S.notes=parseNotes(NOTE_SAMPLE)},
-  ntsave:function(){var o=S.notes;if(!o||!o.items.length)return;var id='c'+(uid++);S.customW.push({id:id,name:o.title,mins:Math.max(10,o.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved "'+o.title+'" to your library.')},
+  ntsave:function(){var o=S.notes;if(!o||!o.items.length)return;var ti=$('#nt-title');if(ti&&ti.value.trim())o.title=ti.value.trim().slice(0,60);var id='c'+(uid++);S.customW.push({id:id,name:o.title,mins:Math.max(10,o.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved "'+o.title+'" to your library.')},
   hidenums:function(){S.hideNums=true;$('#sg-hide').checked=true;toast('Calorie numbers are now hidden.')},
   maint:function(){S.goals=['maintain'];S.macroOv={p:null,c:null,f:null};S.goal='maintain';S.goalKcal=null;S.coachMsg='Switched to a maintenance week. Targets are at maintenance and the plateau check is paused.';toast('Goal set to maintenance.')},
   goal:function(b){S.goals=[{lose:'cut',maintain:'maintain',gain:'lean'}[b.dataset.k]||'maintain'];S.macroOv={p:null,c:null,f:null};S.goal=b.dataset.k;S.goalKcal=null;S.coachMsg='Goal changed. Calorie and protein targets updated on every screen.'},
