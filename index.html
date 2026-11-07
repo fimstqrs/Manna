@@ -1995,6 +1995,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:106,d:'Nov 7, 2026',t:'Sync that just works',s:['Signing in on a device that already has its own data no longer asks which copy to keep. Both are combined: workouts and meals from both are kept, and for each setting the most recent change wins.','Devices that were waiting on that question now sync straight away.','If sync ever fails, Settings › Account says why.']},
  {v:105,d:'Nov 7, 2026',t:'The full version history',s:['The version log now goes all the way back to Version 1.','Versions 1 to 52 are rebuilt from memory and marked approximate. Versions 1 to 59 came before the current site, so they are dated Before Nov 6, 2026.']},
  {v:104,d:'Nov 7, 2026',t:'Sync fixes',s:['Your theme and other settings now sync reliably: the most recent change from any device wins.','Sync now in Settings works and tells you when it is done. The Sync line shows when it last synced.','The rest timer only runs between sets of the same exercise. Workouts without sets, like a run, have no rest timer.','During a workout, tap + Add set to add a set to any exercise. Logging an extra set counts it too.']},
  {v:103,d:'Nov 7, 2026',t:'Test update',s:['A small test release to try the relaunch-to-update message. Nothing else changed.']},
@@ -2274,7 +2275,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='105';
+var heroLast='',APPV='106';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3821,8 +3822,8 @@ function cloudPush(){
   return authToken().then(function(tok){if(!tok)throw {status:401};var a=authGet(),now=new Date().toISOString(),s=snap(),dat=localData();
     ACC.sync='saving';
     return fetch(ACC.cfg.url+'/rest/v1/profiles?on_conflict=id',{method:'POST',headers:Object.assign(sbHeaders(tok),{prefer:'resolution=merge-duplicates,return=minimal'}),body:JSON.stringify({id:a.id,data:dat,updated_at:now})})
-      .then(sbJson).then(function(){syncMetaSet({uid:a.id,h:hashStr(s),at:Date.parse(now),lc:0});syncBaseSet(dat);ACC.sync='saved';ACC.syncAt=Date.now();return dat});
-  }).catch(function(e){ACC.sync='error';throw e});
+      .then(sbJson).then(function(){syncMetaSet({uid:a.id,h:hashStr(s),at:Date.parse(now),lc:0});syncBaseSet(dat);ACC.sync='saved';ACC.syncErr='';ACC.syncAt=Date.now();return dat});
+  }).catch(function(e){ACC.sync='error';ACC.syncErr=syncErrText(e);throw e});
 }
 /* Put the account's data on this device, then restart the app so everything reloads from it. */
 function cloudApply(row){
@@ -3842,10 +3843,12 @@ function syncStart(fromLogin){
     var cloudAt=Date.parse(row.updated_at)||0;
     if(m.uid!==a.id){
       if(localIsFresh())return cloudApply(row);
-      ACC.conflict=row;ACC.sync='';accSay('');return;
+      /* This device has its own data: combine it with the account instead of asking */
+      ACC.conflict=null;syncLocal(mergeData(localData(),row.data||{},{}),true);
+      return cloudPush().then(function(){toast('This device is now synced with your account.');if(fromLogin)accSay('Signed in. This device and your account are now combined.')});
     }
     ACC.sync='';return syncNow();
-  }).catch(function(e){ACC.sync='error';refresh()});
+  }).catch(function(e){ACC.sync='error';ACC.syncErr=syncErrText(e);refresh()});
 }
 /* ---- Automatic sync ----
    Changes here are saved to the account a moment after they happen, and changes made on
@@ -3853,6 +3856,7 @@ function syncStart(fromLogin){
    When both sides changed, they are merged: lists like workouts done, food logged, your
    workouts and AI estimates keep additions and removals from both devices, and each setting
    (theme, goals, units and so on) keeps whichever side changed it. */
+function syncErrText(e){if(!e)return 'Unknown problem';if(e instanceof TypeError)return 'Could not reach the server. Check your connection.';if(e.status===401)return 'Your sign-in expired. Log out and back in.';if(e.status===413)return 'Your data is too large to save.';return 'Error '+(e.status||'')+(e.msg?': '+String(e.msg).slice(0,120):'')}
 function syncBase(){try{return JSON.parse(lsGet('manna.sync.base')||'null')}catch(e){return null}}
 function syncBaseSet(d){try{lsSet('manna.sync.base',JSON.stringify(d))}catch(e){}}
 function jeq(a,b){return JSON.stringify(a)===JSON.stringify(b)}
@@ -3909,18 +3913,18 @@ function syncNow(){
     var local=localData(),h=hashStr(snap()),localChanged=h!==m.h;
     if(!row)return cloudPush();
     var cloudAt=Date.parse(row.updated_at)||0,cloudChanged=cloudAt>(m.at||0);
-    if(!cloudChanged&&!localChanged){ACC.sync='saved';ACC.syncAt=Date.now();return}
+    if(!cloudChanged&&!localChanged){ACC.sync='saved';ACC.syncErr='';ACC.syncAt=Date.now();return}
     if(cloudChanged&&!localChanged){
       if(syncBusy()){syncAgain=true;return}
       syncLocal(row.data||{},false);syncBaseSet(row.data||{});
-      syncMetaSet({uid:a.id,h:hashStr(snap()),at:cloudAt,lc:0});ACC.sync='saved';ACC.syncAt=Date.now();return}
+      syncMetaSet({uid:a.id,h:hashStr(snap()),at:cloudAt,lc:0});ACC.sync='saved';ACC.syncErr='';ACC.syncAt=Date.now();return}
     if(!cloudChanged)return cloudPush();
     /* Both changed: merge, keep the result here and save it to the account */
     if(syncBusy()){syncAgain=true;return}
     var merged=mergeData(local,row.data||{},syncBase()||{});
     syncLocal(merged,true);
     return cloudPush();
-  }).catch(function(){ACC.sync='error'}).then(function(){syncRun=null;refresh();if(syncAgain){syncAgain=false;clearTimeout(syncT);syncT=setTimeout(syncNow,4000)}});
+  }).catch(function(e){ACC.sync='error';ACC.syncErr=syncErrText(e)}).then(function(){syncRun=null;refresh();if(syncAgain){syncAgain=false;clearTimeout(syncT);syncT=setTimeout(syncNow,4000)}});
   return syncRun;
 }
 /* Called whenever the app saves: push a couple of seconds after the last change */
@@ -3966,7 +3970,7 @@ function accRender(){
   var el=$('#acct-card');if(!el)return;
   var on=!!(ACC.cfg&&ACC.cfg.accounts);el.hidden=!on;if(!on)return;
   var a=authGet(),m=syncMeta();
-  var sig=JSON.stringify([ACC.prov,ACC.mode,ACC.busy,ACC.msg,ACC.err,a&&a.email,a&&a.prov,a&&a.name,a&&a.provs,ACC.usage,ACC.sync,Math.floor(ACC.syncAt/60000),!!ACC.conflict,!!ACC.delAsk]);
+  var sig=JSON.stringify([ACC.prov,ACC.mode,ACC.busy,ACC.msg,ACC.err,a&&a.email,a&&a.prov,a&&a.name,a&&a.provs,ACC.usage,ACC.sync,ACC.syncErr,Math.floor(ACC.syncAt/60000),!!ACC.conflict,!!ACC.delAsk]);
   if(sig===ACC.sig)return;ACC.sig=sig;
   var f=accFields(),h='<div class="sh"><h3>Account</h3>';
   var note=ACC.msg?'<p class="note small'+(ACC.err==='out'?' crit':ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
@@ -3981,7 +3985,7 @@ function accRender(){
     }
     h+='<div class="kv"><span>Plan</span><span class="badge">'+plan+'</span></div>'
       +(u?'<div class="kv"><span>AI uses today</span><span class="mono">'+(u.limit==null?'Unlimited':u.used+' of '+u.limit)+'</span></div>':'')
-      +'<div class="kv"><span>Sync</span><span class="small">'+(ACC.sync==='saving'||ACC.sync==='checking'?'Syncing…':ACC.sync==='error'?'Not synced yet. Will retry.':'On, automatic'+(ACC.syncAt?' · last synced '+fmtT(new Date(ACC.syncAt).toTimeString().slice(0,5)):''))+'</span></div>'
+      +'<div class="kv"><span>Sync</span><span class="small">'+(ACC.sync==='saving'||ACC.sync==='checking'?'Syncing…':ACC.sync==='error'?'Not synced. '+esc(ACC.syncErr||'Will retry.'):'On, automatic'+(ACC.syncAt?' · last synced '+fmtT(new Date(ACC.syncAt).toTimeString().slice(0,5)):''))+'</span></div>'
       +'<div class="row"><button class="btn" data-act="acsync">Sync now</button><button class="btn" data-act="acswitch">Use a different account</button><button class="btn" data-act="acout">Log out</button></div>'
       +(ACC.delAsk?'<div class="note warn stack"><b>Delete your account?</b><p class="small">This permanently deletes your account and everything saved to it. Data on this device stays until you clear it.</p><div class="row"><button class="btn primary" data-act="acdel2">Yes, delete it</button><button class="btn" data-act="acdelno">Cancel</button></div></div>'
         :'<button class="linkbtn small" data-act="acdel">Delete account</button>');
