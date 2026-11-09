@@ -625,6 +625,24 @@ input[type=text],input[type=number],select,textarea{
 [data-cat=soccer]{--cc:#58B368}[data-cat=fball]{--cc:#A0724A}[data-cat=base]{--cc:#D96C6C}[data-cat=tennis]{--cc:#C8D64A}[data-cat=golf]{--cc:#3FA66B}[data-cat=swim]{--cc:#3DA5E0}[data-cat=volley]{--cc:#E8B84A}[data-cat=hockey]{--cc:#7C8CF0}[data-cat=wrestle]{--cc:#B565D9}
 .shcard .shl{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}.shcard .shl li{display:flex;gap:.7rem;align-items:center;padding:.6rem .7rem;border-radius:12px;background:color-mix(in srgb,var(--acc,#888) 8%,transparent)}.shcard .shl .se{font-size:1.6rem;line-height:1}.shcard .shl b{display:block}.shcard .shtot{font-weight:700}.tplan .pst{display:flex;gap:.75rem;align-items:flex-start;padding:.7rem 0;border-top:1px solid color-mix(in srgb,currentColor 10%,transparent)}.tplan .pst:first-of-type{border-top:0}.tplan .pn{flex:none;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.85rem;background:color-mix(in srgb,var(--acc,#888) 16%,transparent)}.tplan .pst.ok .pn{background:var(--acc,#6b8);color:#fff}.tplan .pb{flex:1;min-width:0;display:grid;gap:.35rem}.tplan .pb .row{gap:.4rem}.tplan .pbar{height:7px;border-radius:9px;background:color-mix(in srgb,currentColor 10%,transparent);overflow:hidden}.tplan .pbar i{display:block;height:100%;background:var(--acc,#6b8);border-radius:9px}.tplan .wb{padding:.55rem .75rem;border-radius:12px;background:color-mix(in srgb,var(--acc,#888) 10%,transparent)}.tplan textarea{width:100%;min-height:4.5rem}.tplan .ci{display:flex;gap:.4rem;flex-wrap:wrap}.yv-top{display:flex;align-items:center;gap:.35rem;flex-wrap:nowrap}.yv-ref{flex:1;min-width:0;white-space:nowrap;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:.35rem;font:700 1.05rem var(--f-display);padding:.55rem 1rem;border-radius:999px;border:0;cursor:pointer;color:inherit;background:color-mix(in srgb,currentColor 7%,transparent)}.yv-ref small{font:600 .7rem/1 system-ui;padding:.25rem .4rem;border-radius:6px;background:color-mix(in srgb,currentColor 12%,transparent)}.yv-ic{flex:none;width:2.4rem;height:2.4rem;padding:0;border-radius:50%;border:0;cursor:pointer;font-size:1.05rem;color:inherit;background:color-mix(in srgb,currentColor 7%,transparent)}.yv-ic[aria-pressed=true]{background:var(--acc,#6b8);color:#fff}.yv-set{display:grid;gap:.6rem;padding:.75rem;border-radius:14px;background:color-mix(in srgb,currentColor 5%,transparent)}.yv-txt{font-family:var(--f-display);font-size:calc(1.12rem * var(--rsz,1));line-height:1.9;padding:.2rem .1rem}.yv-txt.sans{font-family:system-ui,-apple-system,sans-serif}.yv-txt h4{text-align:center;font:600 1.5rem var(--f-display);margin:.6rem 0 1rem}.yv-txt .bv{cursor:pointer;border-radius:4px;padding:.05em 0;transition:background .2s}.yv-txt .bv sup{font:700 .62em system-ui;color:var(--muted);margin:0 .2em 0 .35em;vertical-align:.45em}.yv-txt .bv.sel{text-decoration:underline dotted 2px;text-underline-offset:.28em}.yv-txt .bv.say{background:color-mix(in srgb,var(--acc,#6b8) 22%,transparent)}.yv-txt .hl-y{background:color-mix(in srgb,#FFD84D 50%,transparent)}.yv-txt .hl-g{background:color-mix(in srgb,#7BE08A 45%,transparent)}.yv-txt .hl-b{background:color-mix(in srgb,#6EC1FF 45%,transparent)}.yv-txt .hl-p{background:color-mix(in srgb,#FF8FC0 45%,transparent)}.yv-txt .hl-o{background:color-mix(in srgb,#FFAE5C 50%,transparent)}.yv-nav{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:.5rem}.yv-nav .yv-ic{width:3rem;height:3rem;font-size:1.3rem}
 .how{margin:.35rem 0 .1rem;font-size:.92rem}.how summary{cursor:pointer;color:var(--acc,#2a7);font-weight:600;font-size:.85rem;list-style:none;display:inline-flex;align-items:center;gap:.3rem}.how summary::-webkit-details-marker{display:none}.how summary::before{content:'ⓘ';font-weight:700}.how[open] summary{margin-bottom:.3rem}.how p{margin:.2rem 0 .45rem;line-height:1.5;padding:.55rem .7rem;border-radius:10px;background:color-mix(in srgb,var(--acc,#888) 8%,transparent)}
+.wtop{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:.45rem;flex-wrap:nowrap;padding:.6rem .8rem;border-radius:18px;background:var(--surface,var(--card,#fff));box-shadow:0 2px 14px rgba(0,0,0,.08);margin-bottom:.6rem}.wtop .wtn{flex:1;min-width:0}.wtop .wtn b{display:block;font-size:.98rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.wtop .wtn .pill{font-size:.68rem}.wtop .btn{flex:none}@media (max-width:420px){.wtop .wsets{display:none}}.wtop .wclock{font:700 1.35rem/1 var(--f-mono,ui-monospace,monospace)}.wtop.paused .wclock{opacity:.5}
+.wfeedw{position:relative;max-width:560px;margin:0 auto}
+.wfeed{height:clamp(420px,calc(100dvh - 215px),900px);overflow-y:auto;scroll-snap-type:y mandatory;overscroll-behavior:contain;border-radius:26px;scrollbar-width:none;-webkit-overflow-scrolling:touch;background:var(--surface,var(--card,#fff));box-shadow:0 6px 30px rgba(0,0,0,.08)}.wfeed::-webkit-scrollbar{display:none}
+.wslide{position:relative;height:100%;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overscroll-behavior:auto;padding:1.3rem 3.2rem 1.4rem 1.3rem;display:flex;flex-direction:column;gap:.55rem;background:linear-gradient(170deg,color-mix(in srgb,var(--accent,#6b8) 12%,transparent),transparent 55%)}
+.wslide:nth-child(even){background:linear-gradient(170deg,color-mix(in srgb,#B565D9 10%,transparent),transparent 55%)}
+.wslide .wtag{font:600 .72rem var(--f-mono,monospace);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0}
+.wslide .wname{font:700 clamp(1.6rem,7vw,2.2rem)/1.1 var(--f-display,inherit);margin:0}
+.wslide .wrx{font:700 1.25rem var(--f-mono,monospace)}
+.wslide .setform{margin-top:auto}
+.wslide .how p{font-size:.95rem}
+.wend{justify-content:center;text-align:center;align-items:center}
+.wrail{position:absolute;right:.55rem;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.4rem;z-index:3}.wrail button{width:.7rem;height:.7rem;padding:0;border-radius:99px;border:0;cursor:pointer;background:color-mix(in srgb,var(--ink,#000) 20%,transparent);transition:height .2s,background .2s}.wrail button.done{background:color-mix(in srgb,var(--accent,#6b8) 55%,transparent)}.wrail button.on{height:1.6rem;background:var(--accent,#6b8)}
+.wfhint{margin:.2rem 0 0;text-align:center;font-size:.8rem;color:var(--muted);pointer-events:none;transition:opacity .3s;animation:wfbob 1.8s ease-in-out infinite}.wfhint.gone{opacity:0}@keyframes wfbob{50%{transform:translateY(-5px)}}html.lite .wfhint{animation:none}
+.wrest{position:absolute;inset:0;z-index:4;display:grid;place-items:center;border-radius:26px;background:color-mix(in srgb,var(--bg,#fff) 55%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:wrin .35s cubic-bezier(.2,.9,.3,1.2)}html.lite .wrest{-webkit-backdrop-filter:none;backdrop-filter:none;background:color-mix(in srgb,var(--bg,#fff) 88%,transparent);animation:none}
+@keyframes wrin{from{opacity:0;transform:scale(.94)}}
+.wrest-c{display:grid;gap:.55rem;justify-items:center;text-align:center;padding:1.3rem 1.4rem;border-radius:24px;background:var(--surface,var(--card,#fff));box-shadow:0 14px 44px rgba(0,0,0,.22);width:min(19rem,86%)}
+.wrest-r{position:relative;width:9rem;height:9rem}.wrest-r svg{width:100%;height:100%;transform:rotate(-90deg)}.wrest-r circle{fill:none;stroke-width:9}.wrest-r .bg{stroke:color-mix(in srgb,var(--ink,#000) 10%,transparent)}.wrest-r .fg{stroke:var(--accent,#6b8);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.wrest-t{position:absolute;inset:0;display:grid;place-items:center;font:700 2.1rem var(--f-mono,monospace)}
 .rscard{text-align:center;display:grid;gap:.7rem}.rscard .rsclock{font:700 2.6rem/1 var(--f-mono,ui-monospace,monospace);letter-spacing:.02em}.rscard .rsic{font-size:2.6rem;line-height:1}
 .mkcard{text-align:center;display:grid;gap:.8rem;max-height:85vh;overflow:auto}.mkcard .ex,.mkcard .list{text-align:left}
 .mkorb{position:relative;width:7.5rem;height:7.5rem;margin:.6rem auto .2rem}.mkorb i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,var(--acc,#6b8),#B565D9,#6EC1FF,#FFD84D,var(--acc,#6b8));filter:blur(10px);opacity:.75;animation:mkspin 2.4s linear infinite}.mkorb b{position:absolute;inset:14%;border-radius:50%;background:var(--card,#fff);display:grid;place-items:center;font-size:2.4rem;animation:mkpulse 1.6s ease-in-out infinite;box-shadow:0 0 0 1px color-mix(in srgb,currentColor 8%,transparent)}.mkorb s{position:absolute;width:.5rem;height:.5rem;border-radius:50%;background:var(--acc,#6b8);text-decoration:none;opacity:0;animation:mkspark 2s ease-out infinite}.mkorb s:nth-of-type(1){top:6%;left:18%}.mkorb s:nth-of-type(2){top:16%;right:6%;animation-delay:.5s;background:#B565D9}.mkorb s:nth-of-type(3){bottom:8%;left:10%;animation-delay:1s;background:#6EC1FF}.mkorb s:nth-of-type(4){bottom:2%;right:22%;animation-delay:1.5s;background:#FFD84D}
@@ -2294,6 +2312,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:135,d:'Nov 9, 2026',t:'TikTok-style workouts',s:['During a workout, each exercise is now its own full-screen card. Swipe up for the next exercise and down to go back, or tap the dots on the side.','The top bar keeps your time, sets logged, Pause and Finish in view the whole time.','After you log the last set of an exercise, Manna moves you to the next card on its own.','The rest timer now pops up on top of whatever card you are on, with a countdown ring, +15 s and Skip rest. Your phone buzzes when rest is over (where supported).']},
  {v:134,d:'Nov 9, 2026',t:'AI progress bar, free exercise steps',s:['Whenever Manna asks AI for something, the pop-up shows a progress bar and a percentage, and fills to 100% when it is done.','Every exercise without built-in steps, including in AI-made, imported and your own workouts, now gets How to do it steps automatically. These never use your AI uses.']},
  {v:133,d:'Nov 9, 2026',t:'How to do every exercise',s:['Every exercise now has a How to do it button that opens short, plain steps: how to set up, the movement, and a form tip.','It shows on workout pages, on Before you start and during the workout itself.','Workouts made with AI come with their own steps for each exercise, at no extra AI use.','Exercises you added yourself or imported get exact steps automatically, for free.']},
  {v:132,d:'Nov 9, 2026',t:'Workouts pause when you leave',s:['If you close Manna, switch apps or lock your phone during a workout, the timer pauses on its own, and so does any rest timer.','When you come back, a pop-up shows your time so far with a Resume button. You can also finish the workout or leave it paused.','Even if your phone closes Manna completely, your workout and the sets you logged come back, with the timer stopped at the moment you left.']},
@@ -2629,7 +2648,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='134';
+var heroLast='',APPV='135';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3591,9 +3610,9 @@ function lastTop(wid,i,kind){
 function clockH(ms){var t=Math.floor(ms/1000),h=Math.floor(t/3600),m=Math.floor(t%3600/60),sec=t%60;return (h?h+':'+('0'+m).slice(-2):m)+':'+('0'+sec).slice(-2)}
 /* Pause the workout when Manna is closed, hidden or the phone locks; offer Resume on return */
 function sessPause(auto){var a=S.sess;if(!a||a.paused)return false;var now=Date.now();a.acc+=now-a.last;a.paused=true;a.autoP=!!auto;a.pAt=now;
-  if(S.rest&&S.rest.until>now){a.restLeft=S.rest.until-now}else a.restLeft=0;S.rest=null;return true}
+  if(S.rest&&S.rest.until>now){a.restLeft=S.rest.until-now;a.restTot=S.rest.tot}else a.restLeft=0;S.rest=null;return true}
 function sessResume(){var a=S.sess;if(!a)return;var now=Date.now();if(a.paused){a.paused=false;a.last=now}a.autoP=false;
-  if(a.restLeft>0){S.rest={until:now+a.restLeft};a.mark=now+a.restLeft}a.restLeft=0}
+  if(a.restLeft>0){S.rest={until:now+a.restLeft,tot:a.restTot||Math.ceil(a.restLeft/1000)};a.mark=now+a.restLeft}a.restLeft=0}
 function rsOpen(){var a=S.sess,w=a&&sessW();if(!a||!a.paused||!a.autoP||!w)return;var m=$('#rs');rsRender();if(m.hidden){modalOpen(m);document.body.classList.add('modal-open')}}
 function rsClose(){var m=$('#rs');if(m&&!m.hidden){modalHide(m);document.body.classList.remove('modal-open')}}
 function rsRender(){var a=S.sess,w=a&&sessW(),c=$('#rs-card');if(!c)return;if(!a||!w){c.innerHTML='';return}
@@ -3621,7 +3640,7 @@ function wakeSync(){
 }
 setInterval(function(){
   var t=$('#rest-t');
-  if(S.rest){var left=Math.ceil((S.rest.until-Date.now())/1000);if(left<=0){S.rest=null;refresh()}else if(t)t.textContent=Math.floor(left/60)+':'+('0'+left%60).slice(-2)}
+  if(S.rest){var left=Math.ceil((S.rest.until-Date.now())/1000);if(left<=0){S.rest=null;try{if(navigator.vibrate)navigator.vibrate([120,60,120])}catch(e){}refresh()}else{restPaint()}}
   wakeSync();
 },1000);
 document.addEventListener('visibilitychange',wakeSync);
@@ -4012,34 +4031,62 @@ function renderSession(){
       +(!pwk.ex.some(function(e,i){var d=S.pd[i];return (d&&d.s!=null?d.s:setTarget(e[1]))>1})?'<p class="small muted">No rest timer: every exercise here is done once.</p>':'<div class="stack restpick"><b>Rest between sets</b><div class="chips" role="group" aria-label="Rest between sets">'+[0,30,60,90,120,180].map(function(r){return '<button type="button" class="chip" data-act="restpick" data-s="'+r+'" aria-pressed="'+(S.restPick===r)+'">'+(r?restLabel(r):'No rest')+'</button>'}).join('')+'</div><p class="small muted">'+(S.restPick?'A countdown starts after each set you log. You can skip it any time.':'No countdown between sets.')+' Your choice is remembered for next time.</p></div>')
       +'<div class="row spread">'+(rows.length?'<button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button>':'<span></span>')+'<div class="row"><button class="btn" data-act="pcancel">Cancel</button><button class="btn primary" data-act="pstart">Start workout</button></div></div></div>';
   }else if(S.sess&&w){
-    var ms=sessMs(),t=sessTotals(w),st=stageCalc(),paused=S.sess.paused;
-    h+='<header class="vh"><p class="eyebrow"><span class="pill '+(paused?'pause':'prog')+'">'+(paused?'Paused':'In progress')+'</span></p><h2>'+esc(w.name)+'</h2><p class="lede">'+esc(w.focus||'')+' · planned '+w.mins+' min</p></header>';
-    h+='<div class="ssbar'+(paused?' paused':'')+'">'+statTiles(ms,sessKcal(ms,w),t.n,t.vol,S.units,true)
-      +'<div class="row"><button class="btn" data-act="spause">'+(paused?'Resume':'Pause')+'</button><button class="btn primary" data-act="sfinish">Finish workout</button></div></div>';
-    if(S.rest&&S.rest.until>Date.now())h+='<div class="card row spread" role="timer"><div><b>Rest</b> <span class="mono" id="rest-t"></span></div><button class="btn" data-act="restskip">Skip rest</button></div>';
-    h+='<div class="card">'+(S.showBurn?'<p class="small muted">Calories are an estimate from your weight, the type of workout and the time spent. Pausing stops the clock.</p>':'<p class="small muted">Calorie burn is hidden by your eating safeguards. <button class="chip" data-act="sburn">Show it</button></p>');
-    if(S.area!=='none')h+='<p class="small muted">Checked against your '+AREAS.filter(function(a){return a[0]===S.area})[0][1].toLowerCase()+' (stage '+st+'). Stop if pain goes above 3.</p>';
-    h+=w.ex.map(function(e,i){
+    var ms=sessMs(),t=sessTotals(w),st=stageCalc(),paused=S.sess.paused,n=w.ex.length,setsAll=0,setsDone=0;
+    h+='<div class="wtop'+(paused?' paused':'')+'"><div class="wtn"><span class="pill '+(paused?'pause':'prog')+'">'+(paused?'Paused':'In progress')+'</span><b>'+esc(w.name)+'</b></div><span class="wclock" id="ss-time" role="timer" aria-label="Workout time"></span><span class="small muted wsets">'+t.n+' set'+(t.n===1?'':'s')+'</span><button class="btn sm" data-act="spause">'+(paused?'Resume':'Pause')+'</button><button class="btn sm primary" data-act="sfinish">Finish</button><span id="ss-kcal" hidden></span></div>';
+    var slides=w.ex.map(function(e,i){
       var kind=exKind(e[0],e[1]),TG=sessTg(w,i),tg=TG.s,k=w.id+'|'+i,logged=S.sets[k]||[],last=logged[logged.length-1],prev=lastTop(w.id,i,kind),state=exState(e[0],S.area,st),done=logged.length>=tg;
+      setsAll+=tg;setsDone+=Math.min(tg,logged.length);
       var sl=logged.map(function(x,j){return '<li><span class="mono">Set '+(j+1)+': '+esc(setLabel(x,kind,S.units))+(x.t?' · '+secLabel(x.t):'')+'</span><button class="btn sm" data-act="setdel" data-i="'+i+'" data-j="'+j+'" aria-label="Remove set '+(j+1)+' of '+esc(e[0])+'">Remove</button></li>'}).join('');
       var pre=last?last.r:TG.r,preW=last&&last.w?last.w:(S.pw[k]||'');
       var form='<div class="setform">'+(kind==='reps'?'<label class="f small muted" for="sw-'+i+'">Weight ('+S.units+')<input type="number" inputmode="decimal" min="0" step="any" id="sw-'+i+'" value="'+preW+'" placeholder="0"></label>':'')
         +'<label class="f small muted" for="sr-'+i+'">'+KLAB[kind]+'<input type="number" inputmode="numeric" min="0" step="1" id="sr-'+i+'" value="'+pre+'" placeholder="0"></label>'
-        +'<button class="btn primary" data-act="setadd" data-i="'+i+'">Log set '+(logged.length+1)+'</button></div>';
+        +'<button class="btn primary" data-act="setadd" data-i="'+i+'">'+(done?'Log extra set':'Log set '+(logged.length+1))+'</button></div>';
       var m=muOf(e[0])[0].map(function(x){return MUS[x]}).join(' · ');
-      return '<div class="ex exb"><div class="exh"><div><b>'+esc(e[0])+'</b> '+exBadge(state)+(done?' <span class="pill done">Done</span>':'')+(m?'<div class="small muted">'+esc(m)+'</div>':'')+(state!=='ok'?'<div class="small muted">'+(state==='modify'?'Lower the load and stop at pain 3.':'Swap: '+esc(ALT[e[0]]||'skip it for now')+'.')+'</div>':'')+howHtml(e[0])+'</div><span class="mono">'+esc(e[1])+'</span></div>'
+      return '<section class="wslide" data-i="'+i+'" aria-label="Exercise '+(i+1)+' of '+n+': '+esc(e[0])+'"><p class="wtag">Exercise '+(i+1)+' of '+n+'</p><h3 class="wname">'+esc(e[0])+'</h3>'
+        +'<div class="row" style="gap:.4rem;align-items:center"><span class="wrx">'+esc(e[1])+'</span>'+exBadge(state)+(done?'<span class="pill done">Done</span>':'')+'</div>'
+        +(m?'<div class="small muted">'+esc(m)+'</div>':'')+(state!=='ok'?'<div class="small muted">'+(state==='modify'?'Lower the load and stop at pain 3.':'Swap: '+esc(ALT[e[0]]||'skip it for now')+'.')+'</div>':'')
+        +howHtml(e[0])
         +'<div class="row" style="gap:.5rem;align-items:center"><div class="sprog'+(done?' full':logged.length?' part':'')+'">'+logged.length+' of '+tg+' sets</div><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="-1" aria-label="One set fewer"'+(tg<=Math.max(1,logged.length)?' disabled':'')+'>−</button><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="1">+ Add set</button></div>'
-        +(prev?'<div class="small muted">Last time: '+esc(prev)+'</div>':'')+(sl?'<ul class="setlist">'+sl+'</ul>':'')+form+'</div>';
+        +(prev?'<div class="small muted">Last time: '+esc(prev)+'</div>':'')+(sl?'<ul class="setlist">'+sl+'</ul>':'')+form+(i===0&&n>1?'<p class="wfhint" id="wfhint" aria-hidden="true">Swipe up for the next exercise ↑</p>':'')+'</section>';
     }).join('');
-    h+='</div><div class="row spread"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="btn" data-act="scancel">'+(S.cancelAsk?'Tap again to discard':'Cancel session')+'</button></div>';
+    var endS='<section class="wslide wend" data-i="'+n+'" aria-label="Finish"><p class="wtag">All exercises</p><h3 class="wname">'+(setsDone>=setsAll?'You did it! 🎉':'Ready to finish?')+'</h3><p class="muted">'+setsDone+' of '+setsAll+' planned sets logged</p>'
+      +'<button class="btn primary" data-act="sfinish">Finish workout</button>'
+      +(S.showBurn?'<p class="small muted">Calories are an estimate from your weight, the type of workout and the time spent. Pausing stops the clock.</p>':'<p class="small muted">Calorie burn is hidden by your eating safeguards. <button class="chip" data-act="sburn">Show it</button></p>')
+      +(S.area!=='none'?'<p class="small muted">Checked against your '+AREAS.filter(function(a){return a[0]===S.area})[0][1].toLowerCase()+' (stage '+st+'). Stop if pain goes above 3.</p>':'')
+      +'<div class="row" style="justify-content:center"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="btn sm" data-act="scancel">'+(S.cancelAsk?'Tap again to discard':'Cancel session')+'</button></div></section>';
+    var rail='<nav class="wrail" id="wrail" aria-label="Exercises">'+w.ex.map(function(e,i){var lg=(S.sets[w.id+'|'+i]||[]).length,dn=lg>=sessTg(w,i).s;return '<button type="button" data-act="wgo" data-i="'+i+'" class="'+(dn?'done':'')+'" aria-label="Go to '+esc(e[0])+(dn?', done':'')+'"></button>'}).join('')+'<button type="button" data-act="wgo" data-i="'+n+'" aria-label="Go to finish"></button></nav>';
+    var rest='';
+    if(S.rest&&S.rest.until>Date.now()){var ri=S.rest.i!=null?S.rest.i:-1,re=ri>-1?w.ex[ri]:null,nx=re?(S.sets[w.id+'|'+ri]||[]).length+1:0;
+      rest='<div class="wrest" role="timer" aria-label="Rest timer"><div class="wrest-c"><p class="eyebrow" style="margin:0">Rest</p><div class="wrest-r"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="rest-ring" cx="60" cy="60" r="52"/></svg><div class="wrest-t" id="rest-t">0:00</div></div>'
+        +(re?'<p class="small" style="margin:0">Next: set '+nx+' of <b>'+esc(re[0])+'</b></p>':'')
+        +'<div class="row" style="justify-content:center"><button class="btn sm" data-act="restadd">+15 s</button><button class="btn sm primary" data-act="restskip">Skip rest</button></div></div></div>'}
+    h+='<div class="wfeedw"><div class="wfeed" id="wfeed" tabindex="-1">'+slides+endS+'</div>'+rail+rest+'</div>';
   }else if(S.done){
     var d=S.done;
     h+='<header class="vh"><p class="eyebrow"><span class="pill done">Complete</span></p><h2>Workout complete</h2><p class="lede">'+esc(d.name)+'</p></header><div class="card stack complete">'+statTiles(d.ms,d.kcal,d.n,d.vol,d.unit,false)+'<p class="small muted">Saved to Today and to your workout history.'+(S.showBurn?' Calories are an estimate.':'')+'</p><div class="row"><a class="btn primary" href="#history" style="text-decoration:none">See history</a><a class="btn" href="#workouts" style="text-decoration:none">Back to library</a><a class="btn" href="#today" style="text-decoration:none">Go to Today</a></div></div>';
   }else{
     h+='<header class="vh"><p class="eyebrow">Workout session</p><h2>No workout running</h2><p class="lede">Pick a workout and press Start. You will get a timer, a calorie estimate and set logging.</p></header><div class="card"><a class="btn primary" href="#workouts" style="text-decoration:none">Choose a workout</a></div>';
   }
-  el.innerHTML=h;
-  Object.keys(draft).forEach(function(id){var i=document.getElementById(id);if(i&&i.value==='')i.value=draft[id]});
+  var of=$('#wfeed'),ost=of?of.scrollTop:null,ae=document.activeElement,aid=ae&&ae.id;
+  if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;
+    var nf=$('#wfeed');if(nf&&ost!=null)nf.scrollTop=ost;
+    Object.keys(draft).forEach(function(id){var i=document.getElementById(id);if(i&&i.value==='')i.value=draft[id]});
+    if(aid){var fe=document.getElementById(aid);if(fe&&fe!==ae&&/^(sw|sr)-/.test(aid))try{fe.focus({preventScroll:true})}catch(e){}}}
+  wfBind();var stt=$('#ss-time');if(stt&&S.sess)stt.textContent=clockH(sessMs());
+  if(S.wfGo!=null){var gi=S.wfGo;S.wfGo=null;setTimeout(function(){wfGo(gi,true)},S.wfGoDelay||60);S.wfGoDelay=0}
+  restPaint();
+}
+function wfGo(i,smooth){var f=$('#wfeed'),sl=f&&f.querySelector('.wslide[data-i="'+i+'"]');if(!sl)return;f.scrollTo({top:sl.offsetTop,behavior:smooth&&!document.documentElement.classList.contains('lite')?'smooth':'auto'})}
+function wfIdx(){var f=$('#wfeed');return f&&f.clientHeight?Math.round(f.scrollTop/f.clientHeight):0}
+function wfBind(){var f=$('#wfeed');if(!f||f._b)return;f._b=1;var tk=0;
+  f.addEventListener('scroll',function(){if(tk)return;tk=requestAnimationFrame(function(){tk=0;var k=wfIdx();$$('#wrail button').forEach(function(d,j){var on=j===k;d.classList.toggle('on',on);if(on)d.setAttribute('aria-current','step');else d.removeAttribute('aria-current')});var hn=$('#wfhint');if(hn&&k>0)hn.classList.add('gone')})},{passive:true});
+  var k0=wfIdx();$$('#wrail button').forEach(function(d,j){d.classList.toggle('on',j===k0)});
+}
+function restPaint(){
+  var t=$('#rest-t'),ring=$('#rest-ring');if(!S.rest)return;
+  var left=Math.max(0,Math.ceil((S.rest.until-Date.now())/1000)),tot=Math.max(1,S.rest.tot||left||1);
+  if(t)t.textContent=Math.floor(left/60)+':'+('0'+left%60).slice(-2);
+  if(ring){var C=2*Math.PI*52;ring.style.strokeDasharray=C;ring.style.strokeDashoffset=C*(1-left/tot)}
 }
 function rxFor(name,sets,focus){
   if(name==='Plank')return sets+'×30 s';
@@ -4431,6 +4478,8 @@ var ACT={
   tmove:function(b){var o=S.tord,i=o.indexOf(b.dataset.id),j=i+(+b.dataset.d);if(i<0||j<0||j>=o.length)return;var t=o[i];o[i]=o[j];o[j]=t},
   xall:function(b){XP.forEach(function(x){S.xp[x[0]]=b.dataset.k==='on'})},
   restskip:function(){S.rest=null;if(S.sess)S.sess.mark=Date.now()},
+  restadd:function(){if(!S.rest)return;S.rest.until+=15000;S.rest.tot=(S.rest.tot||0)+15;if(S.sess)S.sess.mark=S.rest.until;restPaint()},
+  wgo:function(b){wfGo(+b.dataset.i,true)},
   restpick:function(b){var r=parseInt(b.dataset.s,10)||0;S.restPick=r;S.restDef=r},
   mkclose:function(){mkClose()},
   howai:function(b){var n=b.dataset.n;delete HOWFAIL[String(n).toLowerCase().trim()];howQueue(n)},
@@ -4669,7 +4718,7 @@ var ACT={
     });
     if(bad.length){S.prepMsg='Enter a weight, or tick Bodyweight, for: '+bad.join(', ')+'.';return}
     rows.forEach(function(i){var d=S.pd[i];S.pw[w.id+'|'+i]=d.b?0:parseFloat(d.v)});
-    S.prep=null;S.prepMsg='';beginSess(w);S.sess.tg=tg;
+    S.prep=null;S.prepMsg='';beginSess(w);S.sess.tg=tg;setTimeout(function(){window.scrollTo(0,0)},30);
   },
   pcancel:function(){S.prep=null;S.prepMsg='';location.hash='workouts'},
   spause:function(){var a=S.sess;if(!a)return;if(a.paused){sessResume();rsClose()}else sessPause(false)},
@@ -4688,7 +4737,8 @@ var ACT={
     if(!(r>0)||(wt<0)){toast('Enter the reps, seconds or minutes first.');return}
     var k=w.id+'|'+i,a=S.sess,now=Date.now(),t=Math.max(1,Math.round((now-(a.mark||a.last||now))/1000));(S.sets[k]=S.sets[k]||[]).push({w:wt>0?wt:0,r:r,t:t});S.sess.tg=S.sess.tg||{};S.sess.tg[i]={s:Math.max(sessTg(w,+i).s,S.sets[k].length),r:String(r)};S.cancelAsk=false;
     var more=(S.sets[k]||[]).length<sessTg(w,+i).s;
-    if(a.rest>0&&more){S.rest={until:now+a.rest*1000};a.mark=now+a.rest*1000}else{S.rest=null;a.mark=now}
+    if(a.rest>0&&more){S.rest={until:now+a.rest*1000,tot:a.rest,i:+i};a.mark=now+a.rest*1000}else{S.rest=null;a.mark=now}
+    if(!more){S.wfGo=+i+1;S.wfGoDelay=650;toast(w.ex[+i][0]+' done.',{title:'Nice work',icon:'✅'})}
   },
   tgset:function(b){var w=sessW();if(!w)return;var i=+b.dataset.i,cur=sessTg(w,i);S.sess.tg=S.sess.tg||{};var have=(S.sets[w.id+'|'+i]||[]).length;S.sess.tg[i]={s:Math.max(1,have,Math.min(20,cur.s+parseInt(b.dataset.d,10))),r:cur.r}},
   setdel:function(b){
