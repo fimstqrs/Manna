@@ -17,6 +17,25 @@ const MAX_IMAGE = 1_600_000;      // characters of base64 (about 1.2 MB)
 const PER_IP_DAY = 40;
 const TIMEOUT_MS = 15_000;      // per model call; then the next model is tried            // safety net per server instance, not the user-facing limit
 const hits = new Map();
+const howHits = new Map();
+const HOW_PER_IP_DAY = 120;      // free "how to do it" requests, per server instance
+
+function howOver(ip) {
+  const k = ip + '|' + new Date().toISOString().slice(0, 10);
+  const n = (howHits.get(k) || 0) + 1;
+  howHits.set(k, n);
+  if (howHits.size > 5000) howHits.clear();
+  return n > HOW_PER_IP_DAY;
+}
+
+// Free: steps for named exercises. The server writes the prompt itself, so this can only ever
+// explain exercises; it never counts as one of the person's AI uses.
+function howPrompt(names) {
+  return 'For each exercise below, explain how to do it for a beginner in 2 or 3 short, plain sentences: ' +
+    'how to set up, the movement, and one key form tip. If a name is not a real exercise or drill, describe the most likely safe movement it means. ' +
+    'Reply with JSON only: {"how": {"<exercise name exactly as given>": "steps"}}.\nExercises:\n' +
+    names.map(n => '- ' + n).join('\n');
+}
 // Pro accounts: no daily AI limit. Add more emails in Vercel as PRO_EMAILS (comma separated).
 const PRO = new Set(['themorningfallcorp@gmail.com', ...String(process.env.PRO_EMAILS || '').split(',')]
   .map(e => e.trim().toLowerCase()).filter(Boolean));
@@ -126,10 +145,31 @@ export default async function handler(req, res) {
 
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
   const pro = isPro(user);
-  if (!pro && overLimit(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+
+  if (body?.kind === 'how') {
+    const names = (Array.isArray(body.names) ? body.names : []).map(n => String(n || '').replace(/[\r\n"{}<>]/g, ' ').trim().slice(0, 60)).filter(Boolean).slice(0, 12);
+    if (!names.length) return res.status(400).json({ ok: false, code: 'empty' });
+    if (!pro && howOver(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
+    try {
+      const text = ant ? await askClaude(ant, howPrompt(names), null) : await askGemini(gem, howPrompt(names), null);
+      const d = parseJson(text), out = {};
+      const src = d && typeof d.how === 'object' && d.how ? d.how : {};
+      for (const n of names) {
+        const k = Object.keys(src).find(x => x.toLowerCase().trim() === n.toLowerCase());
+        if (k && typeof src[k] === 'string') out[n] = src[k].slice(0, 400);
+      }
+      return res.status(200).json({ ok: true, data: { how: out }, free: true });
+    } catch (e) {
+      const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 || e.status === 503 ? 'rate_limited' : 'failed';
+      console.error('ai how error', e.status || '', e.message);
+      return res.status(code === 'rate_limited' ? 429 : 502).json({ ok: false, code });
+    }
+  }
+
+  if (!pro && overLimit(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
   const prompt = String(body?.prompt || '').slice(0, MAX_PROMPT);
   if (!prompt.trim()) return res.status(400).json({ ok: false, code: 'empty' });
   let img = null;

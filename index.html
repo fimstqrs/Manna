@@ -629,6 +629,7 @@ input[type=text],input[type=number],select,textarea{
 .mkcard{text-align:center;display:grid;gap:.8rem;max-height:85vh;overflow:auto}.mkcard .ex,.mkcard .list{text-align:left}
 .mkorb{position:relative;width:7.5rem;height:7.5rem;margin:.6rem auto .2rem}.mkorb i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,var(--acc,#6b8),#B565D9,#6EC1FF,#FFD84D,var(--acc,#6b8));filter:blur(10px);opacity:.75;animation:mkspin 2.4s linear infinite}.mkorb b{position:absolute;inset:14%;border-radius:50%;background:var(--card,#fff);display:grid;place-items:center;font-size:2.4rem;animation:mkpulse 1.6s ease-in-out infinite;box-shadow:0 0 0 1px color-mix(in srgb,currentColor 8%,transparent)}.mkorb s{position:absolute;width:.5rem;height:.5rem;border-radius:50%;background:var(--acc,#6b8);text-decoration:none;opacity:0;animation:mkspark 2s ease-out infinite}.mkorb s:nth-of-type(1){top:6%;left:18%}.mkorb s:nth-of-type(2){top:16%;right:6%;animation-delay:.5s;background:#B565D9}.mkorb s:nth-of-type(3){bottom:8%;left:10%;animation-delay:1s;background:#6EC1FF}.mkorb s:nth-of-type(4){bottom:2%;right:22%;animation-delay:1.5s;background:#FFD84D}
 @keyframes mkspin{to{transform:rotate(360deg)}}@keyframes mkpulse{50%{transform:scale(1.07)}}@keyframes mkspark{0%{opacity:0;transform:scale(.3)}30%{opacity:1}100%{opacity:0;transform:translateY(-14px) scale(1.2)}}
+.mkbar{position:relative;height:10px;border-radius:99px;overflow:hidden;background:color-mix(in srgb,currentColor 10%,transparent)}.mkbar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:99px;background:linear-gradient(90deg,var(--acc,#6b8),#B565D9,#6EC1FF);background-size:200% 100%;animation:mkflow 2s linear infinite;transition:width .25s ease-out}@keyframes mkflow{to{background-position:-200% 0}}.mkpct{font:700 1.5rem/1 var(--f-mono,ui-monospace,monospace)}html.lite .mkbar i{animation:none}
 .mkstep{min-height:1.5em;font-weight:600;transition:opacity .3s}.mkdots{display:flex;justify-content:center;gap:.35rem}.mkdots span{width:.45rem;height:.45rem;border-radius:50%;background:color-mix(in srgb,currentColor 20%,transparent);transition:background .3s}.mkdots span.on{background:var(--acc,#6b8)}
 .mkres{animation:mkin .45s cubic-bezier(.2,.9,.3,1.2)}@keyframes mkin{from{opacity:0;transform:translateY(10px) scale(.97)}}
 html.lite .mkorb i,html.lite .mkorb b,html.lite .mkorb s,html.lite .mkres{animation:none}html.lite .mkorb s{display:none}html.gfx-med .mkorb s{display:none}
@@ -1941,26 +1942,34 @@ function howOf(name,aiHow){
   if(HOWL[l])return {t:HOWL[l],src:'lib'};
   if(aiHow)return {t:String(aiHow),src:'ai'};
   if(S.howC&&S.howC[l])return {t:S.howC[l],src:'ai'};
-  var c='';try{c=canon(n).toLowerCase()}catch(e){}if(c&&HOWL[c])return {t:HOWL[c],src:'lib'};
+  var c='';try{c=canon(n).toLowerCase()}catch(e){}if(c&&HOWL[c]){var ck=Object.keys(HOW).filter(function(k){return k.toLowerCase()===c})[0];return {t:HOWL[c],src:'like',like:ck||c}}
   for(var i=0;i<HOWKW.length;i++)if(HOWKW[i][0].test(l)&&HOW[HOWKW[i][1]])return {t:HOW[HOWKW[i][1]],src:'like',like:HOWKW[i][1]};
   return null;
 }
-function howHtml(name,aiHow){
-  var h=howOf(name,aiHow),busy=S.howBusy===String(name).toLowerCase();
-  var ok=String(name).toLowerCase(),op=HOWOPEN[ok]?' open':'',dk=' data-hk="'+esc(ok)+'"';
-  if(h)return '<details class="how"'+dk+op+'><summary>How to do it</summary><p>'+esc(h.t)+(h.src==='like'?' <span class="muted">(Same idea as '+esc(h.like)+'.)</span>':'')+'</p>'+(h.src==='like'?'<button class="btn sm" data-act="howai" data-n="'+esc(name)+'">'+(busy?'Asking AI…':'Ask AI for exact steps (1 AI use)')+'</button>':'')+'</details>';
-  return '<details class="how"'+dk+op+'><summary>How to do it</summary><p class="muted">No instructions for this one yet.</p><button class="btn sm" data-act="howai" data-n="'+esc(name)+'">'+(busy?'Asking AI…':'Ask AI to explain (1 AI use)')+'</button></details>';
+var HOWQ={},HOWPEND={},HOWFAIL={},howT=0;
+function howFetch(names){
+  var tokP=typeof accOn==='function'&&accOn()&&typeof authToken==='function'?authToken().catch(function(){return null}):Promise.resolve(null);
+  return tokP.then(function(tok){var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
+    return fetch('/api/ai',{method:'POST',headers:h,body:JSON.stringify({kind:'how',names:names})})}).then(function(r){return r.json()}).then(function(j){if(!j||!j.ok||!j.data||typeof j.data.how!=='object')throw {code:j&&j.code||'failed'};return j.data.how});
 }
-function howAsk(name){
-  var l=String(name).toLowerCase();if(S.howBusy)return;S.howBusy=l;refresh();
-  getSample().then(function(sm){
-    if(!sm){S.howBusy='';toast('AI is not available right now.');refresh();return}
-    if(sm===SERVER_AI&&aiLeft()<=0){S.howBusy='';toast(aiErr('limit'));refresh();return}
-    return sm.json('Explain how to do the exercise "'+String(name).slice(0,60)+'" for a beginner in 2 or 3 short, plain sentences: how to set up, the movement, and one key form tip. Reply with JSON only: {"how": "..."}',{modelTier:'quick'}).then(function(r){
-      var t=r&&String(r.how||'').trim();if(!t)throw {code:'failed'};if(!S.howC||typeof S.howC!=='object')S.howC={};S.howC[l]=t.slice(0,400);S.howC=Object.assign({},S.howC);S.howBusy='';refresh();
-      setTimeout(function(){$$('details.how').forEach(function(d){var ex=d.closest('.ex');if(ex&&ex.textContent.toLowerCase().indexOf(l)>-1)d.open=true})},60);
-    });
-  }).catch(function(e){S.howBusy='';toast(aiErr(e&&e.code)+' Try again in a moment.');refresh()});
+function howQueue(name){var l=String(name).toLowerCase().trim();if(!l||HOWQ[l]||HOWPEND[l]||HOWFAIL[l])return;HOWQ[l]=String(name).trim();clearTimeout(howT);howT=setTimeout(howFlush,350)}
+function howFlush(){
+  var ks=Object.keys(HOWQ).slice(0,12);if(!ks.length)return;var names=ks.map(function(k){return HOWQ[k]});ks.forEach(function(k){delete HOWQ[k];HOWPEND[k]=1});
+  if(Object.keys(HOWQ).length)howT=setTimeout(howFlush,600);
+  howFetch(names).then(function(map){if(!S.howC||typeof S.howC!=='object')S.howC={};var got=0;
+    names.forEach(function(n){var l=n.toLowerCase(),k=Object.keys(map).filter(function(x){return x.toLowerCase()===l})[0];delete HOWPEND[l];if(k&&map[k]){S.howC[l]=String(map[k]).slice(0,400);got++}else HOWFAIL[l]=1});
+    if(got)S.howC=Object.assign({},S.howC);refresh()})
+   .catch(function(){ks.forEach(function(k){delete HOWPEND[k];HOWFAIL[k]=1});refresh()});
+}
+function howFill(names){(names||[]).forEach(function(n){var h=howOf(n);if(!h||h.src==='like')howQueue(n)})}
+function howHtml(name,aiHow){
+  var h=howOf(name,aiHow),l=String(name).toLowerCase().trim(),op=HOWOPEN[l]?' open':'',dk=' data-hk="'+esc(l)+'"';
+  if(!h||h.src==='like')howQueue(name);
+  var pend=HOWPEND[l]||HOWQ[l],fail=HOWFAIL[l],body;
+  if(h&&h.src!=='like')body='<p>'+esc(h.t)+'</p>';
+  else if(h)body='<p>'+esc(h.t)+' <span class="muted">(Same idea as '+esc(h.like)+'.)</span></p>'+(pend?'<p class="small muted how-wait">Getting exact steps…</p>':'');
+  else body=pend?'<p class="muted how-wait">Getting the steps…</p>':'<p class="muted">Steps for this one could not be loaded right now.</p><button class="btn sm" data-act="howai" data-n="'+esc(name)+'">Try again</button>';
+  return '<details class="how"'+dk+op+'><summary>How to do it</summary>'+body+'</details>';
 }
 var ALIAS=[[/pull[\s-]?up|chin[\s-]?up/,'Pull-ups'],[/push[\s-]?up/,'Push-ups'],[/squat/,'Squat'],[/bench/,'Bench press'],[/overhead|ohp|shoulder press/,'Overhead press'],[/lat pull/,'Lat pulldown'],[/lateral raise/,'Lateral raise'],[/^(?!.*(upright|rowing|rower|machine|cable|seated|single|one[ -]?arm|db|dumbbell|kettlebell|band|inverted|t-bar|pendlay)).*\b(bent[ -]?over |barbell )?rows?\b/,'Bent-over row'],[/dead\s?lift/,'Deadlift'],[/lunge/,'Lunges'],[/calf/,'Calf raise'],[/plank/,'Plank'],[/glute bridge|hip thrust/,'Glute bridge'],[/bird dog/,'Bird dog'],[/kettlebell|kb swing|swing/,'Kettlebell swing'],[/leg press/,'Leg press'],[/jump rope|skipping/,'Jump rope'],[/run|jog/,'Running'],[/cycl|bike/,'Easy cycling'],[/swim/,'Swimming'],[/walk/,'Walking']];
 var NOTE_SAMPLE='Leg day (from my phone)\nsquats 4x8\nlunges 3 x 10\ndeadlift 3x6 @ 60kg\ncalf raises 3x15\nplank 3x40s\nrun 10 min easy\nstretch if time';
@@ -2092,7 +2101,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['howBusy','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals;else if(p.mealsD&&Array.isArray(p.meals)&&p.meals.length)d.prevMeals={d:p.mealsD,m:p.meals}}}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
   /* Version 131: clear sample health data that earlier versions gave everyone, only where it was never changed */
@@ -2285,7 +2294,8 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:133,d:'Nov 9, 2026',t:'How to do every exercise',s:['Every exercise now has a How to do it button that opens short, plain steps: how to set up, the movement, and a form tip.','It shows on workout pages, on Before you start and during the workout itself.','Workouts made with AI come with their own steps for each exercise, at no extra AI use.','Exercises you added yourself or imported get steps from the closest matching exercise, and you can ask AI for exact steps.']},
+ {v:134,d:'Nov 9, 2026',t:'AI progress bar, free exercise steps',s:['Whenever Manna asks AI for something, the pop-up shows a progress bar and a percentage, and fills to 100% when it is done.','Every exercise without built-in steps, including in AI-made, imported and your own workouts, now gets How to do it steps automatically. These never use your AI uses.']},
+ {v:133,d:'Nov 9, 2026',t:'How to do every exercise',s:['Every exercise now has a How to do it button that opens short, plain steps: how to set up, the movement, and a form tip.','It shows on workout pages, on Before you start and during the workout itself.','Workouts made with AI come with their own steps for each exercise, at no extra AI use.','Exercises you added yourself or imported get exact steps automatically, for free.']},
  {v:132,d:'Nov 9, 2026',t:'Workouts pause when you leave',s:['If you close Manna, switch apps or lock your phone during a workout, the timer pauses on its own, and so does any rest timer.','When you come back, a pop-up shows your time so far with a Resume button. You can also finish the workout or leave it paused.','Even if your phone closes Manna completely, your workout and the sets you logged come back, with the timer stopped at the moment you left.']},
  {v:131,d:'Nov 9, 2026',t:'Faith, one verse at a time',s:['Faith is now a full-screen feed. Swipe up for the next verse, starting with the verse of the day, your favorite verse and one chosen for your day.','Double-tap a verse, or tap the heart, to save it. Your saved verses have their own Saved tab, and the Bible reader and prayer notes are under Bible.','Share sends a verse with its reference, and Chapter opens it in the Bible reader.','New accounts no longer start with sample data: no peanut allergy, lab results, knee injury, sleep numbers or coach message. If you set up Manna before today and do not have a peanut allergy, turn it off in Settings › Allergies.','In setup, no goal is picked for you and you can unpick any goal, so choosing only Gain lean muscle is one tap. Your name is marked optional.']},
  {v:130,d:'Nov 7, 2026',t:'Making with AI, right where you are',s:['Build with AI no longer jumps you to another section. A Making with AI animation pops up right where you tapped, then shows what it made.','For workouts you can Start now, Save to library, or Make another straight from the pop-up, including when no template matches your filters or your search.','Logging food with AI (typed or photo) and reading a workout or schedule with AI show the same animation while they work.']},
@@ -2619,7 +2629,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='133';
+var heroLast='',APPV='134';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2989,16 +2999,25 @@ function mkOpen(kind,title,watch){
     $$('#mk-card .mkdots span').forEach(function(d,i){d.classList.toggle('on',i===MK.step)});
     if(Date.now()-MK.t0>45000){MK.phase='err';MK.msg='AI took too long. Try again in a moment.';refresh()}},1700);
 }
+var MKTAU={workout:5.5,food:4.5,read:5};
+function mkPct(){if(!MK)return 0;if(MK.fin)return 100;var t=(Date.now()-MK.t0)/1000;return Math.min(95,Math.round(95*(1-Math.exp(-t/(MKTAU[MK.kind]||5)))))}
+function mkBar(v){var b=$('#mk-bar'),p=$('#mk-pct'),w=$('#mk-barw');if(b)b.style.width=v+'%';if(p)p.textContent=v+'%';if(w)w.setAttribute('aria-valuenow',v)}
+setInterval(function(){if(MK&&MK.phase==='busy')mkBar(mkPct())},180);
 function mkClose(){clearInterval(mkOpen.iv);MK=null;var m=$('#mk');if(m&&!m.hidden){modalHide(m);document.body.classList.remove('modal-open')}}
 function mkTick(){
-  if(!MK||MK.phase!=='busy')return;
-  if(MK.kind==='workout'){if(!S.aiBusy&&(S.ai||S.aiMsg)&&Date.now()-MK.t0>300){if(S.ai){MK.phase='done'}else{MK.phase='err';MK.msg=S.aiMsg}}}
-  else if(MK.watch){var w=MK.watch();if(w&&w.done&&Date.now()-MK.t0>300){if(w.err){MK.phase='err';MK.msg=w.err}else{mkClose();return}}}
+  if(!MK||MK.phase!=='busy')return;var now=Date.now(),out=null;
+  if(MK.kind==='workout'){if(!S.aiBusy&&(S.ai||S.aiMsg)&&now-MK.t0>300)out=S.ai?{ok:1}:{err:S.aiMsg}}
+  else if(MK.watch){var w=MK.watch();if(w&&w.done&&now-MK.t0>300)out=w.err?{err:w.err}:{ok:1}}
+  if(!out)return;
+  if(out.err){MK.phase='err';MK.msg=out.err;return}
+  if(!MK.fin){MK.fin=now;mkBar(100);var st=$('#mk-step');if(st)st.textContent='Done!';setTimeout(refresh,450);return}
+  if(now-MK.fin<420){setTimeout(refresh,430-(now-MK.fin));return}
+  if(MK.kind==='workout')MK.phase='done';else mkClose();
 }
 function mkRender(){
   var c=$('#mk-card');if(!c||!MK)return;var h;
   if(MK.phase==='busy'){var st=MKSTEPS[MK.kind];
-    h='<h3 id="mk-t" class="vh-only">Making with AI</h3><div class="mkorb" aria-hidden="true"><i></i><b>'+MKICON[MK.kind]+'</b><s></s><s></s><s></s><s></s></div><p class="eyebrow" style="margin:0">Making with AI</p><h3 style="margin:0">'+esc(MK.title)+'</h3><p class="mkstep" id="mk-step" role="status" aria-live="polite">'+st[MK.step]+'…</p><div class="mkdots" aria-hidden="true">'+st.map(function(_,i){return '<span'+(i===MK.step?' class="on"':'')+'></span>'}).join('')+'</div><div class="row" style="justify-content:center"><button class="btn sm" data-act="mkclose">Cancel</button></div>'}
+    h='<h3 id="mk-t" class="vh-only">Making with AI</h3><div class="mkorb" aria-hidden="true"><i></i><b>'+MKICON[MK.kind]+'</b><s></s><s></s><s></s><s></s></div><p class="eyebrow" style="margin:0">Making with AI</p><h3 style="margin:0">'+esc(MK.title)+'</h3><div class="mkpct" id="mk-pct" aria-hidden="true">0%</div><div class="mkbar" id="mk-barw" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="mk-bar"></i></div><p class="mkstep" id="mk-step" role="status" aria-live="polite">'+st[MK.step]+'…</p><div class="mkdots" aria-hidden="true">'+st.map(function(_,i){return '<span'+(i===MK.step?' class="on"':'')+'></span>'}).join('')+'</div><div class="row" style="justify-content:center"><button class="btn sm" data-act="mkclose">Cancel</button></div>'}
   else if(MK.phase==='err'){h='<div class="mkres stack"><h3 id="mk-t">That did not work</h3><p class="muted">'+esc(MK.msg||'Something went wrong.')+'</p><div class="row" style="justify-content:center">'+(MK.kind==='workout'&&MK.ask?'<button class="btn primary" data-act="mkagain">Try again</button>':'')+'<button class="btn" data-act="mkclose">Close</button></div></div>'}
   else{var o=S.ai;if(!o){mkClose();return}
     h='<div class="mkres stack"><p class="eyebrow" style="margin:0">Made with AI ✨</p><h3 id="mk-t" style="margin:0">'+esc(o.name)+'</h3><p class="small muted" style="margin:0">About '+o.mins+' minutes · '+o.items.length+' exercises</p><div>'+o.items.map(function(e){return '<div class="ex"><div><b>'+esc(e.name)+'</b> '+exBadge(e.state)+howHtml(e.name,e.how)+'</div><span class="mono">'+esc(e.rx)+'</span></div>'}).join('')+'</div>'+muPreview(o.items)
@@ -4123,7 +4142,7 @@ function aiWorkout(t){
       var st=stageCalc(),items=r.items.slice(0,12).map(function(i){var n=String(i&&i.name||'').trim().slice(0,50);return {name:n,rx:String(i&&i.rx||'3×10').slice(0,20),how:String(i&&i.how||'').trim().slice(0,400),state:exState(n,S.area,st)}}).filter(function(x){return x.name&&x.state!=='avoid'});
       if(!items.length)throw {code:'failed'};
       S.ai={name:String(r.name||'AI workout').slice(0,60),mins:clamp(parseInt(r.mins,10)||30,5,180),focus:'Built by AI',pl:'strength',items:items,notes:(Array.isArray(r.notes)?r.notes:[]).slice(0,5).map(function(x){return String(x).slice(0,200)}),src:'ai'};
-      S.aiBusy=false;refresh();
+      S.aiBusy=false;try{howFill(items.filter(function(i){return !i.how}).map(function(i){return i.name}))}catch(e){}refresh();
     }).catch(function(e){S.aiBusy=false;S.ai=null;S.aiMsg=aiErr(e&&e.code)+' Try again in a moment.';refresh()});
   });
 }
@@ -4414,7 +4433,7 @@ var ACT={
   restskip:function(){S.rest=null;if(S.sess)S.sess.mark=Date.now()},
   restpick:function(b){var r=parseInt(b.dataset.s,10)||0;S.restPick=r;S.restDef=r},
   mkclose:function(){mkClose()},
-  howai:function(b){howAsk(b.dataset.n)},
+  howai:function(b){var n=b.dataset.n;delete HOWFAIL[String(n).toLowerCase().trim()];howQueue(n)},
   mkagain:function(){var t=MK&&MK.ask,ti=MK&&MK.title;if(t)mkWorkout(t,ti)},
   mksave:function(){var n=S.customW.length;ACT.aisave();var w=S.customW[S.customW.length-1];mkClose();if(S.customW.length>n&&w)toast('"'+w.name+'" is in My workouts.',{title:'Saved',icon:'💪'})},
   mkstart:function(){var n=S.customW.length;ACT.aisave();var w=S.customW[S.customW.length-1];mkClose();if(S.customW.length>n&&w)ACT.wstart({dataset:{id:w.id}})},
@@ -4700,6 +4719,7 @@ var ACT={
   ntai:function(){var txt=$('#nt-text').value||'';if(!txt.trim())return;S.ntBusy=true;S.ntMsg='';mkOpen('read','Your workout',function(){return {done:!S.ntBusy,err:S.ntMsg}});
     aiReadText('routine',txt,function(r,err){S.ntBusy=false;
       if(!r||!Array.isArray(r.items)||!r.items.length){S.ntMsg=err||'AI could not read that either. Try one exercise per line.';refresh();return}
+      try{howFill(r.items.map(function(i){return i&&i.name}).filter(Boolean))}catch(e){}
       S.notes={title:String(r.title||(S.notes&&S.notes.title)||'Imported routine').slice(0,60),items:r.items.slice(0,20).map(function(i){return {name:canon(String(i&&i.name||'').slice(0,50)),rx:String(i&&i.rx||'3×10').slice(0,24)}}).filter(function(i){return i.name}),skipped:[]};refresh()})},
   ntsample:function(){$('#nt-text').value=NOTE_SAMPLE;S.notes=parseNotes(NOTE_SAMPLE)},
   ntsave:function(){var o=S.notes;if(!o||!o.items.length)return;var ti=$('#nt-title');if(ti&&ti.value.trim())o.title=ti.value.trim().slice(0,60);var id='c'+(uid++);S.customW.push({id:id,name:o.title,mins:Math.max(10,o.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved "'+o.title+'" to your library.')},
