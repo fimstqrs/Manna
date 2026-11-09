@@ -636,6 +636,48 @@ html{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100
 .bbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 104px);z-index:60;width:min(32rem,calc(100vw - 24px));display:grid;gap:.55rem;padding:.8rem;border-radius:20px;background:var(--card,#fff);color:var(--ink,#111);box-shadow:0 12px 40px rgba(0,0,0,.25);animation:bbin .25s ease-out}@keyframes bbin{from{opacity:0;transform:translate(-50%,14px)}}html.lite .bbar{animation:none}.bbar .hlsw{display:flex;flex-direction:row;gap:.6rem;align-items:center;flex-wrap:wrap}.bbar .dot{flex:none;display:inline-block;width:2.1rem;height:2.1rem;min-width:0;min-height:0;padding:0;border-radius:50%;border:3px solid transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);cursor:pointer}.bbar .dot.on{border-color:currentColor}.bbar textarea{width:100%;min-height:4rem}
 .bpcard .bpg{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.2rem,1fr));gap:.4rem}.bpcard .bpc{display:grid;grid-template-columns:repeat(auto-fill,minmax(3rem,1fr));gap:.4rem}.bpcard .bpg button,.bpcard .bpc button{padding:.6rem .4rem;border-radius:10px;border:0;cursor:pointer;color:inherit;background:color-mix(in srgb,currentColor 6%,transparent);font:inherit;text-align:center}.bpcard button.on{background:var(--acc,#6b8);color:#fff}.bpcard{max-height:80vh;overflow:auto}
 .wtrend svg{width:100%;height:56px;display:block}.wtrend path{fill:none;stroke:var(--acc,#6b8);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}[data-cat=cycle]{--cc:#E27BC9}
+
+/* Faith feed: one verse per screen, swipe up for the next (Version 131) */
+.vis-hide{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sc-vh{margin-bottom:0}
+.sctabs{display:flex;justify-content:center;gap:4px;padding:3px;margin:0 auto;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.sctab{appearance:none;border:0;background:none;font:inherit;font-weight:600;font-size:.92rem;color:var(--muted);padding:.42rem 1rem;border-radius:99px;cursor:pointer;transition:background .2s,color .2s}
+.sctab[aria-selected=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 6px rgba(0,0,0,.12)}
+.sctab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.vfeed{position:relative;height:var(--fh,72vh);width:100%;max-width:520px;margin:0 auto;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;border-radius:24px;scrollbar-width:none;-webkit-overflow-scrolling:touch;outline:none}
+.vfeed::-webkit-scrollbar{display:none}
+.vfeed[hidden]{display:none}
+.vfeed:focus-visible{box-shadow:0 0 0 2px var(--accent)}
+.vslide{position:relative;height:100%;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;justify-content:center;padding:28px 76px 92px 26px;box-sizing:border-box;overflow:hidden;color:var(--ink);
+  background:radial-gradient(120% 80% at 15% 0%,color-mix(in srgb,var(--sw) 70%,var(--bg)) 0%,transparent 70%),linear-gradient(170deg,color-mix(in srgb,var(--sw) 48%,var(--bg)),color-mix(in srgb,var(--sw) 18%,var(--bg)));-webkit-user-select:none;user-select:none}
+.vslide+.vslide{border-top:1px solid color-mix(in srgb,var(--ink) 6%,transparent)}
+.vs-q{font:italic 400 clamp(1.45rem,6.4vw,2.05rem)/1.32 var(--f-serif,Georgia,serif);margin:0;text-wrap:pretty}
+.vs-q.m{font-size:clamp(1.22rem,5.2vw,1.65rem)}.vs-q.l{font-size:clamp(1.05rem,4.4vw,1.32rem);line-height:1.42}
+.vs-foot{position:absolute;left:26px;right:84px;bottom:24px;display:flex;flex-direction:column;gap:3px}
+.vs-tag{font:600 .7rem var(--f-mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.vf-ref{font-weight:700;font-size:1.08rem;letter-spacing:0;text-transform:none;color:var(--ink)}
+.vs-why{font-size:.84rem;color:var(--muted)}
+.vs-rail{position:absolute;right:12px;bottom:22px;display:flex;flex-direction:column;gap:14px;align-items:center}
+.vs-btn{appearance:none;border:0;background:none;color:var(--ink);font:inherit;font-size:.7rem;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:0;min-width:52px}
+.vs-btn i{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:color-mix(in srgb,var(--bg) 62%,transparent);box-shadow:0 3px 12px rgba(0,0,0,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:transform .2s}
+.vs-btn svg{width:24px;height:24px}
+.vs-btn:active i{transform:scale(.9)}
+.vs-btn[aria-pressed=true] i{color:#FF2D55}
+.vs-btn[aria-pressed=true] svg path{fill:#FF2D55}
+.vs-btn:focus-visible i{outline:2px solid var(--accent);outline-offset:2px}
+.vs-hint{position:absolute;left:0;right:0;top:18px;font-size:.78rem;font-weight:600;color:color-mix(in srgb,var(--ink) 60%,transparent);display:flex;align-items:center;justify-content:center;gap:6px;pointer-events:none}
+.vs-burst{position:absolute;width:96px;height:96px;margin:-48px 0 0 -48px;pointer-events:none;color:#FF2D55;z-index:4}
+.vs-burst svg{width:100%;height:100%;filter:drop-shadow(0 6px 18px rgba(255,45,85,.45))}
+.vs-empty{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:.5rem;padding:2rem;color:var(--muted);background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.vs-empty b{color:var(--ink);font-size:1.15rem}
+@media (prefers-reduced-motion:no-preference){
+  .vs-hint span{animation:vs-bob 1.6s ease-in-out infinite}
+  .vs-burst{animation:vs-pop .8s cubic-bezier(.2,.9,.3,1.3) forwards}
+}
+.vs-burst{opacity:0}
+@media (prefers-reduced-motion:reduce){.vs-burst{opacity:1;transition:opacity .4s}}
+@keyframes vs-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes vs-pop{0%{opacity:0;transform:scale(.3) rotate(-12deg)}25%{opacity:1;transform:scale(1.15) rotate(6deg)}45%{transform:scale(1) rotate(0)}80%{opacity:1;transform:scale(1) translateY(-10px)}100%{opacity:0;transform:scale(.9) translateY(-40px)}}
 /* welcome + tutorial */
 #wel{position:fixed;inset:0;z-index:9500;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--ink);text-align:center;padding:24px;opacity:1;transition:opacity .6s ease}
 #wel[hidden]{display:none}#wel.out{opacity:0}
@@ -1051,13 +1093,17 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
     </section>
 
     <section class="view" id="v-scripture" hidden>
-      <header class="vh"><p class="eyebrow">Faith</p><h2>Word for today</h2>
-        <p class="lede">A new verse each day, and the whole Bible to read.</p></header>
-      <div class="card paper stack" id="sc-votd"></div>
-      <div class="card stack" id="sc-fav" hidden></div>
-      <div class="card paper stack" id="sc-today"></div>
+      <header class="vh sc-vh"><h2 class="vis-hide">Word for today</h2>
+        <div class="sctabs" role="tablist" aria-label="Faith">
+          <button type="button" role="tab" class="sctab" data-act="sctab" data-k="feed" id="sct-feed" aria-controls="sc-feed">For you</button>
+          <button type="button" role="tab" class="sctab" data-act="sctab" data-k="saved" id="sct-saved" aria-controls="sc-feed">Saved</button>
+          <button type="button" role="tab" class="sctab" data-act="sctab" data-k="bible" id="sct-bible" aria-controls="sc-bible">Bible</button>
+        </div></header>
+      <div class="vfeed" id="sc-feed" role="feed" aria-label="Verses. Swipe up for the next one." tabindex="0"></div>
+      <div class="stack" id="sc-bible" hidden>
       <div class="card stack" id="sc-reader"></div>
       <div class="card stack" id="sc-pnotes"></div>
+      </div>
     </section>
 
     <!-- THEMES -->
@@ -2007,6 +2053,14 @@ function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
 var PSKIP=['frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals;else if(p.mealsD&&Array.isArray(p.meals)&&p.meals.length)d.prevMeals={d:p.mealsD,m:p.meals}}}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
+  /* Version 131: clear sample health data that earlier versions gave everyone, only where it was never changed */
+  try{if(d.labs&&d.labs.fe===22&&d.labs.vd===24&&d.labs.b12===410)d.labs={fe:null,vd:null,b12:null};
+    if(d.sleep===6.2&&d.hrv===48&&d.sore===3){d.sleep=8;d.hrv=55;d.sore=1}
+    if(d.area==='knee'&&d.pain===4&&d.free===2){d.area='none';d.pain=0;d.free=0}
+    if(Array.isArray(d.thread)&&d.thread.length===1&&!d.thread[0].me&&/^Your sleep was short two nights/.test(d.thread[0].text))d.thread=[];
+    if(!Array.isArray(d.vsaved))d.vsaved=[];
+    if(!d.vsaved.length&&d.saved)Object.keys(d.saved).forEach(function(id){if(!d.saved[id])return;var v=VERSES.filter(function(x){return x.id===id})[0];if(v&&d.vsaved.indexOf(v.ref)<0)d.vsaved.push(v.ref)});
+    if(['feed','saved','bible'].indexOf(d.sctab)<0)d.sctab='feed'}catch(e){}
   try{(d.customW||[]).concat(d.hist).forEach(function(x){var n=parseInt(String(x&&x.id||'').replace(/^[a-z]+/,''),10);if(n>=uid)uid=n+1})}catch(e){}
   ['S1','S2','S3'].forEach(function(k){if(!Array.isArray(d.plans[k])||d.plans[k].length!==7)d.plans[k]=[null,null,null,null,null,null,null];if(typeof d.planNames[k]!=='string')d.planNames[k]=''});
   if(!d.plans[d.planId]||['S1','S2','S3'].indexOf(d.planId)<0)d.planId='S1';
@@ -2020,15 +2074,15 @@ function prefSave(){try{var o={};Object.keys(S).forEach(function(k){if(PSKIP.ind
 function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
-    allergy:{peanut:true,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:['cut'],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
-    sleep:6.2,hrv:48,sore:3,
-    meals:[],labs:{fe:22,vd:24,b12:410},
+    allergy:{peanut:false,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:[],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],vsaved:[],sctab:'feed',savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
+    sleep:8,hrv:55,sore:1,
+    meals:[],labs:{fe:null,vd:null,b12:null},
     override:false,coachMsg:null,imported:[],
-    area:'knee',pain:4,free:2,
+    area:'none',pain:0,free:0,
     mens:false,phase:'none',stress:3,mood:3,ill:false,
     joined:{},kudos:{},share:{workouts:'friends',meals:'private',weight:'private'},
-    thread:[{me:false,text:'Your sleep was short two nights in a row, so I kept this week to three hard sessions. Tell me how the knee feels.'}],
+    thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
     name:'Friend',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
@@ -2124,7 +2178,7 @@ function flags(){
   if(S.cond.bb)out.push(['','Beta blocker','Use effort (RPE) instead of heart-rate zones.']);
   return out;
 }
-function labStatus(k){var l=LABS[k],v=S.labs[k];if(v<l.lo)return ['warn','Low'];if(l.bl&&v<l.bl)return ['warn','Borderline'];if(v>l.hi)return ['warn','High'];return ['ok','In range']}
+function labStatus(k){var l=LABS[k],v=S.labs[k];if(v==null||v===''||isNaN(v))return ['','Not entered'];if(v<l.lo)return ['warn','Low'];if(l.bl&&v<l.bl)return ['warn','Borderline'];if(v>l.hi)return ['warn','High'];return ['ok','In range']}
 function sessionView(i){
   var d=S.sched[i];if(!d.w)return null;
   var w=d.w,why=null;
@@ -2186,6 +2240,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:131,d:'Nov 9, 2026',t:'Faith, one verse at a time',s:['Faith is now a full-screen feed. Swipe up for the next verse, starting with the verse of the day, your favorite verse and one chosen for your day.','Double-tap a verse, or tap the heart, to save it. Your saved verses have their own Saved tab, and the Bible reader and prayer notes are under Bible.','Share sends a verse with its reference, and Chapter opens it in the Bible reader.','New accounts no longer start with sample data: no peanut allergy, lab results, knee injury, sleep numbers or coach message. If you set up Manna before today and do not have a peanut allergy, turn it off in Settings › Allergies.','In setup, no goal is picked for you and you can unpick any goal, so choosing only Gain lean muscle is one tap. Your name is marked optional.']},
  {v:130,d:'Nov 7, 2026',t:'Making with AI, right where you are',s:['Build with AI no longer jumps you to another section. A Making with AI animation pops up right where you tapped, then shows what it made.','For workouts you can Start now, Save to library, or Make another straight from the pop-up, including when no template matches your filters or your search.','Logging food with AI (typed or photo) and reading a workout or schedule with AI show the same animation while they work.']},
  {v:129,d:'Nov 7, 2026',t:'No accidental zooming',s:['On iPhone and other phones, pinching or double-tapping no longer zooms the page, and tapping into a text box no longer zooms in, so everything stays in view.','To make text bigger, use Settings › Look › Display size on phones, or Aa in the Bible reader.']},
  {v:128,d:'Nov 7, 2026',t:'Friends',s:['New Friends page (Today › Friends). Pick a username, then add friends by their username. There is no public search, so only people you tell can find you.','Friends must accept your request before they see anything.','See your friends\' workouts this week and their streak, plus what they ate today and their weight change if they choose to share those.','You choose what friends can see: workouts are on by default, food and weight change are off until you turn them on. Friends never see your actual weight.','Send a friend 🙏, 💪 or 🔥 once a day each. You can remove or block anyone.','Friends needs an account. Everything else in Manna still works without one.']},
@@ -2363,7 +2418,7 @@ var TOUR=[
  {v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and AI builds it. Every workout can be changed with the Configure button.'},
  {v:'schedule',sel:'#sh-plans',t:'Three schedules',p:'Name each schedule and pick a workout for every day. The selected schedule drives Today and your home page.'},
  {v:'history',sel:'#v-history .vh',t:'Workout history',p:'Every finished session with the sets you logged, plus your week at a glance.'},
- {v:'scripture',sel:'#sc-votd',t:'Word for today',p:'A new verse each day and the whole Bible to read. Your favorite verse shows here too.'},
+ {v:'scripture',sel:'#sc-feed',t:'Word for today',p:'Swipe up through verses, one at a time. Double-tap or tap the heart to save one, and switch to Bible to read whole chapters. Your favorite verse shows here too.'},
  {v:'safeguards',sel:'#v-safeguards .vh',t:'Eating safeguards',p:'Controls that keep counting healthy: hide numbers, keep a calorie floor, and get a gentle check-in after a hard week.'},
  {v:'themes',sel:'#th-now',t:'Themes',p:'Default is plain white or black. The other twelve each match a mood in scripture. Leave it on the verse of the day, or pick one and keep it.'},
  {v:'settings',sel:'#g-card',t:'Goals and body',p:'Change your goals, age, height and activity any time. Your targets update, and you can type your own numbers.'},
@@ -2409,8 +2464,8 @@ function onbSrc(){return ONB.in||(S.onboarded?{a:S.age,kg:S.weight,h:S.height}:{
 function onbOk(x){return isFinite(x)&&x>0}
 function onbH(){var h=onbSrc().h,i=onbOk(h)?Math.round(h/2.54):NaN;return S.units==='lb'?'<div class="onb-row"><label class="f" for="onb-ft">Height (ft)<input type="number" id="onb-ft" data-oi="1" min="3" max="7" inputmode="numeric" placeholder="ft" value="'+(onbOk(i)?Math.floor(i/12):'')+'"></label><label class="f" for="onb-in">(in)<input type="number" id="onb-in" data-oi="1" min="0" max="11" inputmode="numeric" placeholder="in" value="'+(onbOk(i)?i%12:'')+'"></label></div>':'<div class="onb-row"><label class="f" for="onb-cm">Height (cm)<input type="number" id="onb-cm" data-oi="1" min="120" max="230" inputmode="numeric" placeholder="e.g. 175" value="'+(onbOk(h)?Math.round(h):'')+'"></label><span></span></div>'}
 function onbPanel(n){
-  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you?<input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(!S.onboarded&&(S.name==='Fimi'||S.name==='Friend')?'':S.name)+'"></label><div id="ob-acct" class="onb-acct"></div></div>';
-  if(n===1)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">What are your goals?</h2><p>Pick one or more. Manna blends them into one plan.</p><div class="onb-opts" role="group" aria-label="Goals">'+GOALS.map(function(g){return '<button type="button" class="onb-opt" data-onb="gtog" data-k="'+g[0]+'" aria-pressed="'+(goalSet().indexOf(g[0])>-1)+'"><b>'+g[1]+'</b><span>'+g[2]+'</span></button>'}).join('')+'</div></div>';
+  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you? <span class="muted">(optional)</span><input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(!S.onboarded&&(S.name==='Fimi'||S.name==='Friend')?'':S.name)+'"></label><div id="ob-acct" class="onb-acct"></div></div>';
+  if(n===1)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">What are your goals?</h2><p>Pick one or more. Manna blends them into one plan.</p><div class="onb-opts" role="group" aria-label="Goals">'+GOALS.map(function(g){return '<button type="button" class="onb-opt" data-onb="gtog" data-k="'+g[0]+'" aria-pressed="'+((S.goals||[]).indexOf(g[0])>-1)+'"><b>'+g[1]+'</b><span>'+g[2]+'</span></button>'}).join('')+'</div></div>';
   if(n===2)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">About you</h2><p>These are used only to estimate how much energy your body needs.</p><div class="onb-seg" role="group" aria-label="Sex">'+[['female','Female'],['male','Male'],['other','Prefer not to say']].map(function(x){return '<button type="button" class="chip" data-onb="sex" data-k="'+x[0]+'" aria-pressed="'+(S.sex===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-seg" role="group" aria-label="Units">'+[['kg','kg and cm'],['lb','lb and ft']].map(function(x){return '<button type="button" class="chip" data-onb="unit" data-k="'+x[0]+'" aria-pressed="'+(S.units===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-row"><label class="f" for="onb-age">Age<input type="number" id="onb-age" data-oi="1" min="10" inputmode="numeric" placeholder="e.g. 30" value="'+(onbOk(onbSrc().a)?onbSrc().a:'')+'"></label><label class="f" for="onb-wt">Weight ('+S.units+')<input type="number" id="onb-wt" data-oi="1" step="0.1" inputmode="decimal" placeholder="e.g. '+(S.units==='lb'?'165':'75')+'" value="'+(onbOk(onbSrc().kg)?Math.round((S.units==='lb'?onbSrc().kg*2.20462:onbSrc().kg)*10)/10:'')+'"></label></div>'+onbH()+'</div>';
   if(n===3)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">How active are you?</h2><p>Think about a normal week, including work.</p><div class="onb-opts" role="radiogroup" aria-label="Activity level">'+ACTS.map(function(a){return '<button type="button" class="onb-opt" role="radio" data-onb="act" data-k="'+a[0]+'" aria-checked="'+(S.activity===a[0])+'" aria-pressed="'+(S.activity===a[0])+'"><b>'+a[1]+'</b><span>'+a[2]+'</span></button>'}).join('')+'</div></div>';
   if(n===5){var order=THEMES.filter(function(t){return t.id==='plain'}).concat(THEMES.filter(function(t){return t.id!=='plain'}));return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Pick a look</h2><p>The Default theme is plain white or black and follows your device. Tap any theme to preview it right now.</p><div class="onb-themes" role="radiogroup" aria-label="Theme">'+order.map(function(t){return '<button type="button" class="onb-th" role="radio" data-onb="theme" data-k="'+t.id+'" aria-checked="'+(S.themeMode===t.id)+'" aria-pressed="'+(S.themeMode===t.id)+'"><i style="background:'+t.sw+'"></i><b>'+esc(t.name)+(t.id==='plain'?' (default)':'')+'</b><span>'+esc(t.mood)+'</span></button>'}).join('')+'</div></div>'}
@@ -2472,12 +2527,13 @@ function onbValid(){var m='',x=ONB.in||{a:NaN,kg:NaN,h:NaN};
 var ONBACT={
   next:function(){
     if(ONB.step===0){var nm=($('#onb-name').value||'').trim().slice(0,20);if(nm)S.name=nm;else if(!S.onboarded&&S.name==='Fimi')S.name='Friend';if($('#ob-acct')&&$('#ob-acct').innerHTML)S.acctAsked=true}
+    if(ONB.step===1&&!(S.goals||[]).filter(function(x){return GOALS.some(function(y){return y[0]===x})}).length){$('#onb-msg').textContent='Pick at least one goal to continue.';return}
     if(ONB.step===2){onbReadBody();if(!onbValid())return}
     if(ONB.step===ONBN-1){onbClose(true);return}
     ONB.step++;ONB.back=false;onbRender()},
   back:function(){if(ONB.step>0){ONB.step--;ONB.back=true;onbRender()}},
   skip:function(){onbClose()},
-  gtog:function(b){var k=b.dataset.k,g=goalSet().slice(),i=g.indexOf(k);if(i>-1){if(g.length>1)g.splice(i,1)}else g.push(k);S.goals=g;legacyGoal();S.goalKcal=null;S.macroOv={p:null,c:null,f:null};b.setAttribute('aria-pressed',g.indexOf(k)>-1);$('#onb-msg').textContent=''},
+  gtog:function(b){var k=b.dataset.k,g=(S.goals||[]).filter(function(x){return GOALS.some(function(y){return y[0]===x})}),i=g.indexOf(k);if(i>-1)g.splice(i,1);else g.push(k);S.goals=g;legacyGoal();S.goalKcal=null;S.macroOv={p:null,c:null,f:null};b.setAttribute('aria-pressed',g.indexOf(k)>-1);$('#onb-msg').textContent=''},
   sex:function(b){S.sex=b.dataset.k;$$('[data-onb=sex]').forEach(function(x){x.setAttribute('aria-pressed',x===b)})},
   unit:function(b){onbReadBody();S.units=b.dataset.k;onbRender()},
   act:function(b){S.activity=b.dataset.k;$$('[data-onb=act]').forEach(function(x){var on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)})},
@@ -2516,7 +2572,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='130';
+var heroLast='',APPV='131';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -2617,11 +2673,11 @@ function renderLabs(){
   var avg={fe:6.1,vd:4.2,b12:3.0},tgt={fe:T.iron,vd:T.vd,b12:T.b12},low=[];
   $('#lb-labs').innerHTML=Object.keys(LABS).map(function(k){
     var l=LABS[k],st=labStatus(k),a=avg[k],t=tgt[k],under=a<t*0.8;
-    if(st[1]!=='In range')low.push(k);
+    if(st[0]==='warn')low.push(k);
     return '<div class="stack" style="gap:.2rem"><div class="row spread"><b>'+l.name+'</b><span class="badge '+st[0]+'">'+st[1]+'</span></div><span class="small muted">Your 14-day average intake is '+a+' '+(k==='fe'?'mg':'µg')+' against a target of '+t+'.'+(st[1]==='Low'||st[1]==='Borderline'?(under?' Intake is consistently under target, which may fit this result.':' Intake is near target, so another cause is worth asking about.'):'')+'</span></div>';
   }).join('')+'<p class="small muted">Reference ranges differ by lab, age and sex. Compare with the range on your own report.</p>';
   var h='<h3>Foods that could help</h3>';
-  if(!low.length)h+='<p class="muted">All three results are in range. Nothing to suggest.</p>';
+  if(!low.length)h+=(Object.keys(LABS).some(function(k){return labStatus(k)[1]==='Not entered'})?'<p class="muted">Enter your results to see foods that could help.</p>':'<p class="muted">All three results are in range. Nothing to suggest.</p>');
   else{
     h+=low.map(function(k){
       var l=LABS[k],pool=allFoods().filter(function(f){return f[l.nut]>0&&!f.al.some(function(a){return S.allergy[a]})}).sort(function(a,b){return b[l.nut]-a[l.nut]}).slice(0,3);
@@ -3269,17 +3325,111 @@ function pickVerse(){
   if(wc.sig.length)return ['ecc','The weekly check-in noticed a hard week with food. Eat with joy, and consider talking to someone you trust.'];
   return ['phil','A steady day. Train as planned.'];
 }
-function renderScripture(){renderPNotes();
-  var v=S.votd,vt=verseText(v.ref),th=currentTheme(),h;
-  h='<p class="eyebrow" style="color:var(--paper-muted)">Verse of the day</p>';
-  h+=vt?'<p class="vq">'+esc(qt(vt.text))+'</p><p><b>'+esc(v.ref)+'</b></p>':'<p class="vq">'+esc(v.ref)+'</p><p class="small muted">Loading the Bible text.</p>';
-  h+='<p class="small muted">A new verse is picked each day, '+esc(stampLabel(v.stamp))+'.</p><div class="row"><button class="btn primary" data-act="bbgo" data-ref="'+esc(v.ref)+'">Read the chapter</button></div>';
-  $('#sc-votd').innerHTML=h;
-  var fv=S.favVerse,fc=$('#sc-fav');if(fc){fc.hidden=!fv;if(fv){var ft=verseText(fv);fc.innerHTML='<p class="eyebrow">Your favorite verse</p>'+(ft?'<p class="vq">'+esc(qt(ft.text))+'</p>':'')+'<p><b>'+esc(fv)+'</b></p><div class="row"><button class="btn" data-act="bbgo" data-ref="'+esc(fv)+'">Read the chapter</button></div>'}}
-  var sw=THEMES.filter(function(t){return t.id===th.id})[0].sw;
-  var pick=pickVerse(),pv=VERSES.filter(function(x){return x.id===pick[0]})[0],pt=verseText(pv.ref),sv=!!S.saved[pv.id];
-  $('#sc-today').innerHTML='<p class="eyebrow" style="color:var(--paper-muted)">Chosen for your day</p>'+(pt?'<p class="vq">'+esc(qt(pt.text))+'</p><p><b>'+esc(pv.ref)+'</b></p>':'<p class="vq">'+esc(pv.ref)+'</p>')+'<p class="small muted">'+esc(pick[1])+'</p><div class="row"><button class="chip" data-act="save" data-id="'+pv.id+'" aria-pressed="'+(sv?'true':'false')+'">'+(sv?'Saved':'Save this verse')+'</button><button class="chip" data-act="bbgo" data-ref="'+esc(pv.ref)+'">Read the chapter</button></div>';
+/* ---------- Faith feed (Version 131): a full-screen verse per swipe ---------- */
+var FEEDX=['Genesis 1:1','Genesis 28:15','Exodus 14:14','Exodus 15:2','Numbers 6:24-26','Deuteronomy 31:6','Deuteronomy 31:8','Joshua 1:9','1 Samuel 16:7','2 Chronicles 7:14','Nehemiah 8:10','Psalm 1:1-2','Psalm 16:11','Psalm 18:2','Psalm 19:14','Psalm 23:1-3','Psalm 27:1','Psalm 34:8','Psalm 34:18','Psalm 37:4','Psalm 46:1','Psalm 46:10','Psalm 51:10','Psalm 55:22','Psalm 62:1-2','Psalm 73:26','Psalm 90:12','Psalm 91:1-2','Psalm 103:2-4','Psalm 118:24','Psalm 119:105','Psalm 121:1-2','Psalm 139:14','Psalm 143:8','Proverbs 3:5-6','Proverbs 4:23','Proverbs 16:3','Proverbs 17:22','Proverbs 18:10','Proverbs 27:17','Ecclesiastes 3:1','Isaiah 26:3','Isaiah 40:29','Isaiah 40:31','Isaiah 41:10','Isaiah 43:2','Isaiah 55:8-9','Jeremiah 29:11','Lamentations 3:22-23','Micah 6:8','Zephaniah 3:17','Matthew 5:14-16','Matthew 6:33','Matthew 6:34','Matthew 11:28-30','Matthew 19:26','Matthew 28:20','Mark 10:27','Mark 11:24','Luke 1:37','John 1:5','John 3:16','John 8:12','John 10:10','John 14:6','John 14:27','John 15:5','John 16:33','Romans 5:8','Romans 8:28','Romans 8:38-39','Romans 12:2','Romans 12:12','Romans 15:13','1 Corinthians 6:19-20','1 Corinthians 9:24','1 Corinthians 10:13','1 Corinthians 10:31','1 Corinthians 13:4-7','1 Corinthians 16:14','2 Corinthians 4:16-18','2 Corinthians 5:17','2 Corinthians 12:9','Galatians 2:20','Galatians 5:22-23','Galatians 6:9','Ephesians 2:8-9','Ephesians 3:20','Ephesians 4:32','Ephesians 6:10','Philippians 1:6','Philippians 4:6-7','Philippians 4:8','Philippians 4:13','Philippians 4:19','Colossians 3:17','Colossians 3:23','1 Thessalonians 5:16-18','2 Timothy 1:7','Hebrews 4:16','Hebrews 11:1','Hebrews 12:1-2','Hebrews 13:8','James 1:2-3','James 1:5','James 4:8','1 Peter 5:7','1 John 1:9','1 John 4:18','1 John 4:19','Revelation 21:4'];
+var VF={key:'',mode:'',list:[],pool:null,cyc:0,built:0};
+var IC_HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.6l-1.3-1.2C5.6 14.8 2.4 11.9 2.4 8.3 2.4 5.4 4.7 3.2 7.5 3.2c1.7 0 3.3.8 4.5 2.1 1.2-1.3 2.8-2.1 4.5-2.1 2.8 0 5.1 2.2 5.1 5.1 0 3.6-3.2 6.5-8.3 11.1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+var IC_BOOK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 5.5c2.8-1 6-1 9.5 1 3.5-2 6.7-2 9.5-1v13c-2.8-1-6-1-9.5 1-3.5-2-6.7-2-9.5-1z"/><path d="M12 6.5v13"/></svg>';
+var IC_SHARE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3.5"/><path d="M7.5 8 12 3.5 16.5 8"/><path d="M5 12.5v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
+function vfNice(ref){var m=String(ref).match(/^(.+?)\s+(\d.*)$/);if(!m)return ref;var b=WNAMES[m[1].toLowerCase()]||m[1];if(b==='Psalms'&&!/-|,/.test(m[2].split(':')[0]))b='Psalm';return b+' '+m[2]}
+function vfTheme(ref){var k=refKey(ref),id=REFMAP[k]||REFMAP[k.replace(/-\d+$/,'')];var t=id&&THEMES.filter(function(x){return x.id===id})[0];if(t)return t.sw;var h=0;for(var i=0;i<k.length;i++)h=(h*31+k.charCodeAt(i))>>>0;var c=THEMES.filter(function(x){return x.id!=='plain'});return c[h%c.length].sw}
+function vfRand(seed){return function(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}}
+function vfPool(){
+  if(VF.pool)return VF.pool;
+  var seen={},out=[];
+  FEEDX.concat(Object.keys(REFMAP)).concat(VERSES.map(function(v){return v.ref})).forEach(function(r){
+    var k=refKey(r),start=k.replace(/-\d+$/,'');if(seen[start])return;if(!webLookup(r))return;seen[start]=1;out.push(vfNice(r));
+  });
+  return VF.pool=out;
 }
+function vfBatch(n){
+  var p=vfPool();if(!p.length)return [];
+  var st=todayStamp(),seed=0;for(var i=0;i<st.length;i++)seed=(seed*31+st.charCodeAt(i))>>>0;
+  var out=[];
+  while(out.length<n){
+    var cyc=Math.floor(VF.cyc/p.length),r=vfRand(seed+cyc*7919),order=p.slice();
+    for(var j=order.length-1;j>0;j--){var q=Math.floor(r()*(j+1)),t=order[j];order[j]=order[q];order[q]=t}
+    out.push({ref:order[VF.cyc%p.length],tag:'For you'});VF.cyc++;
+  }
+  return out;
+}
+function vfIsSaved(ref){return (S.vsaved||[]).indexOf(ref)>-1}
+function vfSlide(it,i){
+  var t=webLookup(it.ref)||'';if(!t)return '';
+  var q=qt(t),cls=q.length>260?' l':(q.length>140?' m':'');
+  var sv=vfIsSaved(it.ref);
+  return '<article class="vslide" data-ref="'+esc(it.ref)+'" aria-label="'+esc(it.ref)+'" style="--sw:'+vfTheme(it.ref)+'">'+
+    '<p class="vs-q'+cls+'">'+esc(q)+'</p>'+
+    '<div class="vs-foot"><span class="vs-tag">'+esc(it.tag)+'</span><span class="vf-ref">'+esc(it.ref)+'</span>'+(it.why?'<span class="vs-why">'+esc(it.why)+'</span>':'')+'</div>'+
+    '<div class="vs-rail">'+
+      '<button type="button" class="vs-btn" data-act="vsave" data-ref="'+esc(it.ref)+'" aria-pressed="'+sv+'" aria-label="'+(sv?'Saved. Tap to remove ':'Save ')+esc(it.ref)+'"><i>'+IC_HEART+'</i><span>'+(sv?'Saved':'Save')+'</span></button>'+
+      '<button type="button" class="vs-btn" data-act="bbgo" data-ref="'+esc(it.ref)+'" aria-label="Read the chapter for '+esc(it.ref)+'"><i>'+IC_BOOK+'</i><span>Chapter</span></button>'+
+      '<button type="button" class="vs-btn" data-act="vshare" data-ref="'+esc(it.ref)+'" aria-label="Share '+esc(it.ref)+'"><i>'+IC_SHARE+'</i><span>Share</span></button>'+
+    '</div>'+
+    (i===0&&VF.mode==='feed'?'<div class="vs-hint" aria-hidden="true">Swipe up for more <span>↑</span></div>':'')+
+  '</article>';
+}
+function vfSize(){
+  var f=$('#sc-feed');if(!f||f.hidden||!f.offsetParent)return;
+  var top=f.getBoundingClientRect().top+window.scrollY,tb=$('#tabs'),bot=16;
+  if(tb&&tb.getClientRects().length&&getComputedStyle(tb).position==='fixed'){var r=tb.getBoundingClientRect();if(r.top>window.innerHeight/2)bot=window.innerHeight-r.top+12}
+  var h=Math.max(380,Math.round(window.innerHeight-top-bot));
+  f.style.setProperty('--fh',h+'px');
+}
+function vfBuild(){
+  var f=$('#sc-feed');if(!f)return;
+  VF.mode=S.sctab==='saved'?'saved':'feed';
+  if(!WEBB){f.innerHTML='<div class="vs-empty"><b>Opening the Bible…</b><span>Your verses will be here in a moment.</span></div>';VF.built=0;return}
+  var items=[];
+  if(VF.mode==='saved'){
+    items=(S.vsaved||[]).slice().reverse().map(function(r){return {ref:r,tag:'Saved'}});
+    if(!items.length){f.innerHTML='<div class="vs-empty"><b>No saved verses yet</b><span>Double-tap a verse, or tap the heart, to keep it here.</span><button class="btn sm" data-act="sctab" data-k="feed">Go to For you</button></div>';VF.built=1;return}
+  }else{
+    VF.cyc=0;
+    items.push({ref:vfNice(S.votd.ref),tag:'Verse of the day',why:stampLabel(S.votd.stamp)});
+    if(S.favVerse&&webLookup(S.favVerse))items.push({ref:vfNice(S.favVerse),tag:'Your favorite verse'});
+    var pk=pickVerse(),pv=VERSES.filter(function(x){return x.id===pk[0]})[0];if(pv)items.push({ref:vfNice(pv.ref),tag:'Chosen for your day',why:pk[1]});
+    var have={};items.forEach(function(x){have[refKey(x.ref)]=1});
+    items=items.concat(vfBatch(14).filter(function(x){var k=refKey(x.ref);if(have[k])return false;have[k]=1;return true}));
+  }
+  VF.list=items;
+  f.innerHTML=items.map(vfSlide).join('');f.scrollTop=0;VF.built=1;
+}
+function vfMore(){
+  var f=$('#sc-feed');if(!f||VF.mode!=='feed'||!VF.built||!WEBB)return;
+  var h=f.clientHeight||1,idx=Math.round(f.scrollTop/h),n=f.children.length;
+  if(idx>=n-4){var add=vfBatch(10);VF.list=VF.list.concat(add);f.insertAdjacentHTML('beforeend',add.map(function(x){return vfSlide(x,99)}).join(''))}
+}
+function vfSync(){$$('#sc-feed [data-act=vsave]').forEach(function(b){var sv=vfIsSaved(b.dataset.ref);if(b.getAttribute('aria-pressed')!==String(sv)){b.setAttribute('aria-pressed',sv);b.lastChild.textContent=sv?'Saved':'Save';b.setAttribute('aria-label',(sv?'Saved. Tap to remove ':'Save ')+b.dataset.ref)}})}
+function vfToggle(ref,force){if(!Array.isArray(S.vsaved))S.vsaved=[];var i=S.vsaved.indexOf(ref);if(i>-1&&force!==true){S.vsaved.splice(i,1);return false}if(i<0)S.vsaved.push(ref);return true}
+function renderScripture(){renderPNotes();
+  if(['feed','saved','bible'].indexOf(S.sctab)<0)S.sctab='feed';
+  ['feed','saved','bible'].forEach(function(k){var b=$('#sct-'+k);if(b){b.setAttribute('aria-selected',S.sctab===k);b.tabIndex=S.sctab===k?0:-1}});
+  var f=$('#sc-feed'),bb=$('#sc-bible');if(!f||!bb)return;
+  vfWire();
+  var bible=S.sctab==='bible';f.hidden=bible;bb.hidden=!bible;
+  if(bible)return;
+  var pk=pickVerse()[0],key=[S.sctab,WEBB?1:0,S.votd.ref,S.favVerse||'',pk,todayStamp(),S.sctab==='saved'?((S.vsaved||[]).length?1:0):''].join('§');
+  if(key!==VF.key){VF.key=key;vfBuild()}else vfSync();
+  requestAnimationFrame(vfSize);
+}
+function vfWire(){
+  var f=$('#sc-feed');if(!f||f._wired)return;f._wired=1;
+  var tick=0;f.addEventListener('scroll',function(){if(tick)return;tick=requestAnimationFrame(function(){tick=0;vfMore()})},{passive:true});
+  window.addEventListener('resize',function(){if(curId==='scripture')vfSize()});
+  var last=0,lx=0,ly=0;
+  function dbl(e,x,y){
+    var sl=e.target.closest('.vslide');if(!sl||e.target.closest('.vs-btn'))return;
+    var ref=sl.dataset.ref,was=vfIsSaved(ref);vfToggle(ref,true);try{prefSave()}catch(_){}vfSync();
+    var r=sl.getBoundingClientRect(),bu=document.createElement('div');bu.className='vs-burst';bu.innerHTML=IC_HEART.replace('fill="none"','fill="currentColor"');
+    bu.style.left=(x-r.left)+'px';bu.style.top=(y-r.top)+'px';sl.appendChild(bu);setTimeout(function(){bu.remove()},900);
+    if(!was)toast('Saved to your verses.');
+  }
+  f.addEventListener('touchend',function(e){if(e.changedTouches.length!==1)return;var t=e.changedTouches[0],now=Date.now();
+    if(now-last<320&&Math.abs(t.clientX-lx)<30&&Math.abs(t.clientY-ly)<30){e.preventDefault();dbl(e,t.clientX,t.clientY);last=0}else{last=now;lx=t.clientX;ly=t.clientY}},{passive:false});
+  f.addEventListener('dblclick',function(e){dbl(e,e.clientX,e.clientY)});
+  f.addEventListener('keydown',function(e){if(e.key!=='l'&&e.key!=='L')return;var h=f.clientHeight||1,sl=f.children[Math.round(f.scrollTop/h)];if(sl&&sl.dataset.ref){var r=sl.getBoundingClientRect();dbl({target:sl},r.left+r.width/2,r.top+r.height/2)}});
+  $('.sctabs')&&$('.sctabs').addEventListener('keydown',function(e){var k=['feed','saved','bible'],i=k.indexOf(S.sctab);if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();var n=k[(i+(e.key==='ArrowRight'?1:2))%3];S.sctab=n;refresh();var b=$('#sct-'+n);if(b)b.focus()}});}
 var HLC=[['y','#FFD84D','Yellow'],['g','#7BE08A','Green'],['b','#6EC1FF','Blue'],['p','#FF8FC0','Pink'],['o','#FFAE5C','Orange']];
 function rStreak(){var L=(S.rdays||[]).slice().sort(),n=0,d=new Date();for(;;){var st=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);if(L.indexOf(st)>-1){n++;d.setDate(d.getDate()-1)}else if(n===0&&st===todayStamp()){d.setDate(d.getDate()-1)}else break}return n}
 function bRef(b,c,list){list=list.slice().sort(function(x,y){return x-y});var parts=[],i=0;while(i<list.length){var j=i;while(j+1<list.length&&list[j+1]===list[j]+1)j++;parts.push(j>i?list[i]+'-'+list[j]:String(list[i]));i=j+1}return b+' '+c+':'+parts.join(',')}
@@ -4041,7 +4191,7 @@ function refresh(){try{renderStreaks();upPaint();gfxPaint()}catch(e){}setTimeout
 function syncInputs(){
 
   $('#sg-hide').checked=S.hideNums;$('#sg-burn').checked=S.showBurn;$('#sg-goal').value=targets().kcal;
-  $('#lab-fe').value=S.labs.fe;$('#lab-vd').value=S.labs.vd;$('#lab-b12').value=S.labs.b12;
+  $('#lab-fe').value=S.labs.fe==null?'':S.labs.fe;$('#lab-vd').value=S.labs.vd==null?'':S.labs.vd;$('#lab-b12').value=S.labs.b12==null?'':S.labs.b12;
   $('#p-name').value=S.name;$('#ai-text').value='';$('#nt-text').value='';$('#p-scale').value=S.scale;$('#p-scaled').value=scaleD();$('#p-hc').checked=S.hc;$('#p-h24').checked=S.h24;$('#p-glass').checked=S.glass;$('#p-rm').checked=S.rm;$('#p-plain').checked=S.plain;if($('#p-sched'))$('#p-sched').checked=S.useSched!==false;$('#p-lang').value=S.lang;$('#p-units').value=S.units;
   $('#f-q').value='';$('#b-q').value='';$('#e-ai').value='';$('#r-name').value='';$('#r-serv').value=2;$('#l-text').value='';
 }
@@ -4317,10 +4467,14 @@ var ACT={
   preset:function(){S.pshow=['kcal','workout','protein']},
   tfollow:function(){S.themeMode=S.themeMode==='auto'?currentTheme().id:'auto'},
   scalereset:function(b){if(b.dataset.d){S.scaleD=1;$('#p-scaled').value=1}else{S.scale=1;$('#p-scale').value=1}},
+  sctab:function(b){var k=b.dataset.k;if(['feed','saved','bible'].indexOf(k)<0)return;S.sctab=k;VF.key='';window.scrollTo(0,0)},
+  vsave:function(b){var on=vfToggle(b.dataset.ref);toast(on?'Saved to your verses.':'Removed from saved verses.')},
+  vshare:function(b){var ref=b.dataset.ref,t=webLookup(ref)||'',msg=qt(t)+' ('+ref+', BSB)';
+    if(navigator.share){navigator.share({text:msg}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){toast('Verse copied.')},function(){toast('Could not copy the verse.')})}else toast('Sharing is not available on this device.')},
   bbgo:function(b){
     var m=String(b.dataset.ref||'').replace(/[–—]/g,'-').match(/^(.+?)\s+(\d{1,3}):/),bk=m&&WNAMES[m[1].toLowerCase()];
     if(bk){S.rb=bk;S.rc=+m[2];S.bm={b:bk,c:+m[2]};S.readD=todayStamp()}
-    location.hash='scripture';setTimeout(function(){var r=$('#sc-reader');if(r)r.scrollIntoView({block:'start'})},60);
+    S.sctab='bible';location.hash='scripture';setTimeout(function(){var r=$('#sc-reader');if(r)r.scrollIntoView({block:'start'})},60);
   },
   bbnav:function(b){
     bStop();S.bsel=[];S.bnote=false;
