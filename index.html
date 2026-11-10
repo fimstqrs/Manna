@@ -919,8 +919,8 @@ html.lite .card,html.lite .wcard,html.lite .fcard{transition:none}
 .swtrack{display:flex;align-items:flex-start;overflow:hidden;touch-action:pan-y;scrollbar-width:none;margin:-24px -16px -50px;-webkit-overflow-scrolling:touch;transition:height .32s cubic-bezier(.2,.8,.2,1)}
 .swtrack::-webkit-scrollbar{display:none}
 .swpage{flex:0 0 100%;min-width:0;padding:24px 16px 50px;display:flex;flex-direction:column;gap:16px;will-change:auto}
-.swtrack.moving .swpage{will-change:transform}.swtrack.moving .card,.swtrack.moving .hero,.swtrack.moving .wcard,.swtrack.moving .fcard,.swtrack.anim .card,.swtrack.anim .hero,.swtrack.anim .wcard,.swtrack.anim .fcard{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background-color:var(--surface)}.wslide,.vslide{contain:layout style}.wfeed,.vfeed{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}html.scrolling .card,html.scrolling .hero{transition:none!important}
-.swpage.swoff{visibility:hidden}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}
+.swpage:not(.swoff){will-change:transform;backface-visibility:hidden}html.lite .swpage:not(.swoff),html.gfx-med .swpage:not(.swoff){will-change:auto}.swtrack.moving .card,.swtrack.moving .hero,.swtrack.moving .wcard,.swtrack.moving .fcard,.swtrack.anim .card,.swtrack.anim .hero,.swtrack.anim .wcard,.swtrack.anim .fcard{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background-color:var(--surface)}.wslide,.vslide{contain:layout style}.wfeed,.vfeed{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}html.scrolling .card,html.scrolling .hero{transition:none!important}
+.swpage.swoff{visibility:hidden}.swpage.swnear{visibility:visible}.swtrack.moving .swpage,.swtrack.anim .swpage{visibility:visible}.swtrack.moving:not(.anim) .swpage.swoff{visibility:hidden}
 @media (prefers-reduced-motion:no-preference){.swdot.on>span{animation:sw-pop .38s cubic-bezier(.34,1.56,.64,1)}@keyframes sw-pop{0%{transform:scale(.7);opacity:.4}100%{transform:none;opacity:1}}}
 .rm .swtrack,html.lite .swtrack{transition:none}
 /* Graphics: Medium keeps glass and motion but drops the extra effects */
@@ -1187,6 +1187,39 @@ html.lite #aiglow::after{display:none}
 @media (prefers-reduced-motion:reduce){#aiglow::before,#aiglow::after{animation:none!important}html.aidone #aiglow{animation:none}}
 html.rm #aiglow::before,html.rm #aiglow::after{animation:none!important}
 </style>
+<style id="topbtn-style">
+.topl .ambbtn.ambtop{display:grid;place-items:center;width:1.9rem;height:1.9rem;padding:0;border-radius:50%;color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);box-shadow:0 4px 14px rgba(0,0,0,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:transform .25s cubic-bezier(.3,1.4,.5,1),background .3s,color .3s}
+.topl .ambbtn.ambtop svg{width:1.05rem;height:1.05rem}
+.topl .ambbtn.ambtop:active{transform:scale(.9)}
+.topl .ambbtn.ambtop.off{color:var(--muted);background:color-mix(in srgb,var(--muted) 10%,var(--surface));border-color:color-mix(in srgb,var(--muted) 28%,transparent)}
+.topl .ambbtn.ambtop.off::after{left:24%;right:24%;height:1.6px}
+</style>
+<style id="wcdel-style">
+.wcwrap{position:relative;display:grid}.wcwrap>.wcard{width:100%}
+.wcdel{position:absolute;top:.45rem;right:.45rem;display:inline-flex;align-items:center;gap:.3rem;height:1.9rem;min-width:1.9rem;padding:0 .45rem;border-radius:999px;border:1px solid color-mix(in srgb,#ff453a 35%,transparent);background:color-mix(in srgb,#ff453a 14%,var(--surface));color:#ff453a;cursor:pointer;font:600 .78rem var(--f-body,system-ui);transition:background .2s,color .2s,transform .2s}
+.wcdel svg{width:1rem;height:1rem}.wcdel span{display:none}
+.wcdel.armed{background:#ff453a;color:#fff}.wcdel.armed span{display:inline}
+.wcdel:active{transform:scale(.92)}
+</style>
+<style id="frload-style">
+.frload{display:grid;gap:var(--gap,14px)}
+.frload-top{display:flex;align-items:center;justify-content:center;gap:.55rem;padding:.6rem 0 .2rem;color:var(--muted);font-size:.95rem}
+.frload-top b{font-weight:600;color:var(--ink)}
+.frload-ic{display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--surface));animation:frpulse 1.6s ease-in-out infinite}
+.frload-ic svg{width:1.2rem;height:1.2rem}
+.frload-dots{display:inline-flex;gap:3px}.frload-dots i{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.3;animation:frdot 1.2s ease-in-out infinite}
+.frload-dots i:nth-child(2){animation-delay:.15s}.frload-dots i:nth-child(3){animation-delay:.3s}
+.frsk{display:grid;gap:.7rem}.frsk-h{display:flex;align-items:center;gap:.7rem}
+.frsk i{display:block;border-radius:8px;background:linear-gradient(90deg,color-mix(in srgb,var(--ink) 7%,transparent) 0%,color-mix(in srgb,var(--ink) 14%,transparent) 50%,color-mix(in srgb,var(--ink) 7%,transparent) 100%);background-size:220% 100%;animation:frshine 1.3s linear infinite}
+.frsk-av{width:2.6rem!important;height:2.6rem;border-radius:50%!important;flex:none}
+.frsk-l{height:.85rem;margin-bottom:.35rem}.frsk-s{height:.65rem;width:22%}.frsk-in{height:2.6rem;border-radius:12px!important}
+.frsk-row{display:flex;align-items:center;justify-content:space-between;gap:1rem}.frsk-row .frsk-l{margin:0}
+@keyframes frshine{from{background-position:120% 0}to{background-position:-120% 0}}
+@keyframes frpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes frdot{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+html.rm .frsk i,html.rm .frload-ic,html.rm .frload-dots i{animation:none}
+@media (prefers-reduced-motion:reduce){.frsk i,.frload-ic,.frload-dots i{animation:none}}
+</style>
 <style id="type-style">
 /* Text system: CAPITALS only for short, important labels. Everything else is normal sentence text. */
 :root{--caps-ls:.1em}
@@ -1194,11 +1227,11 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-r
 h1,h2,h3,h4{text-wrap:balance}
 p,li,.note,.small,.muted{text-wrap:pretty}
 /* Important: small capital labels, all the same style */
-.eyebrow,.date,.vs-ref,.a2n,.wslide .wtag,.vs-tag,.fxname,.fxpaused,.fxstate,.badge.warn,.badge.crit,.lvl{text-transform:uppercase;letter-spacing:var(--caps-ls)}
+.eyebrow,.date,.vs-ref,.a2n,.wslide .wtag,.vs-tag,.fxname,.fxpaused,.fxstate,.badge.warn,.badge.crit{text-transform:uppercase;letter-spacing:var(--caps-ls)}
 .eyebrow,.a2n,.wslide .wtag,.vs-tag,.date{font-family:var(--f-body,system-ui);font-weight:650;font-size:.7rem;line-height:1.3}
 .fxstate{font-size:.72rem;font-weight:650}
 .badge.warn,.badge.crit{font-family:var(--f-body,system-ui);font-weight:700;font-size:.64rem}
-.lvl{font-size:.64rem;font-weight:700}
+.lvl{text-transform:lowercase;letter-spacing:.01em}
 /* The rest: normal text, easier to read */
 .onb-ring .mid span,.fxmet span,.fxsum span,.fxin label,.cmpsec th,.howp .howh{text-transform:none;letter-spacing:0}
 .fxin label,.fxmet span,.fxsum span,.cmpsec th,.howp .howh,.onb-ring .mid span{font-size:.8rem;font-weight:500}
@@ -1219,7 +1252,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
     <div id="wel" role="status" aria-live="polite" hidden><div class="wel-in"><div class="wel-ic" id="wel-ic"></div><h2 id="wel-h"></h2><p>Let's take a quick look around.</p></div></div>
     <div id="tour" hidden><div id="tour-hl" aria-hidden="true"></div><div id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-t"><p class="eyebrow" id="tour-n"></p><h3 id="tour-t" tabindex="-1"></h3><p id="tour-p"></p><div class="tour-btns"><button class="btn" data-tour="back" id="tour-back">Back</button><button class="btn primary" data-tour="next" id="tour-next">Next</button><button class="btn" data-tour="exit" id="tour-exit">Exit tutorial</button></div></div></div>
     <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 48 48"><path fill="currentColor" fill-rule="evenodd" d="M12 40V26.2C7.6 24.6 5 21.2 5 17.2 5 11.2 10.9 7 18 7h12c7.1 0 13 4.2 13 10.2 0 4-2.6 7.4-7 9V40a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3zM22.5 12.5h3v4.75h4.75v3H25.5V31h-3V20.25h-4.75v-3h4.75z"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
-    <div class="topl"><a class="setfab" id="setfab" href="#settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a><button type="button" class="ambbtn ambtop" data-act="ambtog" aria-pressed="true" aria-label="Turn background music off" title="Background music">♪</button></div>
+    <div class="topl"><a class="setfab" id="setfab" href="#settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a><button type="button" class="ambbtn ambtop" data-act="ambtog" aria-pressed="true" aria-label="Turn background music off" title="Background music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.5l10-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></button></div>
 <div class="clockbar"><button type="button" class="ambbtn" id="amb-btn" data-act="ambtog" aria-pressed="true" aria-label="Turn background music off" title="Background music">♪</button><span class="clk" role="timer" aria-label="Current time"><span id="clk-time" class="clk-time"></span><span id="clk-date" class="clk-date"></span></span></div>
     <div class="subnav" id="subnav" hidden></div>
     <!-- TODAY -->
@@ -1307,8 +1340,8 @@ p,li,.note,.small,.muted{text-wrap:pretty}
           <h3>Build with AI</h3>
           <p class="small muted">1 AI use per build.</p>
           <textarea id="ai-text" aria-label="Describe the workout you want" placeholder="30 minutes, dumbbells only, upper body, go easy on my knee"></textarea>
-          <div class="stack" style="gap:.35rem"><b class="small">Difficulty</b><div class="seg" role="radiogroup" aria-label="Difficulty" id="ai-lvl"><button type="button" role="radio" data-act="ailvl" data-k="easy">Easy</button><button type="button" role="radio" data-act="ailvl" data-k="mid">Intermediate</button><button type="button" role="radio" data-act="ailvl" data-k="hard">Hard</button></div></div>
-          <div class="stack" style="gap:.35rem"><b class="small">Length</b><div class="chips" role="radiogroup" aria-label="Length" id="ai-mins"><button type="button" class="chip" role="radio" data-act="aimins" data-m="15">15 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="20">20 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="30">30 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="45">45 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="60">60 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="75">75 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="90">90 min</button></div></div>
+          <div class="stack" style="gap:.35rem"><b class="small">Difficulty</b><div class="seg" role="radiogroup" aria-label="Difficulty" id="ai-lvl"><button type="button" role="radio" data-act="ailvl" data-k="easy">easy</button><button type="button" role="radio" data-act="ailvl" data-k="mid">intermediate</button><button type="button" role="radio" data-act="ailvl" data-k="hard">advanced</button></div></div>
+          <p class="small muted" style="margin:0">Want a set length? Type it in the box above, like “30 minutes” or “quick 15 min”.</p>
           <div class="chips" id="ai-ex"></div>
           <div class="row"><button class="btn primary" data-act="aigen">Build workout</button></div>
           <div id="ai-out" aria-live="polite"></div>
@@ -2500,8 +2533,9 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:143,d:'Nov 10, 2026',t:'Faster Friends, smoother swipes and fixes',s:['Difficulty labels (easy, intermediate, advanced) are now lowercase.','Build with AI no longer has a Length picker. If you want a set length, type it in the box, like “30 minutes”. Otherwise AI picks a sensible length.','Fixed: tapping a difficulty under Make it again as no longer changes the difficulty for every workout you build after.','Imported and self-made routines now have a red delete button on their card. Tap it, then tap Delete? to confirm.','The music button at the top now matches the settings button.','Friends opens instantly: Manna remembers your friends list on your phone and loads the latest in the background. The first time, a loading screen shows while it loads.','Swiping between pages is smoother, especially swiping right to left. Manna now keeps only the pages right next to you ready, instead of waking every page at the start of a swipe.']},
  {v:142,d:'Nov 10, 2026',t:'AI glow, bodyweight button and more',s:['Anything made with AI now has its own animation: a colourful glow flows around the edge of the screen while AI is working, then flashes when it is done.','New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default.','When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.','In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.','The welcome text on the opening animation is back in capitals, like before.']},
- {v:141,d:'Nov 10, 2026',t:'Cleaner text',s:['Text across Manna is easier to read. Capitals are now only used for small, important labels, like section names, the date, Bible references, warnings and difficulty. Everything else is normal text.','Long lines wrap more evenly, so you get fewer single words left on their own line.','Workout numbers, labels and how-to headings now use normal text instead of capitals.']},
+ {v:141,d:'Nov 10, 2026',t:'Cleaner text',s:['Text across Manna is easier to read. Capitals are now only used for small, important labels, like section names, the date, Bible references and warnings. Everything else is normal text.','Long lines wrap more evenly, so you get fewer single words left on their own line.','Workout numbers, labels and how-to headings now use normal text instead of capitals.']},
  {v:140,d:'Nov 10, 2026',t:'Install Manna on your iPhone',s:['On iPhone and iPad, a step-by-step guide shows how to add Manna to your Home Screen so it opens full screen like an app. It knows if you are in Safari, Chrome or another app\'s browser and shows the right steps, with pictures of what to tap.','Manna now runs as a proper full-screen app from the Home Screen, with its own icon and the status bar handled properly.','Find the guide any time in Settings › About.','The workout countdown is now 3 in green, 2 in yellow and 1 in red, with no Go, text or Skip button.','When you import a workout or schedule and Manna cannot read some lines, AI now reads them for you straight away, with no button to tap (it uses one AI use). If you have no AI uses left, the lines are listed like before.','Swiping between pages and scrolling through workouts is smoother. Manna does less work while your finger moves, and drops the blur effect during swipes, so it no longer stutters on older phones.']},
  {v:139,d:'Nov 10, 2026',t:'Black workout screen is back',s:['Workouts are back on the black Apple Fitness background, whatever theme you use. The bottom bar stays hidden during a workout.','Delete account now matches your theme instead of being red.','The Settings gear is smaller, the same size as the music button, and the music button now sits right next to it at the top left.']},
  {v:138,d:'Nov 10, 2026',t:'Goals, AI schedules, smarter food scores, sounds',s:['Every button at the bottom now makes the same pop as Home. Choose Pop, Bubble, Click, Chime or Wood in Settings › Look › Tap sound.','New background music on Fuel: a light, warm groove with marimba and soft brushes.','Smarter food scores: whole foods score higher and highly processed ones lower, foods with your allergies score 1, very big portions lose points, and scores follow your goals (filling foods for losing weight, calorie-dense protein for gaining, good carbs for endurance).','New Goals card in Settings › Body: set a target weight and a pace (Gentle, Steady or Faster) and see roughly when you could reach it.','Whenever your goals change, a pop-up shows exactly what changes: calories, protein, carbs and fat, workouts a week, focus, reps and workout length. Keep the changes or undo them.','Set goals with AI: describe what you want in your own words, or let AI refine your current goals using your body, progress and workouts.','Make a schedule with AI (Pro): describe your ideal week and AI builds a full 7-day schedule. Rename the schedule and each workout before you save it.','Setup now asks for your pace and an optional target weight, and lets AI pick your goals from a description.','Easy, Intermediate and Hard are colour coded green, orange and red.','Workouts now sit on your theme\'s background, the bottom bar is hidden during a workout, and there are no scroll sounds while you train.','New Fitness theme: the black and green Apple Fitness look for the whole app. Pick it in Settings › Look › Change theme.','Logging a set keeps you on the same exercise. Manna moves on only when all its sets are done.','Adding or removing a set is now just − and +.','Removed Last time from workout cards.','The How to do it steps now fade away gently when you close them.','When AI finds your food, from text or a photo, the food itself shows first. Swipe to see today\'s totals.','Buttons that remove or delete are red, and buttons that add are green.','Settings moved out of the bottom bar to a gear at the top left of the screen, coloured to match your theme.','Compare your workouts in History: for any workout you have done more than once, see your last 5 times side by side, including time, sets, volume and your best set for each exercise, with improvements in green.']},
@@ -2848,7 +2882,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='142';
+var heroLast='',APPV='143';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3263,7 +3297,7 @@ function mkRender(){
       +'<div class="row" style="justify-content:center"><button class="btn primary" data-act="mkstart">Start now</button><button class="btn" data-act="mksave">Save to library</button></div><div class="row" style="justify-content:center"><button class="btn sm" data-act="mkagain">Make another</button><button class="btn sm" data-act="mkclose">Close</button></div></div>'}
   if(c.dataset.h!==h){c.dataset.h=h;c.innerHTML=h}
 }
-function mkWorkout(t,title){t=String(t||'').trim();if(!t)return;S.ai=null;S.aiMsg='';mkOpen('workout',title||'Your workout');MK.ask=t;aiWorkout(t)}
+function mkWorkout(t,title,lvl){t=String(t||'').trim();if(!t)return;S.ai=null;S.aiMsg='';mkOpen('workout',title||'Your workout');MK.ask=t;aiWorkout(t,lvl)}
 /* ---------- Ambient background music: made live in the browser, no files ----------
    calm on most pages, peaceful on Faith, upbeat on Fitness. Crossfades between them. */
 var AMB={ctx:null,master:null,send:null,bus:null,mood:'',next:0,step:0,iv:0,noise:null,started:false};
@@ -3545,13 +3579,16 @@ function a2Auto(){
 }
 /* ----- Friends ----- */
 var FR={busy:false,data:null,handle:undefined,err:'',at:0,msg:'',ok:false,pushH:'',pushAt:0};
+/* Remember the last friends list on this phone so the page shows instantly, then refresh quietly */
+(function(){try{var c=JSON.parse(localStorage.getItem('manna.fr.v1')||'null');var me=null;try{me=JSON.parse(localStorage.getItem('manna.auth.v1')||'null')}catch(e){}if(c&&c.handle&&c.data&&me&&me.id&&c.uid===me.id){FR.handle=c.handle;FR.data=c.data;FR.cached=true}}catch(e){}})();
+function frCache(){try{if(FR.handle&&FR.data)localStorage.setItem('manna.fr.v1',JSON.stringify({uid:(authGet()||{}).id,handle:FR.handle,data:FR.data}));else localStorage.removeItem('manna.fr.v1')}catch(e){}}
 function frOn(){var a=authGet();return !!(ACC.cfg&&ACC.cfg.accounts&&a&&a.id)}
 function rpc(name,args){return authToken().then(function(tok){if(!tok)throw {status:401};return fetch(ACC.cfg.url+'/rest/v1/rpc/'+name,{method:'POST',headers:sbHeaders(tok),body:JSON.stringify(args||{})}).then(sbJson)})}
 function frErr(e){return e&&e.status===404?'Friends is not set up on the server yet. The site owner needs to run supabase/friends.sql.':e&&e.status===401?'Sign in again to use Friends.':'Could not reach the server. Check your connection and try again.'}
 function frLoad(){
   if(!frOn()||FR.busy)return;FR.busy=true;FR.err='';
-  rpc('my_handle').then(function(h){FR.handle=h&&h.username?h:null;return FR.handle?rpc('friends_list'):null})
-    .then(function(d){if(d&&d.ok){FR.data=d;if(d.allow&&typeof d.allow==='object'){S.fshare={workouts:d.allow.workouts!==false,meals:!!d.allow.meals,weight:!!d.allow.weight}}}FR.at=Date.now();FR.busy=false;frPush(true);refresh()})
+  Promise.all([rpc('my_handle'),rpc('friends_list').catch(function(){return null})]).then(function(r){var h=r[0];FR.handle=h&&h.username?h:null;return FR.handle?r[1]:null})
+    .then(function(d){FR.cached=false;if(!FR.handle)FR.data=null;if(d&&d.ok){FR.data=d;if(d.allow&&typeof d.allow==='object'){S.fshare={workouts:d.allow.workouts!==false,meals:!!d.allow.meals,weight:!!d.allow.weight}}}FR.at=Date.now();FR.busy=false;frCache();frPush(true);refresh()})
     .catch(function(e){FR.busy=false;FR.at=Date.now();FR.err=frErr(e);refresh()});
 }
 function frSummary(){
@@ -3567,14 +3604,19 @@ function frPush(force){
   if(!force&&h===FR.pushH)return;if(!force&&Date.now()-FR.pushAt<20000)return;
   FR.pushAt=Date.now();rpc('set_share',{p_allow:al,p_summary:sum}).then(function(r){if(r&&r.ok)FR.pushH=h}).catch(function(){});
 }
+setTimeout(function(){try{if(frOn()&&!FR.busy&&(FR.handle===undefined||FR.cached))frLoad()}catch(e){}},1800);
 setInterval(function(){try{frPush(false);if(curId==='friends'&&!document.hidden&&Date.now()-FR.at>45000)frLoad()}catch(e){}},15000);
 function frAgo(t){var d=(Date.now()-Date.parse(t))/1000;if(!isFinite(d))return '';if(d<90)return 'just now';if(d<3600)return Math.round(d/60)+' min ago';if(d<86400)return Math.round(d/3600)+' h ago';return Math.round(d/86400)+' d ago'}
 var CHEER={pray:['🙏','Praying for you'],strong:['💪','Keep going'],fire:['🔥','On fire']};
+function frSkel(){var c=function(n){var r='';for(var i=0;i<n;i++)r+='<div class="frsk-row"><i class="frsk-l" style="width:'+(55+((i*23)%35))+'%"></i><i class="frsk-s"></i></div>';return r};
+  return '<div class="frload" role="status" aria-live="polite"><div class="frload-top"><span class="frload-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.4"/><path d="M2.8 20c.8-3.6 3.3-5.6 6.2-5.6s5.4 2 6.2 5.6"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.4c2.4.2 4.2 2 4.8 5"/></svg></span><b>Loading your friends</b><span class="frload-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>'
+    +'<div class="card frsk"><div class="frsk-h"><i class="frsk-av"></i><div style="flex:1"><i class="frsk-l" style="width:40%"></i><i class="frsk-s" style="width:28%"></i></div></div><i class="frsk-in"></i></div>'
+    +[3,2,2].map(function(n){return '<div class="card frsk"><div class="frsk-h"><i class="frsk-av"></i><div style="flex:1"><i class="frsk-l" style="width:46%"></i><i class="frsk-s" style="width:32%"></i></div></div>'+c(n)+'</div>'}).join('')+'</div>'}
 function renderFriends(){
   var el=$('#fr-body');if(!el||curId!=='friends')return;var h='';if(FR.msg&&Date.now()-(FR.msgAt||0)>10000)FR.msg='';
   if(!ACC.cfg||!ACC.cfg.accounts)h='<div class="card stack"><h3>Friends</h3><p class="muted">Friends needs accounts, which are not available on this copy of Manna.</p></div>';
   else if(!frOn())h='<div class="card stack"><h3>Sign in to add friends</h3><p class="muted">Friends needs an account so your friends can see what you share. Everything else in Manna works without one.</p><div class="row"><a class="btn primary" href="#settings" >Sign in or create an account</a></div></div>';
-  else if(FR.handle===undefined||(FR.busy&&!FR.data&&FR.handle===undefined))h='<div class="card"><p class="muted">Loading your friends…</p></div>'+(FR.err?'<div class="note warn">'+esc(FR.err)+'</div>':'');
+  else if(FR.handle===undefined||(FR.busy&&!FR.data&&FR.handle===undefined))h=FR.err?'<div class="note warn">'+esc(FR.err)+'</div><div class="row" style="justify-content:center"><button class="btn sm" data-act="frrefresh">Try again</button></div>':frSkel();
   else if(!FR.handle||S.frEditName){
     h='<div class="card stack"><h3>'+(FR.handle?'Change your username':'Pick a username')+'</h3><p class="muted">Friends add you by your username. Use 3 to 20 lowercase letters, numbers or underscores. There is no public search, so only people you tell can find you.</p>'
       +'<div class="row"><label class="vh-only" for="fr-un">Username</label><span class="mono" style="font-size:1.1rem">@</span><input type="text" id="fr-un" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="yourname" style="flex:1;min-width:10rem" value="'+esc(FR.handle?FR.handle.username:'')+'"><button class="btn primary" data-act="frname">Save</button>'+(FR.handle?'<button class="btn" data-act="frnamecancel">Cancel</button>':'')+'</div>'
@@ -3606,7 +3648,7 @@ function renderFriends(){
   }
   var ae=document.activeElement,aid=ae&&ae.id,av={};['fr-un','fr-add'].forEach(function(i){var e=$('#'+i);if(e)av[i]=e.value});
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;Object.keys(av).forEach(function(i){var e=$('#'+i);if(e&&av[i])e.value=av[i]});if(aid){var e2=$('#'+aid);if(e2&&e2!==ae){e2.focus();try{var n=e2.value.length;e2.setSelectionRange(n,n)}catch(_){}}}}
-  if(frOn()&&!FR.busy&&(FR.handle===undefined||Date.now()-FR.at>45000)&&!FR.err)frLoad();
+  if(frOn()&&!FR.busy&&(FR.handle===undefined||FR.cached||Date.now()-FR.at>45000)&&!FR.err)frLoad();
 }
 function frAct(p,msgOk){FR.msg='';FR.err='';return p.then(function(r){if(r&&r.ok===false){FR.ok=false;FR.msg=({not_found:'No one has that username. Check the spelling.',self:'That is your own username.',no_username:'Pick a username first.',too_many:'You have too many requests waiting. Cancel some first.',not_friends:'You can only cheer friends.',taken:'That username is taken. Try another.',invalid:'Use 3 to 20 lowercase letters, numbers or underscores.'})[r.error]||'Something went wrong. Try again.'}else if(msgOk){FR.ok=true;FR.msg=typeof msgOk==='function'?msgOk(r):msgOk}FR.msgAt=Date.now();FR.at=0;FR.busy=false;frLoad();return r}).catch(function(e){FR.ok=false;FR.err=frErr(e);refresh()})}
 /* ----- weight log ----- */
@@ -4206,7 +4248,10 @@ function sortLv(a){return a.slice().sort(function(x,y){var d=(LVO[x.level]!==und
 function lvlN(l){return {Beginner:1,Intermediate:2,Advanced:3}[l]||0}
 function lvlHtml(l){var n=lvlN(l);if(!n)return l?' · '+esc(l):'';return '<span class="lvl" data-l="'+n+'" title="Difficulty: '+esc(l)+'"><i></i><i></i><i></i>'+esc(l)+'</span>'}
 /* One workout card, shared by the Fitness page and the setup top-3 picker (pick=true/false there) */
-function wcardHtml(w,pick){var lv=wMuscles(w),top=MKEYS.filter(function(k){return lv[k]===2}).slice(0,3).map(function(k){return MUS[k]});var on=pick===undefined?S.selW===w.id:!!pick;return '<button type="button" class="wcard" data-cat="'+w.cat+'" '+(pick===undefined?'data-act="wsel"':'data-onb="wk"')+' data-id="'+w.id+'" aria-pressed="'+(on?'true':'false')+'"><span class="wcat"><i class="cdot"></i>'+esc(CATS[w.cat]||w.cat)+'</span><b>'+esc(w.name)+'</b><span class="wmeta">'+w.mins+' min'+lvlHtml(w.level)+'</span><span class="wmu">'+esc(top.join(', ')||'Cardio')+'</span></button>'}
+var WDELARM=null;
+function wcardHtml(w,pick){var card,lv=wMuscles(w),top=MKEYS.filter(function(k){return lv[k]===2}).slice(0,3).map(function(k){return MUS[k]});var on=pick===undefined?S.selW===w.id:!!pick;card='<button type="button" class="wcard" data-cat="'+w.cat+'" '+(pick===undefined?'data-act="wsel"':'data-onb="wk"')+' data-id="'+w.id+'" aria-pressed="'+(on?'true':'false')+'"><span class="wcat"><i class="cdot"></i>'+esc(CATS[w.cat]||w.cat)+'</span><b>'+esc(w.name)+'</b><span class="wmeta">'+w.mins+' min'+lvlHtml(w.level)+'</span><span class="wmu">'+esc(top.join(', ')||'Cardio')+'</span></button>';
+  if(pick!==undefined||w.cat!=='custom')return card;
+  return '<div class="wcwrap">'+card+'<button type="button" class="wcdel'+(WDELARM===w.id?' armed':'')+'" data-act="wdelask" data-id="'+w.id+'" aria-label="Delete '+esc(w.name)+'" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M5.5 7l1 12.5a1.5 1.5 0 0 0 1.5 1.5h8a1.5 1.5 0 0 0 1.5-1.5L18.5 7M9 7V4.5h6V7"/></svg><span>Delete?</span></button></div>'}
 function isSport(){return SPORTS.indexOf(S.wf.cat)>-1}
 function wseq(){var q=[0];if(needsAcc())q.push(1);if(!isSport())q.push(2);q.push(3);return q}
 function wSearch(){var t=(S.wq||'').toLowerCase().split(/\s+/).filter(Boolean);if(!t.length)return null;
@@ -4723,17 +4768,17 @@ function buildAI(text){
   var nm=named.length?muNames(named.join(',')):{full:'Full body',upper:'Upper body',lower:'Lower body',core:'Core',cardio:'Cardio',mobility:'Mobility'}[focus];
   return {name:nm+', '+mins+' min',mins:mins,focus:nm,items:items,notes:notes,pl:{full:'strength',upper:'strength',lower:'strength',core:'mobility',cardio:'cardio',mobility:'mobility'}[focus]};
 }
-var AILVL={easy:['Easy','Beginner friendly: simple movements, lower volume, longer rests, moderate effort (RPE 5 to 6).'],mid:['Intermediate','Moderate volume and effort (RPE 7), normal rests.'],hard:['Hard','Advanced: higher volume and intensity, harder variations, shorter rests, supersets or circuits where it makes sense (RPE 8 to 9). Still respect every safety rule above.']};
+var AILVL={easy:['easy','Beginner friendly: simple movements, lower volume, longer rests, moderate effort (RPE 5 to 6).'],mid:['intermediate','Moderate volume and effort (RPE 7), normal rests.'],hard:['advanced','Advanced: higher volume and intensity, harder variations, shorter rests, supersets or circuits where it makes sense (RPE 8 to 9). Still respect every safety rule above.']};
 var LVLNAME={easy:'Beginner',mid:'Intermediate',hard:'Advanced'};
 function aiOptPaint(){$$('#ai-lvl [data-k]').forEach(function(b){b.setAttribute('aria-checked',String(b.dataset.k===S.aiLvl))});$$('#ai-mins [data-m]').forEach(function(b){var on=+b.dataset.m===+S.aiMins;b.setAttribute('aria-checked',String(on));b.setAttribute('aria-pressed',String(on))})}
-function aiWorkout(t){
+function aiWorkout(t,lvlOver){
   if(!String(t).trim())return;
   getSample().then(function(sm){
     if(!sm){if(!S.aiMsg)S.aiMsg='AI is not available right now.';refresh();return}
     if(sm===SERVER_AI&&aiLeft()<=0){S.ai=null;S.aiMsg=aiErr('limit');refresh();return}
     S.aiBusy=true;S.aiMsg='';refresh();
-    var LV=AILVL[S.aiLvl]||AILVL.mid,lvlKey=S.aiLvl in AILVL?S.aiLvl:'mid',minsW=S.aiMins||30;
-    var pr=buildPrompt(t)+'\n\nDifficulty: '+LV[0]+'. '+LV[1]+'\nLength: about '+minsW+' minutes in total, including the warm-up and cool-down. Choose the number of exercises, sets and rest so it fits.\nIf the request above names its own length or difficulty, follow the request instead.'+'\n\nReply with JSON only, in this shape: {"name": "short workout name", "mins": 30, "items": [{"name": "exercise name", "rx": "3×10" or "30 s" or "10 min", "how": "2 short plain sentences: how to set up and do it, with one form tip"}], "notes": ["short note"]}. Use '+(minsW<=20?'3 to 5':minsW<=45?'4 to 8':'6 to 10')+' items.';
+    var lk=lvlOver&&AILVL[lvlOver]?lvlOver:S.aiLvl,LV=AILVL[lk]||AILVL.mid,lvlKey=lk in AILVL?lk:'mid';
+    var pr=buildPrompt(t)+'\n\nDifficulty: '+LV[0]+'. '+LV[1]+'\nLength: if the request above names a length, make the whole workout fit it, including the warm-up and cool-down. If it does not, pick a sensible length for the request (usually 30 to 45 minutes).\nIf the request above names its own difficulty, follow the request instead.'+'\n\nReply with JSON only, in this shape: {"name": "short workout name", "mins": 30, "items": [{"name": "exercise name", "rx": "3×10" or "30 s" or "10 min", "how": "2 short plain sentences: how to set up and do it, with one form tip"}], "notes": ["short note"]}. Use 3 to 5 items for 20 minutes or less, 4 to 8 for up to 45 minutes, and 6 to 10 for longer.';
     return sm.json(pr,{modelTier:'quick'}).then(function(r){
       if(!r||!Array.isArray(r.items)||!r.items.length)throw {code:'failed'};
       var st=stageCalc(),items=r.items.slice(0,12).map(function(i){var n=String(i&&i.name||'').trim().slice(0,50);return {name:n,rx:String(i&&i.rx||'3×10').slice(0,20),how:String(i&&i.how||'').trim().slice(0,400),state:exState(n,S.area,st)}}).filter(function(x){return x.name&&x.state!=='avoid'});
@@ -5065,12 +5110,12 @@ var ACT={
     S.planId=id;syncSched();SHA=null;toast('"'+nm+'" is saved and selected.',{title:'Schedule saved',icon:'📅',kind:'ok'})},
   ailvl:function(b){S.aiLvl=b.dataset.k},
   aimins:function(b){S.aiMins=+b.dataset.m},
-  mklvl:function(b){var k=b.dataset.k,t=MK&&MK.ask,ti=MK&&MK.title;if(!t||!AILVL[k])return;S.aiLvl=k;mkWorkout(t,ti)},
+  mklvl:function(b){var k=b.dataset.k,t=MK&&MK.ask,ti=MK&&MK.title;if(!t||!AILVL[k])return;mkWorkout(t,ti,k)},
   ambtog:function(){ambSet(!ambPref().on)},
   sfxsty:function(b){var px=ambPref();px.sty=b.dataset.k;ambSave(px);sfxPop('today',px.sty)},
   howtog:function(b){var k=b.dataset.hk;if(HOWOPEN[k]){if(HOWCLOSE[k])return;HOWCLOSE[k]=1;$$('.howp').forEach(function(p){if(p.dataset.hk===k)p.classList.add('out')});$$('.howi').forEach(function(x){if(x.dataset.hk===k){x.classList.remove('on');x.setAttribute('aria-expanded','false')}});setTimeout(function(){delete HOWOPEN[k];delete HOWCLOSE[k];refresh()},230)}else{delete HOWCLOSE[k];HOWOPEN[k]=1}},
   howai:function(b){var n=b.dataset.n;delete HOWFAIL[String(n).toLowerCase().trim()];howQueue(n)},
-  mkagain:function(){var t=MK&&MK.ask,ti=MK&&MK.title;if(t)mkWorkout(t,ti)},
+  mkagain:function(){var t=MK&&MK.ask,ti=MK&&MK.title;if(t)mkWorkout(t,ti,S.ai&&S.ai.lvl)},
   mksave:function(){var n=S.customW.length;ACT.aisave();var w=S.customW[S.customW.length-1];mkClose();if(S.customW.length>n&&w)toast('"'+w.name+'" is in My workouts.',{title:'Saved',icon:'💪'})},
   mkstart:function(){var n=S.customW.length;ACT.aisave();var w=S.customW[S.customW.length-1];mkClose();if(S.customW.length>n&&w)ACT.wstart({dataset:{id:w.id}})},
   wsearchai:function(){var q=(S.wq||'').trim();if(q)mkWorkout(q,q.charAt(0).toUpperCase()+q.slice(1))},
@@ -5251,6 +5296,9 @@ var ACT={
     if(at>-1)S.customW[at]=obj;else S.customW.push(obj);
     S.selW=id;S.wz=4;S.edit=null;S.wf.cat='all';S.wf.mu='all';syncSched();toast('Saved. It is in your saved workouts.');
   },
+  wdelask:function(b){var id=b.dataset.id;clearTimeout(ACT.wdelask.t);
+    if(WDELARM!==id){WDELARM=id;ACT.wdelask.t=setTimeout(function(){WDELARM=null;refresh()},3000);return}
+    WDELARM=null;var w=wById(id);ACT.wdel(b);toast('Deleted '+(w?w.name:'the routine')+'.')},
   wdel:function(b){
     var id=b.dataset.id;S.customW=S.customW.filter(function(w){return w.id!==id});S.savedW=(S.savedW||[]).filter(function(x){return x!==id});
     Object.keys(S.plans).forEach(function(k){S.plans[k]=S.plans[k].map(function(x){return x===id?null:x})});
@@ -5396,7 +5444,7 @@ var ACC={cfg:null,busy:false,msg:'',err:false,mode:'login',usage:null,sync:'',sy
 function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function lsSet(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
 function authGet(){try{return JSON.parse(lsGet('manna.auth.v1')||'null')}catch(e){return null}}
-function authSet(a){lsSet('manna.auth.v1',a?JSON.stringify(a):null)}
+function authSet(a){lsSet('manna.auth.v1',a?JSON.stringify(a):null);if(!a){try{localStorage.removeItem('manna.fr.v1')}catch(e){}if(typeof FR!=='undefined'){FR.handle=undefined;FR.data=null;FR.cached=false}}}
 function signedIn(){var a=authGet();return !!(ACC.cfg&&ACC.cfg.accounts&&a&&a.id)}
 function sbHeaders(tok){var h={apikey:ACC.cfg.anonKey,'content-type':'application/json'};h.authorization='Bearer '+(tok||ACC.cfg.anonKey);if(!tok&&String(ACC.cfg.anonKey).indexOf('eyJ')!==0)delete h.authorization;return h}
 function sbJson(r){return r.text().then(function(t){var j=null;try{j=t?JSON.parse(t):null}catch(e){}if(!r.ok)throw {status:r.status,msg:(j&&(j.msg||j.error_description||j.message||j.error))||'',code:j&&(j.error_code||j.code)};return j})}
@@ -5899,7 +5947,7 @@ function swFrame(st){
 function swSettle(st,user){
   var w=swW(st);if(!w)return;var i=Math.max(0,Math.min(st.pages.length-1,Math.round(st.tr.scrollLeft/w)));
   var changed=i!==st.last;st.i=i;st.last=i;st.hc=null;st.oy=null;swBar(st);swHeight(st);st.tr.classList.remove('moving');
-  st.pages.forEach(function(p,k){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin=''}p.setAttribute('aria-hidden',k===i?'false':'true');p.classList.toggle('swoff',k!==i)});
+  st.pages.forEach(function(p,k){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin=''}var near=Math.abs(k-i)===1;p.setAttribute('aria-hidden',k===i?'false':'true');p.classList.toggle('swoff',k!==i&&!near);p.classList.toggle('swnear',near);try{p.inert=k!==i}catch(e){}});
   SWMEM[st.root.id]=i;try{sessionStorage.setItem('manna.sw.v1',JSON.stringify(SWMEM))}catch(e){}
   if(changed&&user)swTopIn(st);
   if(changed&&user){try{sfxSwish(1)}catch(e){}}
@@ -6025,7 +6073,7 @@ function swInit(root){
     if(e.target.closest&&e.target.closest('input[type=range],textarea,pre,select'))return;
     var w=swW(st);if(!w)return;
     if(st.animating){cancelAnimationFrame(st.anim);st.animating=false;tr.classList.remove('anim')}
-    var base=Math.round(tr.scrollLeft/w);
+    var base=Math.round(tr.scrollLeft/w);st.pages.forEach(function(p,k){if(Math.abs(k-base)===1&&p.classList.contains('swoff')){p.classList.remove('swoff');p.classList.add('swnear')}});
     st.drag={id:e.pointerId,x:e.clientX,y:e.clientY,base:base,on:false,lx:e.clientX,lt:e.timeStamp,v:0};
   });
   tr.addEventListener('pointermove',function(e){
@@ -6217,6 +6265,7 @@ function show(){
   sn.innerHTML=gv.map(function(v){return '<a href="#'+v+'"'+(v===id?' aria-current="page"':'')+'>'+VLABEL[v]+'</a>'}).join('');
   $$('#nav a').forEach(function(a){if(a.dataset.group===g){a.setAttribute('aria-current','page');try{a.scrollIntoView({block:'nearest',inline:'nearest'})}catch(e){}}else a.removeAttribute('aria-current')});
   window.scrollTo(0,0);setTimeout(dvPaint,0);
+  if(id==='friends'){try{renderFriends()}catch(e){}}
   if(id==='scripture')S.readD=todayStamp();
   if(id==='eat'&&window.matchMedia&&matchMedia('(hover:hover)').matches){var fq=$('#f-q');if(fq)fq.focus()}
 }
