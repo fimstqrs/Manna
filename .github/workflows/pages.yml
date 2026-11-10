@@ -24,7 +24,7 @@ jobs:
       - name: Collect the static files
         run: |
           mkdir _site
-          cp index.html version.json robots.txt favicon.ico favicon.svg favicon-32.png apple-touch-icon.png _site/
+          cp index.html version.json manifest.webmanifest robots.txt favicon.ico favicon.svg favicon-32.png apple-touch-icon.png _site/
           cp -r icons data _site/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
