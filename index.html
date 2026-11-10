@@ -2482,6 +2482,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:144,d:'Nov 10, 2026',t:'Smoother countdown',s:['In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.']},
  {v:143,d:'Nov 10, 2026',t:'All bodyweight button',s:['When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.']},
  {v:142,d:'Nov 10, 2026',t:'Opening screen back to normal',s:['The welcome text on the opening animation is back in capitals, like before.']},
  {v:141,d:'Nov 10, 2026',t:'Cleaner text',s:['Text across Manna is easier to read. Capitals are now only used for small, important labels, like section names, the date, Bible references, warnings and difficulty. Everything else is normal text.','Long lines wrap more evenly, so you get fewer single words left on their own line.','Workout numbers, labels and how-to headings now use normal text instead of capitals.']},
@@ -2831,7 +2832,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='143';
+var heroLast='',APPV='144';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4589,7 +4590,7 @@ function countdown(done){
   o.innerHTML='<div class="cdring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" cx="60" cy="60" r="54"/></svg><span class="cdn">3</span></div>';
   document.body.appendChild(o);var n=3,ended=false,num=o.querySelector('.cdn'),fg=o.querySelector('.fg'),C=2*Math.PI*54,COL={3:'#30d158',2:'#ffd60a',1:'#ff453a'};fg.style.strokeDasharray=C;
   var fin=function(){if(ended)return;ended=true;clearInterval(iv);o.classList.add('out');setTimeout(function(){o.remove()},380);done()};
-  var show=function(){num.textContent=n;num.style.color=COL[n];fg.style.stroke=COL[n];num.classList.remove('pop');void num.offsetWidth;num.classList.add('pop');fg.style.transition='none';fg.style.strokeDashoffset=0;void fg.offsetWidth;fg.style.transition='stroke-dashoffset .95s linear';fg.style.strokeDashoffset=C;
+  var show=function(){num.textContent=n;num.style.color=COL[n];fg.style.stroke=COL[n];num.classList.remove('pop');void num.offsetWidth;num.classList.add('pop');fg.style.transition='none';fg.style.strokeDashoffset=0;fg.getBoundingClientRect();requestAnimationFrame(function(){requestAnimationFrame(function(){if(ended)return;fg.style.transition='stroke-dashoffset .9s linear';fg.style.strokeDashoffset=C})});
     cdBeep(false);try{if(navigator.vibrate)navigator.vibrate(40)}catch(e){}};
   show();
   var iv=setInterval(function(){n--;if(n<1){cdBeep(true);fin();return}show()},1000);
