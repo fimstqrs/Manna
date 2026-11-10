@@ -3,6 +3,22 @@
 //
 // Reads the names Vercel's Supabase integration sets, or the ones you add by hand.
 
+// Lets the copy of Manna on GitHub Pages (fimstqrs.github.io) call these functions.
+// Returns true when the request was a preflight check that has now been answered.
+const PAGES_ORIGIN = /^https:\/\/fimstqrs\.github\.io$/i;
+export function cors(req, res) {
+  const o = req.headers.origin || '';
+  if (PAGES_ORIGIN.test(o)) {
+    res.setHeader('Access-Control-Allow-Origin', o);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'authorization, content-type');
+    res.setHeader('Access-Control-Max-Age', '86400');
+  }
+  if (req.method === 'OPTIONS') { res.status(204).end(); return true; }
+  return false;
+}
+
 export function supaEnv() {
   const url = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/+$/, '');
   const anon = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';

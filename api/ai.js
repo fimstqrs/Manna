@@ -10,7 +10,7 @@
 // so clearing the browser can't reset them. Signed-out people: the app counts 5 a
 // day on the device. Set AI_REQUIRE_LOGIN=1 to make AI need an account.
 
-import { supaEnv, bearer, getUser, rpc } from './_supa.js';
+import { supaEnv, bearer, getUser, rpc, cors } from './_supa.js';
 
 const MAX_PROMPT = 8000;          // characters
 const MAX_IMAGE = 1_600_000;      // characters of base64 (about 1.2 MB)
@@ -51,7 +51,7 @@ function allowedOrigin(req) {
   if (!o) return true; // same-origin requests from some browsers omit it
   try {
     const h = new URL(o).hostname;
-    return h === req.headers.host?.split(':')[0] || h.endsWith('.vercel.app') && h.startsWith('manna') || h === 'localhost' || h === '127.0.0.1';
+    return h === req.headers.host?.split(':')[0] || h.endsWith('.vercel.app') && h.startsWith('manna') || h === 'fimstqrs.github.io' || h === 'localhost' || h === '127.0.0.1';
   } catch { return false; }
 }
 
@@ -125,6 +125,7 @@ async function askClaude(key, prompt, img) {
 }
 
 export default async function handler(req, res) {
+  if (cors(req, res)) return;
   res.setHeader('cache-control', 'no-store');
   const env = supaEnv();
   const token = bearer(req);

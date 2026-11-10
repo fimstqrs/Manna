@@ -1,8 +1,9 @@
 // DELETE /api/account with the person's sign-in token: permanently deletes their
 // account and, through the database's cascade, their saved data and AI usage.
-import { supaEnv, bearer, getUser, deleteUser } from './_supa.js';
+import { supaEnv, bearer, getUser, deleteUser, cors } from './_supa.js';
 
 export default async function handler(req, res) {
+  if (cors(req, res)) return;
   res.setHeader('cache-control', 'no-store');
   if (req.method !== 'DELETE') return res.status(405).json({ ok: false, code: 'method' });
   const env = supaEnv();
