@@ -643,6 +643,7 @@ input[type=text],input[type=number],select,textarea{
 .wrest-c{display:grid;gap:.55rem;justify-items:center;text-align:center;padding:1.3rem 1.4rem;border-radius:24px;background:var(--surface,var(--card,#fff));box-shadow:0 14px 44px rgba(0,0,0,.22);width:min(19rem,86%)}
 .wrest-r{position:relative;width:9rem;height:9rem}.wrest-r svg{width:100%;height:100%;transform:rotate(-90deg)}.wrest-r circle{fill:none;stroke-width:9}.wrest-r .bg{stroke:color-mix(in srgb,var(--ink,#000) 10%,transparent)}.wrest-r .fg{stroke:var(--accent,#6b8);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
 .wrest-t{position:absolute;inset:0;display:grid;place-items:center;font:700 2.1rem var(--f-mono,monospace)}
+.ambbtn{appearance:none;border:0;background:color-mix(in srgb,var(--accent,#6b8) 16%,transparent);color:inherit;width:1.9rem;height:1.9rem;border-radius:50%;font-size:1rem;line-height:1;cursor:pointer;margin-right:.45rem;vertical-align:middle;transition:opacity .2s,background .2s}.ambbtn.off{background:color-mix(in srgb,currentColor 7%,transparent);opacity:.55;text-decoration:line-through}
 .rscard{text-align:center;display:grid;gap:.7rem}.rscard .rsclock{font:700 2.6rem/1 var(--f-mono,ui-monospace,monospace);letter-spacing:.02em}.rscard .rsic{font-size:2.6rem;line-height:1}
 .mkcard{text-align:center;display:grid;gap:.8rem;max-height:85vh;overflow:auto}.mkcard .ex,.mkcard .list{text-align:left}
 .mkorb{position:relative;width:7.5rem;height:7.5rem;margin:.6rem auto .2rem}.mkorb i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,var(--acc,#6b8),#B565D9,#6EC1FF,#FFD84D,var(--acc,#6b8));filter:blur(10px);opacity:.75;animation:mkspin 2.4s linear infinite}.mkorb b{position:absolute;inset:14%;border-radius:50%;background:var(--card,#fff);display:grid;place-items:center;font-size:2.4rem;animation:mkpulse 1.6s ease-in-out infinite;box-shadow:0 0 0 1px color-mix(in srgb,currentColor 8%,transparent)}.mkorb s{position:absolute;width:.5rem;height:.5rem;border-radius:50%;background:var(--acc,#6b8);text-decoration:none;opacity:0;animation:mkspark 2s ease-out infinite}.mkorb s:nth-of-type(1){top:6%;left:18%}.mkorb s:nth-of-type(2){top:16%;right:6%;animation-delay:.5s;background:#B565D9}.mkorb s:nth-of-type(3){bottom:8%;left:10%;animation-delay:1s;background:#6EC1FF}.mkorb s:nth-of-type(4){bottom:2%;right:22%;animation-delay:1.5s;background:#FFD84D}
@@ -1072,7 +1073,7 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
     <div id="wel" role="status" aria-live="polite" hidden><div class="wel-in"><div class="wel-ic" id="wel-ic"></div><h2 id="wel-h"></h2><p>Let's take a quick look around.</p></div></div>
     <div id="tour" hidden><div id="tour-hl" aria-hidden="true"></div><div id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-t"><p class="eyebrow" id="tour-n"></p><h3 id="tour-t" tabindex="-1"></h3><p id="tour-p"></p><div class="tour-btns"><button class="btn" data-tour="back" id="tour-back">Back</button><button class="btn primary" data-tour="next" id="tour-next">Next</button><button class="btn" data-tour="exit" id="tour-exit">Exit tutorial</button></div></div></div>
     <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 48 48"><path fill="currentColor" fill-rule="evenodd" d="M12 40V26.2C7.6 24.6 5 21.2 5 17.2 5 11.2 10.9 7 18 7h12c7.1 0 13 4.2 13 10.2 0 4-2.6 7.4-7 9V40a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3zM22.5 12.5h3v4.75h4.75v3H25.5V31h-3V20.25h-4.75v-3h4.75z"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
-    <div class="clockbar" role="timer" aria-label="Current time"><span id="clk-time" class="clk-time"></span><span id="clk-date" class="clk-date"></span></div>
+    <div class="clockbar"><button type="button" class="ambbtn" id="amb-btn" data-act="ambtog" aria-pressed="true" aria-label="Turn background music off" title="Background music">♪</button><span role="timer" aria-label="Current time"><span id="clk-time" class="clk-time"></span><span id="clk-date" class="clk-date"></span></span></div>
     <div class="subnav" id="subnav" hidden></div>
     <!-- TODAY -->
     <section class="view" id="v-today" hidden>
@@ -1419,6 +1420,9 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
           <label class="f" for="p-scaled"><span class="row spread"><span>Display size on laptops and computers</span><span class="row" style="gap:.6rem"><span class="mono" id="p-v2"></span><button type="button" class="chip" data-act="scalereset" data-d="1">Reset</button></span></span><input type="range" id="p-scaled" min="0.8" max="1.4" step="0.05"></label>
           <p class="small muted" id="p-scnote"></p>
           <label class="check" for="p-h24"><input type="checkbox" id="p-h24"><span>24-hour time<small>Show 14:30 instead of 2:30 PM. Turn off for 12-hour time.</small></span></label>
+          <div class="stack" style="gap:.45rem"><label class="check" for="p-amb"><input type="checkbox" id="p-amb"><span>Background music<small>Soft music made live by Manna: calm on most pages, peaceful on Faith, upbeat on Fitness. It changes smoothly as you move around. This device only.</small></span></label>
+            <label class="f" for="p-ambv"><span class="row spread"><span>Music volume</span></span><input type="range" id="p-ambv" min="0" max="100" step="5"></label><p class="small muted" id="p-ambn"></p>
+            <label class="check" for="p-sfx"><input type="checkbox" id="p-sfx"><span>Tap sounds<small>A little pop when you tap Home, Fitness, Fuel, Faith or Settings at the bottom.</small></span></label></div>
           <div class="stack gfxset" style="gap:.45rem"><b>Graphics and animations</b>
             <div class="seg" role="radiogroup" aria-label="Graphics and animations" id="p-gfx"><button type="button" role="radio" data-act="gfx" data-k="auto">Auto</button><button type="button" role="radio" data-act="gfx" data-k="low">Low</button><button type="button" role="radio" data-act="gfx" data-k="med">Medium</button><button type="button" role="radio" data-act="gfx" data-k="high">High</button></div>
             <p class="small muted" id="p-gfxn"></p></div>
@@ -2312,6 +2316,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:136,d:'Nov 10, 2026',t:'Background music and tap sounds',s:['Manna now plays soft background music, made live in the app (no downloads): calm on most pages, peaceful with chimes on Faith, and an upbeat beat on Fitness. It blends smoothly when you switch.','Tap ♪ next to the clock at the top to turn it on or off, and set the volume in Settings › Look.','It starts after your first tap, pauses when you leave Manna, and goes quiet while the Bible is being read aloud.','Tapping Home, Fitness, Fuel, Faith or Settings at the bottom now makes a little pop, a different note for each. Turn it off in Settings › Look › Tap sounds.']},
  {v:135,d:'Nov 9, 2026',t:'TikTok-style workouts',s:['During a workout, each exercise is now its own full-screen card. Swipe up for the next exercise and down to go back, or tap the dots on the side.','The top bar keeps your time, sets logged, Pause and Finish in view the whole time.','After you log the last set of an exercise, Manna moves you to the next card on its own.','The rest timer now pops up on top of whatever card you are on, with a countdown ring, +15 s and Skip rest. Your phone buzzes when rest is over (where supported).']},
  {v:134,d:'Nov 9, 2026',t:'AI progress bar, free exercise steps',s:['Whenever Manna asks AI for something, the pop-up shows a progress bar and a percentage, and fills to 100% when it is done.','Every exercise without built-in steps, including in AI-made, imported and your own workouts, now gets How to do it steps automatically. These never use your AI uses.']},
  {v:133,d:'Nov 9, 2026',t:'How to do every exercise',s:['Every exercise now has a How to do it button that opens short, plain steps: how to set up, the movement, and a form tip.','It shows on workout pages, on Before you start and during the workout itself.','Workouts made with AI come with their own steps for each exercise, at no extra AI use.','Exercises you added yourself or imported get exact steps automatically, for free.']},
@@ -2648,7 +2653,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='135';
+var heroLast='',APPV='136';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3045,6 +3050,88 @@ function mkRender(){
   if(c.dataset.h!==h){c.dataset.h=h;c.innerHTML=h}
 }
 function mkWorkout(t,title){t=String(t||'').trim();if(!t)return;S.ai=null;S.aiMsg='';mkOpen('workout',title||'Your workout');MK.ask=t;aiWorkout(t)}
+/* ---------- Ambient background music: made live in the browser, no files ----------
+   calm on most pages, peaceful on Faith, upbeat on Fitness. Crossfades between them. */
+var AMB={ctx:null,master:null,send:null,bus:null,mood:'',next:0,step:0,iv:0,noise:null,started:false};
+function ambPref(){if(AMB.pc)return AMB.pc;var d={on:true,vol:0.5,sfx:true};try{var p=JSON.parse(localStorage.getItem('manna.music.v1'));if(p&&typeof p==='object'){if(typeof p.on==='boolean')d.on=p.on;if(isFinite(p.vol))d.vol=Math.max(0,Math.min(1,+p.vol));if(typeof p.sfx==='boolean')d.sfx=p.sfx}}catch(e){}AMB.pc=d;return d}
+function ambSave(p){AMB.pc=null;try{localStorage.setItem('manna.music.v1',JSON.stringify(p))}catch(e){}}
+function ambMoodFor(id){var g=(GROUPS.filter(function(x){return x[2].indexOf(id)>-1})[0]||[])[0];return g==='train'?'workout':g==='faith'?'faith':'calm'}
+var AMBM={
+  calm:{spb:1,bar:4,chords:[[62,66,69,73],[59,62,66,69],[55,59,62,66],[57,62,64,69]],every:2,cut:1500,pad:.055,scale:[74,76,78,81,83,86],chime:.28},
+  faith:{spb:1.1,bar:4,chords:[[60,64,67,74],[57,60,64,67],[53,57,60,64],[55,60,62,67]],every:2,cut:1300,pad:.06,scale:[72,74,76,79,81,84,86,88],chime:.55},
+  workout:{spb:60/104/4,bar:16,chords:[[57,60,64,69],[53,57,60,65],[48,55,60,64],[55,59,62,67]],every:1,cut:900,pad:.03}
+};
+function ambCtx(){
+  if(AMB.ctx)return AMB.ctx;var C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
+  var c=new C(),m=c.createGain(),comp=c.createDynamicsCompressor();m.gain.value=0;m.connect(comp);comp.connect(c.destination);
+  var len=Math.floor(c.sampleRate*3.2),ir=c.createBuffer(2,len,c.sampleRate);for(var ch=0;ch<2;ch++){var d=ir.getChannelData(ch);for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3)}
+  var cv=c.createConvolver();cv.buffer=ir;var wet=c.createGain();wet.gain.value=.55;cv.connect(wet);wet.connect(m);
+  var nb=c.createBuffer(1,c.sampleRate,c.sampleRate),nd=nb.getChannelData(0);for(var j=0;j<nd.length;j++)nd[j]=Math.random()*2-1;
+  AMB.ctx=c;AMB.master=m;AMB.send=cv;AMB.noise=nb;return c;
+}
+function mtof(n){return 440*Math.pow(2,(n-69)/12)}
+function ambEnv(g,t,a,peak,hold,rel){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.setValueAtTime(peak,t+a+hold);g.gain.linearRampToValueAtTime(0,t+a+hold+rel)}
+function ambPad(t,notes,dur,cut,lvl){var c=AMB.ctx,b=AMB.bus;if(!b)return;var f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=cut;f.Q.value=.4;var g=c.createGain();f.connect(g);g.connect(b.dry);g.connect(b.wet);
+  ambEnv(g,t,Math.min(3,dur*.4),lvl,Math.max(0,dur*.6-1),Math.min(4,dur*.6));
+  notes.forEach(function(n){[[ 'sine',0],['triangle',7],['triangle',-7]].forEach(function(o){var x=c.createOscillator();x.type=o[0];x.frequency.value=mtof(n);x.detune.value=o[1];x.connect(f);x.start(t);x.stop(t+dur*1.05+4)})})}
+function ambChime(t,n,v){var c=AMB.ctx,b=AMB.bus;if(!b)return;var g=c.createGain();g.connect(b.wet);g.connect(b.dry);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+3.2);
+  [[1,1],[2.01,.25],[3.98,.08]].forEach(function(p){var x=c.createOscillator(),pg=c.createGain();x.type='sine';x.frequency.value=mtof(n)*p[0];pg.gain.value=p[1];x.connect(pg);pg.connect(g);x.start(t);x.stop(t+3.3)})}
+function ambKick(t){var c=AMB.ctx,b=AMB.bus;var x=c.createOscillator(),g=c.createGain();x.type='sine';x.frequency.setValueAtTime(115,t);x.frequency.exponentialRampToValueAtTime(42,t+.13);g.gain.setValueAtTime(.42,t);g.gain.exponentialRampToValueAtTime(.001,t+.33);x.connect(g);g.connect(b.dry);x.start(t);x.stop(t+.35)}
+function ambHat(t,v){var c=AMB.ctx,b=AMB.bus;var s=c.createBufferSource();s.buffer=AMB.noise;var f=c.createBiquadFilter();f.type='highpass';f.frequency.value=7500;var g=c.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0005,t+.06);s.connect(f);f.connect(g);g.connect(b.dry);s.start(t,Math.random()*.5);s.stop(t+.07)}
+function ambBass(t,n,d){var c=AMB.ctx,b=AMB.bus;var x=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();x.type='sawtooth';x.frequency.value=mtof(n);f.type='lowpass';f.frequency.setValueAtTime(520,t);f.frequency.exponentialRampToValueAtTime(160,t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.09,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+d);x.connect(f);f.connect(g);g.connect(b.dry);x.start(t);x.stop(t+d+.02)}
+function ambPluck(t,n){var c=AMB.ctx,b=AMB.bus;var x=c.createOscillator(),g=c.createGain();x.type='triangle';x.frequency.value=mtof(n);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.005);g.gain.exponentialRampToValueAtTime(.0005,t+.35);x.connect(g);g.connect(b.dry);g.connect(b.wet);x.start(t);x.stop(t+.4)}
+function ambStep(i,t){
+  var M=AMBM[AMB.mood];if(!M)return;var barN=Math.floor(i/M.bar),inBar=i%M.bar,ci=Math.floor(barN/M.every)%M.chords.length,ch=M.chords[ci];
+  if(AMB.mood==='workout'){
+    if(inBar===0)ambPad(t,ch.map(function(n){return n+12}),M.spb*M.bar,M.cut,M.pad);
+    if(i%4===0)ambKick(t);
+    if(i%4===2)ambHat(t,.05);else if(i%2===1)ambHat(t,.018);
+    if(i%2===0)ambBass(t,ch[0]-12,M.spb*1.7);
+    var arp=[0,1,2,3,2,1,0,2];if(barN%2===1||i%2===0)ambPluck(t,ch[arp[i%8]]+12);
+  }else{
+    if(inBar===0&&barN%M.every===0)ambPad(t,ch,M.spb*M.bar*M.every+1,M.cut,M.pad);
+    if(inBar===0&&barN%M.every===0)ambPad(t,[ch[0]-12],M.spb*M.bar*M.every+1,600,M.pad*.8);
+    if(Math.random()<M.chime/M.bar*1.6)ambChime(t+Math.random()*M.spb*.5,M.scale[Math.floor(Math.random()*M.scale.length)],.05+Math.random()*.04);
+  }
+}
+function ambTick(){var c=AMB.ctx;if(!c||!AMB.bus||c.state!=='running'||!ambPref().on)return;var M=AMBM[AMB.mood];while(AMB.next<c.currentTime+.35){ambStep(AMB.step,AMB.next);AMB.step++;AMB.next+=M.spb}}
+function ambSetMood(m){
+  var c=AMB.ctx;if(!c||m===AMB.mood)return;var now=c.currentTime,old=AMB.bus;
+  if(old){old.out.gain.cancelScheduledValues(now);old.out.gain.setValueAtTime(old.out.gain.value,now);old.out.gain.linearRampToValueAtTime(0,now+2.5);setTimeout(function(){try{old.out.disconnect()}catch(e){}},3200)}
+  var out=c.createGain(),dry=c.createGain(),wet=c.createGain();out.gain.setValueAtTime(0,now);out.gain.linearRampToValueAtTime(1,now+2.5);dry.connect(out);out.connect(AMB.master);wet.gain.value=m==='workout'?.25:.9;wet.connect(AMB.send);
+  /* the reverb send fades with the mood too */
+  var wg=c.createGain();wg.gain.setValueAtTime(0,now);wg.gain.linearRampToValueAtTime(1,now+2.5);wet.disconnect();wet.connect(wg);wg.connect(AMB.send);out._wg=wg;
+  if(old&&old.out._wg){old.out._wg.gain.cancelScheduledValues(now);old.out._wg.gain.setValueAtTime(old.out._wg.gain.value,now);old.out._wg.gain.linearRampToValueAtTime(0,now+2.5)}
+  AMB.bus={out:out,dry:dry,wet:wet};AMB.mood=m;AMB.step=0;AMB.next=now+.08;
+}
+function ambLevel(){var p=ambPref(),c=AMB.ctx;if(!c)return;var v=p.on?p.vol*.42:0;if(S.rplay)v*=.25;var now=c.currentTime;AMB.master.gain.cancelScheduledValues(now);AMB.master.gain.setValueAtTime(AMB.master.gain.value,now);AMB.master.gain.linearRampToValueAtTime(v,now+1.2)}
+function ambStart(){
+  var p=ambPref();if(!p.on||document.hidden)return;var c=ambCtx();if(!c)return;
+  if(c.state==='suspended')c.resume().catch(function(){});
+  ambSetMood(ambMoodFor(curId));ambLevel();if(!AMB.iv)AMB.iv=setInterval(ambTick,90);
+  if(!AMB.started){AMB.started=true;try{if(!localStorage.getItem('manna.music.told')){localStorage.setItem('manna.music.told','1');setTimeout(function(){toast('Background music is on. Tap ♪ at the top to turn it off.',{title:'Music',icon:'♪'})},800)}}catch(e){}}
+  ambPaint();
+}
+function ambStop(){var c=AMB.ctx;if(!c)return;ambLevel();ambPaint()}
+function ambSet(on,vol){var p=ambPref();if(on!=null)p.on=!!on;if(vol!=null)p.vol=Math.max(0,Math.min(1,vol));ambSave(p);if(p.on)ambStart();else ambStop();ambLevel()}
+function ambPaint(){var p=ambPref(),b=$('#amb-btn');if(b){b.setAttribute('aria-pressed',String(p.on));b.setAttribute('aria-label',p.on?'Turn background music off':'Turn background music on');b.classList.toggle('off',!p.on)}
+  var t=$('#p-amb');if(t)t.checked=p.on;var sx=$('#p-sfx');if(sx)sx.checked=p.sfx;var v=$('#p-ambv');if(v&&document.activeElement!==v)v.value=Math.round(p.vol*100);var n=$('#p-ambn');if(n)n.textContent=p.on?'Now playing: '+({calm:'Calm',faith:'Faith',workout:'Workout'})[AMB.mood||ambMoodFor(curId)]+' music.':'Music is off.'}
+/* Tap sounds for the bottom 5 buttons: a soft pop, a different note for each */
+var SFXN={today:76,workouts:79,eat:81,scripture:84,more:86};
+function sfxPop(tab){
+  var p=ambPref();if(!p.sfx)return;var c=ambCtx();if(!c)return;if(c.state!=='running')c.resume().catch(function(){});
+  if(!AMB.fx){AMB.fx=c.createGain();AMB.fx.gain.value=.55;AMB.fx.connect(c.destination)}
+  var t=c.currentTime+.005,f0=mtof(SFXN[tab]||79),x=c.createOscillator(),g=c.createGain();
+  x.type='sine';x.frequency.setValueAtTime(f0*.75,t);x.frequency.exponentialRampToValueAtTime(f0*1.5,t+.07);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.32,t+.004);g.gain.exponentialRampToValueAtTime(.001,t+.14);x.connect(g);g.connect(AMB.fx);x.start(t);x.stop(t+.16);
+  var y=c.createOscillator(),h=c.createGain();y.type='triangle';y.frequency.setValueAtTime(f0*2,t+.045);h.gain.setValueAtTime(0,t+.045);h.gain.linearRampToValueAtTime(.08,t+.05);h.gain.exponentialRampToValueAtTime(.001,t+.2);y.connect(h);h.connect(AMB.fx);y.start(t+.045);y.stop(t+.22);
+  if(AMB.noise){var n=c.createBufferSource(),hp=c.createBiquadFilter(),ng=c.createGain();n.buffer=AMB.noise;hp.type='highpass';hp.frequency.value=3500;ng.gain.setValueAtTime(.06,t);ng.gain.exponentialRampToValueAtTime(.0005,t+.025);n.connect(hp);hp.connect(ng);ng.connect(AMB.fx);n.start(t);n.stop(t+.03)}
+}
+(function(){var tabs=document.getElementById('tabs');if(!tabs)return;var last=0;
+  tabs.addEventListener('pointerdown',function(e){var a=e.target.closest&&e.target.closest('[data-tab]');if(!a)return;last=Date.now();sfxPop(a.dataset.tab)});
+  tabs.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-tab]');if(!a||Date.now()-last<600)return;sfxPop(a.dataset.tab)});})();
+['pointerdown','keydown','touchend'].forEach(function(ev){document.addEventListener(ev,function(){if(ambPref().on&&(!AMB.bus||!AMB.ctx||AMB.ctx.state!=='running'))ambStart()},{passive:true})});
+document.addEventListener('visibilitychange',function(){if(!AMB.ctx)return;if(document.hidden)AMB.ctx.suspend().catch(function(){});else if(ambPref().on){AMB.ctx.resume().then(ambLevel).catch(function(){})}});
 /* ----- Friends ----- */
 var FR={busy:false,data:null,handle:undefined,err:'',at:0,msg:'',ok:false,pushH:'',pushAt:0};
 function frOn(){var a=authGet();return !!(ACC.cfg&&ACC.cfg.accounts&&a&&a.id)}
@@ -3556,7 +3643,7 @@ function bpRender(){
     h='<div class="row spread"><h3 id="bp-t">Choose a book</h3><button class="btn sm" data-act="bpclose">Close</button></div>'+sec('Old Testament',bk.slice(0,39))+sec('New Testament',bk.slice(39))}
   if(c.dataset.h!==h){c.dataset.h=h;c.innerHTML=h}
 }
-function bSay(){
+function bSay(){try{ambLevel()}catch(e){}
   if(!('speechSynthesis' in window)){toast('Reading aloud is not supported on this browser.');S.rplay=null;return}
   var vs=WEBB[S.rb][S.rc-1],i=S.rplay.i;if(i>=vs.length){S.rplay=null;refresh();return}
   var u=new SpeechSynthesisUtterance(vs[i]||'');u.rate=.95;var tok=S.rplay.tok;
@@ -3565,7 +3652,7 @@ function bSay(){
   speechSynthesis.speak(u);bSayMark();
 }
 function bSayMark(){$$('#yv-txt .bv.say').forEach(function(e){e.classList.remove('say')});if(!S.rplay)return;var e=document.querySelector('#yv-txt .bv[data-v="'+(S.rplay.i+1)+'"]');if(e){e.classList.add('say');if(e.getBoundingClientRect().top>innerHeight*.7)e.scrollIntoView({block:'center',behavior:'smooth'})}}
-function bStop(){if(S.rplay){S.rplay=null;try{speechSynthesis.cancel()}catch(e){}}}
+function bStop(){if(S.rplay){S.rplay=null;try{speechSynthesis.cancel()}catch(e){}}try{ambLevel()}catch(e){}}
 function nice(k){return k.replace(/(^|\s)([a-z])/g,function(m,a,b){return a+b.toUpperCase()})}
 function renderThemes(){
   var th=currentTheme(),c=classify(),v=S.votd;
@@ -4312,7 +4399,7 @@ function tickClock(){
   dt.textContent=d.toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'});
 }
 function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.textContent=t})}
-function refresh(){try{renderStreaks();upPaint();gfxPaint()}catch(e){}setTimeout(function(){try{vpSyncAll()}catch(e){}},0);setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
+function refresh(){try{renderStreaks();upPaint();gfxPaint();ambPaint()}catch(e){}setTimeout(function(){try{vpSyncAll()}catch(e){}},0);setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   applyPrefs();renderToday();try{renderFriends()}catch(e){}try{mkTick();mkRender()}catch(e){}renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
@@ -4482,6 +4569,7 @@ var ACT={
   wgo:function(b){wfGo(+b.dataset.i,true)},
   restpick:function(b){var r=parseInt(b.dataset.s,10)||0;S.restPick=r;S.restDef=r},
   mkclose:function(){mkClose()},
+  ambtog:function(){ambSet(!ambPref().on)},
   howai:function(b){var n=b.dataset.n;delete HOWFAIL[String(n).toLowerCase().trim()];howQueue(n)},
   mkagain:function(){var t=MK&&MK.ask,ti=MK&&MK.title;if(t)mkWorkout(t,ti)},
   mksave:function(){var n=S.customW.length;ACT.aisave();var w=S.customW[S.customW.length-1];mkClose();if(S.customW.length>n&&w)toast('"'+w.name+'" is in My workouts.',{title:'Saved',icon:'💪'})},
@@ -5223,6 +5311,9 @@ document.addEventListener('click',function(e){
 });
 function onInput(e){
   var t=e.target;
+  if(t.id==='p-amb'){if(e.type==='change')ambSet(t.checked);return}
+  if(t.id==='p-sfx'){if(e.type==='change'){var px=ambPref();px.sfx=t.checked;ambSave(px);if(px.sfx)sfxPop('scripture')}return}
+  if(t.id==='p-ambv'){ambSet(null,(+t.value||0)/100);var pa=ambPref();if(!pa.on&&+t.value>0)ambSet(true);return}
   if(t.dataset&&t.dataset.fs){if(e.type!=='change')return;S.fshare=Object.assign({},S.fshare||{});S.fshare[t.dataset.fs]=t.checked;FR.pushH='';FR.pushAt=0;frPush(true);refresh();return}
   if(e.type==='change'&&(t.type==='text'||t.tagName==='TEXTAREA'))return;
   if(e.type==='input'&&t.dataset&&t.dataset.chg)return;
@@ -5612,7 +5703,7 @@ function show(){
   if(!VALID[id])id='today';
   $$('.view').forEach(function(s){s.hidden=s.id!=='v-'+id});
   if(id!=='scripture'){if(S.rplay)bStop();S.bsel=[]}
-  curId=id;document.body.classList.remove('sheet');updateTabs();
+  curId=id;try{if(AMB.ctx&&ambPref().on)ambSetMood(ambMoodFor(id));setTimeout(ambPaint,0)}catch(e){}document.body.classList.remove('sheet');updateTabs();
   var g=VGROUP[id],gg=GROUPS.filter(function(x){return x[0]===g})[0],gv=gg?gg[2].filter(function(v){return v!=='session'&&v!=='settings'&&!(v==='schedule'&&S.useSched===false)}):[],sn=$('#subnav');
   sn.hidden=id==='session'||gv.length<2;
   sn.innerHTML=gv.map(function(v){return '<a href="#'+v+'"'+(v===id?' aria-current="page"':'')+'>'+VLABEL[v]+'</a>'}).join('');
