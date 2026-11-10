@@ -2482,6 +2482,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:143,d:'Nov 10, 2026',t:'All bodyweight button',s:['When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.']},
  {v:142,d:'Nov 10, 2026',t:'Opening screen back to normal',s:['The welcome text on the opening animation is back in capitals, like before.']},
  {v:141,d:'Nov 10, 2026',t:'Cleaner text',s:['Text across Manna is easier to read. Capitals are now only used for small, important labels, like section names, the date, Bible references, warnings and difficulty. Everything else is normal text.','Long lines wrap more evenly, so you get fewer single words left on their own line.','Workout numbers, labels and how-to headings now use normal text instead of capitals.']},
  {v:140,d:'Nov 10, 2026',t:'Install Manna on your iPhone',s:['On iPhone and iPad, a step-by-step guide shows how to add Manna to your Home Screen so it opens full screen like an app. It knows if you are in Safari, Chrome or another app\'s browser and shows the right steps, with pictures of what to tap.','Manna now runs as a proper full-screen app from the Home Screen, with its own icon and the status bar handled properly.','Find the guide any time in Settings › About.','The workout countdown is now 3 in green, 2 in yellow and 1 in red, with no Go, text or Skip button.','When you import a workout or schedule and Manna cannot read some lines, AI now reads them for you straight away, with no button to tap (it uses one AI use). If you have no AI uses left, the lines are listed like before.','Swiping between pages and scrolling through workouts is smoother. Manna does less work while your finger moves, and drops the blur effect during swipes, so it no longer stutters on older phones.']},
@@ -2830,7 +2831,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='142';
+var heroLast='',APPV='143';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4522,7 +4523,7 @@ function renderSession(){
         +'</div></div>';
     }).join('')+(S.prepMsg?'<div class="note warn" role="alert">'+esc(S.prepMsg)+'</div>':'')
       +(!pwk.ex.some(function(e,i){var d=S.pd[i];return (d&&d.s!=null?d.s:setTarget(e[1]))>1})?'<p class="small muted">No rest timer: every exercise here is done once.</p>':'<div class="stack restpick"><b>Rest between sets</b><div class="chips" role="group" aria-label="Rest between sets">'+[0,30,60,90,120,180].map(function(r){return '<button type="button" class="chip" data-act="restpick" data-s="'+r+'" aria-pressed="'+(S.restPick===r)+'">'+(r?restLabel(r):'No rest')+'</button>'}).join('')+'</div><p class="small muted">'+(S.restPick?'A countdown starts after each set you log. You can skip it any time.':'No countdown between sets.')+' Your choice is remembered for next time.</p></div>')
-      +'<div class="row spread">'+(rows.length?'<button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button>':'<span></span>')+'<div class="row"><button class="btn" data-act="pcancel">Cancel</button><button class="btn primary" data-act="pstart">Start workout</button></div></div></div>';
+      +'<div class="row spread">'+(rows.length?'<div class="row"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="chip" data-act="pbwall">All bodyweight</button></div>':'<span></span>')+'<div class="row"><button class="btn" data-act="pcancel">Cancel</button><button class="btn primary" data-act="pstart">Start workout</button></div></div></div>';
   }else if(S.sess&&w){
     var ms=sessMs(),t=sessTotals(w),st=stageCalc(),paused=S.sess.paused,n=w.ex.length,setsAll=0,setsDone=0,exDone=0,ACC=['#30d158','#0a84ff','#ff9f0a','#ff375f','#bf5af2','#64d2ff','#ffd60a'];
     w.ex.forEach(function(e,i){var tg=sessTg(w,i).s,lg=(S.sets[w.id+'|'+i]||[]).length;setsAll+=tg;setsDone+=Math.min(tg,lg);if(lg>=tg)exDone++});
@@ -5330,6 +5331,9 @@ var ACT={
       if(!r||!Array.isArray(r.items)||!r.items.length){S.ntMsg=err||'AI could not read that either. Try one exercise per line.';refresh();return}
       try{howFill(r.items.map(function(i){return i&&i.name}).filter(Boolean))}catch(e){}
       S.notes={title:String(r.title||(S.notes&&S.notes.title)||'Imported routine').slice(0,60),items:r.items.slice(0,20).map(function(i){return {name:canon(String(i&&i.name||'').slice(0,50)),rx:String(i&&i.rx||'3×10').slice(0,24)}}).filter(function(i){return i.name}),skipped:[]};refresh()})},
+  pbwall:function(){var cs=$$('#ss-body input[id^="pb-"]');if(!cs.length)return;var on=!cs.every(function(c){return c.checked});
+    cs.forEach(function(c){c.checked=on;var i=+c.id.slice(3);S.pd[i]=Object.assign(S.pd[i]||{},{b:on})});
+    toast(on?'Bodyweight on for every exercise.':'Bodyweight off for every exercise.');return false},
   ntsample:function(){$('#nt-text').value=NOTE_SAMPLE;S.notes=parseNotes(NOTE_SAMPLE)},
   ntsave:function(){var o=S.notes;if(!o||!o.items.length)return;var ti=$('#nt-title');if(ti&&ti.value.trim())o.title=ti.value.trim().slice(0,60);var id='c'+(uid++);S.customW.push({id:id,name:o.title,mins:Math.max(10,o.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved "'+o.title+'" to your library.')},
   hidenums:function(){S.hideNums=true;$('#sg-hide').checked=true;toast('Calorie numbers are now hidden.')},
