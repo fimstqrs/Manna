@@ -2533,6 +2533,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:144,d:'Nov 10, 2026',t:'Stay on your exercise',s:['Fixed: logging a set no longer jumps you back to the first exercise on iPhone. You stay on the exercise you are doing.','The workout screen now only updates the parts that change when you log, so it feels quicker and does not flash.']},
  {v:143,d:'Nov 10, 2026',t:'Faster Friends, smoother swipes and fixes',s:['Difficulty labels (easy, intermediate, advanced) are now lowercase.','Build with AI no longer has a Length picker. If you want a set length, type it in the box, like “30 minutes”. Otherwise AI picks a sensible length.','Fixed: tapping a difficulty under Make it again as no longer changes the difficulty for every workout you build after.','Imported and self-made routines now have a red delete button on their card. Tap it, then tap Delete? to confirm.','The music button at the top now matches the settings button.','Friends opens instantly: Manna remembers your friends list on your phone and loads the latest in the background. The first time, a loading screen shows while it loads.','Swiping between pages is smoother, especially swiping right to left. Manna now keeps only the pages right next to you ready, instead of waking every page at the start of a swipe.']},
  {v:142,d:'Nov 10, 2026',t:'AI glow, bodyweight button and more',s:['Anything made with AI now has its own animation: a colourful glow flows around the edge of the screen while AI is working, then flashes when it is done.','New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default.','When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.','In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.','The welcome text on the opening animation is back in capitals, like before.']},
  {v:141,d:'Nov 10, 2026',t:'Cleaner text',s:['Text across Manna is easier to read. Capitals are now only used for small, important labels, like section names, the date, Bible references and warnings. Everything else is normal text.','Long lines wrap more evenly, so you get fewer single words left on their own line.','Workout numbers, labels and how-to headings now use normal text instead of capitals.']},
@@ -2882,7 +2883,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='143';
+var heroLast='',APPV='144';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4644,7 +4645,13 @@ function renderSession(){
     h+='<header class="vh"><p class="eyebrow">Workout session</p><h2>No workout running</h2><p class="lede">Pick a workout and press Start. You will get a timer, a calorie estimate and set logging.</p></header><div class="card"><a class="btn primary" href="#workouts" style="text-decoration:none">Choose a workout</a></div>';
   }
   var of=$('#wfeed'),ost=of?of.scrollTop:null,oh=$('#fxh'),ohl=oh?oh.scrollLeft:null,ae=document.activeElement,aid=ae&&ae.id;
-  if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;
+  var morphed=false;
+  if(el.dataset.h!==h&&of&&S.sess){var tpl=document.createElement('div');tpl.innerHTML=h;var tf=tpl.querySelector('#wfeed');
+    if(tf&&tf.querySelectorAll('.wslide').length===of.querySelectorAll('.wslide').length){el.dataset.h=h;domMorph(el,tpl);morphed=true;
+      Object.keys(draft).forEach(function(id){var i=document.getElementById(id);if(i&&i.value==='')i.value=draft[id]});
+      var k1=WFI!=null?WFI:wfIdx();$$('#wrail button').forEach(function(d,j){var on=j===k1;d.classList.toggle('on',on);if(on)d.setAttribute('aria-current','step');else d.removeAttribute('aria-current')});
+      if(of.scrollTop!==ost&&ost!=null)of.scrollTop=ost;if(oh&&ohl!=null&&oh.scrollLeft!==ohl)oh.scrollLeft=ohl}}
+  if(!morphed&&el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;
     var nf=$('#wfeed');if(nf){var keepI=WFI!=null?WFI:(ost!=null&&nf.clientHeight?Math.round(ost/nf.clientHeight):0);var put=function(){var sl=nf.querySelector('.wslide[data-i="'+keepI+'"]');if(sl)nf.scrollTop=sl.offsetTop};put();requestAnimationFrame(put)}var nh=$('#fxh');if(nh){nh.scrollLeft=ohl!=null?ohl:nh.scrollWidth}
     Object.keys(draft).forEach(function(id){var i=document.getElementById(id);if(i&&i.value==='')i.value=draft[id]});
     if(aid){var fe=document.getElementById(aid);if(fe&&fe!==ae&&/^(sw|sr)-/.test(aid))try{fe.focus({preventScroll:true})}catch(e){}}}
@@ -4668,6 +4675,30 @@ function countdown(done){
 }
 function wfGo(i,smooth){WFI=i;var f=$('#wfeed'),sl=f&&f.querySelector('.wslide[data-i="'+i+'"]');if(!sl)return;f.scrollTo({top:sl.offsetTop,behavior:smooth&&!document.documentElement.classList.contains('lite')?'smooth':'auto'})}
 var WFI=null;
+/* Update only what changed, so scroll positions (and your place in the workout) never move */
+function domMorph(a,b){
+  var bc=Array.prototype.slice.call(b.childNodes),byId={},bIds={};
+  Array.prototype.forEach.call(a.childNodes,function(n){if(n.nodeType===1&&n.id)byId[n.id]=n});
+  bc.forEach(function(n){if(n.nodeType===1&&n.id)bIds[n.id]=1});
+  for(var i=0;i<bc.length;i++){var y=bc[i],x=a.childNodes[i];
+    /* Something new appears before a kept element (like the rest pop-up before the exercise list): insert it, never move the kept one */
+    if(x&&x.nodeType===1&&x.id&&bIds[x.id]&&!(y.nodeType===1&&y.id===x.id)&&!(y.nodeType===1&&y.id&&byId[y.id])){a.insertBefore(y.cloneNode(true),x);continue}
+    if(y.nodeType===1&&y.id&&byId[y.id]&&byId[y.id]!==x){
+      /* A kept element further on: drop what is in the way instead of moving it */
+      while(x&&x!==byId[y.id]&&!(x.nodeType===1&&x.id&&bIds[x.id])){var nx=x.nextSibling;a.removeChild(x);x=nx}
+      if(x!==byId[y.id]){a.insertBefore(byId[y.id],x||null)}x=byId[y.id]}
+    if(!x){a.appendChild(y.cloneNode(true));continue}
+    if(x.nodeType!==y.nodeType||x.nodeName!==y.nodeName||(x.nodeType===1&&x.id!==y.id)){
+      if(x.nodeType===1&&x.id&&byId[x.id]){a.insertBefore(y.cloneNode(true),x)}else a.replaceChild(y.cloneNode(true),x);continue}
+    if(x.nodeType!==1){if(x.nodeValue!==y.nodeValue)x.nodeValue=y.nodeValue;continue}
+    var xa=x.attributes,ya=y.attributes,k;
+    for(k=xa.length-1;k>=0;k--){var n=xa[k].name;if(!y.hasAttribute(n)&&n!=='style')x.removeAttribute(n)}
+    for(k=0;k<ya.length;k++){var m=ya[k];if(x.getAttribute(m.name)!==m.value)x.setAttribute(m.name,m.value)}
+    if(x.nodeName==='INPUT'||x.nodeName==='TEXTAREA'||x.nodeName==='SELECT'){if(document.activeElement!==x){var v=y.getAttribute('value');if(v!=null&&x.value!==v)x.value=v}if(x.type==='checkbox'||x.type==='radio')x.checked=y.hasAttribute('checked');continue}
+    if(x.nodeName==='svg'||x.nodeName==='SVG'){if(x.innerHTML!==y.innerHTML)x.innerHTML=y.innerHTML;continue}
+    domMorph(x,y)}
+  while(a.childNodes.length>bc.length)a.removeChild(a.lastChild);
+}
 function wfIdx(){var f=$('#wfeed');return f&&f.clientHeight?Math.round(f.scrollTop/f.clientHeight):0}
 function wfBind(){var f=$('#wfeed');if(!f||f._b)return;f._b=1;var tk=0;
   f.addEventListener('scroll',function(){if(tk)return;tk=requestAnimationFrame(function(){tk=0;var k=wfIdx();if(k===f._k)return;f._k=k;WFI=k;$$('#wrail button').forEach(function(d,j){var on=j===k;d.classList.toggle('on',on);if(on)d.setAttribute('aria-current','step');else d.removeAttribute('aria-current')});var hn=$('#wfhint');if(hn&&k>0)hn.classList.add('gone')})},{passive:true});
@@ -5851,14 +5882,14 @@ var INPUT={
     r.readAsText(f);t.value='';
   }
 };
-function key(el){return el.dataset.act+'|'+(el.dataset.id||el.dataset.k||'')}
+function key(el){var d=el.dataset;return d.act+'|'+(d.id||d.k||'')+'|'+(d.i||'')+'|'+(d.d||'')+'|'+(d.j||'')}
 document.addEventListener('click',function(e){
   var b=e.target.closest('[data-act]');if(!b||!ACT[b.dataset.act])return;
   var fk=key(b);
   if(b.dataset.act!=='reset')delConfirm=false;
   ACT[b.dataset.act](b);
   refresh();
-  if(!document.body.contains(b)&&b.dataset.act!=='fopen'){var n=$$('[data-act]').filter(function(x){return key(x)===fk})[0];if(n)n.focus()}
+  if(!document.body.contains(b)&&b.dataset.act!=='fopen'){var n=$$('[data-act]').filter(function(x){return key(x)===fk})[0];if(n)try{n.focus({preventScroll:true})}catch(e){}}
 });
 function onInput(e){
   var t=e.target;
