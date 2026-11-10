@@ -1170,6 +1170,23 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
 .sp-ic{color:var(--logo)}
 .sp-t{color:var(--logo)}
 </style>
+<style id="ai-style">
+@property --aia{syntax:'<angle>';initial-value:0deg;inherits:false}
+#aiglow{position:fixed;inset:0;pointer-events:none;z-index:9800;opacity:0;transition:opacity .45s ease;border-radius:0}
+@media (max-width:860px){#aiglow{border-radius:2.6rem}}
+#aiglow::before,#aiglow::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:3px;
+  background:conic-gradient(from var(--aia),#0a84ff,#bf5af2,#ff375f,#ff9f0a,#ffd60a,#30d158,#64d2ff,#0a84ff);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  animation:aispin 2.6s linear infinite;animation-play-state:paused}
+#aiglow::after{padding:14px;filter:blur(14px);opacity:.75}
+html.aion #aiglow{opacity:1}html.aion #aiglow::before,html.aion #aiglow::after,html.aidone #aiglow::before,html.aidone #aiglow::after{animation-play-state:running}
+html.aidone #aiglow{animation:aiflash 1s ease-out forwards}
+@keyframes aispin{to{--aia:360deg}}
+@keyframes aiflash{0%{opacity:1;filter:brightness(1.7) saturate(1.3)}35%{opacity:1}100%{opacity:0;filter:none}}
+html.lite #aiglow::after{display:none}
+@media (prefers-reduced-motion:reduce){#aiglow::before,#aiglow::after{animation:none!important}html.aidone #aiglow{animation:none}}
+html.rm #aiglow::before,html.rm #aiglow::after{animation:none!important}
+</style>
 <style id="type-style">
 /* Text system: CAPITALS only for short, important labels. Everything else is normal sentence text. */
 :root{--caps-ls:.1em}
@@ -2135,7 +2152,7 @@ var HOWQ={},HOWPEND={},HOWFAIL={},howT=0;
 function howFetch(names){
   var tokP=typeof accOn==='function'&&accOn()&&typeof authToken==='function'?authToken().catch(function(){return null}):Promise.resolve(null);
   return tokP.then(function(tok){var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
-    return fetch(API+'/api/ai',{method:'POST',headers:h,body:JSON.stringify({kind:'how',names:names})})}).then(function(r){return r.json()}).then(function(j){if(!j||!j.ok||!j.data||typeof j.data.how!=='object')throw {code:j&&j.code||'failed'};return j.data.how});
+    aiFx(true);return fetch(API+'/api/ai',{method:'POST',headers:h,body:JSON.stringify({kind:'how',names:names})})}).then(function(r){return r.json()}).then(function(j){if(!j||!j.ok||!j.data||typeof j.data.how!=='object')throw {code:j&&j.code||'failed'};aiFx(false,true);return j.data.how},function(e){aiFx(false,false);throw e});
 }
 function howQueue(name){var l=String(name).toLowerCase().trim();if(!l||HOWQ[l]||HOWPEND[l]||HOWFAIL[l])return;HOWQ[l]=String(name).trim();clearTimeout(howT);howT=setTimeout(howFlush,350)}
 function howFlush(){
@@ -2483,10 +2500,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:145,d:'Nov 10, 2026',t:'Keep the clock running',s:['New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default, so the timer still pauses like before.']},
- {v:144,d:'Nov 10, 2026',t:'Smoother countdown',s:['In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.']},
- {v:143,d:'Nov 10, 2026',t:'All bodyweight button',s:['When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.']},
- {v:142,d:'Nov 10, 2026',t:'Opening screen back to normal',s:['The welcome text on the opening animation is back in capitals, like before.']},
+ {v:142,d:'Nov 10, 2026',t:'AI glow, bodyweight button and more',s:['Anything made with AI now has its own animation: a colourful glow flows around the edge of the screen while AI is working, then flashes when it is done.','New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default.','When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.','In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.','The welcome text on the opening animation is back in capitals, like before.']},
  {v:141,d:'Nov 10, 2026',t:'Cleaner text',s:['Text across Manna is easier to read. Capitals are now only used for small, important labels, like section names, the date, Bible references, warnings and difficulty. Everything else is normal text.','Long lines wrap more evenly, so you get fewer single words left on their own line.','Workout numbers, labels and how-to headings now use normal text instead of capitals.']},
  {v:140,d:'Nov 10, 2026',t:'Install Manna on your iPhone',s:['On iPhone and iPad, a step-by-step guide shows how to add Manna to your Home Screen so it opens full screen like an app. It knows if you are in Safari, Chrome or another app\'s browser and shows the right steps, with pictures of what to tap.','Manna now runs as a proper full-screen app from the Home Screen, with its own icon and the status bar handled properly.','Find the guide any time in Settings › About.','The workout countdown is now 3 in green, 2 in yellow and 1 in red, with no Go, text or Skip button.','When you import a workout or schedule and Manna cannot read some lines, AI now reads them for you straight away, with no button to tap (it uses one AI use). If you have no AI uses left, the lines are listed like before.','Swiping between pages and scrolling through workouts is smoother. Manna does less work while your finger moves, and drops the blur effect during swipes, so it no longer stutters on older phones.']},
  {v:139,d:'Nov 10, 2026',t:'Black workout screen is back',s:['Workouts are back on the black Apple Fitness background, whatever theme you use. The bottom bar stays hidden during a workout.','Delete account now matches your theme instead of being red.','The Settings gear is smaller, the same size as the music button, and the music button now sits right next to it at the top left.']},
@@ -2834,7 +2848,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='145';
+var heroLast='',APPV='142';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3098,10 +3112,20 @@ var SERVER_AI={
   limits:function(){return {images:true}}
 };
 function aiErr(code){return code==='login'?'Log in under Settings › Account to use AI.':code==='limit'?'You have used today’s '+AI_DAY+' AI uses. They reset at midnight.':code==='nokey'?'AI is not switched on for Manna yet.':code==='rate_limited'?'AI is busy right now. Try again in a minute.':code==='offline'?'You seem to be offline.':code==='too_big'?'That photo is too large. Try another.':code==='timeout'?'AI took too long to answer. Try again.':'AI could not do that right now. Try again.'}
-function getSample(){
+function getSample(){return getSample0().then(aiWrap)}
+function getSample0(){
   try{if(typeof claude!=='undefined'&&claude.use)return Promise.resolve(claude.use('sample')).catch(function(){return location.protocol==='file:'?null:SERVER_AI})}catch(e){}
   return Promise.resolve(location.protocol==='file:'?null:SERVER_AI);
 }
+/* AI glow: a colourful light flows around the screen edge while AI works, then flashes when it is done */
+var AIFX={n:0,t:0};
+function aiFx(on,ok){var de=document.documentElement,g=document.getElementById('aiglow');
+  if(!g){g=document.createElement('div');g.id='aiglow';g.setAttribute('aria-hidden','true');document.body.appendChild(g)}
+  if(on){AIFX.n++;clearTimeout(AIFX.t);de.classList.remove('aidone');de.classList.add('aion');return}
+  AIFX.n=Math.max(0,AIFX.n-1);if(AIFX.n)return;de.classList.remove('aion');
+  if(ok){de.classList.remove('aidone');void g.offsetWidth;de.classList.add('aidone');AIFX.t=setTimeout(function(){de.classList.remove('aidone')},1100)}}
+function aiWrap(sm){if(!sm||sm._fx)return sm;var w=Object.create(sm);w._fx=true;
+  w.json=function(a,b){aiFx(true);return Promise.resolve().then(function(){return sm.json(a,b)}).then(function(r){aiFx(false,true);return r},function(e){aiFx(false,false);throw e})};return w}
 function num(v,mx){v=parseFloat(v);return isFinite(v)?Math.max(0,Math.min(mx,v)):0}
 function readAmt(){
   var e=$('#e-amt'),v=e?parseFloat(e.value):NaN;
