@@ -625,6 +625,54 @@ input[type=text],input[type=number],select,textarea{
 [data-cat=soccer]{--cc:#58B368}[data-cat=fball]{--cc:#A0724A}[data-cat=base]{--cc:#D96C6C}[data-cat=tennis]{--cc:#C8D64A}[data-cat=golf]{--cc:#3FA66B}[data-cat=swim]{--cc:#3DA5E0}[data-cat=volley]{--cc:#E8B84A}[data-cat=hockey]{--cc:#7C8CF0}[data-cat=wrestle]{--cc:#B565D9}
 .shcard .shl{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}.shcard .shl li{display:flex;gap:.7rem;align-items:center;padding:.6rem .7rem;border-radius:12px;background:color-mix(in srgb,var(--acc,#888) 8%,transparent)}.shcard .shl .se{font-size:1.6rem;line-height:1}.shcard .shl b{display:block}.shcard .shtot{font-weight:700}.tplan .pst{display:flex;gap:.75rem;align-items:flex-start;padding:.7rem 0;border-top:1px solid color-mix(in srgb,currentColor 10%,transparent)}.tplan .pst:first-of-type{border-top:0}.tplan .pn{flex:none;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.85rem;background:color-mix(in srgb,var(--acc,#888) 16%,transparent)}.tplan .pst.ok .pn{background:var(--acc,#6b8);color:#fff}.tplan .pb{flex:1;min-width:0;display:grid;gap:.35rem}.tplan .pb .row{gap:.4rem}.tplan .pbar{height:7px;border-radius:9px;background:color-mix(in srgb,currentColor 10%,transparent);overflow:hidden}.tplan .pbar i{display:block;height:100%;background:var(--acc,#6b8);border-radius:9px}.tplan .wb{padding:.55rem .75rem;border-radius:12px;background:color-mix(in srgb,var(--acc,#888) 10%,transparent)}.tplan textarea{width:100%;min-height:4.5rem}.tplan .ci{display:flex;gap:.4rem;flex-wrap:wrap}.yv-top{display:flex;align-items:center;gap:.35rem;flex-wrap:nowrap}.yv-ref{flex:1;min-width:0;white-space:nowrap;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:.35rem;font:700 1.05rem var(--f-display);padding:.55rem 1rem;border-radius:999px;border:0;cursor:pointer;color:inherit;background:color-mix(in srgb,currentColor 7%,transparent)}.yv-ref small{font:600 .7rem/1 system-ui;padding:.25rem .4rem;border-radius:6px;background:color-mix(in srgb,currentColor 12%,transparent)}.yv-ic{flex:none;width:2.4rem;height:2.4rem;padding:0;border-radius:50%;border:0;cursor:pointer;font-size:1.05rem;color:inherit;background:color-mix(in srgb,currentColor 7%,transparent)}.yv-ic[aria-pressed=true]{background:var(--acc,#6b8);color:#fff}.yv-set{display:grid;gap:.6rem;padding:.75rem;border-radius:14px;background:color-mix(in srgb,currentColor 5%,transparent)}.yv-txt{font-family:var(--f-display);font-size:calc(1.12rem * var(--rsz,1));line-height:1.9;padding:.2rem .1rem}.yv-txt.sans{font-family:system-ui,-apple-system,sans-serif}.yv-txt h4{text-align:center;font:600 1.5rem var(--f-display);margin:.6rem 0 1rem}.yv-txt .bv{cursor:pointer;border-radius:4px;padding:.05em 0;transition:background .2s}.yv-txt .bv sup{font:700 .62em system-ui;color:var(--muted);margin:0 .2em 0 .35em;vertical-align:.45em}.yv-txt .bv.sel{text-decoration:underline dotted 2px;text-underline-offset:.28em}.yv-txt .bv.say{background:color-mix(in srgb,var(--acc,#6b8) 22%,transparent)}.yv-txt .hl-y{background:color-mix(in srgb,#FFD84D 50%,transparent)}.yv-txt .hl-g{background:color-mix(in srgb,#7BE08A 45%,transparent)}.yv-txt .hl-b{background:color-mix(in srgb,#6EC1FF 45%,transparent)}.yv-txt .hl-p{background:color-mix(in srgb,#FF8FC0 45%,transparent)}.yv-txt .hl-o{background:color-mix(in srgb,#FFAE5C 50%,transparent)}.yv-nav{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:.5rem}.yv-nav .yv-ic{width:3rem;height:3rem;font-size:1.3rem}
 #t-train{display:none!important}
+/* Less explaining: hide page subtitles and toggle descriptions, except where they matter (eating safeguards, what friends can see) */
+.vh .lede{display:none}#v-safeguards .vh .lede,.vh .lede.keep{display:block}
+.check small{display:none}#fr-body .check small,#v-safeguards .check small{display:block}
+/* ---------- Apple Fitness style workout ---------- */
+body.fitmode{--bg:#000;--ink:#fff;--muted:#8e8e93;--surface:#1c1c1e;--card:#1c1c1e;--line:#2c2c2e;--tabbar:rgba(18,18,20,.92);background:#000!important;color:#fff}
+body.fitmode .tabs [aria-current]{background:rgba(48,209,88,.18)!important;color:#30d158!important}body.fitmode .tabs a,body.fitmode .tabs button{color:#8e8e93}
+body.fitmode .clockbar{background:linear-gradient(#000,rgba(0,0,0,.6))}
+body.fitmode #v-session{color:#fff}
+.fxh{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch;gap:0;margin:0 -2px}.fxh::-webkit-scrollbar{display:none}
+.fxh>section{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;min-width:0;box-sizing:border-box;padding:0 2px}
+.fxctl{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.6rem;padding-top:.4rem!important;min-height:calc(100dvh - 190px)}
+.fxname{margin:0;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem;color:#30d158}.fxstate{margin:0;color:var(--muted);font-size:.85rem}
+.fxbigtime{font:600 clamp(3.4rem,17vw,5rem)/1 ui-rounded,'SF Pro Rounded',system-ui,sans-serif;font-variant-numeric:tabular-nums;color:#ffd60a;letter-spacing:-.01em;margin:.3rem 0}
+.fxmet{display:flex;justify-content:center;gap:1.6rem;flex-wrap:wrap}.fxmet div,.fxsum div{display:flex;flex-direction:column;align-items:center}.fxmet b,.fxsum b{font:600 1.7rem/1.1 ui-rounded,system-ui,sans-serif;font-variant-numeric:tabular-nums}.fxmet span,.fxsum span{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.y{color:#ffd60a}.p{color:#ff375f}.g{color:#30d158}.b{color:#0a84ff}
+.fxbtns{display:flex;justify-content:center;gap:1.4rem;margin:.9rem 0 .4rem}.fxbtns div{display:flex;flex-direction:column;align-items:center;gap:.35rem;font-size:.78rem;color:var(--muted)}
+.fxc{width:4.3rem;height:4.3rem;border-radius:50%;border:0;cursor:pointer;font-size:1.35rem;font-weight:700;display:grid;place-items:center}.fxc.pa{background:rgba(255,214,10,.2);color:#ffd60a}.fxc.go{background:rgba(48,209,88,.22);color:#30d158}.fxc.end{background:rgba(255,69,58,.22);color:#ff453a}.fxc.later{background:rgba(142,142,147,.22);color:#d1d1d6}
+.fxback{appearance:none;border:0;background:none;color:#30d158;font-weight:600;font-size:1rem;cursor:pointer;padding:.5rem}
+.fxmore{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.fxtop{display:flex;align-items:center;gap:.6rem;padding:.25rem .2rem .55rem}.fxtopbtn{width:2.3rem;height:2.3rem;border-radius:50%;border:0;background:#1c1c1e;color:#30d158;font-size:1.3rem;font-weight:700;cursor:pointer;flex:none}
+.fxclock{flex:1;display:flex;align-items:baseline;gap:.45rem}.fxclock .y{font:600 2.1rem/1 ui-rounded,'SF Pro Rounded',system-ui,sans-serif;font-variant-numeric:tabular-nums}.fxof{color:var(--muted);font:500 1rem ui-rounded,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.fxpaused{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ffd60a}
+body.fitmode .wfeed{background:#000;box-shadow:none;border-radius:28px;height:clamp(420px,calc(100dvh - 205px),900px)}
+.wslide.fxs{background:radial-gradient(120% 60% at 0% 0%,color-mix(in srgb,var(--ac,#30d158) 26%,#1c1c1e),#1c1c1e 60%);border-radius:28px;color:#fff;padding:1.2rem 2.9rem 1.2rem 1.2rem;gap:.6rem}
+.wslide.fxs+.wslide.fxs{border-top:6px solid #000}
+.wslide.fxs .wtag{color:var(--ac);opacity:.95}.wslide.fxs .wname{font:700 clamp(1.7rem,7.4vw,2.3rem)/1.08 system-ui,-apple-system,sans-serif;letter-spacing:-.01em;color:#fff}
+.fxhead{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}.fxhead>div:first-child{min-width:0}
+.fxrx{margin:.25rem 0 0;font:700 1.35rem ui-rounded,system-ui,sans-serif;color:var(--ac)}.fxmu{margin:.15rem 0 0;color:var(--muted);font-size:.85rem}
+.fxring{position:relative;width:4rem;height:4rem;flex:none}.fxring svg{width:100%;height:100%;transform:rotate(-90deg)}.fxring circle{fill:none;stroke-width:7}.fxring .bg{stroke:color-mix(in srgb,var(--ac) 25%,#000)}.fxring .fg{stroke:var(--ac);stroke-linecap:round;transition:stroke-dashoffset .5s ease}.fxring span{position:absolute;inset:0;display:grid;place-items:center;font:700 .9rem ui-rounded,system-ui,sans-serif}
+.fxs .howi{color:#fff;border-color:rgba(255,255,255,.4)}.fxs .howi.on{background:#fff;color:#000;border-color:#fff}.fxs .howp{background:rgba(255,255,255,.08)}
+.fxwarn,.fxprev{margin:0;font-size:.85rem;color:var(--muted)}
+.fxsets{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem}.fxsets li{display:flex;align-items:center;gap:.35rem;padding:.3rem .35rem .3rem .7rem;border-radius:99px;background:color-mix(in srgb,var(--ac) 22%,transparent);font-size:.82rem;font-weight:600}
+.fxx{width:1.4rem;height:1.4rem;border-radius:50%;border:0;background:rgba(0,0,0,.35);color:#fff;font-size:.7rem;cursor:pointer}
+.fxadj{display:flex;align-items:center;gap:.8rem;font-size:.85rem;color:var(--muted)}.fxlink{appearance:none;border:0;background:none;color:var(--ac);font-weight:600;cursor:pointer;padding:.2rem 0}.fxlink:disabled{opacity:.35}
+.fxform{display:flex;gap:.6rem;margin-top:auto}.fxin{flex:1;display:flex;flex-direction:column;gap:.25rem;min-width:0}.fxin label{font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.fxstep{display:flex;align-items:center;background:#2c2c2e;border-radius:16px;overflow:hidden}.fxstep button{width:2.6rem;height:3rem;border:0;background:none;color:var(--ac);font-size:1.4rem;font-weight:600;cursor:pointer;flex:none}.fxstep input{flex:1;min-width:0;width:100%;border:0!important;background:none!important;color:#fff!important;text-align:center;font:600 1.35rem ui-rounded,system-ui,sans-serif;padding:0;box-shadow:none!important}
+.fxlog{width:100%;height:3.4rem;border:0;border-radius:18px;background:var(--ac);color:#000;font:700 1.1rem system-ui,-apple-system,sans-serif;cursor:pointer;margin-top:.15rem}.fxlog:active{transform:scale(.98)}
+.fxs .wfhint{color:var(--muted);font-size:.75rem}
+.fxdone{justify-content:center;align-items:center;text-align:center;background:radial-gradient(100% 60% at 50% 0%,rgba(48,209,88,.28),#1c1c1e 65%)!important}
+.fxtrophy{font-size:3.6rem;line-height:1}.fxsum{display:flex;gap:1.6rem;justify-content:center;margin:.4rem 0 .8rem}
+.fxbig{width:min(100%,20rem);height:4.2rem;border:0;border-radius:99px;background:#30d158;color:#000;font:800 1.4rem system-ui,-apple-system,sans-serif;cursor:pointer;box-shadow:0 10px 30px rgba(48,209,88,.35)}.fxbig:active{transform:scale(.97)}
+body.fitmode .wrail button{background:rgba(255,255,255,.22)}body.fitmode .wrail button.done{background:rgba(48,209,88,.6)}body.fitmode .wrail button.on{background:#fff}
+body.fitmode .wrest{background:rgba(0,0,0,.55)}body.fitmode .wrest-c{background:#1c1c1e;color:#fff}body.fitmode .wrest-r .fg{stroke:#30d158}body.fitmode .wrest-r .bg{stroke:#2c2c2e}
+.cdown{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:#fff;animation:cdin .25s ease-out}.cdown.out{opacity:0;transition:opacity .35s}@keyframes cdin{from{opacity:0}}
+.cdring{position:relative;width:min(62vw,15rem);height:min(62vw,15rem)}.cdring svg{width:100%;height:100%;transform:rotate(-90deg)}.cdring circle{fill:none;stroke-width:8}.cdring .bg{stroke:#2c2c2e}.cdring .fg{stroke:#30d158;stroke-linecap:round}
+.cdn{position:absolute;inset:0;display:grid;place-items:center;font:700 clamp(5rem,30vw,8rem)/1 ui-rounded,'SF Pro Rounded',system-ui,sans-serif;color:#30d158}.cdn.pop{animation:cdpop .9s cubic-bezier(.2,1.3,.4,1)}@keyframes cdpop{0%{transform:scale(.4);opacity:0}25%{transform:scale(1.08);opacity:1}100%{transform:scale(1);opacity:1}}
+.cdlab{margin:0;font-size:1.1rem;color:#8e8e93;min-height:1.4em}.cdskip{appearance:none;border:0;background:#1c1c1e;color:#fff;border-radius:99px;padding:.6rem 1.4rem;font-weight:600;cursor:pointer}
+html.lite .cdn.pop,html.lite .cdown{animation:none}
 .howi{appearance:none;flex:none;display:inline-grid;place-items:center;width:1.4rem;height:1.4rem;margin:0 0 0 .4rem;padding:0;border-radius:50%;border:1.5px solid color-mix(in srgb,currentColor 30%,transparent);background:transparent;color:var(--muted);font:italic 700 .78rem/1 Georgia,'Times New Roman',serif;vertical-align:.15em;cursor:pointer;transition:background .15s,color .15s,border-color .15s}.howi:hover{border-color:currentColor;color:var(--ink)}.howi.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}.wname .howi{width:1.7rem;height:1.7rem;font-size:.95rem;vertical-align:.3em;margin-left:.55rem}
 .howp{margin:.45rem 0 .2rem;padding:.6rem .75rem;border-radius:12px;background:color-mix(in srgb,currentColor 6%,transparent);font-size:.93rem;line-height:1.5;animation:howin .2s ease-out}.howp p{margin:.15rem 0 0}.howp .howh{display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}@keyframes howin{from{opacity:0;transform:translateY(-4px)}}html.lite .howp{animation:none}
 .how{margin:.35rem 0 .1rem;font-size:.92rem}.how summary{cursor:pointer;color:var(--acc,#2a7);font-weight:600;font-size:.85rem;list-style:none;display:inline-flex;align-items:center;gap:.3rem}.how summary::-webkit-details-marker{display:none}.how summary::before{content:'ⓘ';font-weight:700}.how[open] summary{margin-bottom:.3rem}.how p{margin:.2rem 0 .45rem;line-height:1.5;padding:.55rem .7rem;border-radius:10px;background:color-mix(in srgb,var(--acc,#888) 8%,transparent)}
@@ -1159,11 +1207,10 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
       <div class="vsec" data-name="Build with AI">
       <div class="card stack" id="w-ai">
           <h3>Build with AI</h3>
-          <p class="small muted">Describe the session in your own words and AI builds it. Each build uses one AI use.</p>
+          <p class="small muted">1 AI use per build.</p>
           <textarea id="ai-text" aria-label="Describe the workout you want" placeholder="30 minutes, dumbbells only, upper body, go easy on my knee"></textarea>
           <div class="stack" style="gap:.35rem"><b class="small">Difficulty</b><div class="seg" role="radiogroup" aria-label="Difficulty" id="ai-lvl"><button type="button" role="radio" data-act="ailvl" data-k="easy">Easy</button><button type="button" role="radio" data-act="ailvl" data-k="mid">Intermediate</button><button type="button" role="radio" data-act="ailvl" data-k="hard">Hard</button></div></div>
           <div class="stack" style="gap:.35rem"><b class="small">Length</b><div class="chips" role="radiogroup" aria-label="Length" id="ai-mins"><button type="button" class="chip" role="radio" data-act="aimins" data-m="15">15 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="20">20 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="30">30 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="45">45 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="60">60 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="75">75 min</button><button type="button" class="chip" role="radio" data-act="aimins" data-m="90">90 min</button></div></div>
-          <p class="small muted">These also apply when you tap Build it with AI or Make it with AI anywhere else.</p>
           <div class="chips" id="ai-ex"></div>
           <div class="row"><button class="btn primary" data-act="aigen">Build workout</button></div>
           <div id="ai-out" aria-live="polite"></div>
@@ -2336,7 +2383,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:137,d:'Nov 10, 2026',t:'Hard workouts, AI difficulty, Friends button, sounds',s:['How to do it is now a small i button next to each exercise name. Tap it to show or hide the steps.','Removed the Workouts card from Home. Today\'s plan already shows today\'s workout with a Start button.','Removed Check in from Today\'s plan, so it is now eat, train, and read.','Friends now has its own button in the bottom bar, between Fuel and Faith.','New sound effects: a swish when you swipe between pages, a tick for each card in swipe feeds, and soft ticks as you scroll. Turn them off in Settings › Look › Sound effects.','Fixed the time and date at the top running together.','Done sounds: a chime when something is saved or logged, a tiny ding for each set, and a little fanfare when you finish a workout.','Notifications now drop in from the top middle of the screen, like on an iPhone, then fade away.','12 new hard template workouts: Heavy Strength Day, Leg Day Destroyer, Upper Body Burner, Bodyweight Gauntlet, Calisthenics Strength, HIIT Inferno, Kettlebell Crusher, Speed Intervals, Hill Sprint Session, Dumbbell Full-Body Blast, Core Crusher and Court Conditioning.','Build with AI now lets you pick Easy, Intermediate or Hard and a length from 15 to 90 minutes before it makes the workout. After it is made, you can remake it at another difficulty.']},
+ {v:137,d:'Nov 10, 2026',t:'Apple Fitness-style workouts, Friends button, sounds and more',s:['How to do it is now a small i button next to each exercise name. Tap it to show or hide the steps.','Removed the Workouts card from Home. Today\'s plan already shows today\'s workout with a Start button.','Removed Check in from Today\'s plan, so it is now eat, train, and read.','Friends now has its own button in the bottom bar, between Fuel and Faith.','New sound effects: a swish when you swipe between pages, a tick for each card in swipe feeds, and soft ticks as you scroll. Turn them off in Settings › Look › Sound effects.','Fixed the time and date at the top running together.','Done sounds: a chime when something is saved or logged, a tiny ding for each set, and a little fanfare when you finish a workout.','Notifications now drop in from the top middle of the screen, like on an iPhone, then fade away.','Less small print: page subtitles and toggle descriptions are hidden, except for eating safeguards and what friends can see.','Workouts now look and feel like Apple Fitness: a 3, 2, 1 countdown before you start, a dark screen, a big yellow timer showing your time and the planned length, and a colourful card for each exercise with a sets ring, + and − buttons for weight and reps, and a big Log set button.','Swipe right during a workout for controls: time, calories, sets, Pause or Resume, Finish, and Resume later, which keeps your workout paused while you use the rest of Manna.','The last card is a Done card with your time, calories and sets, and a big green Done button.','12 new hard template workouts: Heavy Strength Day, Leg Day Destroyer, Upper Body Burner, Bodyweight Gauntlet, Calisthenics Strength, HIIT Inferno, Kettlebell Crusher, Speed Intervals, Hill Sprint Session, Dumbbell Full-Body Blast, Core Crusher and Court Conditioning.','Build with AI now lets you pick Easy, Intermediate or Hard and a length from 15 to 90 minutes before it makes the workout. After it is made, you can remake it at another difficulty.']},
  {v:136,d:'Nov 10, 2026',t:'Background music and tap sounds',s:['Manna now plays soft background music, made live in the app (no downloads): calm on most pages, peaceful with chimes on Faith, and an upbeat beat on Fitness. It blends smoothly when you switch.','Tap ♪ next to the clock at the top to turn it on or off, and set the volume in Settings › Look.','It starts after your first tap, pauses when you leave Manna, and goes quiet while the Bible is being read aloud.','Tapping Home, Fitness, Fuel, Faith or Settings at the bottom now makes a little pop, a different note for each. Turn it off in Settings › Look › Tap sounds.']},
  {v:135,d:'Nov 9, 2026',t:'TikTok-style workouts',s:['During a workout, each exercise is now its own full-screen card. Swipe up for the next exercise and down to go back, or tap the dots on the side.','The top bar keeps your time, sets logged, Pause and Finish in view the whole time.','After you log the last set of an exercise, Manna moves you to the next card on its own.','The rest timer now pops up on top of whatever card you are on, with a countdown ring, +15 s and Skip rest. Your phone buzzes when rest is over (where supported).']},
  {v:134,d:'Nov 9, 2026',t:'AI progress bar, free exercise steps',s:['Whenever Manna asks AI for something, the pop-up shows a progress bar and a percentage, and fills to 100% when it is done.','Every exercise without built-in steps, including in AI-made, imported and your own workouts, now gets How to do it steps automatically. These never use your AI uses.']},
@@ -4155,50 +4202,75 @@ function renderSession(){
       +(!pwk.ex.some(function(e,i){var d=S.pd[i];return (d&&d.s!=null?d.s:setTarget(e[1]))>1})?'<p class="small muted">No rest timer: every exercise here is done once.</p>':'<div class="stack restpick"><b>Rest between sets</b><div class="chips" role="group" aria-label="Rest between sets">'+[0,30,60,90,120,180].map(function(r){return '<button type="button" class="chip" data-act="restpick" data-s="'+r+'" aria-pressed="'+(S.restPick===r)+'">'+(r?restLabel(r):'No rest')+'</button>'}).join('')+'</div><p class="small muted">'+(S.restPick?'A countdown starts after each set you log. You can skip it any time.':'No countdown between sets.')+' Your choice is remembered for next time.</p></div>')
       +'<div class="row spread">'+(rows.length?'<button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button>':'<span></span>')+'<div class="row"><button class="btn" data-act="pcancel">Cancel</button><button class="btn primary" data-act="pstart">Start workout</button></div></div></div>';
   }else if(S.sess&&w){
-    var ms=sessMs(),t=sessTotals(w),st=stageCalc(),paused=S.sess.paused,n=w.ex.length,setsAll=0,setsDone=0;
-    h+='<div class="wtop'+(paused?' paused':'')+'"><div class="wtn"><span class="pill '+(paused?'pause':'prog')+'">'+(paused?'Paused':'In progress')+'</span><b>'+esc(w.name)+'</b></div><span class="wclock" id="ss-time" role="timer" aria-label="Workout time"></span><span class="small muted wsets">'+t.n+' set'+(t.n===1?'':'s')+'</span><button class="btn sm" data-act="spause">'+(paused?'Resume':'Pause')+'</button><button class="btn sm primary" data-act="sfinish">Finish</button><span id="ss-kcal" hidden></span></div>';
+    var ms=sessMs(),t=sessTotals(w),st=stageCalc(),paused=S.sess.paused,n=w.ex.length,setsAll=0,setsDone=0,exDone=0,ACC=['#30d158','#0a84ff','#ff9f0a','#ff375f','#bf5af2','#64d2ff','#ffd60a'];
+    w.ex.forEach(function(e,i){var tg=sessTg(w,i).s,lg=(S.sets[w.id+'|'+i]||[]).length;setsAll+=tg;setsDone+=Math.min(tg,lg);if(lg>=tg)exDone++});
     var slides=w.ex.map(function(e,i){
-      var kind=exKind(e[0],e[1]),TG=sessTg(w,i),tg=TG.s,k=w.id+'|'+i,logged=S.sets[k]||[],last=logged[logged.length-1],prev=lastTop(w.id,i,kind),state=exState(e[0],S.area,st),done=logged.length>=tg;
-      setsAll+=tg;setsDone+=Math.min(tg,logged.length);
-      var sl=logged.map(function(x,j){return '<li><span class="mono">Set '+(j+1)+': '+esc(setLabel(x,kind,S.units))+(x.t?' · '+secLabel(x.t):'')+'</span><button class="btn sm" data-act="setdel" data-i="'+i+'" data-j="'+j+'" aria-label="Remove set '+(j+1)+' of '+esc(e[0])+'">Remove</button></li>'}).join('');
-      var pre=last?last.r:TG.r,preW=last&&last.w?last.w:(S.pw[k]||'');
-      var form='<div class="setform">'+(kind==='reps'?'<label class="f small muted" for="sw-'+i+'">Weight ('+S.units+')<input type="number" inputmode="decimal" min="0" step="any" id="sw-'+i+'" value="'+preW+'" placeholder="0"></label>':'')
-        +'<label class="f small muted" for="sr-'+i+'">'+KLAB[kind]+'<input type="number" inputmode="numeric" min="0" step="1" id="sr-'+i+'" value="'+pre+'" placeholder="0"></label>'
-        +'<button class="btn primary" data-act="setadd" data-i="'+i+'">'+(done?'Log extra set':'Log set '+(logged.length+1))+'</button></div>';
+      var kind=exKind(e[0],e[1]),TG=sessTg(w,i),tg=TG.s,k=w.id+'|'+i,logged=S.sets[k]||[],last=logged[logged.length-1],prev=lastTop(w.id,i,kind),state=exState(e[0],S.area,st),done=logged.length>=tg,ac=ACC[i%ACC.length];
+      var C=2*Math.PI*26,frac=Math.min(1,logged.length/Math.max(1,tg));
+      var ring='<div class="fxring" aria-label="'+logged.length+' of '+tg+' sets"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="bg"/><circle cx="32" cy="32" r="26" class="fg" style="stroke-dasharray:'+C+';stroke-dashoffset:'+(C*(1-frac))+'"/></svg><span>'+(done?'✓':logged.length+'/'+tg)+'</span></div>';
+      var sl=logged.map(function(x,j){return '<li><span>Set '+(j+1)+' · '+esc(setLabel(x,kind,S.units))+'</span><button class="fxx" data-act="setdel" data-i="'+i+'" data-j="'+j+'" aria-label="Remove set '+(j+1)+' of '+esc(e[0])+'">✕</button></li>'}).join('');
+      var pre=last?last.r:TG.r,preW=last&&last.w?last.w:(S.pw[k]||''),wst=S.units==='lb'?5:2.5;
+      var step=function(id,lab,val,d,mode){return '<div class="fxin"><label for="'+id+'">'+lab+'</label><div class="fxstep"><button type="button" data-act="instep" data-t="'+id+'" data-d="-'+d+'" aria-label="Less '+lab+'">−</button><input type="number" inputmode="'+mode+'" min="0" step="any" id="'+id+'" value="'+val+'" placeholder="0"><button type="button" data-act="instep" data-t="'+id+'" data-d="'+d+'" aria-label="More '+lab+'">+</button></div></div>'};
+      var form='<div class="fxform">'+(kind==='reps'?step('sw-'+i,'Weight ('+S.units+')',preW,wst,'decimal'):'')+step('sr-'+i,KLAB[kind],pre,kind==='reps'?1:5,'numeric')+'</div>'
+        +'<button class="fxlog" data-act="setadd" data-i="'+i+'">'+(done?'Log extra set':'Log set '+(logged.length+1))+'</button>';
       var m=muOf(e[0])[0].map(function(x){return MUS[x]}).join(' · ');
-      return '<section class="wslide" data-i="'+i+'" aria-label="Exercise '+(i+1)+' of '+n+': '+esc(e[0])+'"><p class="wtag">Exercise '+(i+1)+' of '+n+'</p><h3 class="wname">'+esc(e[0])+howI(e[0])+'</h3>'
-        +'<div class="row" style="gap:.4rem;align-items:center"><span class="wrx">'+esc(e[1])+'</span>'+exBadge(state)+(done?'<span class="pill done">Done</span>':'')+'</div>'
-        +(m?'<div class="small muted">'+esc(m)+'</div>':'')+(state!=='ok'?'<div class="small muted">'+(state==='modify'?'Lower the load and stop at pain 3.':'Swap: '+esc(ALT[e[0]]||'skip it for now')+'.')+'</div>':'')
+      return '<section class="wslide fxs" data-i="'+i+'" style="--ac:'+ac+'" aria-label="Exercise '+(i+1)+' of '+n+': '+esc(e[0])+'">'
+        +'<div class="fxhead"><div><p class="wtag">'+(i+1)+' of '+n+'</p><h3 class="wname">'+esc(e[0])+howI(e[0])+'</h3><p class="fxrx">'+esc(e[1])+'</p>'+(m?'<p class="fxmu">'+esc(m)+'</p>':'')+'</div>'+ring+'</div>'
+        +(state!=='ok'?'<p class="fxwarn">'+exBadge(state)+' '+(state==='modify'?'Lower the load and stop at pain 3.':'Swap: '+esc(ALT[e[0]]||'skip it for now')+'.')+'</p>':'')
         +howHtml(e[0])
-        +'<div class="row" style="gap:.5rem;align-items:center"><div class="sprog'+(done?' full':logged.length?' part':'')+'">'+logged.length+' of '+tg+' sets</div><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="-1" aria-label="One set fewer"'+(tg<=Math.max(1,logged.length)?' disabled':'')+'>−</button><button class="btn sm" data-act="tgset" data-i="'+i+'" data-d="1">+ Add set</button></div>'
-        +(prev?'<div class="small muted">Last time: '+esc(prev)+'</div>':'')+(sl?'<ul class="setlist">'+sl+'</ul>':'')+form+(i===0&&n>1?'<p class="wfhint" id="wfhint" aria-hidden="true">Swipe up for the next exercise ↑</p>':'')+'</section>';
+        +(prev?'<p class="fxprev">Last time: '+esc(prev)+'</p>':'')
+        +(sl?'<ul class="fxsets">'+sl+'</ul>':'')
+        +'<div class="fxadj"><button class="fxlink" data-act="tgset" data-i="'+i+'" data-d="-1"'+(tg<=Math.max(1,logged.length)?' disabled':'')+'>− Set</button><span>'+tg+' sets</span><button class="fxlink" data-act="tgset" data-i="'+i+'" data-d="1">+ Set</button></div>'
+        +form+(i===0&&n>1?'<p class="wfhint" id="wfhint" aria-hidden="true">Swipe up: next · Swipe right: controls</p>':'')+'</section>';
     }).join('');
-    var endS='<section class="wslide wend" data-i="'+n+'" aria-label="Finish"><p class="wtag">All exercises</p><h3 class="wname">'+(setsDone>=setsAll?'You did it! 🎉':'Ready to finish?')+'</h3><p class="muted">'+setsDone+' of '+setsAll+' planned sets logged</p>'
-      +'<button class="btn primary" data-act="sfinish">Finish workout</button>'
-      +(S.showBurn?'<p class="small muted">Calories are an estimate from your weight, the type of workout and the time spent. Pausing stops the clock.</p>':'<p class="small muted">Calorie burn is hidden by your eating safeguards. <button class="chip" data-act="sburn">Show it</button></p>')
-      +(S.area!=='none'?'<p class="small muted">Checked against your '+AREAS.filter(function(a){return a[0]===S.area})[0][1].toLowerCase()+' (stage '+st+'). Stop if pain goes above 3.</p>':'')
-      +'<div class="row" style="justify-content:center"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="btn sm" data-act="scancel">'+(S.cancelAsk?'Tap again to discard':'Cancel session')+'</button></div></section>';
-    var rail='<nav class="wrail" id="wrail" aria-label="Exercises">'+w.ex.map(function(e,i){var lg=(S.sets[w.id+'|'+i]||[]).length,dn=lg>=sessTg(w,i).s;return '<button type="button" data-act="wgo" data-i="'+i+'" class="'+(dn?'done':'')+'" aria-label="Go to '+esc(e[0])+(dn?', done':'')+'"></button>'}).join('')+'<button type="button" data-act="wgo" data-i="'+n+'" aria-label="Go to finish"></button></nav>';
+    var endS='<section class="wslide fxs fxdone" data-i="'+n+'" aria-label="Done"><div class="fxtrophy" aria-hidden="true">'+(setsDone>=setsAll?'🏆':'🏁')+'</div><h3 class="wname">'+(setsDone>=setsAll?'Workout complete!':'All done?')+'</h3>'
+      +'<div class="fxsum"><div><b class="y" data-live="time"></b><span>Time</span></div>'+(S.showBurn?'<div><b class="p" data-live="kcal"></b><span>Active cal</span></div>':'')+'<div><b class="g">'+setsDone+'/'+setsAll+'</b><span>Sets</span></div></div>'
+      +'<button class="fxbig" data-act="sfinish">Done</button></section>';
+    var rail='<nav class="wrail" id="wrail" aria-label="Exercises">'+w.ex.map(function(e,i){var lg=(S.sets[w.id+'|'+i]||[]).length,dn=lg>=sessTg(w,i).s;return '<button type="button" data-act="wgo" data-i="'+i+'" class="'+(dn?'done':'')+'" aria-label="Go to '+esc(e[0])+(dn?', done':'')+'"></button>'}).join('')+'<button type="button" data-act="wgo" data-i="'+n+'" aria-label="Go to the done card"></button></nav>';
     var rest='';
     if(S.rest&&S.rest.until>Date.now()){var ri=S.rest.i!=null?S.rest.i:-1,re=ri>-1?w.ex[ri]:null,nx=re?(S.sets[w.id+'|'+ri]||[]).length+1:0;
       rest='<div class="wrest" role="timer" aria-label="Rest timer"><div class="wrest-c"><p class="eyebrow" style="margin:0">Rest</p><div class="wrest-r"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="rest-ring" cx="60" cy="60" r="52"/></svg><div class="wrest-t" id="rest-t">0:00</div></div>'
         +(re?'<p class="small" style="margin:0">Next: set '+nx+' of <b>'+esc(re[0])+'</b></p>':'')
         +'<div class="row" style="justify-content:center"><button class="btn sm" data-act="restadd">+15 s</button><button class="btn sm primary" data-act="restskip">Skip rest</button></div></div></div>'}
-    h+='<div class="wfeedw"><div class="wfeed" id="wfeed" tabindex="-1">'+slides+endS+'</div>'+rail+rest+'</div>';
+    var ctl='<section class="fxctl" aria-label="Workout controls"><p class="fxname">'+esc(w.name)+'</p><p class="fxstate">'+(paused?'Paused':'In progress')+'</p>'
+      +'<div class="fxbigtime" data-live="time" role="timer"></div>'
+      +'<div class="fxmet">'+(S.showBurn?'<div><b class="p" data-live="kcal"></b><span>Active cal</span></div>':'')+'<div><b class="g">'+setsDone+'/'+setsAll+'</b><span>Sets</span></div><div><b class="b">'+exDone+'/'+n+'</b><span>Exercises</span></div></div>'
+      +'<div class="fxbtns"><div><button class="fxc '+(paused?'go':'pa')+'" data-act="spause" aria-label="'+(paused?'Resume':'Pause')+'">'+(paused?'▶':'❚❚')+'</button><span>'+(paused?'Resume':'Pause')+'</span></div>'
+      +'<div><button class="fxc end" data-act="sfinish" aria-label="Finish workout">✕</button><span>Finish</span></div>'
+      +'<div><button class="fxc later" data-act="slater" aria-label="Resume later">⏏</button><span>Resume later</span></div></div>'
+      +'<button class="fxback" data-act="fxmain">Back to workout ›</button>'
+      +'<div class="fxmore"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="chip" data-act="scancel">'+(S.cancelAsk?'Tap again to discard':'Discard workout')+'</button></div>'
+      +(S.area!=='none'?'<p class="small muted">Checked against your '+AREAS.filter(function(a){return a[0]===S.area})[0][1].toLowerCase()+' (stage '+st+'). Stop if pain goes above 3.</p>':'')+'</section>';
+    var top='<div class="fxtop"><button class="fxtopbtn" data-act="fxctl" aria-label="Show workout controls">‹</button><div class="fxclock"><span class="y" id="ss-time" data-live="time" role="timer" aria-label="Workout time"></span><span class="fxof">/ '+w.mins+':00</span></div>'+(paused?'<span class="fxpaused">Paused</span>':'<span class="fxpaused"></span>')+'</div>';
+    h+='<div class="fxh" id="fxh">'+ctl+'<section class="fxmain">'+top+'<div class="wfeedw"><div class="wfeed" id="wfeed" tabindex="-1">'+slides+endS+'</div>'+rail+rest+'</div></section></div>';
   }else if(S.done){
     var d=S.done;
-    h+='<header class="vh"><p class="eyebrow"><span class="pill done">Complete</span></p><h2>Workout complete</h2><p class="lede">'+esc(d.name)+'</p></header><div class="card stack complete">'+statTiles(d.ms,d.kcal,d.n,d.vol,d.unit,false)+'<p class="small muted">Saved to Today and to your workout history.'+(S.showBurn?' Calories are an estimate.':'')+'</p><div class="row"><a class="btn primary" href="#history" style="text-decoration:none">See history</a><a class="btn" href="#workouts" style="text-decoration:none">Back to library</a><a class="btn" href="#today" style="text-decoration:none">Go to Today</a></div></div>';
+    h+='<header class="vh"><p class="eyebrow"><span class="pill done">Complete</span></p><h2>Workout complete</h2><p class="lede keep">'+esc(d.name)+'</p></header><div class="card stack complete">'+statTiles(d.ms,d.kcal,d.n,d.vol,d.unit,false)+'<p class="small muted">Saved to Today and to your workout history.'+(S.showBurn?' Calories are an estimate.':'')+'</p><div class="row"><a class="btn primary" href="#history" style="text-decoration:none">See history</a><a class="btn" href="#workouts" style="text-decoration:none">Back to library</a><a class="btn" href="#today" style="text-decoration:none">Go to Today</a></div></div>';
   }else{
     h+='<header class="vh"><p class="eyebrow">Workout session</p><h2>No workout running</h2><p class="lede">Pick a workout and press Start. You will get a timer, a calorie estimate and set logging.</p></header><div class="card"><a class="btn primary" href="#workouts" style="text-decoration:none">Choose a workout</a></div>';
   }
-  var of=$('#wfeed'),ost=of?of.scrollTop:null,ae=document.activeElement,aid=ae&&ae.id;
+  var of=$('#wfeed'),ost=of?of.scrollTop:null,oh=$('#fxh'),ohl=oh?oh.scrollLeft:null,ae=document.activeElement,aid=ae&&ae.id;
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;
-    var nf=$('#wfeed');if(nf&&ost!=null)nf.scrollTop=ost;
+    var nf=$('#wfeed');if(nf&&ost!=null)nf.scrollTop=ost;var nh=$('#fxh');if(nh){nh.scrollLeft=ohl!=null?ohl:nh.scrollWidth}
     Object.keys(draft).forEach(function(id){var i=document.getElementById(id);if(i&&i.value==='')i.value=draft[id]});
     if(aid){var fe=document.getElementById(aid);if(fe&&fe!==ae&&/^(sw|sr)-/.test(aid))try{fe.focus({preventScroll:true})}catch(e){}}}
-  wfBind();var stt=$('#ss-time');if(stt&&S.sess)stt.textContent=clockH(sessMs());
+  wfBind();fxLive();document.body.classList.toggle('fitmode',!!(S.sess&&curId==='session'));
   if(S.wfGo!=null){var gi=S.wfGo;S.wfGo=null;setTimeout(function(){wfGo(gi,true)},S.wfGoDelay||60);S.wfGoDelay=0}
   restPaint();
+}
+function fxLive(){var w=S.sess&&sessW();if(!w)return;var ms=sessMs(),tm=clockH(ms),kc=sessKcal(ms,w);$$('[data-live=time]').forEach(function(e){if(e.textContent!==tm)e.textContent=tm});$$('[data-live=kcal]').forEach(function(e){e.textContent=kc})}
+function fxPane(i){var h=$('#fxh');if(!h)return;h.scrollTo({left:i?h.scrollWidth:0,behavior:document.documentElement.classList.contains('lite')?'auto':'smooth'})}
+/* 3, 2, 1, Go countdown before a workout starts */
+function cdBeep(hi){try{var p=ambPref();if(!p.sfx)return;var c=ambCtx();if(!c)return;if(c.state!=='running')c.resume().catch(function(){});var t=c.currentTime+.01,x=c.createOscillator(),g=c.createGain();x.type='sine';x.frequency.value=hi?1318.5:659.25;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.22,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+(hi?.6:.25));x.connect(g);g.connect(c.destination);x.start(t);x.stop(t+.65)}catch(e){}}
+function countdown(done){
+  var o=document.createElement('div');o.className='cdown';o.setAttribute('role','timer');o.setAttribute('aria-live','assertive');
+  o.innerHTML='<div class="cdring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" cx="60" cy="60" r="54"/></svg><span class="cdn">3</span></div><p class="cdlab">Get ready</p><button class="cdskip" type="button">Skip</button>';
+  document.body.appendChild(o);var n=3,ended=false,num=o.querySelector('.cdn'),fg=o.querySelector('.fg'),C=2*Math.PI*54;fg.style.strokeDasharray=C;
+  var fin=function(){if(ended)return;ended=true;clearInterval(iv);o.classList.add('out');setTimeout(function(){o.remove()},380);done()};
+  var show=function(){num.textContent=n>0?n:'Go';num.classList.remove('pop');void num.offsetWidth;num.classList.add('pop');fg.style.transition='none';fg.style.strokeDashoffset=0;void fg.offsetWidth;fg.style.transition='stroke-dashoffset .95s linear';fg.style.strokeDashoffset=n>0?C:0;
+    o.querySelector('.cdlab').textContent=n>0?'Get ready':'';cdBeep(n<=0);try{if(navigator.vibrate)navigator.vibrate(n>0?40:[80,40,80])}catch(e){}};
+  o.querySelector('.cdskip').addEventListener('click',fin);show();
+  var iv=setInterval(function(){n--;if(n<0){fin();return}show()},1000);
 }
 function wfGo(i,smooth){var f=$('#wfeed'),sl=f&&f.querySelector('.wslide[data-i="'+i+'"]');if(!sl)return;f.scrollTo({top:sl.offsetTop,behavior:smooth&&!document.documentElement.classList.contains('lite')?'smooth':'auto'})}
 function wfIdx(){var f=$('#wfeed');return f&&f.clientHeight?Math.round(f.scrollTop/f.clientHeight):0}
@@ -4609,6 +4681,10 @@ var ACT={
   restskip:function(){S.rest=null;if(S.sess)S.sess.mark=Date.now()},
   restadd:function(){if(!S.rest)return;S.rest.until+=15000;S.rest.tot=(S.rest.tot||0)+15;if(S.sess)S.sess.mark=S.rest.until;restPaint()},
   wgo:function(b){wfGo(+b.dataset.i,true)},
+  fxctl:function(){fxPane(0)},
+  fxmain:function(){fxPane(1)},
+  slater:function(){if(!S.sess)return;sessPause(false);toast('Your workout is paused. Pick it up any time from Fitness.',{title:'Saved for later',icon:'⏸️'});location.hash='today'},
+  instep:function(b){var e=document.getElementById(b.dataset.t);if(!e)return;var v=parseFloat(e.value)||0,d=parseFloat(b.dataset.d)||0;v=Math.max(0,Math.round((v+d)*100)/100);e.value=v;try{sfxTick(true)}catch(x){}},
   restpick:function(b){var r=parseInt(b.dataset.s,10)||0;S.restPick=r;S.restDef=r},
   mkclose:function(){mkClose()},
   ailvl:function(b){S.aiLvl=b.dataset.k},
@@ -4852,7 +4928,7 @@ var ACT={
     });
     if(bad.length){S.prepMsg='Enter a weight, or tick Bodyweight, for: '+bad.join(', ')+'.';return}
     rows.forEach(function(i){var d=S.pd[i];S.pw[w.id+'|'+i]=d.b?0:parseFloat(d.v)});
-    S.prep=null;S.prepMsg='';beginSess(w);S.sess.tg=tg;setTimeout(function(){window.scrollTo(0,0)},30);
+    S.prepMsg='';countdown(function(){S.prep=null;beginSess(w);S.sess.tg=tg;refresh();setTimeout(function(){window.scrollTo(0,0);var h=$('#fxh');if(h)h.scrollLeft=h.scrollWidth},30)});
   },
   pcancel:function(){S.prep=null;S.prepMsg='';location.hash='workouts'},
   spause:function(){var a=S.sess;if(!a)return;if(a.paused){sessResume();rsClose()}else sessPause(false)},
@@ -5750,7 +5826,7 @@ function show(){
   if(!VALID[id])id='today';
   $$('.view').forEach(function(s){s.hidden=s.id!=='v-'+id});
   if(id!=='scripture'){if(S.rplay)bStop();S.bsel=[]}
-  curId=id;try{if(AMB.ctx&&ambPref().on)ambSetMood(ambMoodFor(id));setTimeout(ambPaint,0)}catch(e){}document.body.classList.remove('sheet');updateTabs();
+  curId=id;document.body.classList.toggle('fitmode',!!(S.sess&&id==='session'));try{if(AMB.ctx&&ambPref().on)ambSetMood(ambMoodFor(id));setTimeout(ambPaint,0)}catch(e){}document.body.classList.remove('sheet');updateTabs();
   var g=VGROUP[id],gg=GROUPS.filter(function(x){return x[0]===g})[0],gv=gg?gg[2].filter(function(v){return v!=='session'&&v!=='settings'&&!(v==='schedule'&&S.useSched===false)}):[],sn=$('#subnav');
   sn.hidden=id==='session'||gv.length<2;
   sn.innerHTML=gv.map(function(v){return '<a href="#'+v+'"'+(v===id?' aria-current="page"':'')+'>'+VLABEL[v]+'</a>'}).join('');
@@ -5773,7 +5849,7 @@ $$('#tabs a').forEach(function(a){a.addEventListener('click',function(){document
 setInterval(function(){
   if(!S.sess||S.sess.paused||curId!=='session')return;
   var el=$('#ss-time'),w=sessW();if(!el||!w)return;
-  var ms=sessMs();el.textContent=clockH(ms);var k=$('#ss-kcal');if(k)k.textContent=sessKcal(ms,w);
+  fxLive();
 },1000);
 window.addEventListener('hashchange',show);
 setTimeout(function(){if(S.sess&&S.sess.autoP)rsOpen()},1400);
