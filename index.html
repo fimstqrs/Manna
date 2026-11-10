@@ -1613,6 +1613,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         <div class="card stack" id="tr-card">
           <div class="sh"><h3>Training</h3><p class="small muted">How Manna plans your workouts.</p></div>
           <label class="check" for="p-sched"><input type="checkbox" id="p-sched"><span>Use workout schedules<small>Plan a workout for each day, see it on Home and at the top of Fitness. Turn off to just pick a workout whenever you train. Your schedules are kept either way.</small></span></label>
+          <label class="check" for="p-keeprun"><input type="checkbox" id="p-keeprun"><span>Keep the workout clock running when I leave<small>Normally the timer pauses when you leave Manna or lock your phone. Turn this on and the time keeps counting until you finish.</small></span></label>
         </div>
       </div></div>
       <div class="swpage" data-name="Data" data-ic="data"><div class="grid2">
@@ -2314,7 +2315,7 @@ function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:false,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:[],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],vsaved:[],sctab:'feed',savedW:[],savedSeen:[],useSched:true,addPlan:'',seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:[],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],vsaved:[],sctab:'feed',savedW:[],savedSeen:[],useSched:true,addPlan:'',keepRun:false,seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
     sleep:8,hrv:55,sore:1,
     meals:[],labs:{fe:null,vd:null,b12:null},
     override:false,coachMsg:null,imported:[],
@@ -2334,7 +2335,7 @@ function defaults0(){
 }
 var S=defaults();
 /* Manna was closed mid-workout without a chance to pause: stop the clock at the last moment it was open */
-(function(){var a=S.sess;if(!a||a.paused||!a.last)return;var bt=0;try{bt=+localStorage.getItem('manna.sbeat')||0}catch(e){}
+(function(){var a=S.sess;if(!a||a.paused||!a.last||S.keepRun)return;var bt=0;try{bt=+localStorage.getItem('manna.sbeat')||0}catch(e){}
   var at=Math.min(Date.now(),Math.max(a.last,bt||a.last));a.acc=(a.acc||0)+Math.max(0,at-a.last);a.paused=true;a.autoP=true;a.pAt=at;a.restLeft=0})();
 if(!S.onboarded)S.themeMode='plain'; /* setup always starts in the Default theme */
 function seedMeals(){S.meals=[]}
@@ -2482,6 +2483,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:145,d:'Nov 10, 2026',t:'Keep the clock running',s:['New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default, so the timer still pauses like before.']},
  {v:144,d:'Nov 10, 2026',t:'Smoother countdown',s:['In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.']},
  {v:143,d:'Nov 10, 2026',t:'All bodyweight button',s:['When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.']},
  {v:142,d:'Nov 10, 2026',t:'Opening screen back to normal',s:['The welcome text on the opening animation is back in capitals, like before.']},
@@ -2832,7 +2834,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='144';
+var heroLast='',APPV='145';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4092,7 +4094,7 @@ function rsRender(){var a=S.sess,w=a&&sessW(),c=$('#rs-card');if(!c)return;if(!a
   var when=a.pAt?new Date(a.pAt).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}):'';
   c.innerHTML='<div class="rsic" aria-hidden="true">⏸️</div><p class="eyebrow" style="margin:0">Workout paused</p><h3 id="rs-t" style="margin:0">'+esc(w.name)+'</h3><div class="rsclock" aria-label="Time so far">'+clockH(sessMs())+'</div><p class="small muted" style="margin:0">You left Manna'+(when?' at '+esc(when):'')+', so the timer stopped. Nothing was lost.</p>'
     +'<div class="row" style="justify-content:center"><button class="btn primary" data-act="rsresume">▶ Resume workout</button></div><div class="row" style="justify-content:center"><button class="btn sm" data-act="rsfinish">Finish workout</button><button class="btn sm" data-act="rslater">Not now</button></div>'}
-function sessAway(){if(sessPause(true)){try{prefSave()}catch(e){}}}
+function sessAway(){if(S.keepRun){try{prefSave()}catch(e){}return}if(sessPause(true)){try{prefSave()}catch(e){}}}
 document.addEventListener('visibilitychange',function(){if(document.hidden)sessAway();else if(S.sess&&S.sess.autoP)setTimeout(function(){refresh();rsOpen()},150)});
 window.addEventListener('pagehide',sessAway);
 document.addEventListener('freeze',sessAway);
@@ -4849,7 +4851,7 @@ function syncInputs(){
 
   $('#sg-hide').checked=S.hideNums;$('#sg-burn').checked=S.showBurn;$('#sg-goal').value=targets().kcal;
   $('#lab-fe').value=S.labs.fe==null?'':S.labs.fe;$('#lab-vd').value=S.labs.vd==null?'':S.labs.vd;$('#lab-b12').value=S.labs.b12==null?'':S.labs.b12;
-  $('#p-name').value=S.name;$('#ai-text').value='';$('#nt-text').value='';$('#p-scale').value=S.scale;$('#p-scaled').value=scaleD();$('#p-hc').checked=S.hc;$('#p-h24').checked=S.h24;$('#p-glass').checked=S.glass;$('#p-rm').checked=S.rm;$('#p-plain').checked=S.plain;if($('#p-sched'))$('#p-sched').checked=S.useSched!==false;$('#p-lang').value=S.lang;$('#p-units').value=S.units;
+  $('#p-name').value=S.name;$('#ai-text').value='';$('#nt-text').value='';$('#p-scale').value=S.scale;$('#p-scaled').value=scaleD();$('#p-hc').checked=S.hc;var kr=$('#p-keeprun');if(kr)kr.checked=!!S.keepRun;$('#p-h24').checked=S.h24;$('#p-glass').checked=S.glass;$('#p-rm').checked=S.rm;$('#p-plain').checked=S.plain;if($('#p-sched'))$('#p-sched').checked=S.useSched!==false;$('#p-lang').value=S.lang;$('#p-units').value=S.units;
   $('#f-q').value='';$('#b-q').value='';$('#e-ai').value='';$('#r-name').value='';$('#r-serv').value=2;$('#l-text').value='';
 }
 
@@ -5760,6 +5762,7 @@ var INPUT={
   'p-glass':function(t){S.glass=t.checked},
   'p-h24':function(t){S.h24=t.checked;tickClock()},
   'p-hc':function(t){S.hc=t.checked},
+  'p-keeprun':function(t){S.keepRun=t.checked},
   'p-rm':function(t){S.rm=t.checked},
   'p-plain':function(t){S.plain=t.checked},
   'p-sched':function(t){S.useSched=t.checked;setTimeout(show,0);toast(t.checked?'Schedules are on.':'Schedules are off. Your plans are kept.')},
