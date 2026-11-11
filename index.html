@@ -2860,6 +2860,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:157,d:'Nov 11, 2026',t:'Enter for Bible help',s:['Bible help has an Enter button next to the topic box. Tap it, or press Enter, to get a devotional on what you typed.','Fixed: the Making with AI window now closes when Bible help, the weekly recap or an AI schedule finishes, instead of staying on screen.']},
  {v:156,d:'Nov 11, 2026',big:1,lead:'Meet Manna Overflow, named for Psalm 23: "my cup overflows." Plus free AI food logging for everyone.',t:'Manna Overflow',s:['Manna PRO is now called Manna Overflow.','Free for everyone: type or say what you ate and AI adds each food. It no longer uses up your AI uses.','Free for everyone: make a workout with AI (it uses your daily AI uses), and make one AI schedule a week.','New in Overflow: Progress charts in History, for your strength on each exercise and your weight over time. Logging your weight also updates your targets.','New in Overflow: a weekly recap, where AI sums up your week and gives one tip.','New in Overflow: Food trends on Meals, with 14 days of calories and protein against your targets.','New in Overflow: a meal plan for the day that hits your targets, with a grocery list. Add any meal with one tap.','New in Overflow: training-day and rest-day targets, in Settings › Goals.','New in Overflow: Bible help with AI, to explain a chapter, write a devotional on any topic, or build a 7-day reading plan. Reading the Bible stays free.','New in Overflow: import a recipe from a link, and AI works out the numbers per serving.','CHANGE THEME in Settings is now in capitals.']},
  {v:155,d:'Nov 11, 2026',t:'Full history for everyone',s:['Your whole workout history is now free. Free accounts see every workout, not just the last 30 days.']},
  {v:154,d:'Nov 11, 2026',t:'The Manna logo everywhere',s:['On the Fitness opening animation, the stars now sparkle into place one by one, then keep twinkling.','The Manna logo now shows as the icon in Chrome and Safari tabs, bookmarks, on your desktop and on your home screen. If you added Manna to your home screen before, remove it and add it again to get the new icon.']},
@@ -3222,7 +3223,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='156';
+var heroLast='',APPV='157';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3619,8 +3620,8 @@ function mkClose(){clearInterval(mkOpen.iv);MK=null;var m=$('#mk');if(m&&!m.hidd
 function mkTick(){
   if(!MK||MK.phase!=='busy')return;var now=Date.now(),out=null;
   var early=now-MK.t0<=300;
-  if(MK.kind==='workout'){if(!S.aiBusy&&(S.ai||S.aiMsg)){if(early){setTimeout(refresh,320-(now-MK.t0));return}out=S.ai?{ok:1}:{err:S.aiMsg}}}
-  else if(MK.watch){var w=MK.watch();if(w&&w.done){if(early){setTimeout(refresh,320-(now-MK.t0));return}out=w.err?{err:w.err}:{ok:1}}}
+  if(MK.watch){var w=MK.watch();if(w&&w.done){if(early){setTimeout(refresh,320-(now-MK.t0));return}out=w.err?{err:w.err}:{ok:1}}}
+  else if(MK.kind==='workout'){if(!S.aiBusy&&(S.ai||S.aiMsg)){if(early){setTimeout(refresh,320-(now-MK.t0));return}out=S.ai?{ok:1}:{err:S.aiMsg}}}
   if(!out)return;
   if(out.err){MK.phase='err';MK.msg=out.err;return}
   if(!MK.fin){MK.fin=now;mkBar(100);var st=$('#mk-step');if(st)st.textContent='Done!';setTimeout(refresh,450);return}
@@ -6675,12 +6676,13 @@ function baiMake(kind){if(BAI.busy)return;var b=S.rb||'John',c=S.rc||1,topic=($(
     BAI={busy:false,msg:''};refresh()}).catch(function(e){BAI={busy:false,msg:aiErr(e&&e.code)};refresh()})}
 function refBtn(ref){var r=String(ref).replace(/[–—]/g,'-');var m=r.match(/^(.+?)\s+(\d+)(?::(\d+))?/);if(!m||!WEBB)return esc(ref);var bk=wbook(m[1]);return bk?'<button class="chip" data-act="bbgo" data-ref="'+esc(bk+' '+m[2]+':'+(m[3]||1))+'">📖 '+esc(ref)+'</button>':esc(ref)}
 function wbook(n){if(!WEBB)return null;n=String(n).trim().toLowerCase().replace(/^psalm$/,'psalms').replace(/^song of songs$/,'song of solomon');var ks=Object.keys(WEBB);for(var i=0;i<ks.length;i++){if(ks[i].toLowerCase()===n)return ks[i]}for(var j=0;j<ks.length;j++){if(ks[j].toLowerCase().indexOf(n)===0)return ks[j]}return null}
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='bai-q'&&!e.isComposing){e.preventDefault();if(!proNeed('bible'))return;baiMake('dev');refresh()}});
 function renderBai(){var el=$('#sc-bai');if(!el)return;var h;
   if(!isPro())h=proLock('Bible help','Reading the Bible is always free. Overflow adds AI help: explain this chapter, a devotional on any topic, or a 7-day reading plan for what you are going through.','bible');
   else{var B=S.bai,ch=(S.rb||'John')+' '+(S.rc||1);h='<div class="row spread"><h3 style="margin:0">Bible help</h3><span class="badge pro">✨ OVERFLOW</span></div>'
     +'<div class="row"><button class="btn sm primary" data-act="baigo" data-k="explain"'+(BAI.busy?' disabled':'')+'>Explain '+esc(ch)+'</button></div>'
-    +'<label class="vh-only" for="bai-q">Topic or what you are going through</label><input type="text" id="bai-q" maxlength="200" placeholder="A topic or feeling, like anxiety, patience or a new job">'
-    +'<div class="row"><button class="btn sm" data-act="baigo" data-k="dev"'+(BAI.busy?' disabled':'')+'>Devotional</button><button class="btn sm" data-act="baigo" data-k="plan"'+(BAI.busy?' disabled':'')+'>7-day reading plan</button></div>'+(BAI.msg?'<p class="note warn small">'+esc(BAI.msg)+'</p>':'');
+    +'<label class="vh-only" for="bai-q">Topic or what you are going through</label><div class="row baiq"><input type="text" id="bai-q" maxlength="200" enterkeyhint="go" placeholder="A topic or feeling, like anxiety or a new job" style="flex:1;min-width:0"><button class="btn primary" data-act="baigo" data-k="dev"'+(BAI.busy?' disabled':'')+' aria-label="Enter: write a devotional on this">Enter</button></div>'
+    +'<p class="small muted" style="margin:0">Enter writes a short devotional on it. Or make a reading plan instead:</p><div class="row"><button class="btn sm" data-act="baigo" data-k="plan"'+(BAI.busy?' disabled':'')+'>7-day reading plan</button></div>'+(BAI.msg?'<p class="note warn small">'+esc(BAI.msg)+'</p>':'');
     if(B){h+='<div class="baiout"><b class="baih">'+esc(B.title)+'</b>';
       if(B.kind==='explain')h+=(B.summary?'<p>'+esc(B.summary)+'</p>':'')+(B.points.length?'<ul>'+B.points.map(function(p){return '<li>'+esc(p)+'</li>'}).join('')+'</ul>':'')+(B.apply?'<p class="small"><b>Today:</b> '+esc(B.apply)+'</p>':'');
       else if(B.kind==='dev')h+=(B.refs.length?'<div class="chips">'+B.refs.map(refBtn).join('')+'</div>':'')+B.body.split(/\n\n+/).map(function(p){return '<p>'+esc(p)+'</p>'}).join('')+(B.prayer?'<p class="small"><b>Prayer:</b> <i>'+esc(B.prayer)+'</i></p>':'');
