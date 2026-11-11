@@ -1344,6 +1344,24 @@ body.fitmode{overscroll-behavior:none}body.fitmode footer,body.fitmode .foot,bod
 @keyframes spGlow{0%{opacity:0;transform:scale(.8)}50%{opacity:1}100%{opacity:.7;transform:scale(1.05)}}
 @keyframes spFade{from{opacity:0}to{opacity:1}}
 </style>
+<style id="center-style">
+/* swipe rows: content fills the row */
+.swdel>.sdc>.mrow{width:100%}
+#m-list>li{padding:0;border:0;display:block}#l-today>li.sdli{padding:0;display:block}
+.ltrow{padding:.6rem .1rem}
+/* welcome: picture and text sit together in the middle of the screen */
+#splash.themed{flex-direction:column;gap:clamp(1rem,4vh,2.2rem)}
+#splash.themed .sp-art{position:static;inset:auto;display:block}
+#splash.themed .sp-art svg{display:block;margin:0 auto;width:min(66vw,340px);max-height:44vh;transform:none;animation:spFloat2 3.2s ease-in-out .9s both}
+#splash.themed .sp-in{position:static;left:auto;right:auto;bottom:auto}
+@keyframes spFloat2{0%{transform:scale(.98)}55%{transform:translateY(-1vh) scale(1.015)}100%{transform:none}}
+#splash{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+/* "Making with AI" sits in the centre of the screen, not at the bottom */
+#mk.modal{align-items:center!important;padding:16px}
+#mk .mcard{border-radius:28px!important;margin:auto;max-height:calc(100svh - 48px)}
+/* Friends loading screen centred on the phone */
+.frload{min-height:calc(100svh - 300px);align-content:center}
+</style>
 <style id="vin-style">
 /* replace the old per-card entrance with one light page animation */
 .view:not([hidden])>*{animation:none!important}
@@ -2730,6 +2748,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:149,d:'Nov 10, 2026',t:'Tidier lists, centred loading',s:['Quick now uses swipe to delete, like Meals and History, instead of a red Remove button on every food.','Loading screens (the welcome, Making with AI, and Friends) now sit in the middle of your screen.','Fixed: calories in Meals line up on the right again.']},
  {v:148,d:'Nov 10, 2026',t:'Manna Pro',s:['Meet Manna Pro: $7 a month or $70 a year. See exactly what you get in Settings, under Manna Pro, where Free and Pro are compared side by side.','Pro unlocks unlimited AI, making workouts, schedules and goal plans with AI, fixing foods with AI, unlimited food photos, every theme and music mood, comparing workouts, your full history, unlimited saved routines and bloodwork tracking.','History has a new stats card you can swipe through: Today, This week, This month and This year. Each shows a graph, how many workouts you logged, your total time and your top 2 workout types.','When you make something with AI, the pop-up no longer shows a difficulty and length line.','Treadmill is now a kind of workout and in the gym equipment list, with two new treadmill workouts: an incline walk and run intervals.','Every page switch has a smooth animation that slides in from the side you are heading to. It adapts to your phone: a full slide on fast phones, a lighter one on older phones, and none if Reduce Motion is on.','The Bible now shows the words of Jesus in red, like a red-letter Bible, across the Gospels, Acts and Revelation.','The welcome animation now matches your theme: your theme\'s own picture draws itself across the whole screen, like the plant growing for Garden or the dumbbell for Fitness. The Fitness theme also has its own picture on Home now.','Sections have shorter names: Eat, Meals, Foods, Quick, Safety and Nutrients in Fuel; Schedule, History and Create in Fitness; Daily in Faith.','Buttons now use small, subtle capitals.','If you finish a workout that lasted under 20 seconds, Manna asks whether to save it to your history, in case it was a mis-tap.','Friends can now see the water you log today, alongside your food and workouts (when you share food). Workout times now show correctly for friends too.','Better on iPhone, especially from the Home Screen: the workout screen now fits your screen exactly, so you no longer scroll the page up and down to line it up, and pages no longer bounce or resize as Safari\'s bars move.','Swipe to delete is smoother, and swiping a row all the way now deletes it straight away, even when the Delete button is already showing.','Free still has everything you need every day: logging food and workouts, the verse of the day and Bible, Friends and sharing, and the workout and rest timers.']},
  {v:147,d:'Nov 10, 2026',t:'Swipe to delete, share with friends',s:['Swipe left on a workout in History or a food in Today\'s meals to delete it, just like in Apple\'s apps. Swipe a little to show Delete, or all the way to delete straight away.','History has an Edit button. Tap it, select sessions, then delete them all at once or share them.','Share workouts with friends: tap Share on any workout or history session and pick friends. What friends send you shows on the Friends page under Shared with you, where you can save it to My workouts.','New music: Friends has its own warm, upbeat track, and Faith now has a soft choir and organ sound.','The search box for workouts is bigger and easier to use.','Swiping between pages is smoother: the page no longer resizes on every frame while you swipe.']},
  {v:146,d:'Nov 10, 2026',t:'Matching clock',s:['The time and date at the top now match the settings and music buttons: the same rounded shape, colour and size.']},
@@ -3084,7 +3103,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='148';
+var heroLast='',APPV='149';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4117,7 +4136,7 @@ function renderLog(){
   $('#l-freq').innerHTML=qa||'<p class="muted small">Nothing here yet. Log a food and it will show up here. Save a meal and it will be added here automatically.</p>';
   $('#l-saved').innerHTML=rec.length?'<details><summary class="small">Manage saved meals ('+rec.length+')</summary><ul class="list" style="margin-top:.5rem">'+rec.map(function(r){return '<li><div>'+esc(r.name)+'<div class="small muted mono">'+kc(r.kcal)+' kcal · '+Math.round(r.p)+' g protein</div></div><button class="btn sm" data-act="rshare" data-id="'+r.id+'" aria-label="Share '+esc(r.name)+'">Share</button><button class="btn sm" data-act="delrecipe" data-id="'+r.id+'" aria-label="Remove saved meal '+esc(r.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
   S.msel=S.msel.filter(function(id){return S.meals.some(function(m){return String(m.id)===id})});
-  $('#l-today').innerHTML=S.meals.length?S.meals.map(function(m){var on=S.msel.indexOf(String(m.id))>-1;return '<li><div><label class="row" style="gap:.5rem;flex-wrap:nowrap"><input type="checkbox" data-msel="'+m.id+'"'+(on?' checked':'')+' aria-label="Include '+esc(m.name)+' in a saved meal"><span>'+esc(m.name)+(m.q!==1?' ×'+m.q:'')+' <span class="badge">'+esc(m.via)+'</span></span></label><div class="small muted mono" style="margin-left:1.6rem">'+fmtT(m.t)+' · '+kc(m.n.kcal)+' kcal</div></div><button class="btn sm" data-act="delmeal" data-id="'+m.id+'">Remove</button></li>'}).join(''):'<li><span class="muted">Nothing logged yet.</span></li>';
+  $('#l-today').innerHTML=S.meals.length?S.meals.map(function(m){var on=S.msel.indexOf(String(m.id))>-1;return '<li class="sdli">'+sdWrap('<div class="ltrow"><label class="row" style="gap:.5rem;flex-wrap:nowrap"><input type="checkbox" data-msel="'+m.id+'"'+(on?' checked':'')+' aria-label="Include '+esc(m.name)+' in a saved meal"><span>'+esc(m.name)+(m.q!==1?' ×'+m.q:'')+' <span class="badge">'+esc(m.via)+'</span></span></label><div class="small muted mono" style="margin-left:1.6rem">'+fmtT(m.t)+' · '+kc(m.n.kcal)+' kcal</div></div>','delmeal',String(m.k||m.id),m.name)+'</li>'}).join(''):'<li><span class="muted">Nothing logged yet.</span></li>';
   $('#l-save').hidden=!S.meals.length;
   $('#l-savebtn').disabled=!S.msel.length;
   $('#l-selct').textContent=S.msel.length?S.msel.length+' selected. Name it and save.':'Tick the items that make up one meal, then save them to reuse.';
