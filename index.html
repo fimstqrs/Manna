@@ -2532,7 +2532,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:145,d:'Nov 10, 2026',t:'Right verse of the day, simpler AI schedules',s:['Fixed: the verse of the day now always matches YouVersion for your own date. In the evening Manna used to show the wrong verse, because the server was already on the next day.','When you finish an exercise, Manna now takes you to the first exercise that still has sets left, starting from the top, instead of just the next one down.','A small hint at the top of your workout shows that you can swipe right to see your time, sets and controls. It goes away once you have looked.','After AI logs a food from a photo or text, you can fix it right there: change the size with − and +, type the real calories, or tell AI what was different (like “big bowl, no cheese”) and it re-estimates.','The rainbow outline around the screen while AI works is gone. The Making with AI pop-up is still there.','Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
+ {v:145,d:'Nov 10, 2026',t:'Right verse of the day, simpler AI schedules',s:['Fixed: the verse of the day now always matches YouVersion for your own date. In the evening Manna used to show the wrong verse, because the server was already on the next day.','When you finish an exercise, Manna now takes you to the first exercise that still has sets left, starting from the top, instead of just the next one down.','A small hint at the top of your workout shows that you can swipe right to see your time, sets and controls. It goes away once you have looked.','After AI logs a food from a photo or text, you can fix it right there: change the size with − and +, type the real calories, or tell AI what was different (like “big bowl, no cheese”) and it re-estimates.','Fixed: a sharp noise when leaving the app. Sounds now fade out smoothly when you switch away and fade back in when you return.','Browse foods no longer shows the “Showing 60 of 7505” count.','The rainbow outline around the screen while AI works is gone. The Making with AI pop-up is still there.','Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
  {v:144,d:'Nov 10, 2026',t:'Stay on your exercise',s:['Fixed: logging a set no longer jumps you back to the first exercise on iPhone. You stay on the exercise you are doing.','The workout screen now only updates the parts that change when you log, so it feels quicker and does not flash.']},
  {v:143,d:'Nov 10, 2026',t:'Faster Friends, smoother swipes and fixes',s:['Difficulty labels (easy, intermediate, advanced) are now lowercase.','Build with AI no longer has a Length picker. If you want a set length, type it in the box, like “30 minutes”. Otherwise AI picks a sensible length.','Fixed: tapping a difficulty under Make it again as no longer changes the difficulty for every workout you build after.','Imported and self-made routines now have a red delete button on their card. Tap it, then tap Delete? to confirm.','The music button at the top now matches the settings button.','Friends opens instantly: Manna remembers your friends list on your phone and loads the latest in the background. The first time, a loading screen shows while it loads.','Swiping between pages is smoother, especially swiping right to left. Manna now keeps only the pages right next to you ready, instead of waking every page at the start of a swipe.']},
  {v:142,d:'Nov 10, 2026',t:'AI glow, bodyweight button and more',s:['Anything made with AI now has its own animation: a colourful glow flows around the edge of the screen while AI is working, then flashes when it is done.','New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default.','When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.','In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.','The welcome text on the opening animation is back in capitals, like before.']},
@@ -3352,7 +3352,7 @@ function ambStep(i,t){
     if(Math.random()<M.chime/M.bar*1.6)ambChime(t+Math.random()*M.spb*.5,M.scale[Math.floor(Math.random()*M.scale.length)],.05+Math.random()*.04);
   }
 }
-function ambTick(){var c=AMB.ctx;if(!c||!AMB.bus||c.state!=='running'||!ambPref().on)return;var M=AMBM[AMB.mood];while(AMB.next<c.currentTime+.35){ambStep(AMB.step,AMB.next);AMB.step++;AMB.next+=M.spb}}
+function ambTick(){var c=AMB.ctx;if(!c||!AMB.bus||c.state!=='running'||!ambPref().on)return;var M=AMBM[AMB.mood];if(AMB.next<c.currentTime-.05){AMB.next=c.currentTime+.05}var cap=8;while(AMB.next<c.currentTime+.35&&cap-->0){ambStep(AMB.step,AMB.next);AMB.step++;AMB.next+=M.spb}}
 function ambSetMood(m){
   var c=AMB.ctx;if(!c||m===AMB.mood)return;var now=c.currentTime,old=AMB.bus;
   if(old){old.out.gain.cancelScheduledValues(now);old.out.gain.setValueAtTime(old.out.gain.value,now);old.out.gain.linearRampToValueAtTime(0,now+2.5);setTimeout(function(){try{old.out.disconnect()}catch(e){}},3200)}
@@ -3411,7 +3411,17 @@ function sfxPop(tab,styOver){
   tabs.addEventListener('pointerdown',function(e){var a=e.target.closest&&e.target.closest('[data-tab]');if(!a)return;last=Date.now();sfxPop(a.dataset.tab)});
   tabs.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-tab]');if(!a||Date.now()-last<600)return;sfxPop(a.dataset.tab)});})();
 ['pointerdown','keydown','touchend'].forEach(function(ev){document.addEventListener(ev,function(){if(ambPref().on&&(!AMB.bus||!AMB.ctx||AMB.ctx.state!=='running'))ambStart()},{passive:true})});
-document.addEventListener('visibilitychange',function(){if(!AMB.ctx)return;if(document.hidden)AMB.ctx.suspend().catch(function(){});else if(ambPref().on){AMB.ctx.resume().then(ambLevel).catch(function(){})}});
+/* Leaving the app: fade every sound to silence first, then pause. Cutting audio off mid-wave makes a sharp, painful click. */
+function ambQuiet(){var c=AMB.ctx;if(!c)return;var now=c.currentTime;
+  [AMB.master,AMB.fx].forEach(function(g){if(!g)return;try{g.gain.cancelScheduledValues(now);g.gain.setValueAtTime(g.gain.value,now);g.gain.setTargetAtTime(0,now,.025)}catch(e){}});
+  clearTimeout(AMB.qt);AMB.qt=setTimeout(function(){if(document.hidden&&AMB.ctx&&AMB.ctx.state==='running')AMB.ctx.suspend().catch(function(){})},180)}
+function ambWake(){var c=AMB.ctx;if(!c)return;clearTimeout(AMB.qt);var now=c.currentTime;
+  try{AMB.master.gain.cancelScheduledValues(now);AMB.master.gain.setValueAtTime(0,now)}catch(e){}
+  if(AMB.fx){try{AMB.fx.gain.cancelScheduledValues(now);AMB.fx.gain.setValueAtTime(0,now);AMB.fx.gain.setTargetAtTime(.55,now+.15,.08)}catch(e){}}
+  var go=function(){AMB.next=Math.max(AMB.next||0,c.currentTime+.08);ambLevel()};
+  if(ambPref().on||ambPref().sfx)c.resume().then(go).catch(function(){});}
+document.addEventListener('visibilitychange',function(){if(document.hidden)ambQuiet();else ambWake()});
+window.addEventListener('pagehide',ambQuiet);
 /* ---------- Goals: target weight, pace, plan, and a pop-up that shows what changes ---------- */
 var PACEF={gentle:.6,steady:1,fast:1.35},PACEN={gentle:'Gentle',steady:'Steady',fast:'Faster'};
 var GPLAN={cut:[4,'Strength and cardio','8 to 12',35],lean:[4,'Strength','6 to 10',45],bulk:[5,'Heavy strength','5 to 8',50],recomp:[4,'Strength and conditioning','6 to 10',45],maintain:[3,'A mix of strength and cardio','8 to 12',35],endurance:[5,'Cardio with some strength','12 to 15',45],health:[3,'A mix of strength and cardio','10 to 12',30]};
@@ -3771,7 +3781,7 @@ function renderFoods(){
   $('#e-cmsg').textContent=S.calMsg||'';
   chipGroup('e-browse',FC.filter(function(a){return a[0]!=='all'}).map(function(a){return {k:a[0],label:a[1],on:false}}),'fbrowse');
   var list=foodList($('#b-q').value,S.fcat);
-  $('#f-meta').textContent='Showing '+Math.min(list.length,S.fshow)+' of '+list.length+' matches. '+allFoods().length+' foods in the database.';
+  $('#f-meta').textContent=list.length?'':'No foods match that.';
   $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try What are you eating? to search or estimate it.</p>';
   var qq=($('#f-q').value||'').trim(),el=foodList(qq,'all');
   var multi=qq&&/,|&|\+|\band\b|\bwith\b/i.test(qq);
