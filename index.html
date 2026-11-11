@@ -7,9 +7,11 @@ var API=/\.github\.io$/i.test(location.hostname)?'https://manna-beta-five.vercel
 <meta name="apple-mobile-web-app-title" content="Manna">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="icon" type="image/png" sizes="180x180" href="icons/manna-icon-180.png?v=72"><link rel="icon" type="image/png" sizes="32x32" href="icons/manna-icon-32.png?v=72"><meta property="og:type" content="website"><meta property="og:title" content="Manna"><meta property="og:description" content="Track food and workouts with personalized targets and a daily Bible verse."><meta property="og:url" content="https://manna-beta-five.vercel.app/"><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box}</style></head><body><title>Manna</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Jost:wght@400;500;600&family=Pinyon+Script&display=swap">
+<link rel="preload" href="fonts/jost-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jost-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cormorant-garamond-latin-600-italic.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#000000" id="meta-theme">
+<style id="font-faces">@font-face{font-family:'Jost';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/jost-latin-400-normal.woff2) format('woff2')}@font-face{font-family:'Jost';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/jost-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Jost';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/jost-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/cormorant-garamond-latin-500-normal.woff2) format('woff2')}@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-display:swap;src:url(fonts/cormorant-garamond-latin-500-italic.woff2) format('woff2')}@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/cormorant-garamond-latin-600-normal.woff2) format('woff2')}@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:600;font-display:swap;src:url(fonts/cormorant-garamond-latin-600-italic.woff2) format('woff2')}@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/cormorant-garamond-latin-700-normal.woff2) format('woff2')}@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:700;font-display:swap;src:url(fonts/cormorant-garamond-latin-700-italic.woff2) format('woff2')}@font-face{font-family:'Pinyon Script';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/pinyon-script-latin-400-normal.woff2) format('woff2')}</style>
 <style>
 /* Layout: grouped left rail beside a single working panel; sample data throughout. */
 :root{
@@ -1227,7 +1229,7 @@ html body .clockbar .clk{display:inline-flex;align-items:center;gap:.45rem;heigh
 html body .clockbar .clk,html body .clockbar .clk *{color:var(--accent)!important;font-size:.78rem!important;font-weight:600!important;letter-spacing:.01em}
 html body .clockbar .clk-date{opacity:.8}
 html.lite body .clockbar .clk{-webkit-backdrop-filter:none;backdrop-filter:none}
-@media (max-width:860px){html body .clockbar,html body .clockbar.under{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;overflow:visible!important;min-height:34px}html body .clockbar .clk{position:fixed;z-index:30;top:calc(env(safe-area-inset-top,0px) + 3px);right:12px}}
+@media (max-width:860px){html body .clockbar,html body .clockbar.under{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;overflow:visible!important;min-height:34px}html body .clockbar .clk{position:fixed;z-index:30;top:calc(env(safe-area-inset-top,0px) + 3px);right:12px}html body .clockbar::before{content:'';position:fixed;left:0;right:0;top:0;height:calc(env(safe-area-inset-top,0px) + 50px);background:linear-gradient(var(--bg) 45%,color-mix(in srgb,var(--bg) 0%,transparent));z-index:29;pointer-events:none;opacity:0;transition:opacity .25s}html body .clockbar.under::before{opacity:1}body.fitmode .clockbar::before{display:none}}
 </style>
 <style id="swdel-style">
 .swdel{position:relative;overflow:hidden;touch-action:pan-y;border-radius:14px;contain:paint}
@@ -1256,9 +1258,9 @@ html.lite body .clockbar .clk{-webkit-backdrop-filter:none;backdrop-filter:none}
 .wqlab{font-weight:650;font-size:.95rem}
 .wqbox{position:relative;display:flex;align-items:center}
 .wqbox .wqic{position:absolute;left:1rem;width:1.25rem;height:1.25rem;color:var(--muted);pointer-events:none;transition:color .2s}
-.wqbox input#w-q{width:100%;height:3.4rem;padding:0 1rem 0 2.9rem;font-size:1.08rem;border-radius:18px;border:1.5px solid color-mix(in srgb,var(--ink) 14%,transparent);background:color-mix(in srgb,var(--ink) 5%,var(--surface));color:var(--ink);transition:border-color .2s,box-shadow .2s,background .2s;-webkit-appearance:none;appearance:none}
-.wqbox input#w-q::placeholder{color:var(--muted);opacity:.85}
-.wqbox input#w-q:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent);background:var(--surface)}
+.wqbox input[type=search]{width:100%;height:3.4rem;padding:0 1rem 0 2.9rem;font-size:1.08rem;border-radius:18px;border:1.5px solid color-mix(in srgb,var(--ink) 14%,transparent);background:color-mix(in srgb,var(--ink) 5%,var(--surface));color:var(--ink);transition:border-color .2s,box-shadow .2s,background .2s;-webkit-appearance:none;appearance:none}
+.wqbox input[type=search]::placeholder{color:var(--muted);opacity:.85}
+.wqbox input[type=search]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent);background:var(--surface)}
 .wqbox:focus-within .wqic{color:var(--accent)}
 </style>
 <style id="pro-style">
@@ -1362,6 +1364,31 @@ body.fitmode{overscroll-behavior:none}body.fitmode footer,body.fitmode .foot,bod
 /* Friends loading screen centred on the phone */
 .frload{min-height:calc(100svh - 300px);align-content:center}
 </style>
+<style id="vfind-style">
+.vftopics{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.5rem}
+.vftop{display:flex;align-items:center;gap:.55rem;padding:.7rem .75rem;border-radius:16px;border:1px solid var(--line,rgba(127,127,127,.22));background:color-mix(in srgb,var(--accent) 7%,var(--surface));color:var(--ink);font:600 .9rem var(--f-body,system-ui);text-align:left;cursor:pointer;transition:transform .15s,background .2s}
+.vftop:active{transform:scale(.97)}.vftop span:nth-child(2){flex:1;min-width:0}.vftop small{color:var(--muted);font-weight:500;margin-left:.3rem;flex:none}
+.vfte{font-size:1.25rem}
+.vflist{display:grid;gap:.6rem}
+.vfv{display:grid;gap:.45rem;padding:.85rem .9rem;border-radius:16px;background:color-mix(in srgb,var(--ink) 4%,transparent);border:1px solid var(--line,rgba(127,127,127,.18))}
+.vfvt{margin:0;font:400 1.02rem/1.55 var(--f-display,Georgia,serif)}.vfvr{font-size:.85rem;color:var(--accent)}
+.vfv mark{background:color-mix(in srgb,var(--accent) 30%,transparent);color:inherit;border-radius:4px;padding:0 .1em}
+.vfhead{align-items:flex-end}
+</style>
+<style id="pr-style">
+.prlist{display:grid;gap:.4rem;padding:.8rem .9rem;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,#ffd60a 18%,transparent),color-mix(in srgb,#ff9f0a 10%,transparent));border:1px solid color-mix(in srgb,#ffd60a 40%,transparent)}
+.prrow{display:flex;justify-content:space-between;gap:.6rem;font-size:.92rem}.prrow b{white-space:nowrap}
+.prbadge{display:inline-block;padding:.05rem .4rem;border-radius:999px;background:color-mix(in srgb,#ffd60a 30%,transparent);font-size:.72rem;font-weight:700;vertical-align:middle}
+a.btn,a.btn:hover,a.btn:visited{text-decoration:none}
+</style>
+<style id="bc-style">
+.bccard{max-width:28rem;display:grid;gap:.8rem}
+.bcview{position:relative;aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:#000}
+.bcview video{width:100%;height:100%;object-fit:cover;display:block}
+.bcframe{position:absolute;inset:22% 12%;border:2.5px solid rgba(255,255,255,.9);border-radius:16px;box-shadow:0 0 0 999px rgba(0,0,0,.35)}
+.bcframe i{position:absolute;left:6%;right:6%;top:50%;height:2px;background:#ff453a;box-shadow:0 0 12px #ff453a;animation:bcScan 1.8s ease-in-out infinite}
+@keyframes bcScan{0%,100%{transform:translateY(-38px)}50%{transform:translateY(38px)}}
+</style>
 <style id="vin-style">
 /* replace the old per-card entrance with one light page animation */
 .view:not([hidden])>*{animation:none!important}
@@ -1457,8 +1484,13 @@ p,li,.note,.small,.muted{text-wrap:pretty}
           <button type="button" role="tab" class="sctab" data-act="sctab" data-k="feed" id="sct-feed" aria-controls="sc-feed">Daily</button>
           <button type="button" role="tab" class="sctab" data-act="sctab" data-k="saved" id="sct-saved" aria-controls="sc-feed">Saved</button>
           <button type="button" role="tab" class="sctab" data-act="sctab" data-k="bible" id="sct-bible" aria-controls="sc-bible">Bible</button>
+          <button type="button" role="tab" class="sctab" data-act="sctab" data-k="find" id="sct-find" aria-controls="sc-find">Search</button>
         </div></header>
       <div class="vfeed" id="sc-feed" role="feed" aria-label="Verses. Swipe up for the next one." tabindex="0"></div>
+      <div class="stack" id="sc-find" hidden><div class="card stack vfind">
+        <label class="wqlab" for="vf-q">Search the Bible</label>
+        <div class="wqbox"><svg class="wqic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><input type="search" id="vf-q" autocomplete="off" enterkeyhint="search" placeholder="Strength, worry, lust, or any words…"></div>
+        <div id="vf-out" aria-live="polite"></div></div></div>
       <div class="stack" id="sc-bible" hidden>
       <div class="card stack" id="sc-reader"></div>
       <div class="card stack" id="sc-pnotes"></div>
@@ -1637,7 +1669,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
 </header>
       <div class="card" id="t-targets"></div>
       <div class="card stack" aria-label="Find a food">
-        <div class="row"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="What are you eating?" style="flex:1;min-width:12rem"><button class="btn" data-act="fcam">Camera</button><button class="btn" data-act="fup">Upload photo</button></div>
+        <div class="row"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="What are you eating?" style="flex:1;min-width:12rem"><button class="btn" data-act="fcam">Camera</button><button class="btn" data-act="fup">Upload photo</button><button class="btn" data-act="bcopen">Scan barcode</button></div>
         <input type="file" id="f-cam" accept="image/*" capture="environment" hidden><input type="file" id="f-up" accept="image/*" hidden>
         <div id="f-ask-out" aria-live="polite"></div>
         <div class="fgrid" id="e-res"></div>
@@ -1824,6 +1856,10 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         </div>
       </div></div>
       <div class="swpage" data-name="Data" data-ic="data"><div class="grid2">
+        <div class="card stack" id="exp-card">
+          <div class="sh"><h3>Your data is yours</h3><p class="small muted">Download everything you have logged: workouts, history, meals, weight, goals, notes and settings. Keep it as a backup or take it anywhere.</p></div>
+          <div class="row"><button class="btn primary" data-act="expjson">Download my data</button><button class="btn" data-act="expcsv">Workout history as a spreadsheet</button></div>
+        </div>
         <div class="card stack" id="x-card">
           <div class="sh"><h3>Extras</h3><p class="small muted">Small additions made for you. Turn off any you do not want.</p></div>
           <div id="x-list" class="stack"></div>
@@ -1862,6 +1898,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
 <div class="modal" id="up" role="dialog" aria-modal="true" aria-labelledby="up-t" hidden><div class="mback" data-act="uplater"></div><div class="mcard upcard" id="up-card"></div></div>
 <div class="modal" id="fp" role="dialog" aria-modal="true" aria-labelledby="fp-t" hidden><div class="mback" data-act="fpclose"></div><div class="mcard fpcard" id="fp-card"></div></div>
 <div class="modal" id="wn" role="dialog" aria-modal="true" aria-labelledby="wn-t" hidden><div class="mback" data-act="wnclose"></div><div class="mcard wncard" id="wn-card"></div></div>
+<div class="modal" id="bcm" role="dialog" aria-modal="true" aria-labelledby="bcm-t" hidden><div class="mback" data-act="bcclose"></div><div class="mcard bccard"><div class="row spread"><h3 id="bcm-t" style="margin:0">Scan a barcode</h3><button class="btn sm" data-act="bcclose">Close</button></div><div class="bcview"><video id="bc-vid" playsinline muted></video><div class="bcframe" aria-hidden="true"><i></i></div></div><p class="small muted" id="bc-msg" aria-live="polite" style="margin:0;text-align:center">Point your camera at the barcode on the package.</p><div class="row"><label class="vh-only" for="bc-num">Barcode number</label><input type="text" id="bc-num" inputmode="numeric" pattern="[0-9]*" maxlength="14" placeholder="Or type the barcode number" style="flex:1;min-width:10rem"><button class="btn primary" data-act="bcfind">Look up</button></div><p class="small muted" style="margin:0">Food facts from Open Food Facts, a free food database.</p></div></div>
 <div class="modal" id="shortm" role="dialog" aria-modal="true" aria-labelledby="shortm-t" hidden><div class="mback" data-act="shortclose"></div><div class="mcard shortcard" id="shortm-card"></div></div>
 <div class="modal" id="prom" role="dialog" aria-modal="true" aria-labelledby="prom-t" hidden><div class="mback" data-act="proclose"></div><div class="mcard procard" id="prom-card"></div></div>
 <div class="modal" id="shm" role="dialog" aria-modal="true" aria-labelledby="shm-t" hidden><div class="mback" data-act="shmclose"></div><div class="mcard shcard" id="shm-card"></div></div>
@@ -2748,7 +2785,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:149,d:'Nov 10, 2026',t:'Tidier lists, centred loading',s:['Quick now uses swipe to delete, like Meals and History, instead of a red Remove button on every food.','Loading screens (the welcome, Making with AI, and Friends) now sit in the middle of your screen.','Fixed: calories in Meals line up on the right again.']},
+ {v:149,d:'Nov 10, 2026',t:'Verse search, records, barcode scanning',s:['New in Faith: Search. Type a feeling or a word, like lust, worry, strength or forgiveness, and get verses for it. 26 topics with 10 to 20 verses each, plus a search of every word in the Bible.','Personal records: when you lift more, do more reps or go further than ever before, Manna celebrates it and marks it in History.','Scan a barcode on Eat to log packaged food. Free, no paywall. You can also type the number in.','Download your data from Settings › Data, as a full backup or your workout history as a spreadsheet.','Works offline: once loaded, Manna and the Bible open without internet. Fonts now load from Manna itself, so text looks right straight away.','The phone status bar now matches your theme, and a soft fade sits behind the pinned buttons at the top.','Quick now uses swipe to delete, like Meals and History, instead of a red Remove button on every food.','Loading screens (the welcome, Making with AI, and Friends) now sit in the middle of your screen.','Fixed: calories in Meals line up on the right again.']},
  {v:148,d:'Nov 10, 2026',t:'Manna Pro',s:['Meet Manna Pro: $7 a month or $70 a year. See exactly what you get in Settings, under Manna Pro, where Free and Pro are compared side by side.','Pro unlocks unlimited AI, making workouts, schedules and goal plans with AI, fixing foods with AI, unlimited food photos, every theme and music mood, comparing workouts, your full history, unlimited saved routines and bloodwork tracking.','History has a new stats card you can swipe through: Today, This week, This month and This year. Each shows a graph, how many workouts you logged, your total time and your top 2 workout types.','When you make something with AI, the pop-up no longer shows a difficulty and length line.','Treadmill is now a kind of workout and in the gym equipment list, with two new treadmill workouts: an incline walk and run intervals.','Every page switch has a smooth animation that slides in from the side you are heading to. It adapts to your phone: a full slide on fast phones, a lighter one on older phones, and none if Reduce Motion is on.','The Bible now shows the words of Jesus in red, like a red-letter Bible, across the Gospels, Acts and Revelation.','The welcome animation now matches your theme: your theme\'s own picture draws itself across the whole screen, like the plant growing for Garden or the dumbbell for Fitness. The Fitness theme also has its own picture on Home now.','Sections have shorter names: Eat, Meals, Foods, Quick, Safety and Nutrients in Fuel; Schedule, History and Create in Fitness; Daily in Faith.','Buttons now use small, subtle capitals.','If you finish a workout that lasted under 20 seconds, Manna asks whether to save it to your history, in case it was a mis-tap.','Friends can now see the water you log today, alongside your food and workouts (when you share food). Workout times now show correctly for friends too.','Better on iPhone, especially from the Home Screen: the workout screen now fits your screen exactly, so you no longer scroll the page up and down to line it up, and pages no longer bounce or resize as Safari\'s bars move.','Swipe to delete is smoother, and swiping a row all the way now deletes it straight away, even when the Delete button is already showing.','Free still has everything you need every day: logging food and workouts, the verse of the day and Bible, Friends and sharing, and the workout and rest timers.']},
  {v:147,d:'Nov 10, 2026',t:'Swipe to delete, share with friends',s:['Swipe left on a workout in History or a food in Today\'s meals to delete it, just like in Apple\'s apps. Swipe a little to show Delete, or all the way to delete straight away.','History has an Edit button. Tap it, select sessions, then delete them all at once or share them.','Share workouts with friends: tap Share on any workout or history session and pick friends. What friends send you shows on the Friends page under Shared with you, where you can save it to My workouts.','New music: Friends has its own warm, upbeat track, and Faith now has a soft choir and organ sound.','The search box for workouts is bigger and easier to use.','Swiping between pages is smoother: the page no longer resizes on every frame while you swipe.']},
  {v:146,d:'Nov 10, 2026',t:'Matching clock',s:['The time and date at the top now match the settings and music buttons: the same rounded shape, colour and size.']},
@@ -4331,12 +4368,30 @@ function vfMore(){
 }
 function vfSync(){$$('#sc-feed [data-act=vsave]').forEach(function(b){var sv=vfIsSaved(b.dataset.ref);if(b.getAttribute('aria-pressed')!==String(sv)){b.setAttribute('aria-pressed',sv);b.lastChild.textContent=sv?'Saved':'Save';b.setAttribute('aria-label',(sv?'Saved. Tap to remove ':'Save ')+b.dataset.ref)}})}
 function vfToggle(ref,force){if(!Array.isArray(S.vsaved))S.vsaved=[];var i=S.vsaved.indexOf(ref);if(i>-1&&force!==true){S.vsaved.splice(i,1);return false}if(i<0)S.vsaved.push(ref);return true}
+var TOPICS=[["purity","Lust and purity","🕊️","lust,purity,porn,sexual,temptation,desire,pure,sex,flesh","Matthew 5:28;1 Corinthians 6:18;1 Corinthians 6:19-20;1 Corinthians 10:13;1 Thessalonians 4:3-5;2 Timothy 2:22;Galatians 5:16;Psalm 119:9;Psalm 119:11;Job 31:1;Proverbs 4:23;Romans 13:14;James 1:14-15;1 Peter 2:11;Hebrews 13:4;Colossians 3:5"],["faith","Faith","✝️","faith,believe,belief,doubt,trust god","Hebrews 11:1;Hebrews 11:6;Romans 10:17;Ephesians 2:8;Mark 11:22-24;Matthew 17:20;James 2:17;2 Corinthians 5:7;Galatians 2:20;Romans 1:17;Proverbs 3:5-6;Mark 9:23;1 Peter 1:8-9;James 1:6"],["strength","Strength","💪","strength,strong,weak,weakness,tired,power,courage","Isaiah 40:31;Philippians 4:13;Isaiah 41:10;2 Corinthians 12:9-10;Psalm 46:1;Nehemiah 8:10;Psalm 73:26;Exodus 15:2;Ephesians 6:10;Psalm 28:7;Habakkuk 3:19;Deuteronomy 31:6;Joshua 1:9;Psalm 18:32;Isaiah 40:29"],["anxiety","Anxiety and worry","🌿","anxiety,anxious,worry,worried,stress,stressed,overwhelmed,panic","Philippians 4:6-7;1 Peter 5:7;Matthew 6:34;Matthew 6:25-27;Isaiah 26:3;John 14:27;Psalm 94:19;Psalm 55:22;Proverbs 12:25;Psalm 56:3;Isaiah 41:13;2 Timothy 1:7;Psalm 34:4;Luke 12:25-26"],["fear","Fear","🛡️","fear,afraid,scared,courage,brave,terrified","Isaiah 41:10;Psalm 27:1;Psalm 23:4;2 Timothy 1:7;Joshua 1:9;Psalm 56:3-4;Deuteronomy 31:8;1 John 4:18;Psalm 118:6;Isaiah 43:1;Romans 8:15;Hebrews 13:6;Psalm 91:4-5;Psalm 46:1-2"],["love","Love","❤️","love,loved,loving,kindness,compassion","1 Corinthians 13:4-7;John 3:16;1 John 4:7-8;1 John 4:19;Romans 5:8;Romans 8:38-39;John 15:13;1 Peter 4:8;Colossians 3:14;John 13:34-35;Ephesians 3:17-19;Zephaniah 3:17;Lamentations 3:22-23;1 John 3:18"],["forgiveness","Forgiveness","🤍","forgive,forgiveness,forgiven,guilt,shame,mercy,sin","1 John 1:9;Ephesians 4:32;Colossians 3:13;Matthew 6:14-15;Psalm 103:12;Isaiah 1:18;Micah 7:18-19;Acts 3:19;Psalm 32:5;Luke 6:37;Matthew 18:21-22;Isaiah 43:25;Hebrews 8:12;Mark 11:25"],["peace","Peace","🕊️","peace,calm,rest,quiet,still","John 14:27;Philippians 4:7;Isaiah 26:3;Romans 5:1;John 16:33;Colossians 3:15;Psalm 4:8;Numbers 6:24-26;Romans 15:13;2 Thessalonians 3:16;Matthew 11:28-30;Isaiah 9:6;Psalm 29:11"],["hope","Hope","🌅","hope,hopeless,future,despair,discouraged","Romans 15:13;Jeremiah 29:11;Romans 5:3-5;Hebrews 6:19;Lamentations 3:21-23;Psalm 42:11;Isaiah 40:31;Romans 8:24-25;1 Peter 1:3;Psalm 71:14;Romans 12:12;Proverbs 23:18;Psalm 39:7"],["anger","Anger","🔥","anger,angry,rage,temper,mad,frustrated","James 1:19-20;Ephesians 4:26-27;Proverbs 15:1;Proverbs 29:11;Proverbs 14:29;Ephesians 4:31-32;Colossians 3:8;Psalm 37:8;Ecclesiastes 7:9;Proverbs 16:32;Romans 12:19;Proverbs 19:11"],["patience","Patience","⏳","patience,patient,waiting,wait,endurance,persevere","Galatians 6:9;Romans 12:12;James 5:7-8;Psalm 37:7;Lamentations 3:25-26;Ecclesiastes 7:8;Colossians 3:12;Psalm 27:14;Romans 8:25;Hebrews 10:36;Micah 7:7;James 1:2-4"],["grief","Grief and comfort","🕯️","grief,grieving,loss,death,mourning,comfort,sad,sadness,heartbroken","Psalm 34:18;Matthew 5:4;Revelation 21:4;2 Corinthians 1:3-4;Psalm 147:3;John 11:25-26;Psalm 23:4;John 14:1-3;1 Thessalonians 4:13-14;Psalm 73:26;Romans 8:18;Psalm 30:5"],["temptation","Temptation","⚔️","temptation,tempted,addiction,habit,resist,struggle","1 Corinthians 10:13;James 1:12-14;Hebrews 4:15-16;Matthew 26:41;James 4:7;Hebrews 2:18;1 Peter 5:8-9;Ephesians 6:11;Galatians 5:16;2 Peter 2:9;Psalm 119:11;Romans 6:12-14"],["wisdom","Wisdom","📜","wisdom,wise,decision,guidance,direction,understanding","James 1:5;Proverbs 1:7;Proverbs 3:5-6;Proverbs 2:6;Proverbs 9:10;Colossians 3:16;Psalm 111:10;James 3:17;Proverbs 4:7;Ecclesiastes 7:12;Proverbs 16:16;Psalm 90:12;Psalm 32:8"],["gratitude","Gratitude","🙏","thanks,thankful,gratitude,grateful,praise","1 Thessalonians 5:16-18;Psalm 107:1;Colossians 3:17;Psalm 100:4;Psalm 118:24;Ephesians 5:20;Colossians 2:6-7;Psalm 9:1;Hebrews 12:28;Psalm 136:1;James 1:17;Philippians 4:6"],["healing","Healing","🩹","healing,heal,sick,sickness,illness,pain,health","Jeremiah 17:14;Psalm 103:2-3;Isaiah 53:5;James 5:14-15;Psalm 147:3;Exodus 15:26;3 John 1:2;Jeremiah 30:17;Psalm 30:2;Matthew 9:35;Proverbs 17:22;Malachi 4:2"],["identity","Identity and worth","👑","identity,worth,self-worth,value,insecure,insecurity,confidence,beauty","Psalm 139:14;Ephesians 2:10;2 Corinthians 5:17;Genesis 1:27;1 Peter 2:9;Galatians 2:20;John 1:12;Romans 8:1;Jeremiah 1:5;Zephaniah 3:17;Isaiah 43:4;1 John 3:1"],["prayer","Prayer","🙌","prayer,pray,praying,ask","Philippians 4:6;Matthew 7:7-8;1 Thessalonians 5:17;James 5:16;Jeremiah 33:3;Matthew 6:6;Mark 11:24;1 John 5:14-15;Romans 8:26;Psalm 145:18;Matthew 21:22;Ephesians 6:18"],["body","Body and fitness","🏃","body,fitness,exercise,workout,train,training,health,discipline,run,race","1 Corinthians 6:19-20;1 Timothy 4:8;1 Corinthians 9:24-27;3 John 1:2;Romans 12:1;Proverbs 31:17;Isaiah 40:31;1 Corinthians 10:31;Hebrews 12:1;Philippians 3:14;Proverbs 3:7-8;2 Timothy 4:7"],["food","Food and self-control","🍞","food,eating,eat,diet,gluttony,self-control,fasting,hunger","1 Corinthians 10:31;Proverbs 25:28;Galatians 5:22-23;Titus 2:11-12;Proverbs 23:20-21;Matthew 4:4;John 6:35;Romans 14:17;1 Corinthians 9:25;2 Peter 1:5-6;Matthew 6:16-18;Ecclesiastes 9:7"],["lonely","Loneliness","🤝","lonely,loneliness,alone,isolated,abandoned,rejected","Deuteronomy 31:6;Psalm 25:16;Psalm 68:6;Matthew 28:20;Psalm 27:10;Hebrews 13:5;John 14:18;Psalm 147:3;Psalm 23:4;Joshua 1:9;Romans 8:38-39;Isaiah 41:10"],["purpose","Purpose","🧭","purpose,calling,meaning,plan,plans,future,direction,work,job","Jeremiah 29:11;Romans 8:28;Ephesians 2:10;Proverbs 19:21;Philippians 1:6;Colossians 3:23-24;Proverbs 16:3;Psalm 138:8;Micah 6:8;Matthew 5:16;1 Peter 4:10;Esther 4:14"],["trust","Trust","⚓","trust,trusting,rely,surrender,control","Proverbs 3:5-6;Psalm 56:3;Isaiah 26:4;Psalm 9:10;Jeremiah 17:7-8;Psalm 37:5;Psalm 20:7;Nahum 1:7;Psalm 28:7;Isaiah 12:2;Psalm 62:8;John 14:1"],["salvation","Salvation and grace","✨","salvation,saved,grace,gospel,jesus,eternal life,heaven","Ephesians 2:8-9;Romans 10:9-10;John 3:16;Romans 6:23;Acts 4:12;Titus 3:5;John 14:6;Romans 5:8;2 Corinthians 5:21;John 1:12;Acts 16:31;1 John 5:11-12"],["joy","Joy","😊","joy,happy,happiness,rejoice,glad","Nehemiah 8:10;Psalm 16:11;Romans 15:13;John 15:11;James 1:2-3;Philippians 4:4;Psalm 30:5;Psalm 118:24;Galatians 5:22-23;1 Peter 1:8;Habakkuk 3:17-18;Psalm 126:3"],["relationships","Marriage and relationships","💍","marriage,married,husband,wife,relationship,relationships,dating,friendship,friends","Ephesians 5:25;Genesis 2:24;Proverbs 18:22;1 Corinthians 13:4-7;Ecclesiastes 4:9-12;Colossians 3:18-19;1 Peter 3:7;Mark 10:9;Hebrews 13:4;Proverbs 31:10;Proverbs 17:17;Ruth 1:16"]];
+/* Faith search: topics with hand-picked verses, plus a word search across the whole Bible */
+var VFS={q:null,topic:null};
+function vfTopicMatch(q){q=q.toLowerCase().trim();if(!q)return null;var best=null;
+  TOPICS.forEach(function(t){var keys=[t[1].toLowerCase(),t[0]].concat(t[3].split(','));keys.forEach(function(k){if(!best&&(k===q||(q.length>2&&k.indexOf(q)===0)))best=t})});
+  if(!best)TOPICS.forEach(function(t){if(!best&&t[1].toLowerCase().indexOf(q)>-1&&q.length>2)best=t});return best}
+function vfVerseCard(ref,txt,q){var t=esc(txt||webLookup(ref)||'');if(q){var rx=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');t=t.replace(rx,'<mark>$1</mark>')}
+  return '<div class="vfv"><p class="vfvt">'+t+'</p><div class="row spread"><b class="vfvr">'+esc(ref)+'</b><span class="row" style="gap:.35rem"><button class="btn sm" data-act="bbgo" data-ref="'+esc(ref)+'">Read</button><button class="btn sm" data-act="vshare" data-ref="'+esc(ref)+'">Share</button></span></div></div>'}
+function vfWordSearch(q){var out=[],ql=q.toLowerCase();if(!WEBB||ql.length<3)return out;
+  var words=ql.split(/\s+/).filter(Boolean);
+  Object.keys(WEBB).some(function(b){return WEBB[b].some(function(ch,ci){return ch.some(function(v,vi){var l=v.toLowerCase();if(words.every(function(w){return l.indexOf(w)>-1})){out.push([b+' '+(ci+1)+':'+(vi+1),v]);if(out.length>=60)return true}return false})})});return out}
+function vfFind(){var o=$('#vf-out'),qi=$('#vf-q');if(!o)return;var q=qi?qi.value.trim():'';var key=q+'|'+(VFS.topic||'')+'|'+(WEBB?1:0);if(o.dataset.k===key)return;o.dataset.k=key;
+  var t=VFS.topic?TOPICS.filter(function(x){return x[0]===VFS.topic})[0]:vfTopicMatch(q),h='';
+  if(!q&&!VFS.topic){h='<p class="eyebrow" style="margin:.4rem 0 0">Topics</p><div class="vftopics">'+TOPICS.map(function(x){return '<button type="button" class="vftop" data-act="vftopic" data-k="'+x[0]+'"><span class="vfte" aria-hidden="true">'+x[2]+'</span><span>'+esc(x[1])+'</span><small>'+x[4].split(';').length+'</small></button>'}).join('')+'</div>';o.innerHTML=h;return}
+  if(t){var refs=t[4].split(';');h+='<div class="row spread vfhead"><div><p class="eyebrow" style="margin:0">Topic</p><h3 style="margin:.1rem 0 0">'+t[2]+' '+esc(t[1])+'</h3></div><button class="btn sm" data-act="vfclear">All topics</button></div><p class="small muted" style="margin:0">'+refs.length+' verses</p><div class="vflist">'+refs.map(function(r){return vfVerseCard(r)}).join('')+'</div>'}
+  if(q&&!VFS.topic){var L=vfWordSearch(q);if(!WEBB)h+='<p class="muted">Loading the Bible…</p>';else if(L.length)h+='<p class="eyebrow" style="margin:'+(t?'1rem':'.3rem')+' 0 0">Verses with “'+esc(q)+'”'+(L.length>=60?' (first 60)':'')+'</p><div class="vflist">'+L.map(function(x){return vfVerseCard(x[0],x[1],q.split(/\s+/)[0])}).join('')+'</div>';else if(!t)h+='<p class="muted">No verses found for “'+esc(q)+'”. Try a single word, like hope or strength.</p>'}
+  o.innerHTML=h}
 function renderScripture(){renderPNotes();
-  if(['feed','saved','bible'].indexOf(S.sctab)<0)S.sctab='feed';
-  ['feed','saved','bible'].forEach(function(k){var b=$('#sct-'+k);if(b){b.setAttribute('aria-selected',S.sctab===k);b.tabIndex=S.sctab===k?0:-1}});
+  if(['feed','saved','bible','find'].indexOf(S.sctab)<0)S.sctab='feed';
+  ['feed','saved','bible','find'].forEach(function(k){var b=$('#sct-'+k);if(b){b.setAttribute('aria-selected',S.sctab===k);b.tabIndex=S.sctab===k?0:-1}});
   var f=$('#sc-feed'),bb=$('#sc-bible');if(!f||!bb)return;
   vfWire();
-  var bible=S.sctab==='bible';f.hidden=bible;bb.hidden=!bible;
+  var bible=S.sctab==='bible',find=S.sctab==='find',fd=$('#sc-find');f.hidden=bible||find;bb.hidden=!bible;if(fd)fd.hidden=!find;
+  if(find){vfFind();return}
   if(bible)return;
   var pk=pickVerse()[0],key=[S.sctab,WEBB?1:0,S.votd.ref,S.favVerse||'',pk,todayStamp(),S.sctab==='saved'?((S.vsaved||[]).length?1:0):''].join('§');
   if(key!==VF.key){VF.key=key;vfBuild()}else vfSync();
@@ -4446,6 +4501,11 @@ function repTarget(kind,rx){if(kind!=='reps')return preFill(kind,rx);var m=Strin
 function sessTg(w,i){var t=S.sess&&S.sess.tg&&S.sess.tg[i];return {s:t&&t.s>0?t.s:setTarget(w.ex[i][1]),r:t&&t.r?t.r:repTarget(exKind(w.ex[i][0],w.ex[i][1]),w.ex[i][1])}}
 function setTarget(rx){var m=String(rx).match(/^(\d+)\s*[×x]/);return m?parseInt(m[1],10):1}
 function preFill(kind,rx){rx=String(rx);var m=kind==='min'?rx.match(/(\d+)\s*min\b/):kind==='sec'?rx.match(/(\d+)\s*s\b/):kind==='dist'?rx.match(/(\d+)\s*m\b/):null;return m?m[1]:''}
+/* Personal records: compare today's best set for each exercise with every earlier session */
+function prScore(s,k){return k==='min'||k==='sec'||k==='dist'?(+s.r||0):((+s.w||0)>0?(+s.w)*1000+(+s.r||0):(+s.r||0))}
+function prFind(log,unit){var out=[];(log||[]).forEach(function(l){if(!l.s||!l.s.length)return;var nm=String(l.n).toLowerCase(),best=l.s.reduce(function(a,x){return prScore(x,l.k)>prScore(a,l.k)?x:a},l.s[0]),bs=prScore(best,l.k),prev=-1,seen=false;
+    S.hist.forEach(function(h){(h.log||[]).forEach(function(o){if(String(o.n).toLowerCase()!==nm)return;seen=true;(o.s||[]).forEach(function(x){var sc=prScore(x,o.k);if((h.unit||unit)!==unit&&x.w)sc=-1;if(sc>prev)prev=sc})})});
+    if(seen&&bs>prev&&bs>0)out.push({n:l.n,label:setLabel(best,l.k,unit)})});return out}
 function setLabel(s,kind,u){return kind==='min'?s.r+' min':kind==='sec'?s.r+' s':kind==='dist'?s.r+' m':(s.w?s.w+' '+u+' × ':'')+s.r+' reps'}
 function lastTop(wid,i,kind){
   for(var n=S.hist.length-1;n>=0;n--){var x=S.hist[n];if(x.wid!==wid||!x.top||!x.top[i])continue;return setLabel(x.top[i],kind,x.unit)+' ('+x.date+')'}
@@ -4933,7 +4993,7 @@ function renderHistory(){
     if(S.hEdit){var on=S.hSel.indexOf(x.id)>-1;out+='<label class="hrow hsel'+(on?' on':'')+'"><input type="checkbox" data-hsel="'+esc(x.id)+'"'+(on?' checked':'')+' aria-label="Select '+esc(x.name)+'"><span class="hsum"><span class="hwhen"><b>'+esc(day)+'</b><span>'+esc(tm)+'</span></span><span class="hmain"><b>'+esc(x.name)+'</b><span class="wcat"><i class="cdot"></i>'+esc(CATS[x.cat]||'Workout')+'</span></span><span class="hdur mono">'+esc(dur)+'</span></span></label>';return}
     var row='<details class="hrow" data-cat="'+esc(x.cat||'custom')+'"><summary class="hsum">'
       +'<span class="hwhen"><b>'+esc(day)+'</b><span>'+esc(tm)+'</span></span>'
-      +'<span class="hmain"><b>'+esc(x.name)+'</b><span class="wcat"><i class="cdot"></i>'+esc(CATS[x.cat]||'Workout')+'</span></span>'
+      +'<span class="hmain"><b>'+esc(x.name)+((x.prs&&x.prs.length)?' <span class="prbadge" title="New personal best">🏆 '+x.prs.length+'</span>':'')+'</b><span class="wcat"><i class="cdot"></i>'+esc(CATS[x.cat]||'Workout')+'</span></span>'
       +'<span class="hdur mono">'+esc(dur)+'</span><span class="hchev" aria-hidden="true"></span></summary>'
       +'<div class="hbody"><div class="hstats">'+stats.map(function(t){return '<div><span>'+t[0]+'</span><b>'+t[1]+'</b></div>'}).join('')+'</div>'
       +((x.log&&x.log.length)?'<div class="hex">'+x.log.map(function(l){return '<div class="hexr"><b>'+esc(l.n)+'</b><ol>'+l.s.map(function(s){return '<li><span>'+esc(setLabel(s,l.k,x.unit))+'</span>'+(s.t>0?'<span class="mono">'+secLabel(s.t)+'</span>':'')+'</li>'}).join('')+'</ol></div>'}).join('')+'</div>':'<p class="small muted">No sets were logged in this session.</p>')
@@ -5012,7 +5072,7 @@ function renderSession(){
     h+='<div class="fxh" id="fxh">'+ctl+'<section class="fxmain">'+top+'<div class="wfeedw">'+(fxHintOn()?'<button type="button" class="fxhint" id="fxhint" data-act="fxctl"><span class="fxhint-a" aria-hidden="true">›</span>Swipe right for stats</button>':'')+'<div class="wfeed" id="wfeed" tabindex="-1">'+slides+endS+'</div>'+rail+rest+'</div></section></div>';
   }else if(S.done){
     var d=S.done;
-    h+='<header class="vh"><p class="eyebrow"><span class="pill done">Complete</span></p><h2>Workout complete</h2><p class="lede keep">'+esc(d.name)+'</p></header><div class="card stack complete">'+statTiles(d.ms,d.kcal,d.n,d.vol,d.unit,false)+'<p class="small muted">Saved to Today and to your workout history.'+(S.showBurn?' Calories are an estimate.':'')+'</p><div class="row"><a class="btn primary" href="#history" style="text-decoration:none">See history</a><a class="btn" href="#workouts" style="text-decoration:none">Back to library</a><a class="btn" href="#today" style="text-decoration:none">Go to Today</a></div></div>';
+    h+='<header class="vh"><p class="eyebrow"><span class="pill done">Complete</span></p><h2>Workout complete</h2><p class="lede keep">'+esc(d.name)+'</p></header><div class="card stack complete">'+statTiles(d.ms,d.kcal,d.n,d.vol,d.unit,false)+((d.prs&&d.prs.length)?'<div class="prlist"><p class="eyebrow" style="margin:0">🏆 New personal bests</p>'+d.prs.map(function(r){return '<div class="prrow"><span>'+esc(r.n)+'</span><b>'+esc(r.label)+'</b></div>'}).join('')+'</div>':'')+'<p class="small muted">Saved to Today and to your workout history.'+(S.showBurn?' Calories are an estimate.':'')+'</p><div class="row"><a class="btn primary" href="#history" style="text-decoration:none">See history</a><a class="btn" href="#workouts" style="text-decoration:none">Back to library</a><a class="btn" href="#today" style="text-decoration:none">Go to Today</a></div></div>';
   }else{
     h+='<header class="vh"><p class="eyebrow">Workout session</p><h2>No workout running</h2><p class="lede">Pick a workout and press Start. You will get a timer, a calorie estimate and set logging.</p></header><div class="card"><a class="btn primary" href="#workouts" style="text-decoration:none">Choose a workout</a></div>';
   }
@@ -5089,6 +5149,32 @@ function shortOpen(ms){var c=$('#shortm-card');if(!c)return;var sec=Math.max(0,M
   c.innerHTML='<div class="shorthead"><span class="shortic" aria-hidden="true">⏱️</span><h3 id="shortm-t" style="margin:0">Save this workout?</h3><p class="muted" style="margin:0">It only lasted '+sec+' second'+(sec===1?'':'s')+'. Do you want to keep it in your history?</p></div>'
    +'<div class="shortbtns"><button class="btn primary" data-act="sfinish" data-force="1">Save to history</button><button class="btn shortno" data-act="sfdiscard">Don\'t save</button><button class="btn sm" data-act="shortclose">Keep going</button></div>';
   modalOpen($('#shortm'))}
+/* Free barcode scanning: camera (built-in detector, or a small scanning library), or type the number.
+   Food facts come from Open Food Facts, a free, open food database. */
+var BC={stream:null,timer:0,busy:false,reader:null};
+function bcMsg(t){var m=$('#bc-msg');if(m)m.textContent=t}
+function bcStop(){try{clearInterval(BC.timer);BC.timer=0;if(BC.reader&&BC.reader.reset)BC.reader.reset();BC.reader=null;if(BC.stream)BC.stream.getTracks().forEach(function(t){t.stop()});BC.stream=null;var v=$('#bc-vid');if(v)v.srcObject=null}catch(e){}}
+function bcOpen(){BC.busy=false;var n=$('#bc-num');if(n)n.value='';modalOpen($('#bcm'));bcMsg('Starting the camera…');
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){bcMsg('The camera is not available here. Type the barcode number instead.');return}
+  var v=$('#bc-vid');
+  var useDetector=function(){navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false}).then(function(st){BC.stream=st;v.srcObject=st;v.play().catch(function(){});bcMsg('Point your camera at the barcode on the package.');
+      var det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e']});
+      BC.timer=setInterval(function(){if(BC.busy||v.readyState<2)return;det.detect(v).then(function(r){if(r&&r[0]&&r[0].rawValue)bcFound(r[0].rawValue)}).catch(function(){})},250)}).catch(function(){bcMsg('Camera access was not allowed. Type the barcode number instead.')})};
+  var useZx=function(){var go=function(){try{var R=new ZXing.BrowserMultiFormatReader();BC.reader=R;R.decodeFromConstraints({video:{facingMode:'environment'}},v,function(res){if(res&&!BC.busy)bcFound(res.getText())}).then(function(){bcMsg('Point your camera at the barcode on the package.')}).catch(function(){bcMsg('Camera access was not allowed. Type the barcode number instead.')})}catch(e){bcMsg('Scanning is not available here. Type the barcode number instead.')}};
+    if(window.ZXing)return go();var sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';sc.onload=go;sc.onerror=function(){bcMsg('Scanning could not start. Type the barcode number instead.')};document.head.appendChild(sc)};
+  if('BarcodeDetector' in window&&BarcodeDetector.getSupportedFormats){BarcodeDetector.getSupportedFormats().then(function(f){if(f&&f.indexOf('ean_13')>-1)useDetector();else useZx()}).catch(useZx)}else useZx()}
+function bcFound(code){code=String(code||'').replace(/\D/g,'');if(code.length<6||BC.busy)return;BC.busy=true;try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}bcMsg('Found '+code+'. Looking it up…');bcLookup(code)}
+function bcLookup(code){fetch('https://world.openfoodfacts.org/api/v2/product/'+code+'.json?fields=product_name,product_name_en,brands,nutriments,serving_size,serving_quantity').then(function(r){return r.json()}).then(function(j){
+    var pr=j&&j.status===1&&j.product;if(!pr){BC.busy=false;bcMsg('That barcode is not in the food database yet. Try searching by name instead.');return}
+    var nu=pr.nutriments||{},g=parseFloat(pr.serving_quantity)||0,per=function(k){var v=parseFloat(nu[k+'_100g']);return isFinite(v)?v:0};
+    var kcal=per('energy-kcal')||(per('energy')/4.184);if(!kcal&&!per('proteins')&&!per('carbohydrates')){BC.busy=false;bcMsg('That product has no nutrition facts listed. Try searching by name instead.');return}
+    var f=g>0?g/100:1,nm=String(pr.product_name_en||pr.product_name||'Packaged food').slice(0,50)+(pr.brands?' ('+String(pr.brands).split(',')[0].trim().slice(0,24)+')':'');
+    var o=F('e'+(uid++),nm,'Packaged',g>0?String(pr.serving_size||Math.round(g)+' g').slice(0,40):'100 g',Math.round(kcal*f),Math.round(per('proteins')*f*10)/10,Math.round(per('carbohydrates')*f*10)/10,Math.round(per('fat')*f*10)/10,Math.round(per('fiber')*f*10)/10,0,0,0,Math.round(per('sodium')*1000*f),0,[],'estimate',[nm.toLowerCase()]);
+    o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how='barcode';o.id='e'+Date.now().toString(36)+(uid++);o.saved=Date.now();
+    S.est=S.est.filter(function(x){return (x.name+'|'+x.serv)!==(o.name+'|'+o.serv)});S.est.unshift(o);S.est=S.est.slice(0,300);estSave();
+    var meal=mkMeal(o,1,'Barcode');meal.em=emojiFor(o.name);S.meals.push(meal);bcStop();modalHide($('#bcm'));refresh();fpOpen([meal],'logged');toast('Added '+o.name+'.',{title:'Scanned',icon:'📦',kind:'ok'})
+  }).catch(function(){BC.busy=false;bcMsg('Could not reach the food database. Check your connection and try again.')})}
+function dlFile(name,text,type){try{var b=new Blob([text],{type:type+';charset=utf-8'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove()},1500)}catch(e){toast('Could not download that here.')}}
 function wfIdx(){var f=$('#wfeed');return f&&f.clientHeight?Math.round(f.scrollTop/f.clientHeight):0}
 function wfBind(){var f=$('#wfeed');if(!f||f._b)return;f._b=1;var tk=0;
   f.addEventListener('scroll',function(){if(tk)return;tk=requestAnimationFrame(function(){tk=0;var k=wfIdx();if(k===f._k)return;f._k=k;WFI=k;$$('#wrail button').forEach(function(d,j){var on=j===k;d.classList.toggle('on',on);if(on)d.setAttribute('aria-current','step');else d.removeAttribute('aria-current')});var hn=$('#wfhint');if(hn&&k>0)hn.classList.add('gone')})},{passive:true});
@@ -5319,6 +5405,7 @@ function isPhone(){return PHONEQ?PHONEQ.matches:innerWidth<=860}
 function scaleD(){return S.scaleD>0?S.scaleD:S.scale}
 function curScale(){return isPhone()?S.scale:scaleD()}
 if(PHONEQ){var phq=function(){try{refresh()}catch(e){}};if(PHONEQ.addEventListener)PHONEQ.addEventListener('change',phq);else if(PHONEQ.addListener)PHONEQ.addListener(phq)}
+function themeColorSync(){try{var m=document.getElementById('meta-theme');if(!m)return;var bg=getComputedStyle(document.body).backgroundColor||getComputedStyle(document.documentElement).getPropertyValue('--bg');if(document.body.classList.contains('fitmode'))bg='#000000';if(bg&&m.content!==bg)m.content=bg}catch(e){}}
 function applyPrefs(){
   var r=document.documentElement;
   r.style.fontSize=(16*curScale())+'px';
@@ -5335,7 +5422,7 @@ function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.te
 function refresh(){try{renderStreaks();upPaint();gfxPaint();ambPaint();aiOptPaint();goalPaint();shaRender();setfabPaint();a2SetPaint();if(GL)glRender();mkTick();mkRender()}catch(e){}setTimeout(function(){try{vpSyncAll()}catch(e){}},0);setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   try{var ps=$('#pro-set');if(ps){var ph=proSettingsHtml();if(ps.dataset.h!==ph){ps.dataset.h=ph;ps.innerHTML=ph}}}catch(e){}
-  applyPrefs();renderToday();try{renderFriends()}catch(e){}try{mkTick();mkRender()}catch(e){}renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
+  applyPrefs();try{themeColorSync()}catch(e){}renderToday();try{renderFriends()}catch(e){}try{mkTick();mkRender()}catch(e){}renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
 }
 function syncInputs(){
@@ -5657,7 +5744,9 @@ var ACT={
   preset:function(){S.pshow=['kcal','workout','protein']},
   tfollow:function(){S.themeMode=S.themeMode==='auto'?currentTheme().id:'auto'},
   scalereset:function(b){if(b.dataset.d){S.scaleD=1;$('#p-scaled').value=1}else{S.scale=1;$('#p-scale').value=1}},
-  sctab:function(b){var k=b.dataset.k;if(['feed','saved','bible'].indexOf(k)<0)return;S.sctab=k;VF.key='';window.scrollTo(0,0)},
+  vftopic:function(b){VFS.topic=b.dataset.k;var q=$('#vf-q');if(q)q.value='';var o=$('#vf-out');if(o)o.dataset.k='';var c=$('#sc-find');if(c)c.scrollIntoView({block:'start'})},
+  vfclear:function(){VFS.topic=null;var q=$('#vf-q');if(q)q.value='';var o=$('#vf-out');if(o)o.dataset.k=''},
+  sctab:function(b){var k=b.dataset.k;if(['feed','saved','bible','find'].indexOf(k)<0)return;S.sctab=k;VF.key='';window.scrollTo(0,0)},
   vsave:function(b){var on=vfToggle(b.dataset.ref);toast(on?'Saved to your verses.':'Removed from saved verses.')},
   vshare:function(b){var ref=b.dataset.ref,t=webLookup(ref)||'',msg=qt(t)+' ('+ref+', BSB)';
     if(navigator.share){navigator.share({text:msg}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){toast('Verse copied.')},function(){toast('Could not copy the verse.')})}else toast('Sharing is not available on this device.')},
@@ -5806,6 +5895,16 @@ var ACT={
   rslater:function(){rsClose()},
   sburn:function(){S.showBurn=true;$('#sg-burn').checked=true},
   sfdiscard:function(){var w=sessW();if(w)w.ex.forEach(function(e,i){delete S.sets[w.id+'|'+i]});S.sess=null;S.rest=null;S.cancelAsk=false;modalHide($('#shortm'));syncSched();toast('Workout not saved.');location.hash='workouts'},
+  expjson:function(){var o={};Object.keys(S).forEach(function(k){if(PSKIP.indexOf(k)<0&&k!=='_mt')o[k]=S[k]});var est=[];try{est=JSON.parse(localStorage.getItem('manna.est.v1')||'[]')}catch(e){}
+    dlFile('manna-data-'+todayStamp()+'.json',JSON.stringify({app:'Manna',version:APPV,exported:new Date().toISOString(),data:o,foods:est},null,2),'application/json');toast('Your data is downloading.')},
+  expcsv:function(){var rows=[['Date','Workout','Type','Minutes','Sets','Volume','Unit','Exercise','Set','Weight','Reps or time']];
+    S.hist.slice().sort(function(a,b){return a.ts-b.ts}).forEach(function(h){var dt=new Date(h.ts||h.at||0),d=isNaN(dt)?'':dt.toISOString().slice(0,16).replace('T',' '),base=[d,h.name,CATS[h.cat]||h.cat||'',Math.round((h.ms||0)/60000),h.sets||0,Math.round(h.vol||0),h.unit||''];
+      if(h.log&&h.log.length)h.log.forEach(function(l){(l.s||[]).forEach(function(x,i){rows.push(base.concat([l.n,i+1,x.w||'',x.r||'']))})});else rows.push(base.concat(['','','','']))});
+    var csv=rows.map(function(r){return r.map(function(c){c=String(c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(',')}).join('\n');
+    dlFile('manna-workouts-'+todayStamp()+'.csv',csv,'text/csv');toast('Your workout history is downloading.')},
+  bcopen:function(){bcOpen()},
+  bcclose:function(){bcStop();modalHide($('#bcm'))},
+  bcfind:function(){var n=$('#bc-num'),c=n?n.value.replace(/\D/g,''):'';if(c.length<6){bcMsg('Type the full number under the barcode.');return}BC.busy=false;bcFound(c)},
   shortclose:function(){modalHide($('#shortm'))},
   scancel:function(){
     if(!S.cancelAsk){S.cancelAsk=true;return}
@@ -5838,11 +5937,11 @@ var ACT={
     var ms=sessMs(),t=sessTotals(w),kc=sessKcal(ms,w),top={},log=[];
     w.ex.forEach(function(e,i){var a=S.sets[w.id+'|'+i]||[];if(a.length){top[i]=a.reduce(function(m,x){return (x.w>m.w||(x.w===m.w&&x.r>m.r))?x:m},a[0]);log.push({n:e[0],k:exKind(e[0],e[1]),s:a.map(function(x){return {w:x.w,r:x.r,t:x.t||0}})})}});
     S.imported.push({name:w.name,min:Math.max(1,Math.round(ms/60000)),kcal:kc,src:'workout session'});
-    var now=Date.now();
-    S.hist.push({id:'h'+(uid++),wid:w.id,name:w.name,cat:w.cat,ts:now,date:new Date(now).toLocaleDateString(undefined,{month:'short',day:'numeric'}),sets:t.n,vol:Math.round(t.vol),unit:S.units,top:top,ms:ms,kcal:kc,log:log,rest:S.sess&&S.sess.rest>=0?S.sess.rest:undefined});
-    S.done={name:w.name,ms:ms,kcal:kc,n:t.n,vol:Math.round(t.vol),unit:S.units};
+    var now=Date.now(),prs=prFind(log,S.units);
+    S.hist.push({prs:prs,id:'h'+(uid++),wid:w.id,name:w.name,cat:w.cat,ts:now,date:new Date(now).toLocaleDateString(undefined,{month:'short',day:'numeric'}),sets:t.n,vol:Math.round(t.vol),unit:S.units,top:top,ms:ms,kcal:kc,log:log,rest:S.sess&&S.sess.rest>=0?S.sess.rest:undefined});
+    S.done={name:w.name,ms:ms,kcal:kc,n:t.n,vol:Math.round(t.vol),unit:S.units,prs:prs};
     w.ex.forEach(function(e,i){delete S.sets[w.id+'|'+i]});
-    S.sess=null;S.cancelAsk=false;syncSched();toast('Workout saved.',{title:'Workout complete',icon:'🎉',kind:'ok',big:true});
+    S.sess=null;S.cancelAsk=false;syncSched();toast(prs.length?prs.length+' new personal best'+(prs.length===1?'':'s')+'!':'Workout saved.',{title:'Workout complete',icon:prs.length?'🏆':'🎉',kind:'ok',big:true});
   },
   aigen:function(){var t=$('#ai-text').value||'';mkWorkout(t)},
   aiex:function(b){var t=AI_EX[parseInt(b.dataset.id,10)];$('#ai-text').value=t;mkWorkout(t)},
@@ -6285,6 +6384,7 @@ var INPUT={
   'p-h24':function(t){S.h24=t.checked;tickClock()},
   'p-hc':function(t){S.hc=t.checked},
   'p-keeprun':function(t){S.keepRun=t.checked},
+  'vf-q':function(t){VFS.topic=null;clearTimeout(VFS.t);VFS.t=setTimeout(function(){try{vfFind()}catch(e){}},200)},
   'p-rm':function(t){S.rm=t.checked},
   'p-plain':function(t){S.plain=t.checked},
   'p-sched':function(t){S.useSched=t.checked;setTimeout(show,0);toast(t.checked?'Schedules are on.':'Schedules are off. Your plans are kept.')},
@@ -6786,6 +6886,7 @@ function yvSync(){
   }).catch(function(){})}catch(e){}
 }
 document.addEventListener('visibilitychange',function(){if(!document.hidden)yvSync()});
+try{if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}catch(e){}
 haInit();syncInputs();if(!S.onboarded)onbOpen(0);refresh();show();webLoad();usdaLoad();tickClock();yvSync();
 /* Welcome animation made from the theme's own Home art: lines draw in, shapes grow in, in order */
 function spTheme(sp,rm){try{var id=currentTheme().id,art=HEROART[id];if(!art||rm)return false;
