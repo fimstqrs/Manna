@@ -2380,14 +2380,14 @@ var PROF=[
   ['Themes','3','All 14'],
   ['Music moods','Calm','All 6 + sound styles'],
   ['Compare your workouts','—','✓'],
-  ['Workout history','Last 30 days','Everything'],
   ['Saved routines','5','Unlimited'],
   ['Schedules','1','3'],
   ['Bloodwork and nutrients','—','✓'],
   ['Log food and workouts','✓','✓'],
   ['Verse of the day and Bible','✓','✓'],
   ['Friends, cheers and sharing','✓','✓'],
-  ['Workout timer and rest timer','✓','✓']];
+  ['Workout timer and rest timer','✓','✓'],
+  ['Full workout history','✓','✓']];
 var PROWHY={photo:'More food photos today',wai:'Making workouts with AI',sched:'Making schedules with AI',goal:'Making goal plans with AI',fix:'Fixing foods with AI',theme:'This theme',sty:'This sound style',cmp:'Comparing workouts',routine:'Saving more than '+FREE_ROUTINES+' routines',labs:'Bloodwork and nutrients'};
 var PROUI={why:'',yr:true};
 function proNeed(why){if(isPro())return true;proOpen(why);return false}
@@ -2827,6 +2827,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:155,d:'Nov 11, 2026',t:'Full history for everyone',s:['Your whole workout history is now free. Free accounts see every workout, not just the last 30 days.']},
  {v:154,d:'Nov 11, 2026',t:'The Manna logo everywhere',s:['On the Fitness opening animation, the stars now sparkle into place one by one, then keep twinkling.','The Manna logo now shows as the icon in Chrome and Safari tabs, bookmarks, on your desktop and on your home screen. If you added Manna to your home screen before, remove it and add it again to get the new icon.']},
  {v:153,d:'Nov 11, 2026',t:'Custom gets its colour',s:['Custom workouts now have their own gold colour instead of plain grey, on cards, in History and in the charts.']},
  {v:152,d:'Nov 11, 2026',t:'Cleaner workout picker',s:['The floating "Next: …" bubble is now a small arrow under the section dots on the right, so it no longer covers buttons.','Importing schedules and routines now tidies names: times like "(60 min)", stars and hashes, bullets, numbering and day labels are cleaned up, so "Monday (60 min)" no longer becomes "Monday (60 min) (72 min)". If your text says how long a workout is, that time is used.','Your picks in Template workouts (like Calisthenics) now have a red ✕. Tap it to remove that choice and pick again.','The choices in What kind of workout are now in capitals with emojis, like 🏋️ GYM and 🏀 BASKETBALL.','The swipe sound now plays the moment you start swiping, not after the page has moved.','The pop-up you see after logging a food now has a Save as a meal button. If AI added a few foods at once, they are saved together as one meal.','Your targets on Eat now shows five bigger circles: protein, carbs, fat, fiber and sodium.','Pick a workout no longer shows a count like "7 of 98 workouts shown".','Workouts you made or imported are now labelled Custom instead of My workouts.']},
@@ -3187,7 +3188,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='154';
+var heroLast='',APPV='155';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -5074,8 +5075,8 @@ function renderHistory(){
     +'<div class="chips" id="h-types"></div><div id="h-list"></div></div>';
   var hb=$('#hs-body'),same=hb.dataset.h===h;if(!same){hb.dataset.h=h;var oldL=document.getElementById('h-list');if(oldL&&oldL.parentNode)oldL.parentNode.removeChild(oldL);hb.innerHTML=h;var newL=document.getElementById('h-list');if(oldL&&newL)newL.replaceWith(oldL)}
   chipGroup('h-types',[{k:'all',label:'All',on:f==='all'}].concat(Object.keys(cats).map(function(k){return {k:k,label:CATS[k]||k,on:f===k}})),'hfilter');
-  var cut=Date.now()-FREE_HIST_DAYS*864e5,older=isPro()?0:H.filter(function(x){return x.ts<cut&&(f==='all'||(x.cat||'custom')===f)}).length;
-  var shown=H.filter(function(x){return (f==='all'||(x.cat||'custom')===f)&&(isPro()||x.ts>=cut)}),out='',last='',today=dk(Date.now()),yest=dk(Date.now()-86400000);
+  /* Full workout history is free for everyone */var older=0;
+  var shown=H.filter(function(x){return f==='all'||(x.cat||'custom')===f}),out='',last='',today=dk(Date.now()),yest=dk(Date.now()-86400000);
   shown.forEach(function(x){
     var key=dk(x.ts),d=new Date(x.ts),day=key===today?'Today':key===yest?'Yesterday':d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}),tm=d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});
     var dur=(x.ms?Math.max(1,Math.round(x.ms/60000))+' min':'')+(x.km>=.1?(x.ms?' · ':'')+(S.units!=='kg'?Math.round(x.km*0.621371*10)/10+' mi':Math.round(x.km*10)/10+' km'):'');
