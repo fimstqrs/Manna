@@ -1424,6 +1424,15 @@ html:not(.rm):not(.lite) .stt-bar{transform-origin:bottom;animation:sttUp .6s cu
 .baiplan{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.5rem}.baiplan input{margin-top:.25rem}
 .dtg{display:flex;gap:.6rem;align-items:flex-start;padding:.6rem .7rem;border-radius:14px;background:color-mix(in srgb,var(--accent) 7%,transparent)}.dtg input{margin-top:.2rem;flex:none}
 </style>
+<style id="greet-fix">
+#t-glory.greet{padding-left:.1rem;margin:0}
+#t-name{display:inline}
+p.name:has(#t-name){margin-top:.55rem;line-height:1.08;max-width:min(100%,64%);white-space:nowrap;overflow:visible;padding-left:.05rem}
+p.name[data-len=m]{font-size:clamp(3.4rem,11vw,5.2rem)}
+p.name[data-len=l]{font-size:clamp(2.8rem,9vw,4.2rem)}
+p.name[data-len=xl]{font-size:clamp(2.3rem,7.4vw,3.4rem)}
+@media (min-width:700px){p.name:has(#t-name){max-width:70%}}
+</style>
 <style id="pr-style">
 .prlist{display:grid;gap:.4rem;padding:.8rem .9rem;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,#ffd60a 18%,transparent),color-mix(in srgb,#ff9f0a 10%,transparent));border:1px solid color-mix(in srgb,#ffd60a 40%,transparent)}
 .prrow{display:flex;justify-content:space-between;gap:.6rem;font-size:.92rem}.prrow b{white-space:nowrap}
@@ -2860,7 +2869,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:157,d:'Nov 11, 2026',t:'Enter for Bible help',s:['Bible help has an Enter button next to the topic box. Tap it, or press Enter, to get a devotional on what you typed.','Fixed: the Making with AI window now closes when Bible help, the weekly recap or an AI schedule finishes, instead of staying on screen.']},
+ {v:157,d:'Nov 11, 2026',t:'Enter for Bible help',s:['Tidier greeting on Home: "Good morning," lines up with your name, the big letters no longer bump into it, and long names shrink to fit beside the picture (just your first name shows).','Bible help has an Enter button next to the topic box. Tap it, or press Enter, to get a devotional on what you typed.','Fixed: the Making with AI window now closes when Bible help, the weekly recap or an AI schedule finishes, instead of staying on screen.']},
  {v:156,d:'Nov 11, 2026',big:1,lead:'Meet Manna Overflow, named for Psalm 23: "my cup overflows." Plus free AI food logging for everyone.',t:'Manna Overflow',s:['Manna PRO is now called Manna Overflow.','Free for everyone: type or say what you ate and AI adds each food. It no longer uses up your AI uses.','Free for everyone: make a workout with AI (it uses your daily AI uses), and make one AI schedule a week.','New in Overflow: Progress charts in History, for your strength on each exercise and your weight over time. Logging your weight also updates your targets.','New in Overflow: a weekly recap, where AI sums up your week and gives one tip.','New in Overflow: Food trends on Meals, with 14 days of calories and protein against your targets.','New in Overflow: a meal plan for the day that hits your targets, with a grocery list. Add any meal with one tap.','New in Overflow: training-day and rest-day targets, in Settings › Goals.','New in Overflow: Bible help with AI, to explain a chapter, write a devotional on any topic, or build a 7-day reading plan. Reading the Bible stays free.','New in Overflow: import a recipe from a link, and AI works out the numbers per serving.','CHANGE THEME in Settings is now in capitals.']},
  {v:155,d:'Nov 11, 2026',t:'Full history for everyone',s:['Your whole workout history is now free. Free accounts see every workout, not just the last 30 days.']},
  {v:154,d:'Nov 11, 2026',t:'The Manna logo everywhere',s:['On the Fitness opening animation, the stars now sparkle into place one by one, then keep twinkling.','The Manna logo now shows as the icon in Chrome and Safari tabs, bookmarks, on your desktop and on your home screen. If you added Manna to your home screen before, remove it and add it again to get the new icon.']},
@@ -3229,7 +3238,7 @@ function renderToday(){
   renderHeroArt();
   var T=targets(),tot=totals(),rd=readiness(),fl=flags();
   $('#t-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  $('#t-name').textContent=S.name;$('#t-glory').textContent=L('glory');$('#t-logw').textContent=L('logw');$('#t-logf').textContent=L('logf');renderHeroVerse();
+  var fnm=String(S.name||'').trim().split(/\s+/)[0]||S.name,tn=$('#t-name');tn.textContent=fnm;tn.parentNode.dataset.len=fnm.length<=5?'s':fnm.length<=8?'m':fnm.length<=11?'l':'xl';nameFit();$('#t-glory').textContent=L('glory');$('#t-logw').textContent=L('logw');$('#t-logf').textContent=L('logf');renderHeroVerse();
   var minsDone=S.imported.reduce(function(a,w){return a+w.min},0)+(S.sched[0].st==='done'&&!S.sched[0].viaSession?45:0);
   var calP=tot.kcal/T.kcal,over=calP>1,frac=over?1:(clamp(calP,0,1)+clamp(tot.p/T.protein,0,1))/2,R=52,C=2*Math.PI*R,center,sub;
   if(S.hideNums){center=over?'Over goal':frac<.25?'Early':(frac<.95?'On track':'Goal met');sub=L('daily')}
@@ -5602,6 +5611,9 @@ function streakDays(){
   return n;
 }
 function waterN(){var st=todayStamp();if(S.water.d!==st)S.water={d:st,n:0};return S.water.n}
+/* Keep the big script name on one line and shrink it until it fits beside the picture */
+function nameFit(){var p=$('#t-name'),box=p&&p.parentNode;if(!box)return;box.style.fontSize='';var run=function(){var w=box.clientWidth,i=0;if(!w)return;var fs=parseFloat(getComputedStyle(box).fontSize);while(p.getBoundingClientRect().width+fs*.35>w&&fs>26&&i<30){fs*=.93;box.style.fontSize=fs+'px';i++}};run();try{document.fonts.ready.then(run)}catch(e){}}
+window.addEventListener('resize',function(){clearTimeout(nameFit.t);nameFit.t=setTimeout(nameFit,150)});
 function greeting(){var h=new Date().getHours();return h<5?'Good evening,':h<12?'Good morning,':h<18?'Good afternoon,':'Good evening,'}
 function renderXSettings(){
   var el=$('#x-list');if(!el)return;
