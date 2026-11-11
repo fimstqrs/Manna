@@ -1229,6 +1229,39 @@ html body .clockbar .clk-date{opacity:.8}
 html.lite body .clockbar .clk{-webkit-backdrop-filter:none;backdrop-filter:none}
 @media (max-width:860px){html body .clockbar,html body .clockbar.under{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;overflow:visible!important;min-height:34px}html body .clockbar .clk{position:fixed;z-index:30;top:calc(env(safe-area-inset-top,0px) + 3px);right:12px}}
 </style>
+<style id="swdel-style">
+.swdel{position:relative;overflow:hidden;touch-action:pan-y;border-radius:14px;--sdx:0px}
+.swdel>.sdc{position:relative;z-index:1;will-change:transform;background:inherit}
+.swdel>.sdbtn{position:absolute;top:0;bottom:0;right:0;z-index:0;width:var(--sdx);min-width:0;padding:0;border:0;margin:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#ff3b30;color:#fff;font:600 .92rem system-ui,-apple-system,sans-serif;cursor:pointer;border-radius:0 14px 14px 0}
+.swdel>.sdbtn span{white-space:nowrap;padding:0 .9rem}
+.swdel.sdfull>.sdbtn{justify-content:flex-start}
+.swdel:not(.sdon)>.sdbtn{visibility:hidden}
+#m-list>li{padding:0;border:0}
+.hsel{display:flex;align-items:center;gap:.7rem;cursor:pointer;padding:.15rem 0}.hsel input{width:1.25rem;height:1.25rem;flex:none;accent-color:var(--accent)}.hsel .hsum{flex:1;min-width:0}
+.hsel.on .hsum{opacity:1}.hsel:not(.on) .hsum{opacity:.85}
+.hedbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;padding:.55rem .6rem;border-radius:14px;background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.hdelall{color:#ff453a}.hdelall.armed{background:#ff453a;color:#fff;border-color:#ff453a}
+</style>
+<style id="share-style">
+.shcard{max-width:30rem;display:grid;gap:.8rem}
+.shprev{display:grid;gap:.4rem}.shpi{display:flex;flex-direction:column;padding:.6rem .75rem;border-radius:14px;background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.shfl{display:grid;gap:.45rem;max-height:45vh;overflow:auto}
+.shf{display:flex;align-items:center;gap:.7rem;width:100%;text-align:left;padding:.55rem .7rem;border-radius:14px;border:1px solid var(--line,rgba(127,127,127,.25));background:var(--surface);color:var(--ink);cursor:pointer}
+.shf .av{display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;background:color-mix(in srgb,var(--accent) 22%,var(--surface));color:var(--accent);font-weight:700;flex:none}
+.shfn{flex:1;display:flex;flex-direction:column;min-width:0}.shfn small{color:var(--muted)}
+.shck{display:grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;border:1.5px solid var(--line,rgba(127,127,127,.4));font-weight:800;color:#fff}
+.shf.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface))}.shf.on .shck{background:var(--accent);border-color:var(--accent)}
+.shin{display:grid;gap:.45rem;padding:.75rem;border-radius:14px;border:1px solid var(--line,rgba(127,127,127,.22))}.shin.new{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+</style>
+<style id="wq-style">
+.wqlab{font-weight:650;font-size:.95rem}
+.wqbox{position:relative;display:flex;align-items:center}
+.wqbox .wqic{position:absolute;left:1rem;width:1.25rem;height:1.25rem;color:var(--muted);pointer-events:none;transition:color .2s}
+.wqbox input#w-q{width:100%;height:3.4rem;padding:0 1rem 0 2.9rem;font-size:1.08rem;border-radius:18px;border:1.5px solid color-mix(in srgb,var(--ink) 14%,transparent);background:color-mix(in srgb,var(--ink) 5%,var(--surface));color:var(--ink);transition:border-color .2s,box-shadow .2s,background .2s;-webkit-appearance:none;appearance:none}
+.wqbox input#w-q::placeholder{color:var(--muted);opacity:.85}
+.wqbox input#w-q:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent);background:var(--surface)}
+.wqbox:focus-within .wqic{color:var(--accent)}
+</style>
 <style id="type-style">
 /* Text system: CAPITALS only for short, important labels. Everything else is normal sentence text. */
 :root{--caps-ls:.1em}
@@ -1381,7 +1414,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       </div>
       </div>
       <div class="swpage" data-name="Search" data-ic="search">
-      <div class="card stack" id="w-sbox"><label class="f" for="w-q">Search workouts<input type="search" id="w-q" autocomplete="off" placeholder="Try soccer, legs, 20 minutes, plank"></label><div id="w-sres" aria-live="polite"></div></div>
+      <div class="card stack" id="w-sbox"><label class="wqlab" for="w-q">Search workouts</label><div class="wqbox"><svg class="wqic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg><input type="search" id="w-q" autocomplete="off" enterkeyhint="search" placeholder="Soccer, legs, 20 minutes, plank…"></div><div id="w-sres" aria-live="polite"></div></div>
       </div>
       </div></div>
       <div class="stack" id="w-cur" hidden>
@@ -1714,6 +1747,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
 <div class="modal" id="up" role="dialog" aria-modal="true" aria-labelledby="up-t" hidden><div class="mback" data-act="uplater"></div><div class="mcard upcard" id="up-card"></div></div>
 <div class="modal" id="fp" role="dialog" aria-modal="true" aria-labelledby="fp-t" hidden><div class="mback" data-act="fpclose"></div><div class="mcard fpcard" id="fp-card"></div></div>
 <div class="modal" id="wn" role="dialog" aria-modal="true" aria-labelledby="wn-t" hidden><div class="mback" data-act="wnclose"></div><div class="mcard wncard" id="wn-card"></div></div>
+<div class="modal" id="shm" role="dialog" aria-modal="true" aria-labelledby="shm-t" hidden><div class="mback" data-act="shclose"></div><div class="mcard shcard" id="shm-card"></div></div>
 <div class="modal" id="a2" role="dialog" aria-modal="true" aria-labelledby="a2-t" hidden><div class="mback" data-act="a2later"></div><div class="mcard a2card" id="a2-card"></div></div>
 <div class="modal" id="cmp" role="dialog" aria-modal="true" aria-labelledby="cmp-t" hidden><div class="mback" data-act="cmpclose"></div><div class="mcard cmpcard" id="cmp-card"></div></div>
 <div class="modal" id="gl" role="dialog" aria-modal="true" aria-labelledby="gl-t" hidden><div class="mback" data-act="glkeep"></div><div class="mcard glcard" id="gl-card"></div></div>
@@ -2349,7 +2383,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals;else if(p.mealsD&&Array.isArray(p.meals)&&p.meals.length)d.prevMeals={d:p.mealsD,m:p.meals}}}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
   /* Version 131: clear sample health data that earlier versions gave everyone, only where it was never changed */
@@ -2374,7 +2408,7 @@ function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:false,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:[],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],vsaved:[],sctab:'feed',savedW:[],savedSeen:[],useSched:true,addPlan:'',keepRun:false,seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:[],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],vsaved:[],sctab:'feed',savedW:[],savedSeen:[],useSched:true,addPlan:'',keepRun:false,hEdit:false,hSel:[],hDelArm:false,seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
     sleep:8,hrv:55,sore:1,
     meals:[],labs:{fe:null,vd:null,b12:null},
     override:false,coachMsg:null,imported:[],
@@ -2542,6 +2576,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:147,d:'Nov 10, 2026',t:'Swipe to delete, share with friends',s:['Swipe left on a workout in History or a food in Today\'s meals to delete it, just like in Apple\'s apps. Swipe a little to show Delete, or all the way to delete straight away.','History has an Edit button. Tap it, select sessions, then delete them all at once or share them.','Share workouts with friends: tap Share on any workout or history session and pick friends. What friends send you shows on the Friends page under Shared with you, where you can save it to My workouts.','New music: Friends has its own warm, upbeat track, and Faith now has a soft choir and organ sound.','The search box for workouts is bigger and easier to use.','Swiping between pages is smoother: the page no longer resizes on every frame while you swipe.']},
  {v:146,d:'Nov 10, 2026',t:'Matching clock',s:['The time and date at the top now match the settings and music buttons: the same rounded shape, colour and size.']},
  {v:145,d:'Nov 10, 2026',t:'Right verse of the day, simpler AI schedules',s:['Fixed: the verse of the day now always matches YouVersion for your own date. In the evening Manna used to show the wrong verse, because the server was already on the next day.','When you finish an exercise, Manna now takes you to the first exercise that still has sets left, starting from the top, instead of just the next one down.','A small hint at the top of your workout shows that you can swipe right to see your time, sets and controls. It goes away once you have looked.','After AI logs a food from a photo or text, you can fix it right there: change the size with − and +, type the real calories, or tell AI what was different (like “big bowl, no cheese”) and it re-estimates.','Fixed: a sharp noise when leaving the app. Sounds now fade out smoothly when you switch away and fade back in when you return.','Make your own now has a red Delete button for an imported routine you do not want. Tap it twice to remove it.','Browse foods no longer shows the “Showing 60 of 7505” count.','The rainbow outline around the screen while AI works is gone. The Making with AI pop-up is still there.','Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
  {v:144,d:'Nov 10, 2026',t:'Stay on your exercise',s:['Fixed: logging a set no longer jumps you back to the first exercise on iPhone. You stay on the exercise you are doing.','The workout screen now only updates the parts that change when you log, so it feels quicker and does not flash.']},
@@ -2894,7 +2929,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='146';
+var heroLast='',APPV='147';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3315,10 +3350,11 @@ function mkWorkout(t,title,lvl){t=String(t||'').trim();if(!t)return;S.ai=null;S.
 var AMB={ctx:null,master:null,send:null,bus:null,mood:'',next:0,step:0,iv:0,noise:null,started:false};
 function ambPref(){if(AMB.pc)return AMB.pc;var d={on:true,vol:0.5,sfx:true,sty:'pop'};try{var p=JSON.parse(localStorage.getItem('manna.music.v1'));if(p&&typeof p==='object'){if(typeof p.on==='boolean')d.on=p.on;if(isFinite(p.vol))d.vol=Math.max(0,Math.min(1,+p.vol));if(typeof p.sfx==='boolean')d.sfx=p.sfx;if(SFXSTY.some(function(x){return x[0]===p.sty}))d.sty=p.sty}}catch(e){}AMB.pc=d;return d}
 function ambSave(p){AMB.pc=null;try{localStorage.setItem('manna.music.v1',JSON.stringify(p))}catch(e){}}
-function ambMoodFor(id){var g=(GROUPS.filter(function(x){return x[2].indexOf(id)>-1})[0]||[])[0];return g==='train'?'workout':g==='faith'?'faith':g==='fuel'?'food':'calm'}
+function ambMoodFor(id){var g=(GROUPS.filter(function(x){return x[2].indexOf(id)>-1})[0]||[])[0];return g==='train'?'workout':g==='faith'?'faith':g==='fuel'?'food':g==='friends'?'friends':'calm'}
 var AMBM={
   calm:{spb:1,bar:4,chords:[[62,66,69,73],[59,62,66,69],[55,59,62,66],[57,62,64,69]],every:2,cut:1500,pad:.055,scale:[74,76,78,81,83,86],chime:.28},
-  faith:{spb:1.1,bar:4,chords:[[60,64,67,74],[57,60,64,67],[53,57,60,64],[55,60,62,67]],every:2,cut:1300,pad:.06,scale:[72,74,76,79,81,84,86,88],chime:.55},
+  faith:{spb:1.5,bar:4,chords:[[53,60,65,69],[58,62,65,70],[53,60,65,69],[48,55,60,64],[50,57,62,65],[46,53,58,62],[48,55,60,64],[53,60,65,69]],every:1,cut:1100,pad:.05,scale:[77,79,81,84,86,89],chime:.35},
+  friends:{spb:60/84/2,bar:8,chords:[[55,59,62,67],[50,54,57,62],[52,55,59,64],[48,52,55,60]],every:1,cut:1900,pad:.035,scale:[67,69,71,74,76,79]},
   food:{spb:60/92/2,bar:8,chords:[[65,69,72,76],[62,65,69,72],[67,70,74,77],[60,64,67,70]],every:1,cut:1700,pad:.06},
   workout:{spb:60/104/4,bar:16,chords:[[57,60,64,69],[53,57,60,65],[48,55,60,64],[55,59,62,67]],every:1,cut:900,pad:.03}
 };
@@ -3342,6 +3378,16 @@ function ambHat(t,v){var c=AMB.ctx,b=AMB.bus;var s=c.createBufferSource();s.buff
 function ambBass(t,n,d){var c=AMB.ctx,b=AMB.bus;var x=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();x.type='sawtooth';x.frequency.value=mtof(n);f.type='lowpass';f.frequency.setValueAtTime(520,t);f.frequency.exponentialRampToValueAtTime(160,t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.09,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+d);x.connect(f);f.connect(g);g.connect(b.dry);x.start(t);x.stop(t+d+.02)}
 function ambPluck(t,n){var c=AMB.ctx,b=AMB.bus;var x=c.createOscillator(),g=c.createGain();x.type='triangle';x.frequency.value=mtof(n);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.005);g.gain.exponentialRampToValueAtTime(.0005,t+.35);x.connect(g);g.connect(b.dry);g.connect(b.wet);x.start(t);x.stop(t+.4)}
 function ambMarimba(t,n,v){var c=AMB.ctx,b=AMB.bus;if(!b)return;var g=c.createGain();g.connect(b.dry);g.connect(b.wet);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.004);g.gain.exponentialRampToValueAtTime(.0004,t+.55);[[1,1],[3.99,.18],[10.6,.03]].forEach(function(p){var x=c.createOscillator(),pg=c.createGain();x.type='sine';x.frequency.value=mtof(n)*p[0];pg.gain.setValueAtTime(p[1],t);pg.gain.exponentialRampToValueAtTime(.0001,t+(p[0]>1?.12:.55));x.connect(pg);pg.connect(g);x.start(t);x.stop(t+.6)})}
+/* Faith: a soft choir and organ, like a hymn in a quiet church */
+function ambChoir(t,notes,dur,lvl){var c=AMB.ctx,b=AMB.bus;if(!b)return;var f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=1150;f.Q.value=.7;var g=c.createGain();f.connect(g);g.connect(b.dry);g.connect(b.wet);
+  ambEnv(g,t,Math.min(1.6,dur*.35),lvl,Math.max(0,dur*.55),2.2);
+  var lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=4.6;lg.gain.value=5;lfo.connect(lg);lfo.start(t);lfo.stop(t+dur+3);
+  notes.forEach(function(n){[-9,0,9].forEach(function(dt){var x=c.createOscillator();x.type='sawtooth';x.frequency.value=mtof(n);x.detune.value=dt;lg.connect(x.detune);x.connect(f);x.start(t);x.stop(t+dur+3)})})}
+function ambOrgan(t,n,dur,lvl){var c=AMB.ctx,b=AMB.bus;if(!b)return;var g=c.createGain();g.connect(b.dry);g.connect(b.wet);ambEnv(g,t,.6,lvl,Math.max(0,dur-.6),1.8);
+  [[1,1],[2,.45],[4,.12]].forEach(function(p){var x=c.createOscillator(),pg=c.createGain();x.type='sine';x.frequency.value=mtof(n)*p[0];pg.gain.value=p[1];x.connect(pg);pg.connect(g);x.start(t);x.stop(t+dur+2)})}
+/* Friends: warm and upbeat, with guitar-like strums, snaps and a shaker */
+function ambSnap(t,v){var c=AMB.ctx,b=AMB.bus;if(!b)return;var s=c.createBufferSource();s.buffer=AMB.noise;var f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=2600;f.Q.value=1.4;var g=c.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0005,t+.09);s.connect(f);f.connect(g);g.connect(b.dry);g.connect(b.wet);s.start(t,Math.random()*.5);s.stop(t+.1)}
+function ambStrum(t,notes,v,up){var c=AMB.ctx,b=AMB.bus;if(!b)return;var L=up?notes.slice().reverse():notes;L.forEach(function(n,k){var tt=t+k*.018,x=c.createOscillator(),x2=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();x.type='sawtooth';x2.type='triangle';x.frequency.value=x2.frequency.value=mtof(n);x2.detune.value=6;f.type='lowpass';f.frequency.setValueAtTime(3200,tt);f.frequency.exponentialRampToValueAtTime(700,tt+.4);g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(v,tt+.004);g.gain.exponentialRampToValueAtTime(.0004,tt+.9);x.connect(f);x2.connect(f);f.connect(g);g.connect(b.dry);g.connect(b.wet);x.start(tt);x2.start(tt);x.stop(tt+1);x2.stop(tt+1)})}
 function ambStep(i,t){
   var M=AMBM[AMB.mood];if(!M)return;var barN=Math.floor(i/M.bar),inBar=i%M.bar,ci=Math.floor(barN/M.every)%M.chords.length,ch=M.chords[ci];
   if(AMB.mood==='food'){
@@ -3357,6 +3403,17 @@ function ambStep(i,t){
     if(i%4===2)ambHat(t,.05);else if(i%2===1)ambHat(t,.018);
     if(i%2===0)ambBass(t,ch[0]-12,M.spb*1.7);
     var arp=[0,1,2,3,2,1,0,2];if(barN%2===1||i%2===0)ambPluck(t,ch[arp[i%8]]+12);
+  }else if(AMB.mood==='friends'){
+    if(inBar===0)ambPad(t,ch,M.spb*M.bar,M.cut,M.pad);
+    if(inBar===0)ambBass(t,ch[0]-12,M.spb*2.5);else if(inBar===3)ambBass(t,ch[2]-12,M.spb*1.2);else if(inBar===4)ambBass(t,ch[0]-12,M.spb*2);
+    var sp=[1,0,0,1,0,1,1,0];if(sp[inBar])ambStrum(t,ch.map(function(n){return n+12}),inBar===0?.016:.011,inBar%2===1);
+    if(inBar===2||inBar===6)ambSnap(t,.09);
+    if(i%2===1)ambHat(t,.012);
+    if(inBar===5&&Math.random()<.5)ambMarimba(t,M.scale[Math.floor(Math.random()*M.scale.length)],.06);
+  }else if(AMB.mood==='faith'){
+    if(inBar===0){ambChoir(t,ch.slice(1),M.spb*M.bar,M.pad);ambOrgan(t,ch[0]-12,M.spb*M.bar,.045)}
+    if(inBar===2&&Math.random()<.5)ambChime(t,M.scale[Math.floor(Math.random()*M.scale.length)],.04);
+    if(inBar===0&&barN%4===3)ambChime(t+M.spb*.5,ch[3]+24,.035);
   }else{
     if(inBar===0&&barN%M.every===0)ambPad(t,ch,M.spb*M.bar*M.every+1,M.cut,M.pad);
     if(inBar===0&&barN%M.every===0)ambPad(t,[ch[0]-12],M.spb*M.bar*M.every+1,600,M.pad*.8);
@@ -3384,7 +3441,7 @@ function ambStart(){
 function ambStop(){var c=AMB.ctx;if(!c)return;ambLevel();ambPaint()}
 function ambSet(on,vol){var p=ambPref();if(on!=null)p.on=!!on;if(vol!=null)p.vol=Math.max(0,Math.min(1,vol));ambSave(p);if(p.on)ambStart();else ambStop();ambLevel()}
 function ambPaint(){var p=ambPref();$$('.ambbtn').forEach(function(b){b.setAttribute('aria-pressed',String(p.on));b.setAttribute('aria-label',p.on?'Turn background music off':'Turn background music on');b.classList.toggle('off',!p.on)});
-  var t=$('#p-amb');if(t)t.checked=p.on;var sx=$('#p-sfx');if(sx)sx.checked=p.sfx;$$('#p-sty [data-k]').forEach(function(b){b.setAttribute('aria-checked',String(b.dataset.k===p.sty))});var v=$('#p-ambv');if(v&&document.activeElement!==v)v.value=Math.round(p.vol*100);var n=$('#p-ambn');if(n)n.textContent=p.on?'Now playing: '+({calm:'Calm',faith:'Faith',workout:'Workout',food:'Food'})[AMB.mood||ambMoodFor(curId)]+' music.':'Music is off.'}
+  var t=$('#p-amb');if(t)t.checked=p.on;var sx=$('#p-sfx');if(sx)sx.checked=p.sfx;$$('#p-sty [data-k]').forEach(function(b){b.setAttribute('aria-checked',String(b.dataset.k===p.sty))});var v=$('#p-ambv');if(v&&document.activeElement!==v)v.value=Math.round(p.vol*100);var n=$('#p-ambn');if(n)n.textContent=p.on?'Now playing: '+({calm:'Calm',faith:'Faith',workout:'Workout',food:'Food',friends:'Friends'})[AMB.mood||ambMoodFor(curId)]+' music.':'Music is off.'}
 /* Tap sounds for the bottom 5 buttons: a soft pop, a different note for each */
 document.addEventListener('pointerdown',function(e){var a=e.target.closest&&e.target.closest('#setfab');if(a)sfxPop('more')});
 var SFXSTY=[['pop','Pop'],['bubble','Bubble'],['click','Click'],['chime','Chime'],['wood','Wood']];
@@ -3609,10 +3666,40 @@ function rpc(name,args){return authToken().then(function(tok){if(!tok)throw {sta
 function frErr(e){return e&&e.status===404?'Friends is not set up on the server yet. The site owner needs to run supabase/friends.sql.':e&&e.status===401?'Sign in again to use Friends.':'Could not reach the server. Check your connection and try again.'}
 function frLoad(){
   if(!frOn()||FR.busy)return;FR.busy=true;FR.err='';
-  Promise.all([rpc('my_handle'),rpc('friends_list').catch(function(){return null})]).then(function(r){var h=r[0];FR.handle=h&&h.username?h:null;return FR.handle?r[1]:null})
+  Promise.all([rpc('my_handle'),rpc('friends_list').catch(function(){return null}),rpc('shared_inbox').catch(function(e){FR.noShare=!!(e&&(e.status===404||/PGRST202|shared_inbox/.test(String(e.code||e.message||''))));return null})]).then(function(r){var h=r[0];FR.handle=h&&h.username?h:null;if(r[2]&&r[2].ok){FR.inbox=r[2].items||[];FR.noShare=false}return FR.handle?r[1]:null})
     .then(function(d){FR.cached=false;if(!FR.handle)FR.data=null;if(d&&d.ok){FR.data=d;if(d.allow&&typeof d.allow==='object'){S.fshare={workouts:d.allow.workouts!==false,meals:!!d.allow.meals,weight:!!d.allow.weight}}}FR.at=Date.now();FR.busy=false;frCache();frPush(true);refresh()})
     .catch(function(e){FR.busy=false;FR.at=Date.now();FR.err=frErr(e);refresh()});
 }
+/* ---------- Share workouts with friends ---------- */
+var SH={items:[],sel:{},busy:false,msg:'',ok:false};
+function histToShare(x){var ex=(x.log||[]).map(function(l){var s0=(l.s||[])[0]||{},r=s0.r||10;return [String(l.n).slice(0,60),(l.s||[]).length+'×'+(l.k==='time'||s0.sec?r+' s':r)]});
+  if(!ex.length){var w=wById(x.wid);if(w)ex=w.ex.slice(0,30)}
+  return {kind:'session',payload:{name:String(x.name).slice(0,60),cat:x.cat||'custom',at:x.ts,ms:x.ms||0,sets:x.sets||0,vol:Math.round(x.vol||0),unit:x.unit||S.units,ex:ex.slice(0,30)}}}
+function wToShare(w){return {kind:'workout',payload:{name:String(w.name).slice(0,60),cat:w.cat||'custom',mins:w.mins||30,level:w.level||'',ex:(w.ex||[]).slice(0,30).map(function(e){return [String(e[0]).slice(0,60),String(e[1]||'3×10').slice(0,24)]})}}}
+function shareText(items){return items.map(function(it){var p=it.payload;return p.name+(it.kind==='session'&&p.ms?' ('+Math.max(1,Math.round(p.ms/60000))+' min)':'')+'\n'+(p.ex||[]).map(function(e){return '• '+e[0]+' '+e[1]}).join('\n')}).join('\n\n')+'\n\nShared from Manna'}
+function shareOpen(items){SH={items:items,sel:{},busy:false,msg:'',ok:false};if(frOn()&&!FR.data&&!FR.busy)frLoad();shRender();modalOpen($('#shm'))}
+function shRender(){var c=$('#shm-card');if(!c)return;var its=SH.items,one=its.length===1,fl=(FR.data&&FR.data.friends)||[],nSel=Object.keys(SH.sel).filter(function(k){return SH.sel[k]}).length;
+  var h='<div class="row spread"><h3 id="shm-t" style="margin:0">Share '+(one?esc(its[0].payload.name):its.length+' workouts')+'</h3><button class="btn sm" data-act="shclose">Close</button></div>'
+    +'<div class="shprev">'+its.slice(0,3).map(function(it){var p=it.payload;return '<div class="shpi"><b>'+esc(p.name)+'</b><span class="small muted">'+(it.kind==='session'?(p.ms?Math.max(1,Math.round(p.ms/60000))+' min · ':'')+(p.sets||0)+' sets':(p.mins?p.mins+' min · ':'')+(p.ex||[]).length+' exercises')+'</span></div>'}).join('')+(its.length>3?'<p class="small muted" style="margin:0">and '+(its.length-3)+' more</p>':'')+'</div>';
+  if(!frOn())h+='<p class="muted">Sign in and add friends to share with them in Manna. You can still copy it and send it anywhere.</p>';
+  else if(!FR.data&&FR.busy)h+='<p class="muted">Loading your friends…</p>';
+  else if(!fl.length)h+='<p class="muted">You have no friends added yet. Add them on the Friends page, or copy it and send it anywhere.</p>';
+  else h+='<p class="eyebrow" style="margin:.2rem 0 0">Send to</p><div class="shfl">'+fl.map(function(f){var on=!!SH.sel[f.username],nm=f.name||f.display||f.username;return '<button type="button" class="shf'+(on?' on':'')+'" data-act="shpick" data-u="'+esc(f.username)+'" aria-pressed="'+on+'"><span class="av">'+esc(String(nm).charAt(0).toUpperCase())+'</span><span class="shfn"><b>'+esc(nm)+'</b><small>@'+esc(f.username)+'</small></span><span class="shck" aria-hidden="true">'+(on?'✓':'')+'</span></button>'}).join('')+'</div>';
+  if(SH.msg)h+='<div class="note '+(SH.ok?'ok':'warn')+'">'+esc(SH.msg)+'</div>';
+  h+='<div class="row" style="justify-content:flex-end">'+'<button class="btn sm" data-act="shcopy">Copy as text</button>'+(fl.length?'<button class="btn primary" data-act="shsend"'+(nSel&&!SH.busy?'':' disabled')+'>'+(SH.busy?'Sending…':'Send'+(nSel?' to '+nSel:''))+'</button>':'')+'</div>';
+  c.innerHTML=h}
+function shSend(){var us=Object.keys(SH.sel).filter(function(k){return SH.sel[k]});if(!us.length||SH.busy)return;SH.busy=true;SH.msg='';shRender();
+  rpc('share_items',{p_usernames:us,p_items:SH.items}).then(function(r){SH.busy=false;if(r&&r.ok){SH.ok=true;SH.msg='Sent to '+us.length+' friend'+(us.length===1?'':'s')+'.';shRender();toast('Shared with '+us.map(function(u){return '@'+u}).join(', ')+'.',{title:'Sent',icon:'📤',kind:'ok'});setTimeout(function(){modalHide($('#shm'))},900)}else{SH.ok=false;SH.msg=r&&r.error==='too_many'?'That is a lot of sharing for one day. Try again tomorrow.':'Could not send that. Try again.';shRender()}})
+    .catch(function(e){SH.busy=false;SH.ok=false;SH.msg=(e&&(e.status===404||/PGRST202|share_items/.test(String(e.code||e.message||''))))?'Sharing is not set up yet. Run supabase/share.sql in Supabase once.':frErr(e);shRender()})}
+function inboxSave(id){var it=(FR.inbox||[]).filter(function(x){return String(x.id)===String(id)})[0];if(!it)return;var p=it.payload||{},ex=(p.ex||[]).filter(function(e){return e&&e[0]}).slice(0,30).map(function(e){return [String(e[0]).slice(0,60),String(e[1]||'3×10').slice(0,24)]});if(!ex.length){toast('There are no exercises in that one.');return}
+  var nid='c'+(uid++);S.customW.push({id:nid,name:String(p.name||'Shared workout').slice(0,60),mins:p.mins||(p.ms?Math.max(10,Math.round(p.ms/60000)):Math.max(10,ex.length*6)),level:'From @'+it.from,cat:'custom',eq:['bodyweight'],focus:'Shared',pl:'custom',ex:ex});
+  if(S.savedW.indexOf(nid)<0)S.savedW.unshift(nid);toast('"'+String(p.name)+'" is in My workouts.',{title:'Saved',icon:'💪',kind:'ok'});
+  rpc('shared_update',{p_id:+id,p_action:'seen'}).catch(function(){});it.seen=true;it.saved=true}
+function inboxHtml(){var L=FR.inbox||[];if(!L.length)return '';
+  return '<div class="card stack"><div class="row spread"><h3>Shared with you</h3><span class="small muted">'+L.length+'</span></div>'+L.slice(0,12).map(function(it){var p=it.payload||{},ex=p.ex||[];
+    return '<div class="shin'+(it.seen?'':' new')+'"><div class="row spread" style="align-items:flex-start"><div><b>'+esc(p.name||'Workout')+'</b><div class="small muted">from @'+esc(it.from)+' · '+frAgo(it.at)+(it.kind==='session'?' · they did this'+(p.ms?' in '+Math.max(1,Math.round(p.ms/60000))+' min':''):(p.mins?' · '+p.mins+' min':''))+'</div></div>'+(it.seen?'':'<span class="badge">New</span>')+'</div>'
+      +'<ul class="fl">'+ex.slice(0,6).map(function(e){return '<li><span>'+esc(e[0])+'</span><span class="muted mono">'+esc(e[1]||'')+'</span></li>'}).join('')+(ex.length>6?'<li><span class="muted">and '+(ex.length-6)+' more</span></li>':'')+'</ul>'
+      +'<div class="row">'+(it.saved?'<span class="small muted">Saved to My workouts</span>':'<button class="btn sm primary" data-act="shinsave" data-id="'+it.id+'">Save to my workouts</button>')+'<button class="btn sm" data-act="shinrm" data-id="'+it.id+'">Remove</button></div></div>'}).join('')+'</div>'}
 function frSummary(){
   var wk=Date.now()-7*864e5,ws=S.hist.filter(function(x){return x&&!x.sample&&x.ts>wk}).sort(function(a,b){return b.ts-a.ts}).slice(0,12).map(function(x){var w=wById(x.id);return {n:String(x.name||(w&&w.name)||'Workout').slice(0,60),min:Math.round(+x.min||+x.mins||0)||null,ts:x.ts}});
   var o={name:String(S.name&&S.name!=='Friend'?S.name:'').slice(0,40),workouts:ws,streak:streakDays()};
@@ -3651,6 +3738,7 @@ function renderFriends(){
     if(d.incoming.length||d.outgoing.length){
       h+='<div class="card stack"><h3>Requests</h3><ul class="list">'+d.incoming.map(function(r){return '<li><div><b>'+esc(r.display||r.username)+'</b> <span class="small muted">@'+esc(r.username)+' wants to be friends</span></div><span class="row" style="gap:.35rem"><button class="btn sm primary" data-act="fracc" data-u="'+esc(r.username)+'">Accept</button><button class="btn sm" data-act="frrem" data-u="'+esc(r.username)+'">Decline</button></span></li>'}).join('')
         +d.outgoing.map(function(r){return '<li><div><span class="small muted">Waiting for</span> <b>@'+esc(r.username)+'</b></div><button class="btn sm" data-act="frrem" data-u="'+esc(r.username)+'">Cancel</button></li>'}).join('')+'</ul></div>'}
+    h+=inboxHtml();
     if(d.cheers.length)h+='<div class="card stack"><h3>Cheers for you</h3><ul class="list">'+d.cheers.slice(0,8).map(function(c){var k=CHEER[c.kind]||['👏',''];return '<li><div><span aria-hidden="true">'+k[0]+'</span> <b>@'+esc(c.username)+'</b> <span class="small muted">'+esc(k[1])+'</span></div><span class="small muted">'+frAgo(c.at)+'</span></li>'}).join('')+'</ul></div>';
     if(!d.friends.length)h+='<div class="card stack"><h3>No friends yet</h3><p class="muted">Send someone your username, or add theirs above. When they accept, you will see what they choose to share here.</p></div>';
     d.friends.forEach(function(f){var nm=f.name||f.display||f.username,ch=f.cheered||[],cf=S.frConfirm&&S.frConfirm.u===f.username?S.frConfirm.a:'';
@@ -3859,7 +3947,7 @@ function renderMeals(){
   ms.forEach(function(m){T.kcal+=m.n.kcal;T.p+=m.n.p;T.c+=m.n.c;T.f+=m.n.f});
   var mh='<div class="row spread"><h3>'+(ms.length?ms.length+' item'+(ms.length>1?'s':'')+' logged':'Nothing logged yet')+'</h3><span class="badge">'+kc(Math.round(T.kcal))+' / '+kc(Math.round(targets().kcal))+' kcal</span></div><div class="msum">'+todayRings('')+'</div>';
   if($('#m-sum').dataset.h!==mh){$('#m-sum').dataset.h=mh;$('#m-sum').innerHTML=mh}
-  $('#m-list').innerHTML=ms.length?ms.map(function(m){return '<li><button type="button" class="mrow" data-act="mealinfo" data-id="'+esc(m.k||m.id)+'"><span class="memo">'+esc(mealEmoji(m))+'</span><span class="mname">'+esc(m.name)+'<small>'+esc(fmtT(m.t))+'</small></span><span class="mkc">'+kc(Math.round(m.n.kcal))+' kcal</span></button></li>'}).join(''):'<li><span class="muted small">Foods you add today will show here. Tap one to see what is in it.</span></li>';
+  $('#m-list').innerHTML=ms.length?ms.map(function(m){return '<li>'+sdWrap('<button type="button" class="mrow" data-act="mealinfo" data-id="'+esc(m.k||m.id)+'"><span class="memo">'+esc(mealEmoji(m))+'</span><span class="mname">'+esc(m.name)+'<small>'+esc(fmtT(m.t))+'</small></span><span class="mkc">'+kc(Math.round(m.n.kcal))+' kcal</span></button>','delmeal',String(m.k||m.id),m.name)+'</li>'}).join(''):'<li><span class="muted small">Foods you add today will show here. Tap one to see what is in it.</span></li>';
 }
 function renderLog(){
   var rec=S.recipes.slice().reverse(),seen={},recent=[],i;
@@ -4398,7 +4486,7 @@ function renderWorkouts(){
   if(S.cond.insulin)h+='<p class="small muted">Check glucose before and after.</p>';
   if(a&&aw&&a.wid===w.id)h+='<div class="row" style="margin-top:.8rem"><a class="btn primary" href="#session" style="text-decoration:none">Resume session</a><span class="pill prog">In progress</span></div>';
   else if(a&&aw)h+='<p class="small muted" style="margin-top:.8rem">A session for '+esc(aw.name)+' is running. Finish or cancel it before starting another.</p><div class="row"><a class="btn" href="#session" style="text-decoration:none">Go to session</a></div>';
-  else h+='<div class="row" style="margin-top:.8rem"><button class="btn primary" data-act="wstart" data-id="'+w.id+'">Start workout</button><button class="btn" data-act="wedit" data-id="'+w.id+'">'+(w.cat==='custom'?'Edit':'Make it my own')+'</button>'+(w.cat==='custom'?'<button class="btn" data-act="wdel" data-id="'+w.id+'">Delete</button>':'')+'</div>';
+  else h+='<div class="row" style="margin-top:.8rem"><button class="btn primary" data-act="wstart" data-id="'+w.id+'">Start workout</button><button class="btn" data-act="wedit" data-id="'+w.id+'">'+(w.cat==='custom'?'Edit':'Make it my own')+'</button>'+'<button class="btn" data-act="wshare" data-id="'+w.id+'">Share</button>'+(w.cat==='custom'?'<button class="btn" data-act="wdel" data-id="'+w.id+'">Delete</button>':'')+'</div>';
   if(S.useSched!==false){var ap=S.addPlan&&S.plans[S.addPlan]?S.addPlan:S.planId;
     h+='<div class="row wadd" style="margin-top:.6rem;align-items:flex-end"><span class="small muted" style="flex-basis:100%">Add to a schedule</span>'
     +'<label class="f small muted" for="w-plan">Schedule<select id="w-plan">'+(schedList().length?schedList().map(function(id,i){return '<option value="'+id+'"'+(id===ap?' selected':'')+'>'+(i+1)+'. '+esc(schedName(id))+'</option>'}).join(''):'<option value="__new">New schedule</option>')+'</select></label>'
@@ -4576,6 +4664,30 @@ function cmpOpen(k){
   h+='</tbody></table></div>';
   var c=$('#cmp-card');c.innerHTML=h;var m=$('#cmp');if(m.hidden){modalOpen(m);document.body.classList.add('modal-open')}
 }
+/* Swipe engine for .swdel rows: drag left to show Delete, drag far to delete straight away */
+(function(){var cur=null,open=null,OPEN=88,justDragged=0;
+  function rowW(r){return r.getBoundingClientRect().width||300}
+  function setX(r,x,anim){var c=r.querySelector('.sdc');if(!c)return;c.style.transition=anim?'transform .28s cubic-bezier(.2,.9,.3,1)':'none';c.style.transform=x?'translateX('+x+'px)':'';r.style.setProperty('--sdx',Math.max(0,-x)+'px');r.classList.toggle('sdon',x<0);var bt=r.querySelector('.sdbtn');if(bt)bt.style.transition=anim?'width .28s cubic-bezier(.2,.9,.3,1)':'none'}
+  function close(r){if(!r)return;setX(r,0,true);r.classList.remove('sdopen');if(open===r)open=null}
+  document.addEventListener('pointerdown',function(e){
+    var r=e.target.closest&&e.target.closest('.swdel');
+    if(open&&open!==r&&!(e.target.closest&&e.target.closest('.sdbtn'))){close(open)}
+    if(!r||e.button>0||e.target.closest('.sdbtn'))return;
+    cur={r:r,x0:e.clientX,y0:e.clientY,base:r.classList.contains('sdopen')?-OPEN:0,mode:null,x:0,id:e.pointerId};
+  },true);
+  document.addEventListener('pointermove',function(e){if(!cur||e.pointerId!==cur.id)return;var dx=e.clientX-cur.x0,dy=e.clientY-cur.y0;
+    if(!cur.mode){if(Math.abs(dx)>9&&Math.abs(dx)>Math.abs(dy)*1.3)cur.mode=(dx<0||cur.base<0)?'h':'x';else if(Math.abs(dy)>9)cur.mode='v';if(cur.mode!=='h')return}
+    if(cur.mode!=='h')return;var w=rowW(cur.r),x=cur.base+dx;if(x>0)x=x*.25;if(x<-w)x=-w-(-w-x)*.25;cur.x=x;setX(cur.r,x,false);
+    if(-x>w*.6){cur.r.classList.add('sdfull')}else cur.r.classList.remove('sdfull')},{passive:true});
+  function end(e){if(!cur||(e&&e.pointerId!==cur.id))return;var r=cur.r,x=cur.x,mode=cur.mode;cur=null;if(mode!=='h')return;justDragged=Date.now();var w=rowW(r);
+    if(-x>w*.6){setX(r,-w,true);r.classList.remove('sdfull');try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}var b=r.querySelector('.sdbtn');setTimeout(function(){if(b)b.click()},220);return}
+    if(-x>44){setX(r,-OPEN,true);r.classList.add('sdopen');open=r}else close(r)}
+  document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
+  /* a drag should never also open the row it moved */
+  document.addEventListener('click',function(e){if(Date.now()-justDragged<350&&e.target.closest&&e.target.closest('.sdc')){e.preventDefault();e.stopPropagation()}},true);
+})();
+/* Swipe left to delete, like Apple's apps. sdWrap puts a red Delete button behind a row. */
+function sdWrap(inner,act,id,label){return '<div class="swdel"><button type="button" class="sdbtn" data-act="'+act+'" data-id="'+esc(id)+'" aria-label="Delete '+esc(label||'')+'" tabindex="-1"><span>Delete</span></button><div class="sdc">'+inner+'</div></div>'}
 function renderHistory(){
   if(!S.hist.length){$('#hs-body').innerHTML='<div class="card stack hempty"><h3>No workouts yet</h3><p class="muted">Finish your first workout and it shows up here, with the sets you logged and your week at a glance.</p><div class="row"><a class="btn primary" href="#workouts" style="text-decoration:none">Find a workout</a></div></div>';return}
   var H=S.hist.slice().sort(function(a,b){return b.ts-a.ts}),ws=weekStart().getTime(),wk=H.filter(function(h){return h.ts>=ws});
@@ -4589,7 +4701,10 @@ function renderHistory(){
   var f=S.hf;if(f!=='all'&&!cats[f])f='all';
   var rep2={};H.forEach(function(x){if(x.sample)return;var k=cmpKey(x);rep2[k]=rep2[k]||{n:0,name:x.name};rep2[k].n++});var rk=Object.keys(rep2).filter(function(k){return rep2[k].n>1});
   if(rk.length)h+='<div class="card stack"><h3>Compare your workouts</h3><div class="chips">'+rk.map(function(k){return '<button class="chip" data-act="cmpopen" data-k="'+esc(k)+'">'+esc(rep2[k].name)+' <span class="muted">×'+rep2[k].n+'</span></button>'}).join('')+'</div></div>';
-  h+='<div class="card stack"><div class="row spread"><h3>All sessions</h3>'+(H.some(function(x){return x.sample})?'<button class="btn sm" data-act="hsamples">Remove sample sessions</button>':'')+'</div><div class="chips" id="h-types"></div><div id="h-list"></div></div>';
+  S.hSel=(S.hSel||[]).filter(function(id){return H.some(function(x){return x.id===id})});var nSel=S.hSel.length;
+  h+='<div class="card stack"><div class="row spread"><h3>All sessions</h3><div class="row" style="gap:.4rem">'+(!S.hEdit&&H.some(function(x){return x.sample})?'<button class="btn sm" data-act="hsamples">Remove sample sessions</button>':'')+'<button class="btn sm'+(S.hEdit?' primary':'')+'" data-act="hedit">'+(S.hEdit?'Done':'Edit')+'</button></div></div>'
+    +(S.hEdit?'<div class="hedbar"><button class="btn sm" data-act="hselall">'+(nSel&&nSel===H.length?'Select none':'Select all')+'</button><span class="small muted">'+(nSel?nSel+' selected':'Tap sessions to select them')+'</span><span style="flex:1"></span><button class="btn sm" data-act="hshare"'+(nSel?'':' disabled')+'>Share</button><button class="btn sm hdelall'+(S.hDelArm?' armed':'')+'" data-act="hdelsel"'+(nSel?'':' disabled')+'>'+(S.hDelArm?'Tap again to delete '+nSel:'Delete')+'</button></div>':'<p class="small muted" style="margin:0">Swipe a session left to delete it.</p>')
+    +'<div class="chips" id="h-types"></div><div id="h-list"></div></div>';
   $('#hs-body').innerHTML=h;
   chipGroup('h-types',[{k:'all',label:'All',on:f==='all'}].concat(Object.keys(cats).map(function(k){return {k:k,label:CATS[k]||k,on:f===k}})),'hfilter');
   var shown=H.filter(function(x){return f==='all'||(x.cat||'custom')===f}),out='',last='',today=dk(Date.now()),yest=dk(Date.now()-86400000);
@@ -4600,14 +4715,16 @@ function renderHistory(){
     var avg=timed.length?Math.round(timed.reduce(function(a,b){return a+b},0)/timed.length):0;
     var stats=[['Duration',x.ms?clockH(x.ms):'–'],['Sets',String(x.sets||0)],['Volume',x.vol?Math.round(x.vol).toLocaleString()+' '+esc(x.unit):'–'],['Rest',x.rest===0?'No rest':x.rest>0?restLabel(x.rest):'–']];
     if(avg)stats.push(['Avg. set',secLabel(avg)]);if(S.showBurn&&x.kcal)stats.push(['Est. calories',String(x.kcal)]);
-    out+='<details class="hrow" data-cat="'+esc(x.cat||'custom')+'"><summary class="hsum">'
+    if(S.hEdit){var on=S.hSel.indexOf(x.id)>-1;out+='<label class="hrow hsel'+(on?' on':'')+'"><input type="checkbox" data-hsel="'+esc(x.id)+'"'+(on?' checked':'')+' aria-label="Select '+esc(x.name)+'"><span class="hsum"><span class="hwhen"><b>'+esc(day)+'</b><span>'+esc(tm)+'</span></span><span class="hmain"><b>'+esc(x.name)+'</b><span class="wcat"><i class="cdot"></i>'+esc(CATS[x.cat]||'Workout')+'</span></span><span class="hdur mono">'+esc(dur)+'</span></span></label>';return}
+    var row='<details class="hrow" data-cat="'+esc(x.cat||'custom')+'"><summary class="hsum">'
       +'<span class="hwhen"><b>'+esc(day)+'</b><span>'+esc(tm)+'</span></span>'
       +'<span class="hmain"><b>'+esc(x.name)+'</b><span class="wcat"><i class="cdot"></i>'+esc(CATS[x.cat]||'Workout')+'</span></span>'
       +'<span class="hdur mono">'+esc(dur)+'</span><span class="hchev" aria-hidden="true"></span></summary>'
       +'<div class="hbody"><div class="hstats">'+stats.map(function(t){return '<div><span>'+t[0]+'</span><b>'+t[1]+'</b></div>'}).join('')+'</div>'
       +((x.log&&x.log.length)?'<div class="hex">'+x.log.map(function(l){return '<div class="hexr"><b>'+esc(l.n)+'</b><ol>'+l.s.map(function(s){return '<li><span>'+esc(setLabel(s,l.k,x.unit))+'</span>'+(s.t>0?'<span class="mono">'+secLabel(s.t)+'</span>':'')+'</li>'}).join('')+'</ol></div>'}).join('')+'</div>':'<p class="small muted">No sets were logged in this session.</p>')
       +'<div class="row" style="margin-top:.4rem">'+(cmpCount(x)>1?'<button class="btn sm primary" data-act="cmpopen" data-k="'+esc(cmpKey(x))+'">Compare ('+cmpCount(x)+')</button>':'')+(wById(x.wid)?'<a class="btn sm" href="#workouts" data-act="wsel" data-id="'+esc(x.wid)+'" style="text-decoration:none">Do it again</a>':'')
-      +'<button class="btn sm" data-act="hdel" data-id="'+esc(x.id)+'" aria-label="Delete '+esc(x.name)+' from history">Delete</button></div></div></details>';
+      +'<button class="btn sm" data-act="hshare1" data-id="'+esc(x.id)+'">Share</button><button class="btn sm" data-act="hdel" data-id="'+esc(x.id)+'" aria-label="Delete '+esc(x.name)+' from history">Delete</button></div></div></details>';
+    out+=sdWrap(row,'hdel',x.id,x.name);
   });
   $('#h-list').innerHTML=out||'<p class="muted">No sessions yet. Start a workout and it will show up here.</p>';
 }
@@ -5249,7 +5366,7 @@ var ACT={
   fadd:function(){var f=find(S.fsel);if(!f)return;S.meals.push(mkMeal(f,S.fq,'food menu'));var hit=f.al.filter(function(a){return S.allergy[a]});S.fsel=null;toast(hit.length?'Added '+f.name+'. It contains '+hit.join(', ')+'.':'Added '+f.name+' to today.')},
   addfood:function(b){var f=find(b.dataset.id);S.meals.push(mkMeal(f,1,'tap'));var hit=f.al.filter(function(a){return S.allergy[a]});toast(hit.length?'Added '+f.name+'. It contains '+hit.join(', ')+'.':'Added '+f.name+'.')},
   estdel:function(b){S.est=S.est.filter(function(o){return o.id!==b.dataset.id});estSave();if(S.fsel===b.dataset.id)S.fsel=null},
-  delmeal:function(b){var id=b.dataset.id;S.meals=S.meals.filter(function(m){return String(m.k||m.id)!==id&&String(m.id)!==id})},
+  delmeal:function(b){var id=b.dataset.id,gone=S.meals.filter(function(m){return String(m.k||m.id)===id||String(m.id)===id})[0];S.meals=S.meals.filter(function(m){return String(m.k||m.id)!==id&&String(m.id)!==id});if(gone)toast('Removed '+gone.name+'.')},
   mealinfo:function(b){var m=fpFind(b.dataset.id);if(m)fpOpen([m],'view')},
   fpclose:function(){modalHide($('#fp'))},
   fpdel:function(b){var id=b.dataset.id,m=fpFind(id);S.meals=S.meals.filter(function(x){return String(x.k||x.id)!==id});FP.list=FP.list.filter(function(x){return String(x)!==id});if(m)toast('Removed '+m.name+'.');setTimeout(fpRender,0)},
@@ -5411,6 +5528,19 @@ var ACT={
   sdel:function(){var id=S.planId;if(S.sdelAsk!==id){S.sdelAsk=id;setTimeout(function(){if(S.sdelAsk===id){S.sdelAsk=null;refresh()}},4000);return}
     S.sdelAsk=null;var nm=schedName(id);S.plans[id]=[null,null,null,null,null,null,null];S.planNames[id]='';S.schedList=schedList().filter(function(x){return x!==id});S.planId=S.schedList[0]||'S1';syncSched();toast('Deleted '+nm+'.')},
   hfilter:function(b){S.hf=b.dataset.k},
+  shclose:function(){modalHide($('#shm'))},
+  shpick:function(b){var u=b.dataset.u;SH.sel[u]=!SH.sel[u];SH.msg='';shRender();return false},
+  shsend:function(){shSend();return false},
+  shcopy:function(){var t=shareText(SH.items);try{if(navigator.share){navigator.share({title:'Manna workout',text:t}).catch(function(){});return false}}catch(e){}copyText(t);return false},
+  wshare:function(b){var w=wById(b.dataset.id);if(w)shareOpen([wToShare(w)])},
+  shinsave:function(b){inboxSave(b.dataset.id)},
+  shinrm:function(b){var id=b.dataset.id;FR.inbox=(FR.inbox||[]).filter(function(x){return String(x.id)!==String(id)});rpc('shared_update',{p_id:+id,p_action:'remove'}).catch(function(){});toast('Removed.')},
+  hedit:function(){S.hEdit=!S.hEdit;S.hSel=[];S.hDelArm=false},
+  hselall:function(){var all=S.hist.map(function(x){return x.id});S.hSel=S.hSel.length===all.length?[]:all;S.hDelArm=false},
+  hdelsel:function(){if(!S.hSel.length)return;if(!S.hDelArm){S.hDelArm=true;clearTimeout(ACT.hdelsel.t);ACT.hdelsel.t=setTimeout(function(){S.hDelArm=false;refresh()},3000);return}
+    clearTimeout(ACT.hdelsel.t);var n=S.hSel.length,sel=S.hSel;S.hist=S.hist.filter(function(x){return sel.indexOf(x.id)<0});S.hSel=[];S.hDelArm=false;S.hEdit=false;syncSched();toast('Deleted '+n+' session'+(n===1?'':'s')+'.')},
+  hshare:function(){var L=S.hist.filter(function(x){return S.hSel.indexOf(x.id)>-1});if(L.length)shareOpen(L.map(histToShare))},
+  hshare1:function(b){var x=S.hist.filter(function(h){return h.id===b.dataset.id})[0];if(x)shareOpen([histToShare(x)])},
   hdel:function(b){S.hist=S.hist.filter(function(x){return x.id!==b.dataset.id});syncSched();toast('Removed from history.')},
   hsamples:function(){S.hist=S.hist.filter(function(x){return !x.sample});syncSched();toast('Sample sessions removed.')},
   wstart:function(b){
@@ -5932,7 +6062,7 @@ var INPUT={
     r.readAsText(f);t.value='';
   }
 };
-function key(el){var d=el.dataset;return d.act+'|'+(d.id||d.k||'')+'|'+(d.i||'')+'|'+(d.d||'')+'|'+(d.j||'')}
+function key(el){var d=el.dataset;return d.act+'|'+(d.id||d.k||'')+'|'+(d.i||'')+'|'+(d.d||'')+'|'+(d.j||'')+'|'+(d.u||'')}
 document.addEventListener('click',function(e){
   var b=e.target.closest('[data-act]');if(!b||!ACT[b.dataset.act])return;
   var fk=key(b);
@@ -5950,6 +6080,7 @@ function onInput(e){
   if(t.dataset&&t.dataset.fs){if(e.type!=='change')return;S.fshare=Object.assign({},S.fshare||{});S.fshare[t.dataset.fs]=t.checked;FR.pushH='';FR.pushAt=0;frPush(true);refresh();return}
   if(e.type==='change'&&(t.type==='text'||t.tagName==='TEXTAREA'))return;
   if(e.type==='input'&&t.dataset&&t.dataset.chg)return;
+  if(t.dataset&&t.dataset.hsel){var hid=t.dataset.hsel,hi=S.hSel.indexOf(hid);if(t.checked&&hi<0)S.hSel.push(hid);else if(!t.checked&&hi>-1)S.hSel.splice(hi,1);S.hDelArm=false;refresh();return}
   if(t.dataset&&t.dataset.msel){var id=t.dataset.msel,i=S.msel.indexOf(id);if(i>-1)S.msel.splice(i,1);else S.msel.push(id);refresh();var cb=document.querySelector('[data-msel="'+id+'"]');if(cb)cb.focus();return}
   if(t.dataset&&t.dataset.x){S.xp[t.dataset.x]=t.checked;refresh();return}
   if(t.dataset&&t.dataset.share){S.share[t.dataset.share]=t.value;refresh();return}
@@ -6012,22 +6143,23 @@ function swHeight(st,h){if(!swW(st)){st.tr.style.height='';return}var v=Math.cei
 function swFrame(st){
   var w=swW(st);if(!w)return;var f=st.tr.scrollLeft/w,n=st.pages.length;f=Math.max(0,Math.min(n-1,f));
   var i=Math.round(f);if(i!==st.i){st.i=i;swBar(st)}
-  var moving=Math.abs(f-i)>.002;if(!moving){st.hc=null;st.oy=null}
-  var a=Math.floor(f),b=Math.ceil(f);if(!st.hc)st.hc={};
-  if(st.hc[a]==null)st.hc[a]=st.pages[a].offsetHeight;if(st.hc[b]==null)st.hc[b]=st.pages[b].offsetHeight;
-  swHeight(st,Math.max(st.hc[a],st.hc[b]));
+  var moving=Math.abs(f-i)>.002;
+  /* Size the swipe area once per swipe (tall enough for the pages either side), not on every frame:
+     each resize makes the whole page redo its layout, which is what made swiping stutter. */
+  if(!moving){st.hmax=null;st.hc=null;st.oy=null;swHeight(st,st.pages[i].offsetHeight)}
+  else if(st.hmax==null){var b0=Math.round(f),hm=0;for(var k2=Math.max(0,b0-1);k2<=Math.min(n-1,b0+1);k2++)hm=Math.max(hm,st.pages[k2].offsetHeight);st.hmax=hm;st.hc={};swHeight(st,hm)}
   if(moving&&!st.tr.classList.contains('moving'))st.tr.classList.add('moving');
   if(swTiltOff())return;
   if(st.oy==null){var r=st.tr.getBoundingClientRect();st.oy=Math.max(0,Math.min(innerHeight*.92-r.top,r.height))}var oy=st.oy;
   st.pages.forEach(function(p,k){var d=k-f,ad=Math.abs(d);
-    if(!moving||ad>=1){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin=''}return}
-    p.style.transformOrigin='50% '+Math.round(oy)+'px';
+    if(!moving||ad>=1){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin='';p._to=''}return}
+    var to='50% '+Math.round(oy)+'px';if(p._to!==to){p._to=to;p.style.transformOrigin=to}
     p.style.transform='rotate('+(d*6).toFixed(2)+'deg) scale('+(1-ad*.07).toFixed(3)+')';
     p.style.opacity=(1-ad*.45).toFixed(3)});
 }
 function swSettle(st,user){
   var w=swW(st);if(!w)return;var i=Math.max(0,Math.min(st.pages.length-1,Math.round(st.tr.scrollLeft/w)));
-  var changed=i!==st.last;st.i=i;st.last=i;st.hc=null;st.oy=null;swBar(st);swHeight(st);st.tr.classList.remove('moving');
+  var changed=i!==st.last;st.i=i;st.last=i;st.hc=null;st.oy=null;st.hmax=null;swBar(st);swHeight(st);st.tr.classList.remove('moving');
   st.pages.forEach(function(p,k){if(p.style.transform){p.style.transform='';p.style.opacity='';p.style.transformOrigin=''}var near=Math.abs(k-i)===1;p.setAttribute('aria-hidden',k===i?'false':'true');p.classList.toggle('swoff',k!==i&&!near);p.classList.toggle('swnear',near);try{p.inert=k!==i}catch(e){}});
   SWMEM[st.root.id]=i;try{sessionStorage.setItem('manna.sw.v1',JSON.stringify(SWMEM))}catch(e){}
   if(changed&&user)swTopIn(st);
