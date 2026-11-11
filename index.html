@@ -1408,6 +1408,22 @@ html:not(.rm):not(.lite) .stt-bar{transform-origin:bottom;animation:sttUp .6s cu
 <style id="clk-phone">@media (pointer:coarse) and (max-width:600px){.clockbar .clk{display:none!important}}</style>
 <style id="chipx-style">.wsumx{display:inline-flex;align-items:center;gap:.45rem}.chipx{display:inline-grid;place-items:center;width:1.25rem;height:1.25rem;border-radius:50%;background:#ff453a;color:#fff;font:700 .7rem/1 system-ui,-apple-system,sans-serif}</style>
 <style id="vnext-style">.vpg .vnext{left:auto;right:1px;bottom:auto;top:calc(50% + 40px);transform:none;width:22px;height:22px;padding:0;display:grid;place-items:center;border-radius:50%;font-size:.75rem;line-height:1;background:color-mix(in srgb,var(--surface) 80%,transparent);color:var(--muted);box-shadow:0 2px 8px rgba(0,0,0,.18)}.vpg .vnext[hidden]{display:none}.vpg .vnext span{margin-top:-1px}</style>
+<style id="ovf-style">
+.plk-prev{filter:blur(3px) saturate(.8);opacity:.55;pointer-events:none;user-select:none;max-height:140px;overflow:hidden}
+.lc svg{display:block;width:100%;height:130px;overflow:visible}.lc-x{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-top:.2rem}
+.pg-big{display:flex;flex-direction:column;gap:.1rem}.pg-big b{font:700 1.7rem/1.1 var(--f-body);color:var(--ink)}
+.pgtabs{margin:0}.pgtabs button{font:700 .7rem/1.2 var(--f-body)!important;letter-spacing:.08em}
+.rcp{display:flex;flex-direction:column;gap:.35rem;padding:.75rem .9rem;border-radius:16px;background:color-mix(in srgb,var(--accent) 9%,transparent)}.rcp>b{font-size:1.05rem}.rcp ul{margin:0;padding-left:1.1rem}.rcp p{margin:0}
+.ft-bars{position:relative;height:90px;display:flex;align-items:stretch;gap:3px;border-bottom:1px solid color-mix(in srgb,var(--ink) 15%,transparent);margin:.2rem 2.4rem 1.2rem 0}
+.ft-c{flex:1;position:relative;display:flex;flex-direction:column;justify-content:flex-end}.ft-c i{display:block;border-radius:3px 3px 0 0;min-height:0}
+.ft-c em{position:absolute;top:100%;left:0;right:0;text-align:center;font:normal .62rem/1.6 var(--f-body);color:var(--muted)}.ft-c.now em{color:var(--ink);font-weight:700}
+.ft-tgt{position:absolute;left:0;right:0;border-top:1.5px dashed #30d158;z-index:1}.ft-tgt span{position:absolute;left:100%;top:0;transform:translateY(-50%);padding-left:.35rem;font:700 .62rem/1 var(--f-body);color:#30d158}
+.ft-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem}.ft-sum span{display:flex;flex-direction:column}.ft-sum b{font-size:1.15rem}.ft-sum small{font-size:.72rem;color:var(--muted)}
+.mpl li{align-items:center;gap:.6rem}.mpg summary{cursor:pointer;padding:.3rem 0}
+.baiout{display:flex;flex-direction:column;gap:.45rem;padding:.8rem .9rem;border-radius:16px;background:color-mix(in srgb,var(--accent) 8%,transparent)}.baiout p{margin:0;line-height:1.55}.baih{font-size:1.05rem}.baiout ul{margin:0;padding-left:1.1rem}
+.baiplan{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:.5rem}.baiplan input{margin-top:.25rem}
+.dtg{display:flex;gap:.6rem;align-items:flex-start;padding:.6rem .7rem;border-radius:14px;background:color-mix(in srgb,var(--accent) 7%,transparent)}.dtg input{margin-top:.2rem;flex:none}
+</style>
 <style id="pr-style">
 .prlist{display:grid;gap:.4rem;padding:.8rem .9rem;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,#ffd60a 18%,transparent),color-mix(in srgb,#ff9f0a 10%,transparent));border:1px solid color-mix(in srgb,#ffd60a 40%,transparent)}
 .prrow{display:flex;justify-content:space-between;gap:.6rem;font-size:.92rem}.prrow b{white-space:nowrap}
@@ -1526,6 +1542,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         <div id="vf-out" aria-live="polite"></div></div></div>
       <div class="stack" id="sc-bible" hidden>
       <div class="card stack" id="sc-reader"></div>
+      <div class="card stack" id="sc-bai"></div>
       <div class="card stack" id="sc-pnotes"></div>
       </div>
     </section>
@@ -1625,6 +1642,8 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <header class="vh"><p class="eyebrow">Fitness</p><h2>History</h2>
         <p class="lede">Every finished session, with the sets you logged.</p></header>
       <div id="hs-body" class="stack"></div>
+      <div class="card stack" id="h-recap"></div>
+      <div class="card stack" id="h-prog"></div>
     </section>
 
     <!-- WORKOUT SESSION -->
@@ -1695,6 +1714,8 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div class="card stack"><ul class="list" id="m-list"></ul>
         <div class="row"><a class="btn primary" href="#eat">Log food</a><button class="btn" data-act="svmopen">Save as a meal</button></div></div>
       <div class="card stack" id="m-saved"></div>
+      <div class="card stack" id="m-trend"></div>
+      <div class="card stack" id="m-plan"></div>
     </section>
 
     <section class="view" id="v-eat" hidden>
@@ -1714,7 +1735,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         <textarea id="e-ai" aria-label="Describe what you ate" placeholder="What did you eat, and about how much?"></textarea>
         <div class="row" style="align-items:flex-end"><label class="f" for="e-amt" style="flex:1;min-width:9rem">Amount, if you know it (optional)<input type="number" id="e-amt" min="0" step="any" inputmode="decimal" placeholder="e.g. 250"></label><div class="chips" id="e-unit" role="group" aria-label="Amount units"></div></div>
         <p class="small muted">If you enter an amount, the estimate is for exactly that much, and the amount carries over to the food's details.</p>
-        <div class="row"><button class="btn primary" data-act="eestimate">Estimate with AI</button><span class="small muted aileft"></span></div>
+        <div class="row"><button class="btn primary" data-act="eestimate">Estimate with AI</button><span class="small muted">Free for typed food</span></div>
       </div>
       <div class="card stack" id="e-water" hidden>
         <div id="e-water-body" class="stack"></div>
@@ -1742,6 +1763,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         <p class="small muted" id="f-meta" aria-live="polite"></p>
         <div class="fgrid" id="f-res"></div>
       </div>
+      <div class="card stack" id="r-link"></div>
       <div class="card stack">
         <h3>Build a home-cooked recipe</h3>
         <p class="small muted">Combine verified ingredients into one entry with correct per-serving numbers.</p>
@@ -1843,6 +1865,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div class="swpage" data-name="Body" data-ic="body"><div class="grid2">
         <div class="card stack" id="g-goals">
           <div class="row spread"><h3 style="margin:0">Goals</h3><span class="badge">🎯</span></div>
+          <label class="check dtg" for="g-daytgt"><input type="checkbox" id="g-daytgt"><span><b>Training-day and rest-day targets</b> <span class="badge pro">✨ OVERFLOW</span><br><span class="small muted">Eat about 10% more on days you train (mostly carbs) and a little less on rest days.</span></span></label>
           <div class="grid2"><label class="f" for="g-tgt"><span id="g-tgtl">Target weight</span><input type="number" id="g-tgt" data-chg="1" min="30" max="600" step="0.1" inputmode="decimal" placeholder="Optional"></label>
           <div class="stack" style="gap:.3rem"><b class="small">Pace</b><div class="seg" role="radiogroup" aria-label="Pace" id="g-pace"><button type="button" role="radio" data-act="gpace" data-k="gentle">Gentle</button><button type="button" role="radio" data-act="gpace" data-k="steady">Steady</button><button type="button" role="radio" data-act="gpace" data-k="fast">Faster</button></div></div></div>
           <p class="small" id="g-eta"></p>
@@ -2356,25 +2379,31 @@ var SCHED_T=[
  {id:'S2',tag:'Untitled schedule',load:'',desc:'',days:[null,null,null,null,null,null,null]},
  {id:'S3',tag:'Untitled schedule',load:'',desc:'',days:[null,null,null,null,null,null,null]}
 ];
-/* Schedules people have made. Free: 1. PRO: up to 3. Schedules made before this keep working. */
+/* Schedules people have made. Free: 1. Overflow: up to 3. Schedules made before this keep working. */
 function schedList(){
   if(!Array.isArray(S.schedList))S.schedList=SCHED_T.map(function(t){return t.id}).filter(function(id){return (S.plans[id]||[]).some(Boolean)||((S.planNames||{})[id]||'').trim()});
   S.schedList=S.schedList.filter(function(id){return S.plans[id]});
   if(S.schedList.length&&S.schedList.indexOf(S.planId)<0)S.planId=S.schedList[0];
   return S.schedList;
 }
-/* PRO status: the server's answer when we have it, otherwise the last answer remembered on this phone (so PRO themes show straight away) */
+/* Overflow status: the server's answer when we have it, otherwise the last answer remembered on this phone (so Overflow themes show straight away) */
 var PROC=null;
 function isPro(){if(typeof ACC!=='undefined'&&ACC.usage&&ACC.usage.plan){var v=ACC.usage.plan==='pro'||ACC.usage.plan==='paid';if(v!==PROC){PROC=v;try{localStorage.setItem('manna.pro.v1',v?'1':'0')}catch(e){}}return v}
   if(PROC==null){try{PROC=localStorage.getItem('manna.pro.v1')==='1'&&!!localStorage.getItem('manna.auth.v1')}catch(e){PROC=false}}return !!PROC}
 function schedMax(){return isPro()?3:1}
-/* ---------- Manna PRO ---------- */
+/* ---------- Manna Overflow ---------- */
 var PRO_PRICE={m:7,y:70},FREE_THEMES=['devotion','fitness','plain'],FREE_ROUTINES=5,FREE_PHOTOS=2,FREE_HIST_DAYS=30;
 var PROF=[
   ['AI uses','5 a day','Unlimited'],
   ['Snap a photo of your food','2 a day','Unlimited'],
-  ['Make a workout with AI','—','✓'],
-  ['AI weekly schedules','—','✓'],
+  ['AI weekly schedules','1 a week','Unlimited'],
+  ['Progress charts (strength and weight)','—','✓'],
+  ['Weekly recap with AI','—','✓'],
+  ['Food trends','—','✓'],
+  ['Meal plans and grocery lists','—','✓'],
+  ['Training-day and rest-day targets','—','✓'],
+  ['Bible help: explain, devotionals, reading plans','—','✓'],
+  ['Import recipes from a link','—','✓'],
   ['AI goal plans','—','✓'],
   ['Fix a food with AI','—','✓'],
   ['Themes','3','All 14'],
@@ -2384,31 +2413,34 @@ var PROF=[
   ['Schedules','1','3'],
   ['Bloodwork and nutrients','—','✓'],
   ['Log food and workouts','✓','✓'],
+  ['Type or say food, AI adds it','✓ Free','✓'],
+  ['Make a workout with AI','✓ uses AI uses','✓'],
+  ['Barcode scanning and saved meals','✓','✓'],
   ['Verse of the day and Bible','✓','✓'],
   ['Friends, cheers and sharing','✓','✓'],
   ['Workout timer and rest timer','✓','✓'],
   ['Full workout history','✓','✓']];
-var PROWHY={photo:'More food photos today',wai:'Making workouts with AI',sched:'Making schedules with AI',goal:'Making goal plans with AI',fix:'Fixing foods with AI',theme:'This theme',sty:'This sound style',cmp:'Comparing workouts',routine:'Saving more than '+FREE_ROUTINES+' routines',labs:'Bloodwork and nutrients'};
+var PROWHY={prog:'Seeing your progress charts',recap:'The weekly recap',trend:'Seeing your food trends',mplan:'Making meal plans',bible:'Bible help with AI',rlink:'Importing recipes from a link',daytgt:'Setting training-day and rest-day targets',photo:'More food photos today',wai:'Making workouts with AI',sched:'Making schedules with AI',goal:'Making goal plans with AI',fix:'Fixing foods with AI',theme:'This theme',sty:'This sound style',cmp:'Comparing workouts',routine:'Saving more than '+FREE_ROUTINES+' routines',labs:'Bloodwork and nutrients'};
 var PROUI={why:'',yr:true};
 function proNeed(why){if(isPro())return true;proOpen(why);return false}
 function proOpen(why){PROUI.why=why||'';proRender();modalOpen($('#prom'))}
 function proRender(){var c=$('#prom-card');if(!c)return;var yr=PROUI.yr,mo=(PRO_PRICE.y/12).toFixed(2),save=Math.round((1-PRO_PRICE.y/(PRO_PRICE.m*12))*100);
   c.innerHTML='<div class="row spread"><span></span><button class="btn sm" data-act="proclose">Close</button></div>'
-   +'<div class="prohead"><span class="proglow" aria-hidden="true">✨</span><h3 id="prom-t">Manna PRO</h3>'+(PROUI.why&&PROWHY[PROUI.why]?'<p class="proreason">'+esc(PROWHY[PROUI.why])+' is part of Manna PRO.</p>':'<p class="muted" style="margin:0">Everything in Manna, with no limits.</p>')+'</div>'
+   +'<div class="prohead"><span class="proglow" aria-hidden="true">✨</span><h3 id="prom-t">Manna Overflow</h3>'+(PROUI.why&&PROWHY[PROUI.why]?'<p class="proreason">'+esc(PROWHY[PROUI.why])+' is part of Manna Overflow.</p>':'<p class="muted" style="margin:0">Everything in Manna, with no limits.</p>')+'</div>'
    +'<div class="proseg" role="radiogroup" aria-label="Billing"><button type="button" role="radio" aria-checked="'+(!yr)+'" data-act="proplan" data-k="m">Monthly</button><button type="button" role="radio" aria-checked="'+yr+'" data-act="proplan" data-k="y">Yearly <span class="prosave">Save '+save+'%</span></button></div>'
    +'<div class="proprice"><b>$'+(yr?PRO_PRICE.y:PRO_PRICE.m)+'</b><span>'+(yr?'a year · just $'+mo+' a month':'a month')+'</span></div>'
    +proTable()
-   +'<button class="btn primary probuy" data-act="probuy">'+(isPro()?'You have PRO ✓':'Get PRO · $'+(yr?PRO_PRICE.y+'/year':PRO_PRICE.m+'/month'))+'</button>'
+   +'<button class="btn primary probuy" data-act="probuy">'+(isPro()?'You have Overflow ✓':'Get Overflow · $'+(yr?PRO_PRICE.y+'/year':PRO_PRICE.m+'/month'))+'</button>'
    +'<p class="small muted" style="text-align:center;margin:0">Cancel any time. Everything you have logged stays yours either way.</p>'}
-function proTable(){return '<div class="protab" role="table" aria-label="Free and PRO compared"><div class="prorow proth" role="row"><span role="columnheader"></span><span role="columnheader">Free</span><span role="columnheader">PRO</span></div>'
+function proTable(){return '<div class="protab" role="table" aria-label="Free and Overflow compared"><div class="prorow proth" role="row"><span role="columnheader"></span><span role="columnheader">Free</span><span role="columnheader">Overflow</span></div>'
    +PROF.map(function(r){return '<div class="prorow" role="row"><span role="cell">'+esc(r[0])+'</span><span role="cell" class="'+(r[1]==='—'?'no':'')+'">'+esc(r[1])+'</span><span role="cell" class="yes">'+esc(r[2])+'</span></div>'}).join('')+'</div>'}
-function proBadge(){return '<span class="badge pro">✨ PRO</span>'}
+function proBadge(){return '<span class="badge pro">✨ OVERFLOW</span>'}
 function proPhotoLeft(){if(isPro())return 99;try{var o=JSON.parse(localStorage.getItem('manna.photo.v1')||'{}');return o.d===todayStamp()?Math.max(0,FREE_PHOTOS-(o.n||0)):FREE_PHOTOS}catch(e){return FREE_PHOTOS}}
 function proPhotoUse(){if(isPro())return;try{var o=JSON.parse(localStorage.getItem('manna.photo.v1')||'{}');if(o.d!==todayStamp())o={d:todayStamp(),n:0};o.n=(o.n||0)+1;localStorage.setItem('manna.photo.v1',JSON.stringify(o))}catch(e){}}
 function proRoutineOk(){if(isPro())return true;if((S.customW||[]).length<FREE_ROUTINES)return true;proOpen('routine');return false}
-function proSettingsHtml(){var p=isPro();return '<div class="row spread"><h3 style="margin:0">Manna PRO</h3>'+(p?'<span class="badge pro">✨ You have PRO</span>':proBadge())+'</div>'
+function proSettingsHtml(){var p=isPro();return '<div class="row spread"><h3 style="margin:0">Manna Overflow</h3>'+(p?'<span class="badge pro">✨ You have Overflow</span>':proBadge())+'</div>'
   +(p?'<p class="small muted" style="margin:0">Thank you for supporting Manna. Everything is unlocked.</p>':'<p class="small" style="margin:0">$'+PRO_PRICE.m+' a month or $'+PRO_PRICE.y+' a year. Unlimited AI, every theme and music mood, workout compare, full history and more.</p>')
-  +'<button class="btn'+(p?'':' primary')+'" data-act="proopen">'+(p?'See what is in PRO':'Compare Free and PRO')+'</button>'}
+  +'<button class="btn'+(p?'':' primary')+'" data-act="proopen">'+(p?'See what is in Overflow':'Compare Free and Overflow')+'</button>'}
 function schedAdd(){var L=schedList();if(L.length>=schedMax())return null;var id=SCHED_T.map(function(t){return t.id}).filter(function(x){return L.indexOf(x)<0})[0];if(!id)return null;
   S.plans[id]=[null,null,null,null,null,null,null];S.planNames[id]='';L.push(id);S.planId=id;syncSched();return id}
 function schedName(id){id=id||S.planId;var n=(S.planNames&&S.planNames[id]||'').trim();return n||'Untitled schedule'}
@@ -2650,7 +2682,7 @@ function defaults0(){
   var s={goal:'lose',weight:78,units:'kg',
     cond:{glp1:false,insulin:false,bb:false,t2d:false,pcos:false,htn:false},
     allergy:{peanut:false,treenut:false,dairy:false,egg:false,gluten:false,shellfish:false,fish:false,soy:false,sesame:false},
-    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:[],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],vsaved:[],sctab:'feed',savedW:[],savedSeen:[],useSched:true,addPlan:'',keepRun:false,hEdit:false,hSel:[],hDelArm:false,wdays:{},seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
+    hideNums:false,showBurn:false,goalKcal:null,goalMsg:null,goals:[],age:30,sex:'other',height:175,activity:'light',macroOv:{p:null,c:null,f:null},onboarded:false,toured:false,topW:[],vsaved:[],sctab:'feed',savedW:[],savedSeen:[],useSched:true,addPlan:'',keepRun:false,hEdit:false,hSel:[],hDelArm:false,wdays:{},shaFreeWk:'',wlog:[],foodDays:{},recap:null,mplan:null,bai:null,dayTgt:false,progEx:'',progTab:'str',seenV:'',acctAsked:false,restDef:90,restPick:90,stkSeen:0,_mt:{},favVerse:'',
     sleep:8,hrv:55,sore:1,
     meals:[],labs:{fe:null,vd:null,b12:null},
     override:false,coachMsg:null,imported:[],
@@ -2720,6 +2752,7 @@ function targets(){
   var req=(S.goalKcal!=null&&!S.ill)?S.goalKcal:kcal,floor=1200;
   var out=Math.max(floor,req);
   if(req<floor)notes.push(S.hideNums?'Your goal was below the safe minimum, so it was raised to the minimum.':'Your goal was below the 1,200 minimum, so it was held at 1,200.');
+  if(S.dayTgt&&!S.ill&&isPro()){if(isTrainDay()){out=Math.round(out*1.1/10)*10;notes.push('Training day: about 10% more, mostly from carbs.')}else{out=Math.max(floor,Math.round(out*.93/10)*10);notes.push('Rest day: a little less today.')}}
   var M=macrosFor(out,R.pk,R.fp,R.bmr,R.tdee,R.adj),ov=S.macroOv||{};
   var protein=S.cond.glp1?Math.max(M.protein,Math.round(S.weight*1.6)):M.protein;
   if(ov.p!=null)protein=ov.p;
@@ -2827,6 +2860,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:156,d:'Nov 11, 2026',big:1,lead:'Meet Manna Overflow, named for Psalm 23: "my cup overflows." Plus free AI food logging for everyone.',t:'Manna Overflow',s:['Manna PRO is now called Manna Overflow.','Free for everyone: type or say what you ate and AI adds each food. It no longer uses up your AI uses.','Free for everyone: make a workout with AI (it uses your daily AI uses), and make one AI schedule a week.','New in Overflow: Progress charts in History, for your strength on each exercise and your weight over time. Logging your weight also updates your targets.','New in Overflow: a weekly recap, where AI sums up your week and gives one tip.','New in Overflow: Food trends on Meals, with 14 days of calories and protein against your targets.','New in Overflow: a meal plan for the day that hits your targets, with a grocery list. Add any meal with one tap.','New in Overflow: training-day and rest-day targets, in Settings › Goals.','New in Overflow: Bible help with AI, to explain a chapter, write a devotional on any topic, or build a 7-day reading plan. Reading the Bible stays free.','New in Overflow: import a recipe from a link, and AI works out the numbers per serving.','CHANGE THEME in Settings is now in capitals.']},
  {v:155,d:'Nov 11, 2026',t:'Full history for everyone',s:['Your whole workout history is now free. Free accounts see every workout, not just the last 30 days.']},
  {v:154,d:'Nov 11, 2026',t:'The Manna logo everywhere',s:['On the Fitness opening animation, the stars now sparkle into place one by one, then keep twinkling.','The Manna logo now shows as the icon in Chrome and Safari tabs, bookmarks, on your desktop and on your home screen. If you added Manna to your home screen before, remove it and add it again to get the new icon.']},
  {v:153,d:'Nov 11, 2026',t:'Custom gets its colour',s:['Custom workouts now have their own gold colour instead of plain grey, on cards, in History and in the charts.']},
@@ -3188,7 +3222,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='155';
+var heroLast='',APPV='156';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3278,7 +3312,7 @@ function renderSafe(){
 }
 function renderLabs(){
   var lk=$('#lb-lock');if(!lk){var v=$('#v-labs .vh');if(v){lk=document.createElement('div');lk.id='lb-lock';v.parentNode.insertBefore(lk,v.nextSibling)}}
-  if(lk){var pro=isPro();lk.hidden=pro;$('#v-labs').classList.toggle('prolocked',!pro);if(!pro&&!lk.innerHTML)lk.innerHTML='<button type="button" class="prolock big" data-act="proopen"><span>🔒</span><span><b>Bloodwork and nutrients is part of PRO</b><small>Track iron, B12, vitamin D and more, and see how your food connects to your lab results.</small></span>'+proBadge()+'</button>'}
+  if(lk){var pro=isPro();lk.hidden=pro;$('#v-labs').classList.toggle('prolocked',!pro);if(!pro&&!lk.innerHTML)lk.innerHTML='<button type="button" class="prolock big" data-act="proopen"><span>🔒</span><span><b>Bloodwork and nutrients is part of Overflow</b><small>Track iron, B12, vitamin D and more, and see how your food connects to your lab results.</small></span>'+proBadge()+'</button>'}
   var T=targets(),tot=totals();
   var rows=[['Iron',tot.fe,T.iron,'mg',false],['Vitamin B12',tot.b12,T.b12,'µg',false],['Vitamin D',tot.vd,T.vd,'µg',false],['Potassium',tot.k,T.k,'mg',false],['Fiber',tot.fib,T.fiber,'g',false],['Sodium (max)',tot.na,T.sodium,'mg',true]];
   $('#lb-nut').innerHTML=rows.map(function(r){
@@ -3431,7 +3465,7 @@ function accOn(){return typeof ACC!=='undefined'&&ACC&&ACC.cfg&&ACC.cfg.accounts
 function aiLoginNeeded(){return accOn()&&ACC.cfg.aiNeedsLogin&&!signedIn()}
 function aiPro(){return !!(accOn()&&signedIn()&&ACC.usage&&ACC.usage.plan==='pro')}
 function aiLeft(){if(aiPro())return 999;if(accOn()&&signedIn())return ACC.usage?Math.max(0,ACC.usage.limit-ACC.usage.used):1;if(aiLoginNeeded())return 0;return Math.max(0,AI_DAY-aiUsed())}
-function aiLeftText(){if(aiLoginNeeded())return 'Log in under Settings › Account to use AI.';if(aiPro())return 'PRO: unlimited AI';var n=aiLeft(),lim=accOn()&&signedIn()&&ACC.usage?ACC.usage.limit:AI_DAY;if(accOn()&&signedIn()&&!ACC.usage)return '';return n?n+' of '+lim+' AI uses left today':'No AI uses left today. They reset at midnight.'}
+function aiLeftText(){if(aiLoginNeeded())return 'Log in under Settings › Account to use AI.';if(aiPro())return 'Overflow: unlimited AI';var n=aiLeft(),lim=accOn()&&signedIn()&&ACC.usage?ACC.usage.limit:AI_DAY;if(accOn()&&signedIn()&&!ACC.usage)return '';return n?n+' of '+lim+' AI uses left today':'No AI uses left today. They reset at midnight.'}
 function blobUrl(b){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(r.result)};r.onerror=no;r.readAsDataURL(b)})}
 var SERVER_AI={
   json:function(inst,opts){
@@ -3604,7 +3638,7 @@ function mkRender(){
       +'<div class="row" style="justify-content:center"><button class="btn primary" data-act="mkstart">Start now</button><button class="btn" data-act="mksave">Save to library</button></div><div class="row" style="justify-content:center"><button class="btn sm" data-act="mkagain">Make another</button><button class="btn sm" data-act="mkclose">Close</button></div></div>'}
   if(c.dataset.h!==h){c.dataset.h=h;c.innerHTML=h}
 }
-function mkWorkout(t,title,lvl){t=String(t||'').trim();if(!t)return;if(!proNeed('wai'))return;S.ai=null;S.aiMsg='';mkOpen('workout',title||'Your workout');MK.ask=t;aiWorkout(t,lvl)}
+function mkWorkout(t,title,lvl){t=String(t||'').trim();if(!t)return;S.ai=null;S.aiMsg='';mkOpen('workout',title||'Your workout');MK.ask=t;aiWorkout(t,lvl)}
 /* ---------- Ambient background music: made live in the browser, no files ----------
    calm on most pages, peaceful on Faith, upbeat on Fitness. Crossfades between them. */
 var AMB={ctx:null,master:null,send:null,bus:null,mood:'',next:0,step:0,iv:0,noise:null,started:false};
@@ -3831,11 +3865,11 @@ function gAI(mode,text,after){
     });
   }).catch(function(e){S.gaiBusy=false;S.gaiMsg=aiErr(e&&e.code)+' Try again in a moment.';refresh()});
 }
-/* ---------- AI schedule (PRO) ---------- */
+/* ---------- AI schedule (Overflow) ---------- */
 var SHA=null;
 function shaRender(){
-  var el=$('#sh-ai');if(!el)return;var pro=isPro(),h='<div class="row spread"><h3 style="margin:0">Make a schedule with AI</h3><span class="badge pro">✨ PRO</span></div>';
-  if(!pro)h+='<p class="small muted">Tell AI what you want from your week and it builds the whole schedule. This is part of Manna PRO.</p><textarea disabled placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea>';
+  var el=$('#sh-ai');if(!el)return;var pro=isPro(),used=!pro&&S.shaFreeWk===dk(weekStart().getTime()),h='<div class="row spread"><h3 style="margin:0">Make a schedule with AI</h3>'+(pro?'<span class="badge pro">✨ OVERFLOW</span>':'<span class="small muted">'+(used?'Free one used this week':'1 free a week')+'</span>')+'</div>';
+  if(used)h+='<p class="small muted">You have used this week\'s free AI schedule. It comes back on Monday, or get unlimited with Manna Overflow.</p><button class="btn sm" data-act="proopen">See Overflow</button>';
   else{h+='<textarea id="sha-text" aria-label="What do you want from your schedule" placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea><div class="row"><button class="btn primary" data-act="shamake">Make my schedule</button><span class="small muted">1 AI use</span></div>';
     if(S.shaMsg)h+='<p class="note warn small">'+esc(S.shaMsg)+'</p>';
     if(SHA){h+='<div class="stack shaout"><label class="f" for="sha-name">Schedule name<input type="text" id="sha-name" maxlength="40" value="'+esc(SHA.name)+'"></label><ul class="list">'+SHA.days.map(function(d,i){return '<li><div style="flex:1;min-width:0"><span class="small muted">'+DAYN[i]+'</span>'+(d?'<input type="text" class="shad" id="sha-d'+i+'" maxlength="50" value="'+esc(d.name)+'" aria-label="'+DAYN[i]+' workout name"><span class="small muted">'+d.items.length+' exercises · '+d.mins+' min · '+esc(d.items.slice(0,3).map(function(x){return x.name}).join(', '))+(d.items.length>3?'…':'')+'</span>':'<b>Rest</b>')+'</div></li>'}).join('')+'</ul><div class="row"><button class="btn primary" data-act="shasave">Save schedule</button><button class="btn" data-act="shaclr">Discard</button></div><p class="small muted">Tap a name to rename it before saving.</p></div>'}}
@@ -3858,7 +3892,7 @@ function shaMake(){
       var ds=Array.isArray(r&&r.days)?r.days.slice(0,7):[];while(ds.length<7)ds.push(null);
       var days=ds.map(function(d){if(!d||d.rest||!Array.isArray(d.items)||!d.items.length)return null;var st=stageCalc();var items=d.items.slice(0,10).map(function(i){var n=String(i&&i.name||'').trim().slice(0,50);return {name:n,rx:String(i&&i.rx||'3×10').slice(0,20)}}).filter(function(x){return x.name&&exState(x.name,S.area,st)!=='avoid'});if(!items.length)return null;return {name:String(d.name||'Workout').slice(0,50),mins:clamp(parseInt(d.mins,10)||S.aiMins||30,10,120),items:items}});
       if(!days.some(Boolean))throw {code:'failed'};
-      SHA={name:String(r.name||'My AI schedule').slice(0,40),days:days};S.shaBusy=false;
+      SHA={name:String(r.name||'My AI schedule').slice(0,40),days:days};S.shaBusy=false;if(!isPro())S.shaFreeWk=dk(weekStart().getTime());
       try{howFill([].concat.apply([],days.filter(Boolean).map(function(d){return d.items.map(function(i){return i.name})})))}catch(e){}
       refresh();setTimeout(function(){var o=$('#sh-ai');if(o)o.scrollIntoView({block:'start',behavior:'smooth'})},700);
     });
@@ -4119,6 +4153,13 @@ function fpFix(m,note){var key=m.k||m.id;if(FPFIX[key])return;FPFIX[key]=1;fpRen
     delete FPFIX[key];toast('Updated to '+Math.round(m.n.kcal)+' kcal.',{title:'Fixed with AI',icon:'✨',kind:'ok'});refresh();fpRender();
   }).catch(function(e){delete FPFIX[key];var c=e&&e.code;toast(['limit','nokey','rate_limited','offline','too_big','timeout','login'].indexOf(c)>-1?aiErr(c):'AI could not fix that. Try saying it another way.');fpRender()});
 }
+/* Typed food goes to the free food route: the server writes the prompt, and it never uses up AI uses */
+function isServerAI(x){for(var i=0;x&&i<5;i++){if(x===SERVER_AI)return true;x=Object.getPrototypeOf(x)}return false}
+function foodFree(text,amt,ids){var tokP=accOn()&&typeof authToken==='function'?authToken():Promise.resolve(null);
+  return tokP.then(function(tok){var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
+    return fetch(API+'/api/ai',{method:'POST',headers:h,body:JSON.stringify({kind:'food',text:String(text).slice(0,300),amt:amt||null,catalog:ids})})})
+  .then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})},function(){throw {code:'offline'}})
+  .then(function(j){if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};return j.data})}
 function askFood(text,file,opt){
   if(ASK.busy)return;if(file){if(proPhotoLeft()<=0){proOpen('photo');return}proPhotoUse()}
   var amt=opt&&opt.noAmt?null:readAmt();
@@ -4134,7 +4175,7 @@ function askFood(text,file,opt){
           +(amt?' It is one food. The portion is exactly '+amt+' g ('+Math.round(amt/28.3495*10)/10+' oz). Every number you return must be for exactly that amount.':' List every separate food or drink they mention (or the photo shows) as its own item, up to 8, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs). Do not split one dish into its ingredients.')
           +' For each item, if one entry in this list is clearly the same food, give its id as matchId, otherwise null:\n'+ids
           +'\nReturn JSON only: {"foods": [ '+FOODSPEC+' ]}. If you cannot tell what any of it is, return {"foods": []}.';
-        return sample.json(inst,blob?{images:[blob],modelTier:'quick'}:{modelTier:'quick'}).then(function(r){
+        return (blob||!isServerAI(sample)?sample.json(inst,blob?{images:[blob],modelTier:'quick'}:{modelTier:'quick'}):foodFree(text,amt,ids)).then(function(r){
           var L=r&&Array.isArray(r.foods)?r.foods:(r&&r.name?[r]:[]);
           L=L.filter(function(x){return x&&x.name}).slice(0,8);
           if(!L.length){ASK={busy:false,msg:'Could not tell what that is. Try again, or type the food name.',img:''};refresh();return}
@@ -4147,6 +4188,7 @@ function askFood(text,file,opt){
       return (blob?Promise.resolve(sample.limits()).then(function(l){if(!l||!l.images)throw {code:'noimg'}}):Promise.resolve()).then(go);
     }).catch(function(e){
       var code=e&&e.code;
+      if(!file&&opt&&opt.fallback){ASK={busy:false,ok:true,msg:'Logged the simple way, since AI could not be reached.',img:''};try{doLog(String(text),opt.fallback)}catch(x){}refresh();return}
       ASK={busy:false,msg:['limit','nokey','rate_limited','offline','too_big','timeout','login'].indexOf(code)>-1?aiErr(code):code==='noimg'?'Photos cannot be sent from here. Type the food name instead.':code==='not_granted'?'Claude access was declined, so photo and estimate lookups are off. You can still search the list.':code==='rate_limited'?'Too many requests. Wait a moment and try again.':'AI could not look that up. Try again, or search the list.',img:''};refresh();
     });
   });
@@ -4163,7 +4205,7 @@ function renderFoods(){
   $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try What are you eating? to search or estimate it.</p>';
   var qq=($('#f-q').value||'').trim(),el=foodList(qq,'all');
   var multi=qq&&/,|&|\+|\band\b|\bwith\b/i.test(qq);
-  $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">AI adds each food. One AI use for the whole list.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">AI adds each food. One AI use for the whole list.</p>':'')+'</div>'):'';
+  $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">AI adds each food. Free, and it doesn\'t use up your AI uses.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">AI adds each food. Free, and it doesn\'t use up your AI uses.</p>':'')+'</div>'):'';
   var _se=S.est.length?'<details><summary class="small">Saved AI estimates ('+S.est.length+')</summary><p class="small muted">Every food AI estimates is saved here on this device, so you can search and add it again without asking.</p><ul class="list" style="margin-top:.5rem">'+S.est.slice(0,50).map(function(o){return '<li><div>'+esc(o.name)+'<div class="small muted mono">'+esc(o.serv)+' · '+kc(o.kcal)+' kcal</div></div><button class="btn sm" data-act="estdel" data-id="'+o.id+'" aria-label="Remove saved estimate '+esc(o.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
   $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking AI. This takes a few seconds.</div>':(ASK.msg?'<div class="note '+(ASK.ok?'ok':'warn')+'">'+esc(ASK.msg)+'</div>':''));
   renderFoodModal();
@@ -4345,7 +4387,7 @@ function renderPrivacy(){
   $('#p-reset').textContent=delConfirm?'Click again to confirm':'Delete all my data';
   $('#p-units').value=S.units;$('#p-lang').value=S.lang;
   var plainTh=th.id==='plain',cols=THEMES.filter(function(t){return t.id!=='plain'}).map(function(t){return t.sw}),swbg=plainTh?'conic-gradient('+cols.concat(cols[0]).join(',')+')':sw;
-  var thh='<span class="thb-sw" style="background:'+swbg+'"></span><span class="thb-t"><b>Change theme</b><span>Now: '+esc(th.name)+' · '+(th.auto?'follows the verse':'chosen by you')+'</span></span><span class="thb-go" aria-hidden="true">›</span><span class="thb-strip" aria-hidden="true">'+THEMES.map(function(t){return '<i style="background:'+t.sw+'"></i>'}).join('')+'</span>';
+  var thh='<span class="thb-sw" style="background:'+swbg+'"></span><span class="thb-t"><b>CHANGE THEME</b><span>Now: '+esc(th.name)+' · '+(th.auto?'follows the verse':'chosen by you')+'</span></span><span class="thb-go" aria-hidden="true">›</span><span class="thb-strip" aria-hidden="true">'+THEMES.map(function(t){return '<i style="background:'+t.sw+'"></i>'}).join('')+'</span>';
   if($('#p-theme').dataset.h!==thh){$('#p-theme').dataset.h=thh;$('#p-theme').innerHTML=thh;$('#p-theme').style.setProperty('--thsw',plainTh?'#9b7cf0':sw)}
   if($('#p-share'))$('#p-share').innerHTML=[['workouts','Workouts'],['meals','Meals'],['weight','Weight']].map(function(x){return '<div class="row spread"><span>'+x[1]+'</span><span class="badge">'+esc(S.share[x[0]])+'</span></div>'}).join('');
   var ex={settings:{bible_version:ver(),theme:th.id,theme_mode:S.themeMode,units:S.units,language:S.lang,text_size:S.scale},profile:{goal:S.goal,weight_kg:S.weight,conditions:Object.keys(S.cond).filter(function(k){return S.cond[k]}),allergies:Object.keys(S.allergy).filter(function(k){return S.allergy[k]})},meals:S.meals.map(function(m){return {name:m.name,qty:m.q,time:m.t}}),labs:S.labs,sharing:S.share};
@@ -4541,7 +4583,7 @@ function renderThemes(){
     return '<div class="tcard card stack"><div class="tp" data-vtheme="'+t.id+'" aria-hidden="true"><div class="tp-top"><i class="tp-heart"></i><span class="tp-name">'+esc(S.name)+'.</span></div><div class="tp-lines"><i></i><i></i></div><div class="tp-row"><span class="tp-btn">Log Workout</span><span class="tp-paper">'+esc(refs[0]||'')+'</span></div></div>'
     +'<div class="row spread"><h3>'+esc(t.name)+'</h3><span class="row" style="gap:.35rem">'+(match?'<span class="badge">Matches today</span>':'')+(on?'<span class="badge">In use</span>':'')+'</span></div>'
     +'<p class="small muted">'+esc(t.mood)+'</p><p class="small muted">'+(refs.length?'Verses like '+esc(refs.join(', '))+'.':'Not tied to a verse. Follows light or dark mode.')+'</p>'
-    +'<button class="btn'+(chosen?' primary':'')+'" data-act="theme" data-k="'+t.id+'">'+(chosen?'Using '+esc(t.name):(!isPro()&&FREE_THEMES.indexOf(t.id)<0?'✨ PRO · ':'')+'Use '+esc(t.name))+'</button></div>'
+    +'<button class="btn'+(chosen?' primary':'')+'" data-act="theme" data-k="'+t.id+'">'+(chosen?'Using '+esc(t.name):(!isPro()&&FREE_THEMES.indexOf(t.id)<0?'✨ OVERFLOW · ':'')+'Use '+esc(t.name))+'</button></div>'
   }).join('');
 }
 
@@ -4927,13 +4969,13 @@ function renderSchedule(){
   if(S.useSched===false){$('#sh-plans').innerHTML='';$('#sh-week').innerHTML='<h3>Schedules are off</h3><p class="muted">Turn them on to plan a workout for each day of the week.</p><div class="row"><button class="btn primary" data-act="schedon">Turn schedules on</button></div>';return}
   var SL=schedList(),max=schedMax();
   if(!SL.length){$('#sh-plans').innerHTML='';
-    $('#sh-week').innerHTML='<div class="sempty"><div class="sempty-ic" aria-hidden="true">📅</div><h3>No schedules yet</h3><p class="muted">Make a weekly schedule to plan a workout for each day. It shows on Home and Today.</p><button class="btn primary" data-act="sadd">+ Add a schedule</button><p class="small muted">Free: 1 schedule. PRO: up to 3.</p></div>';
+    $('#sh-week').innerHTML='<div class="sempty"><div class="sempty-ic" aria-hidden="true">📅</div><h3>No schedules yet</h3><p class="muted">Make a weekly schedule to plan a workout for each day. It shows on Home and Today.</p><button class="btn primary" data-act="sadd">+ Add a schedule</button><p class="small muted">Free: 1 schedule. Overflow: up to 3.</p></div>';
     renderSchedImport();return}
   $('#sh-plans').innerHTML=SL.map(function(id,ti2){
     var n=S.plans[id].filter(Boolean).length;
     return '<button class="scard" data-act="splan" data-id="'+id+'" aria-pressed="'+(S.planId===id?'true':'false')+'"><span class="sl">'+(ti2+1)+'</span><b data-sn="'+id+'">'+esc(schedName(id))+'</b><span class="mono small">'+n+(n===1?' workout':' workouts')+' a week</span></button>';
-  }).join('')+(SL.length<max?'<button class="scard sadd" data-act="sadd"><span class="sl">+</span><b>Add a schedule</b><span class="mono small">'+(max-SL.length)+' more '+(isPro()?'with PRO':'')+'</span></button>'
-    :!isPro()?'<div class="scard slock" aria-disabled="true"><span class="sl">🔒</span><b>More schedules</b><span class="small muted">PRO accounts get up to 3</span></div>':'');
+  }).join('')+(SL.length<max?'<button class="scard sadd" data-act="sadd"><span class="sl">+</span><b>Add a schedule</b><span class="mono small">'+(max-SL.length)+' more '+(isPro()?'with Overflow':'')+'</span></button>'
+    :!isPro()?'<div class="scard slock" aria-disabled="true"><span class="sl">🔒</span><b>More schedules</b><span class="small muted">Overflow accounts get up to 3</span></div>':'');
   var days=planDays(),tpl=SCHED_T.filter(function(t){return t.id===S.planId})[0],ti=todayIdx(),done=0,total=0;
   var opts=function(sel){
     var o='<option value=""'+(sel?'':' selected')+'>Rest day</option>';
@@ -5095,7 +5137,7 @@ function renderHistory(){
       +'<button class="btn sm" data-act="hshare1" data-id="'+esc(x.id)+'">Share</button><button class="btn sm" data-act="hdel" data-id="'+esc(x.id)+'" aria-label="Delete '+esc(x.name)+' from history">Delete</button></div></div></details>';
     out+=sdWrap(row,'hdel',x.id,x.name);
   });
-  if(older)out+='<button type="button" class="prolock" data-act="proopen"><span>🔒</span><span><b>'+older+' older session'+(older===1?'':'s')+'</b><small>Free shows the last '+FREE_HIST_DAYS+' days. See everything with PRO.</small></span>'+proBadge()+'</button>';
+  if(older)out+='<button type="button" class="prolock" data-act="proopen"><span>🔒</span><span><b>'+older+' older session'+(older===1?'':'s')+'</b><small>Free shows the last '+FREE_HIST_DAYS+' days. See everything with Overflow.</small></span>'+proBadge()+'</button>';
   try{hperBind()}catch(e){}
   var hl=$('#h-list'),hh=out||'<p class="muted">No sessions yet. Start a workout and it will show up here.</p>';if(hl.dataset.h!==hh||!hl.innerHTML){hl.dataset.h=hh;hl.innerHTML=hh}
 }
@@ -5518,7 +5560,7 @@ function aiLeftPaint(){var t=aiLeftText();$$('.aileft').forEach(function(e){e.te
 function refresh(){try{renderStreaks();upPaint();gfxPaint();ambPaint();aiOptPaint();goalPaint();shaRender();setfabPaint();a2SetPaint();if(GL)glRender();mkTick();mkRender()}catch(e){}setTimeout(function(){try{vpSyncAll()}catch(e){}},0);setTimeout(aiLeftPaint,0);setTimeout(dvPaint,40);setTimeout(function(){if(typeof accRender==='function'){accRender();obAcct()}},0);
   if(S.votd.stamp!==todayStamp())S.votd=dayVerse();
   try{var ps=$('#pro-set');if(ps){var ph=proSettingsHtml();if(ps.dataset.h!==ph){ps.dataset.h=ph;ps.innerHTML=ph}}}catch(e){}
-  applyPrefs();try{themeColorSync()}catch(e){}renderToday();try{renderFriends()}catch(e){}try{mkTick();mkRender()}catch(e){}renderScripture();renderReader();renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
+  applyPrefs();try{themeColorSync()}catch(e){}renderToday();try{renderFriends()}catch(e){}try{mkTick();mkRender()}catch(e){}renderScripture();renderReader();try{renderProExtras()}catch(e){}renderWorkouts();renderSchedule();renderHistory();renderSession();renderAI();renderNotes();renderMedical();renderSafe();renderLabs();renderFoods();renderLog();renderMeals();renderExtras();renderXSettings();renderCommunity();renderPrivacy();renderThemes();
   syncBody();prefSave();
 }
 function syncInputs(){
@@ -5709,7 +5751,7 @@ var ACT={
   gluserec:function(){if(!GL)return;S.goalKcal=null;S.macroOv={p:null,c:null,f:null};GL.a=gSnap();glRender()},
   gaimake:function(){if(!proNeed('goal'))return;gAI('make',$('#g-ai')&&$('#g-ai').value)},
   gairefine:function(){if(!proNeed('goal'))return;gAI('refine',$('#g-ai')&&$('#g-ai').value)},
-  shamake:function(){if(!proNeed('sched'))return;shaMake()},
+  shamake:function(){if(!isPro()&&S.shaFreeWk===dk(weekStart().getTime())){proOpen('sched');return}shaMake()},
   shaclr:function(){SHA=null},
   shasave:function(){if(!SHA)return;var L=schedList();if(L.length>=schedMax()){toast('You already have '+schedMax()+' schedules. Delete one first.');return}
     var nm=(($('#sha-name')&&$('#sha-name').value)||SHA.name).trim().slice(0,40)||'My AI schedule',id=schedAdd();if(!id){toast('Could not add a schedule.');return}
@@ -5941,14 +5983,14 @@ var ACT={
     S.plans[S.planId]=plan;var snm=$('#si-name')?$('#si-name').value.trim():(o.name||'');if(snm)S.planNames[S.planId]=snm.slice(0,30);syncSched();S.siRes=null;$('#si-text').value='';
     toast('Imported '+set+' day'+(set===1?'':'s')+' into '+schedName()+(made?', with '+made+' new workout'+(made===1?'':'s'):'')+'.')},
   sreset:function(){S.plans[S.planId]=[null,null,null,null,null,null,null];syncSched();toast('Schedule cleared.')},
-  sadd:function(){var L=schedList();if(L.length>=schedMax()){toast(isPro()?'You have the most schedules: 3.':'Free accounts get 1 schedule. PRO gets up to 3.');return}schedAdd();toast('Added a schedule. Pick a workout for each day.')},
+  sadd:function(){var L=schedList();if(L.length>=schedMax()){toast(isPro()?'You have the most schedules: 3.':'Free accounts get 1 schedule. Overflow gets up to 3.');return}schedAdd();toast('Added a schedule. Pick a workout for each day.')},
   sdel:function(){var id=S.planId;if(S.sdelAsk!==id){S.sdelAsk=id;setTimeout(function(){if(S.sdelAsk===id){S.sdelAsk=null;refresh()}},4000);return}
     S.sdelAsk=null;var nm=schedName(id);S.plans[id]=[null,null,null,null,null,null,null];S.planNames[id]='';S.schedList=schedList().filter(function(x){return x!==id});S.planId=S.schedList[0]||'S1';syncSched();toast('Deleted '+nm+'.')},
   hfilter:function(b){S.hf=b.dataset.k},
-  proopen:function(){proOpen('')},
+  proopen:function(b){proOpen(b&&b.dataset&&b.dataset.why||'')},
   proclose:function(){modalHide($('#prom'))},
   proplan:function(b){PROUI.yr=b.dataset.k==='y';proRender()},
-  probuy:function(){if(isPro()){modalHide($('#prom'));return}toast('Checkout is coming soon. Thank you for wanting PRO!',{title:'Manna PRO',icon:'✨'})},
+  probuy:function(){if(isPro()){modalHide($('#prom'));return}toast('Checkout is coming soon. Thank you for wanting Overflow!',{title:'Manna Overflow',icon:'✨'})},
   shmclose:function(){modalHide($('#shm'))},
   shpick:function(b){var u=b.dataset.u;SH.sel[u]=!SH.sel[u];SH.msg='';shRender();return false},
   shsend:function(){shSend();return false},
@@ -6045,6 +6087,16 @@ var ACT={
   aiex:function(b){var t=AI_EX[parseInt(b.dataset.id,10)];$('#ai-text').value=t;mkWorkout(t)},
   copyprompt:function(){copyText($('#ai-prompt').textContent,$('#ai-prompt'))},
   fpsavemeal:function(){var ms=FP.list.map(fpFind).filter(Boolean);if(!ms.length||FP.saved)return;var nm=ms.length===1?ms[0].name:'';if(saveMealFrom(ms,nm)){FP.saved=true;fpRender()}},
+  progtab:function(b){S.progTab=b.dataset.k==='wt'?'wt':'str'},
+  wlogadd:function(){var v=parseFloat(($('#wl-in')||{}).value);if(!(v>0)){toast('Type your weight first.');return}var kg=S.units==='lb'?v/LBKG:v;if(kg<20||kg>320){toast('That weight looks off. Check the number.');return}
+    if(!Array.isArray(S.wlog))S.wlog=[];var ts=todayStamp();S.wlog=S.wlog.filter(function(w){return w.d!==ts});S.wlog.push({t:Date.now(),d:ts,kg:Math.round(kg*100)/100});S.wlog=S.wlog.slice(-400);
+    if(kg>=35&&kg<=250)S.weight=Math.round(kg*10)/10;var n=$('#wl-in');if(n)n.value='';toast('Weight logged. Your targets now use it.',{title:'Logged',icon:'⚖️',kind:'ok'})},
+  recapgo:function(){if(!proNeed('recap'))return;recapMake()},
+  mpgo:function(){if(!proNeed('mplan'))return;mealPlanMake()},
+  mpadd:function(b){var P=S.mplan,m=P&&P.meals[+b.dataset.i];if(!m)return;var meal=estLog(m,'plan');toast('Added '+m.name+'.',{title:'From your plan',icon:'🍽',kind:'ok'})},
+  mpcopy:function(){var P=S.mplan;if(!P)return;var t=P.grocery.map(function(g){return '• '+g.item+(g.qty?' ('+g.qty+')':'')}).join('\n');try{navigator.clipboard.writeText(t).then(function(){toast('Grocery list copied.')},function(){toast('Could not copy. Try again.')})}catch(e){toast('Could not copy.')}},
+  baigo:function(b){if(!proNeed('bible'))return;baiMake(b.dataset.k)},
+  rlgo:function(){if(!proNeed('rlink'))return;recipeLink()},
   aidel:function(){S.ai=null;S.aiMsg='';toast('AI workout deleted.')},
   aisave:function(){var o=S.ai;if(!o)return;if(!proRoutineOk())return;if(!S.howC||typeof S.howC!=='object')S.howC={};o.items.forEach(function(i){var l=i.name.toLowerCase();if(i.how&&!HOWL[l])S.howC[l]=i.how});S.howC=Object.assign({},S.howC);var id='c'+(uid++);S.customW.push({id:id,name:o.name,mins:o.mins,level:LVLNAME[o.lvl]||'Custom',cat:'custom',eq:['bodyweight'],focus:o.focus,pl:o.pl,ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved to your library.')},
   ntparse:function(){S.ntMsg='';S.notes=parseNotes($('#nt-text').value||'');ntAuto()},
@@ -6296,7 +6348,7 @@ function accRender(){
   var f=accFields(),h='<div class="sh"><h3>Account</h3>';
   var note=ACC.msg?'<p class="note small'+(ACC.err==='out'?' crit':ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
   if(signedIn()&&ACC.mode!=='newpass'){
-    var u=ACC.usage,plan=u&&u.plan==='pro'?'PRO':u&&u.plan==='paid'?'Paid':'Free';
+    var u=ACC.usage,plan=u&&u.plan==='pro'?'Overflow':u&&u.plan==='paid'?'Paid':'Free';
     var pv=a.prov||'email',linked=(a.provs&&a.provs.length?a.provs:[pv]);
     h+='<p class="small muted">Signed in as <b>'+esc(a.email)+'</b></p></div>'+note
       +'<div class="acwho"><span class="acav" data-p="'+esc(pv)+'" aria-hidden="true">'+esc(((a.name||a.email||'?').trim()[0]||'?').toUpperCase())+'</span><div class="acwt">'+(a.name?'<b>'+esc(a.name)+'</b>':'')+'<span class="small">'+(pv==='email'?'Signed in with email and password':'Signed in with '+esc(PROVN[pv]||pv))+'</span></div>'+provBadge(pv)+'</div>'
@@ -6515,6 +6567,145 @@ function svmRender(){var L=$('#svm-list');if(!L)return;
   L.innerHTML=S.meals.map(function(m){var on=SVM.sel.indexOf(String(m.id))>-1;return '<li><label class="row" style="gap:.6rem;flex-wrap:nowrap;width:100%"><input type="checkbox" data-svm="'+m.id+'"'+(on?' checked':'')+'><span style="flex:1">'+esc(m.name)+'</span><span class="small muted mono">'+kc(Math.round(m.n.kcal))+' kcal</span></label></li>'}).join('');
   svmSum()}
 function svmSum(){var k=0,n=0;S.meals.forEach(function(m){if(SVM.sel.indexOf(String(m.id))>-1){k+=+m.n.kcal||0;n++}});var su=$('#svm-sum');if(su)su.textContent=n+' food'+(n===1?'':'s')+' · '+kc(Math.round(k))+' kcal';var g=$('#svm-go');if(g)g.disabled=!n}
+/* ================= Overflow extras (Version 156) ================= */
+function proLock(title,blurb,why,preview){return '<div class="row spread"><h3 style="margin:0">'+title+'</h3>'+proBadge()+'</div><p class="small muted" style="margin:0">'+blurb+'</p>'+(preview?'<div class="plk-prev" aria-hidden="true">'+preview+'</div>':'')+'<button type="button" class="prolock" data-act="proopen" data-why="'+why+'"><span>🔒</span><span><b>Part of Manna Overflow</b><small>Tap to see what Overflow adds.</small></span></button>'}
+/* simple line chart: pts=[{x:ts,y:number}] */
+function lineChart(pts,fmtY,col){if(pts.length<2)return '<p class="small muted">Log this a couple more times to see a line.</p>';
+  var W=300,H=120,P=8,xs=pts.map(function(p){return p.x}),ys=pts.map(function(p){return p.y}),x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys);
+  if(y1===y0){y1+=1;y0-=1}var pad=(y1-y0)*.15;y0-=pad;y1+=pad;
+  var X=function(v){return P+(x1===x0?.5:(v-x0)/(x1-x0))*(W-2*P)},Y=function(v){return H-P-(v-y0)/(y1-y0)*(H-2*P)};
+  var d=pts.map(function(p,i){return (i?'L':'M')+X(p.x).toFixed(1)+' '+Y(p.y).toFixed(1)}).join(' '),c=col||'var(--accent)';
+  var area=d+' L'+X(pts[pts.length-1].x).toFixed(1)+' '+(H-P)+' L'+X(pts[0].x).toFixed(1)+' '+(H-P)+' Z';
+  var f=function(t){return new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric'})};
+  return '<div class="lc"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" role="img" aria-label="Chart from '+fmtY(pts[0].y)+' to '+fmtY(pts[pts.length-1].y)+'"><path d="'+area+'" fill="'+c+'" opacity=".12"/><path d="'+d+'" fill="none" stroke="'+c+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
+    +pts.map(function(p,i){return i===pts.length-1?'<circle cx="'+X(p.x).toFixed(1)+'" cy="'+Y(p.y).toFixed(1)+'" r="4" fill="'+c+'"/>':''}).join('')+'</svg>'
+    +'<div class="lc-x"><span>'+f(x0)+'</span><span>'+f(x1)+'</span></div></div>'}
+function sampleLine(){var t=Date.now(),p=[];for(var i=0;i<8;i++)p.push({x:t-(7-i)*7*864e5,y:60+i*3+(i%3)*2});return lineChart(p,function(v){return v})}
+var LBKG=2.20462;
+function wShow(kg){return S.units==='lb'?Math.round(kg*LBKG*10)/10+' lb':Math.round(kg*10)/10+' kg'}
+/* strength: best estimated one-rep max per session for one exercise */
+function strengthSeries(name){var out=[];S.hist.slice().sort(function(a,b){return a.ts-b.ts}).forEach(function(h){if(h.sample)return;(h.log||[]).forEach(function(l){if(l.n!==name)return;var best=0;(l.s||[]).forEach(function(s){var w=+s.w||0,r=+s.r||0;if(w>0&&r>0){var wu=h.unit&&h.unit!==S.units?(S.units==='lb'?w*LBKG:w/LBKG):w;best=Math.max(best,wu*(1+Math.min(r,12)/30))}});if(best>0)out.push({x:h.ts,y:Math.round(best*10)/10})})});return out}
+function liftNames(){var c={};S.hist.forEach(function(h){(h.log||[]).forEach(function(l){if((l.s||[]).some(function(s){return +s.w>0&&+s.r>0}))c[l.n]=(c[l.n]||0)+1})});return Object.keys(c).sort(function(a,b){return c[b]-c[a]})}
+function renderProgress(){var el=$('#h-prog');if(!el)return;var h;
+  if(!isPro())h=proLock('Progress','See your strength on each exercise and your weight over weeks and months.','prog',sampleLine());
+  else{var tab=S.progTab==='wt'?'wt':'str';
+    h='<div class="row spread"><h3 style="margin:0">Progress</h3><div class="hptabs pgtabs" role="tablist"><button type="button" role="tab" data-act="progtab" data-k="str" aria-selected="'+(tab==='str')+'">STRENGTH</button><button type="button" role="tab" data-act="progtab" data-k="wt" aria-selected="'+(tab==='wt')+'">WEIGHT</button></div></div>';
+    if(tab==='str'){var names=liftNames();
+      if(!names.length)h+='<p class="small muted">Log a weighted exercise, like bench press with a weight, and your strength line shows up here.</p>';
+      else{var ex=names.indexOf(S.progEx)>-1?S.progEx:names[0],ser=strengthSeries(ex),first=ser[0],last=ser[ser.length-1];
+        h+='<label class="f" for="pg-ex">Exercise<select id="pg-ex" data-chg="1">'+names.slice(0,40).map(function(n){return '<option'+(n===ex?' selected':'')+'>'+esc(n)+'</option>'}).join('')+'</select></label>';
+        if(last)h+='<div class="pg-big"><b>'+Math.round(last.y)+' '+S.units+'</b><span class="small muted">estimated one-rep max'+(first&&ser.length>1?' · '+(last.y>=first.y?'▲ ':'▼ ')+Math.abs(Math.round((last.y-first.y)/first.y*100))+'% since '+new Date(first.x).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'')+'</span></div>';
+        h+=lineChart(ser,function(v){return Math.round(v)+' '+S.units});}
+    }else{var wl=(S.wlog||[]).slice().sort(function(a,b){return a.t-b.t}),lw=wl[wl.length-1],fw=wl[0];
+      h+='<form class="row" data-form="wlog" style="align-items:flex-end"><label class="f" for="wl-in" style="flex:1;min-width:9rem">Today\'s weight ('+S.units+')<input type="number" id="wl-in" min="20" max="700" step="0.1" inputmode="decimal" placeholder="'+(lw?(S.units==='lb'?Math.round(lw.kg*LBKG*10)/10:lw.kg):'')+'"></label><button class="btn primary" data-act="wlogadd" type="button">Log weight</button></form>';
+      if(lw)h+='<div class="pg-big"><b>'+wShow(lw.kg)+'</b><span class="small muted">'+(wl.length>1?(lw.kg<=fw.kg?'▼ ':'▲ ')+wShow(Math.abs(lw.kg-fw.kg))+' since '+new Date(fw.t).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'Your first weigh-in')+'</span></div>';
+      h+=lineChart(wl.map(function(w){return {x:w.t,y:S.units==='lb'?w.kg*LBKG:w.kg}}),function(v){return Math.round(v*10)/10+' '+S.units});
+    }}
+  if(el.dataset.h!==h){var v=$('#wl-in')?$('#wl-in').value:'';el.dataset.h=h;el.innerHTML=h;var n=$('#wl-in');if(n&&v)n.value=v}}
+/* weekly recap with AI */
+var RCP={busy:false,msg:''};
+function weekFacts(){var now=Date.now(),wk=S.hist.filter(function(h){return !h.sample&&h.ts>now-7*864e5}),T=targets(),days=[],FD=S.foodDays||{};
+  for(var i=6;i>=0;i--){var d=new Date(now-i*864e5),k=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);if(FD[k]&&FD[k].k>0)days.push(FD[k])}
+  var avg=function(f){return days.length?Math.round(days.reduce(function(a,x){return a+(x[f]||0)},0)/days.length):0};
+  return {workouts:wk.map(function(h){return {day:new Date(h.ts).toLocaleDateString('en-US',{weekday:'short'}),name:h.name,mins:Math.round((h.ms||0)/60000),cat:h.cat||'',prs:(h.prs||[]).length}}),
+    foodDaysLogged:days.length,avgCalories:avg('k'),avgProtein:avg('p'),calorieTarget:T.kcal,proteinTarget:T.protein,streak:streakDays(),goal:S.goal}}
+function recapMake(){if(RCP.busy)return;RCP={busy:true,msg:''};mkOpen('workout','Your week',function(){return {done:!RCP.busy,err:RCP.msg}});
+  getSample().then(function(sm){if(!sm)throw {code:'nokey'};
+    var f=weekFacts(),pr='You are a warm, encouraging fitness and nutrition coach in a faith-friendly app. Here is the person\'s last 7 days as JSON:\n'+JSON.stringify(f)+'\nWrite a short weekly recap. Be specific to the numbers, kind and honest, never shaming. Return JSON only: {"headline": string (max 8 words), "wins": [2 or 3 short strings], "watch": string (one thing to work on, or empty), "tip": string (one practical tip for next week, one sentence)}.';
+    return sm.json(pr,{modelTier:'quick'})}).then(function(r){if(!r||!r.headline)throw {code:'failed'};
+    S.recap={at:Date.now(),wk:dk(weekStart().getTime()),headline:String(r.headline).slice(0,80),wins:(Array.isArray(r.wins)?r.wins:[]).slice(0,3).map(function(x){return String(x).slice(0,160)}),watch:String(r.watch||'').slice(0,200),tip:String(r.tip||'').slice(0,220)};RCP={busy:false,msg:''};refresh()})
+  .catch(function(e){RCP={busy:false,msg:aiErr(e&&e.code)};refresh()})}
+function renderRecap(){var el=$('#h-recap');if(!el)return;var h;
+  if(!isPro())h=proLock('Weekly recap','Every week, AI sums up your training and eating and gives you one tip for next week.','recap','<div class="rcp"><b>Strong week: 4 workouts</b><ul><li>Hit protein 5 of 7 days</li><li>New bench press record</li></ul></div>');
+  else{var r=S.recap;h='<div class="row spread"><h3 style="margin:0">Weekly recap</h3><span class="badge pro">✨ OVERFLOW</span></div>';
+    if(r)h+='<div class="rcp"><b>'+esc(r.headline)+'</b>'+(r.wins.length?'<ul>'+r.wins.map(function(w){return '<li>'+esc(w)+'</li>'}).join('')+'</ul>':'')+(r.watch?'<p class="small"><b>Work on:</b> '+esc(r.watch)+'</p>':'')+(r.tip?'<p class="small"><b>Tip:</b> '+esc(r.tip)+'</p>':'')+'<p class="small muted" style="margin:0">Written '+new Date(r.at).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+'</p></div>';
+    else h+='<p class="small muted" style="margin:0">Get a short, honest summary of your last 7 days and one tip for next week.</p>';
+    h+='<div class="row"><button class="btn '+(r?'sm':'primary')+'" data-act="recapgo"'+(RCP.busy?' disabled':'')+'>'+(RCP.busy?'Writing…':r?'Write a new recap':'Write my recap')+'</button></div>'+(RCP.msg?'<p class="note warn small">'+esc(RCP.msg)+'</p>':'')}
+  if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}}
+/* food trends: last 14 days */
+function foodDaySave(){if(!S.foodDays||typeof S.foodDays!=='object'||Array.isArray(S.foodDays))S.foodDays={};var k=todayStamp();
+  if(S.meals.length){var t=totals();S.foodDays[k]={k:Math.round(t.kcal),p:Math.round(t.p),c:Math.round(t.c),f:Math.round(t.f)}}else if(S.foodDays[k])delete S.foodDays[k];
+  var ks=Object.keys(S.foodDays);if(ks.length>200){ks.sort();ks.slice(0,ks.length-180).forEach(function(x){delete S.foodDays[x]})}}
+function renderTrend(){var el=$('#m-trend');if(!el)return;var h,T=targets();
+  var bars=function(rows,max,tgt,col,lab){return '<div class="ft"><div class="ft-bars">'+(tgt?'<i class="ft-tgt" style="bottom:'+Math.min(100,tgt/max*100).toFixed(1)+'%"><span>'+lab+'</span></i>':'')+rows.map(function(r){return '<span class="ft-c'+(r.today?' now':'')+'" title="'+esc(r.d)+'"><i style="height:'+(r.v/max*100).toFixed(1)+'%;background:'+col+'"></i><em>'+esc(r.l)+'</em></span>'}).join('')+'</div></div>'};
+  if(!isPro()){var demo=[];for(var i=0;i<14;i++)demo.push({v:1400+((i*37)%600),l:i%2?'':'·',d:''});h=proLock('Food trends','See your calories and protein day by day against your targets, so patterns jump out.','trend',bars(demo,2400,2000,'var(--accent)','goal'))}
+  else{var FD=S.foodDays||{},rows=[],sumK=0,sumP=0,n=0;
+    for(var j=13;j>=0;j--){var d=new Date(Date.now()-j*864e5),k=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2),x=FD[k];rows.push({v:x?x.k:0,p:x?x.p:0,l:d.toLocaleDateString('en-US',{weekday:'narrow'}),d:d.toDateString(),today:j===0});if(x&&x.k>0){sumK+=x.k;sumP+=x.p;n++}}
+    var mk=Math.max(T.kcal*1.25,Math.max.apply(null,rows.map(function(r){return r.v}))),mp=Math.max(T.protein*1.25,Math.max.apply(null,rows.map(function(r){return r.p})));
+    h='<div class="row spread"><h3 style="margin:0">Food trends</h3><span class="badge pro">✨ OVERFLOW</span></div>';
+    if(!n)h+='<p class="small muted" style="margin:0">Your days fill in here as you log food. Check back in a few days.</p>';
+    else h+='<div class="ft-sum"><span><b>'+kc(Math.round(sumK/n))+'</b><small>avg kcal a day</small></span><span><b>'+Math.round(sumP/n)+' g</b><small>avg protein</small></span><span><b>'+n+'</b><small>days logged</small></span></div>';
+    h+='<p class="eyebrow" style="margin:.3rem 0 0">CALORIES · LAST 14 DAYS</p>'+bars(rows,mk,T.kcal,'var(--accent)','goal')+'<p class="eyebrow" style="margin:.3rem 0 0">PROTEIN</p>'+bars(rows.map(function(r){return {v:r.p,l:r.l,d:r.d,today:r.today}}),mp,T.protein,'#ff5d5d','goal')}
+  if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}}
+/* meal plan + grocery list */
+var MPL={busy:false,msg:''};
+function mealPlanMake(){if(MPL.busy)return;var pref=($('#mp-pref')&&$('#mp-pref').value||'').trim().slice(0,200),T=targets(),al=Object.keys(S.allergy||{}).filter(function(k){return S.allergy[k]});
+  MPL={busy:true,msg:''};mkOpen('food','Your meal plan',function(){return {done:!MPL.busy,err:MPL.msg}});
+  getSample().then(function(sm){if(!sm)throw {code:'nokey'};
+    var saved=(S.recipes||[]).slice(-12).map(function(r){return r.name+' ('+Math.round(r.kcal)+' kcal)'});
+    var pr='Plan one day of eating for a calorie tracker. Daily targets: '+T.kcal+' kcal, '+T.protein+' g protein, '+T.carb+' g carbs, '+T.fat+' g fat, at least '+T.fiber+' g fiber, sodium under '+T.sodium+' mg.'+(al.length?' Must avoid these allergens completely: '+al.join(', ')+'.':'')+(pref?' Preferences: "'+pref.replace(/"/g,"'")+'".':'')+(saved.length?' They like these saved meals and you may reuse some: '+saved.join('; ')+'.':'')
+      +' Use simple, everyday foods. Make the day total land within 5% of the calorie target and hit the protein target. Return JSON only: {"meals": [{"slot": "Breakfast"|"Lunch"|"Dinner"|"Snack", "name": string, "serving": string, "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number}], "grocery": [{"item": string, "qty": string}] (everything needed, up to 25 items), "note": string (one short sentence)}';
+    return sm.json(pr,{modelTier:'quick'})}).then(function(r){if(!r||!Array.isArray(r.meals)||!r.meals.length)throw {code:'failed'};
+    var n=function(v,m){v=+v;return isFinite(v)&&v>=0?Math.min(v,m):0};
+    S.mplan={at:Date.now(),pref:pref,meals:r.meals.slice(0,6).map(function(m){return {slot:String(m.slot||'Meal').slice(0,20),name:String(m.name||'Meal').slice(0,80),serv:String(m.serving||'1 serving').slice(0,50),kcal:Math.round(n(m.kcal,4000)),p:Math.round(n(m.protein,400)),c:Math.round(n(m.carbs,600)),f:Math.round(n(m.fat,300)),fib:Math.round(n(m.fiber,100)),na:Math.round(n(m.sodium,10000))}}),
+      grocery:(Array.isArray(r.grocery)?r.grocery:[]).slice(0,25).map(function(g){return {item:String(g&&g.item||'').slice(0,60),qty:String(g&&g.qty||'').slice(0,30)}}).filter(function(g){return g.item}),note:String(r.note||'').slice(0,200),got:[]};
+    MPL={busy:false,msg:''};refresh()}).catch(function(e){MPL={busy:false,msg:aiErr(e&&e.code)};refresh()})}
+function estLog(m,via){var o=F('e'+(uid++),m.name,'Meal plan',m.serv,m.kcal,m.p,m.c,m.f,m.fib||0,0,0,0,m.na||0,0,[],'estimate',[m.name.toLowerCase()]);o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how=via||'plan';o.id='e'+Date.now().toString(36)+(uid++);o.saved=Date.now();
+  S.est=S.est.filter(function(x){return (x.name+'|'+x.serv)!==(o.name+'|'+o.serv)});S.est.unshift(o);S.est=S.est.slice(0,300);estSave();var meal=mkMeal(o,1,'Plan');meal.em=emojiFor(o.name);S.meals.push(meal);return meal}
+function renderMealPlan(){var el=$('#m-plan');if(!el)return;var h;
+  if(!isPro())h=proLock('Meal plan','AI plans a full day of meals that hits your targets, with a grocery list. Add any meal with one tap.','mplan','<ul class="list"><li><span>🥣 Breakfast · Greek yogurt bowl</span><span class="mono">420</span></li><li><span>🥗 Lunch · Chicken rice bowl</span><span class="mono">610</span></li></ul>');
+  else{var P=S.mplan;h='<div class="row spread"><h3 style="margin:0">Meal plan</h3><span class="badge pro">✨ OVERFLOW</span></div><label class="vh-only" for="mp-pref">Preferences</label><input type="text" id="mp-pref" maxlength="200" placeholder="Optional: high protein, no fish, quick lunches" value="'+esc(P&&P.pref||'')+'"><div class="row"><button class="btn '+(P?'sm':'primary')+'" data-act="mpgo"'+(MPL.busy?' disabled':'')+'>'+(MPL.busy?'Planning…':P?'Plan a new day':'Plan my day')+'</button></div>'+(MPL.msg?'<p class="note warn small">'+esc(MPL.msg)+'</p>':'');
+    if(P){var tk=P.meals.reduce(function(a,m){return a+m.kcal},0),tp=P.meals.reduce(function(a,m){return a+m.p},0);
+      h+='<p class="small muted" style="margin:0">'+kc(tk)+' kcal · '+tp+' g protein'+(P.note?' · '+esc(P.note):'')+'</p><ul class="list mpl">'+P.meals.map(function(m,i){return '<li><div style="flex:1;min-width:0"><span class="small muted">'+esc(m.slot)+'</span><br><b>'+esc(m.name)+'</b><br><span class="small muted">'+esc(m.serv)+' · '+kc(m.kcal)+' kcal · '+m.p+' g protein</span></div><button class="btn sm" data-act="mpadd" data-i="'+i+'">Add</button></li>'}).join('')+'</ul>';
+      if(P.grocery.length)h+='<details class="mpg"><summary><b>Grocery list</b> <span class="small muted">('+P.grocery.length+' items)</span></summary><ul class="list">'+P.grocery.map(function(g,i){var on=P.got.indexOf(i)>-1;return '<li><label class="row" style="gap:.6rem;flex-wrap:nowrap;width:100%"><input type="checkbox" data-mpg="'+i+'"'+(on?' checked':'')+'><span style="flex:1'+(on?';text-decoration:line-through;opacity:.6':'')+'">'+esc(g.item)+'</span><span class="small muted">'+esc(g.qty)+'</span></label></li>'}).join('')+'</ul><button class="btn sm" data-act="mpcopy">Copy list</button></details>'}}
+  if(el.dataset.h!==h){var v=$('#mp-pref')?$('#mp-pref').value:null,op=el.querySelector('details.mpg')&&el.querySelector('details.mpg').open;el.dataset.h=h;el.innerHTML=h;if(v!=null&&$('#mp-pref'))$('#mp-pref').value=v;if(op&&el.querySelector('details.mpg'))el.querySelector('details.mpg').open=true}}
+/* Bible help with AI */
+var BAI={busy:false,msg:''};
+function baiMake(kind){if(BAI.busy)return;var b=S.rb||'John',c=S.rc||1,topic=($('#bai-q')&&$('#bai-q').value||'').trim().slice(0,200);
+  if(kind!=='explain'&&!topic){BAI.msg='Type a topic or what you are going through first.';refresh();return}
+  BAI={busy:true,msg:''};mkOpen('workout',kind==='explain'?b+' '+c:kind==='plan'?'Your reading plan':'Your devotional',function(){return {done:!BAI.busy,err:BAI.msg}});
+  getSample().then(function(sm){if(!sm)throw {code:'nokey'};var pr;
+    if(kind==='explain')pr='Explain '+b+' chapter '+c+' (Bible) for an everyday reader, warmly and faithfully, in a mainstream Christian way. Return JSON only: {"title": string, "summary": string (3 or 4 sentences), "points": [3 or 4 short strings: key ideas, each naming its verse numbers], "apply": string (one sentence on living it out today)}.';
+    else if(kind==='dev')pr='Write a short Christian devotional about: "'+topic.replace(/"/g,"'")+'". Base it on real Bible passages and quote no more than one verse briefly. Warm, hopeful, never preachy. If the topic mentions crisis or self-harm, gently encourage reaching out to someone they trust or a crisis line. Return JSON only: {"title": string, "refs": [up to 3 Bible references like "Philippians 4:6-7"], "body": string (3 short paragraphs separated by \\n\\n), "prayer": string (2 or 3 sentences)}.';
+    else pr='Make a 7-day Bible reading plan for someone dealing with: "'+topic.replace(/"/g,"'")+'". Each day is one passage of 5 to 30 verses. Return JSON only: {"title": string, "days": [{"ref": string like "Psalm 23:1-6", "why": string (one sentence)}] exactly 7}.';
+    return sm.json(pr,{modelTier:'quick'})}).then(function(r){if(!r||!r.title)throw {code:'failed'};
+    S.bai={kind:kind,at:Date.now(),title:String(r.title).slice(0,80),ref:kind==='explain'?b+' '+c:'',summary:String(r.summary||'').slice(0,800),points:(Array.isArray(r.points)?r.points:[]).slice(0,4).map(function(x){return String(x).slice(0,240)}),apply:String(r.apply||'').slice(0,240),
+      refs:(Array.isArray(r.refs)?r.refs:[]).slice(0,3).map(function(x){return String(x).slice(0,40)}),body:String(r.body||'').slice(0,2000),prayer:String(r.prayer||'').slice(0,500),
+      days:(Array.isArray(r.days)?r.days:[]).slice(0,7).map(function(d){return {ref:String(d&&d.ref||'').slice(0,40),why:String(d&&d.why||'').slice(0,200)}}).filter(function(d){return d.ref}),done:[]};
+    BAI={busy:false,msg:''};refresh()}).catch(function(e){BAI={busy:false,msg:aiErr(e&&e.code)};refresh()})}
+function refBtn(ref){var r=String(ref).replace(/[–—]/g,'-');var m=r.match(/^(.+?)\s+(\d+)(?::(\d+))?/);if(!m||!WEBB)return esc(ref);var bk=wbook(m[1]);return bk?'<button class="chip" data-act="bbgo" data-ref="'+esc(bk+' '+m[2]+':'+(m[3]||1))+'">📖 '+esc(ref)+'</button>':esc(ref)}
+function wbook(n){if(!WEBB)return null;n=String(n).trim().toLowerCase().replace(/^psalm$/,'psalms').replace(/^song of songs$/,'song of solomon');var ks=Object.keys(WEBB);for(var i=0;i<ks.length;i++){if(ks[i].toLowerCase()===n)return ks[i]}for(var j=0;j<ks.length;j++){if(ks[j].toLowerCase().indexOf(n)===0)return ks[j]}return null}
+function renderBai(){var el=$('#sc-bai');if(!el)return;var h;
+  if(!isPro())h=proLock('Bible help','Reading the Bible is always free. Overflow adds AI help: explain this chapter, a devotional on any topic, or a 7-day reading plan for what you are going through.','bible');
+  else{var B=S.bai,ch=(S.rb||'John')+' '+(S.rc||1);h='<div class="row spread"><h3 style="margin:0">Bible help</h3><span class="badge pro">✨ OVERFLOW</span></div>'
+    +'<div class="row"><button class="btn sm primary" data-act="baigo" data-k="explain"'+(BAI.busy?' disabled':'')+'>Explain '+esc(ch)+'</button></div>'
+    +'<label class="vh-only" for="bai-q">Topic or what you are going through</label><input type="text" id="bai-q" maxlength="200" placeholder="A topic or feeling, like anxiety, patience or a new job">'
+    +'<div class="row"><button class="btn sm" data-act="baigo" data-k="dev"'+(BAI.busy?' disabled':'')+'>Devotional</button><button class="btn sm" data-act="baigo" data-k="plan"'+(BAI.busy?' disabled':'')+'>7-day reading plan</button></div>'+(BAI.msg?'<p class="note warn small">'+esc(BAI.msg)+'</p>':'');
+    if(B){h+='<div class="baiout"><b class="baih">'+esc(B.title)+'</b>';
+      if(B.kind==='explain')h+=(B.summary?'<p>'+esc(B.summary)+'</p>':'')+(B.points.length?'<ul>'+B.points.map(function(p){return '<li>'+esc(p)+'</li>'}).join('')+'</ul>':'')+(B.apply?'<p class="small"><b>Today:</b> '+esc(B.apply)+'</p>':'');
+      else if(B.kind==='dev')h+=(B.refs.length?'<div class="chips">'+B.refs.map(refBtn).join('')+'</div>':'')+B.body.split(/\n\n+/).map(function(p){return '<p>'+esc(p)+'</p>'}).join('')+(B.prayer?'<p class="small"><b>Prayer:</b> <i>'+esc(B.prayer)+'</i></p>':'');
+      else h+='<ol class="baiplan">'+B.days.map(function(d,i){var on=B.done.indexOf(i)>-1;return '<li><label class="row" style="gap:.5rem;flex-wrap:nowrap;align-items:flex-start"><input type="checkbox" data-baid="'+i+'"'+(on?' checked':'')+' aria-label="Day '+(i+1)+' done"><span style="flex:1"><b>Day '+(i+1)+'</b> '+refBtn(d.ref)+'<br><span class="small muted">'+esc(d.why)+'</span></span></label></li>'}).join('')+'</ol>';
+      h+='<p class="small muted" style="margin:0">Written with AI. Always read the passage itself too.</p></div>'}}
+  if(el.dataset.h!==h){var v=$('#bai-q')?$('#bai-q').value:'';el.dataset.h=h;el.innerHTML=h;if($('#bai-q')&&v)$('#bai-q').value=v}}
+/* recipe from a link */
+var RLK={busy:false,msg:''};
+function recipeLink(){var u=($('#rl-url')&&$('#rl-url').value||'').trim();if(!/^https:\/\//i.test(u)){RLK.msg='Paste a full recipe link that starts with https://';refresh();return}if(RLK.busy)return;
+  RLK={busy:true,msg:''};mkOpen('food','Reading the recipe',function(){return {done:!RLK.busy,err:RLK.msg}});
+  authToken().then(function(tok){var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;return fetch(API+'/api/ai',{method:'POST',headers:h,body:JSON.stringify({kind:'recipe_url',url:u})})})
+  .then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})},function(){throw {code:'offline'}}).then(function(j){
+    if(!j||!j.ok)throw {code:j&&j.code||'failed'};var r=j.data||{};if(!r.name)throw {code:'notrecipe'};
+    var n=function(v,m){v=+v;return isFinite(v)&&v>=0?Math.min(v,m):0},name=String(r.name).slice(0,60);
+    var o={id:'r'+Date.now().toString(36)+(uid++),name:name,region:'My recipes',serv:String(r.serving||'1 serving').slice(0,50),al:[],src:'recipe',keys:[name.toLowerCase()],parts:(Array.isArray(r.ingredients)?r.ingredients:[]).slice(0,20).map(function(x){return String(x).slice(0,80)}),from:u.slice(0,300),
+      kcal:Math.round(n(r.kcal,4000)),p:+n(r.protein,400).toFixed(1),c:+n(r.carbs,600).toFixed(1),f:+n(r.fat,300).toFixed(1),fib:+n(r.fiber,100).toFixed(1),fe:0,b12:0,vd:0,na:Math.round(n(r.sodium,10000)),k:0};
+    S.recipes.push(o);RLK={busy:false,msg:'',last:o.name+' · '+o.kcal+' kcal per serving'};if($('#rl-url'))$('#rl-url').value='';toast('Saved "'+o.name+'" to your recipes.',{title:'Recipe added',icon:'🍲',kind:'ok'});refresh()})
+  .catch(function(e){var c=e&&e.code;RLK={busy:false,msg:c==='bad_url'?'That link can\'t be read. Use a normal https recipe page.':c==='page'?'That page could not be opened. Try another link.':c==='notrecipe'?'That page doesn\'t look like a recipe.':c==='pro'?'Recipe links are part of Manna Overflow.':aiErr(c)};refresh()})}
+function renderRecipeLink(){var el=$('#r-link');if(!el)return;var h;
+  if(!isPro())h=proLock('Import from a link','Paste a recipe page and AI works out the calories and macros per serving, then saves it to your recipes.','rlink');
+  else h='<div class="row spread"><h3 style="margin:0">Import from a link</h3><span class="badge pro">✨ OVERFLOW</span></div><p class="small muted" style="margin:0">Paste a recipe page. AI reads it and works out the numbers per serving.</p><div class="row"><label class="vh-only" for="rl-url">Recipe link</label><input type="url" id="rl-url" inputmode="url" placeholder="https://…" style="flex:1;min-width:12rem"><button class="btn primary" data-act="rlgo"'+(RLK.busy?' disabled':'')+'>'+(RLK.busy?'Reading…':'Import')+'</button></div>'+(RLK.msg?'<p class="note warn small">'+esc(RLK.msg)+'</p>':'')+(RLK.last?'<p class="small">Added: '+esc(RLK.last)+'</p>':'');
+  if(el.dataset.h!==h){var v=$('#rl-url')?$('#rl-url').value:'';el.dataset.h=h;el.innerHTML=h;if($('#rl-url')&&v)$('#rl-url').value=v}}
+function renderProExtras(){try{foodDaySave()}catch(e){}var dg=$('#g-daytgt');if(dg)dg.checked=!!S.dayTgt&&isPro();[renderProgress,renderRecap,renderTrend,renderMealPlan,renderBai,renderRecipeLink].forEach(function(f){try{f()}catch(e){console.error(e)}})}
+/* training days vs rest days (Overflow) */
+function isTrainDay(){try{if(wdaysSync()[new Date().toDateString()])return true;var sv=typeof sessionView==='function'?sessionView(todayIdx()):null;return !!sv}catch(e){return false}}
 function keepPlace(fn,sel){var y=window.scrollY,a=sel&&document.querySelector(sel),at=a?a.getBoundingClientRect().top:null;fn();
   var put=function(){var n=sel&&document.querySelector(sel);if(n&&at!=null){var d=n.getBoundingClientRect().top-at;if(Math.abs(d)>2)window.scrollTo({top:window.scrollY+d,behavior:'instant'})}else if(Math.abs(window.scrollY-y)>2)window.scrollTo({top:y,behavior:'instant'});if(n&&document.activeElement!==n)try{n.focus({preventScroll:true})}catch(e){}};
   put();requestAnimationFrame(function(){put();requestAnimationFrame(put)})}
@@ -6537,6 +6728,10 @@ function onInput(e){
   if(e.type==='change'&&(t.type==='text'||t.tagName==='TEXTAREA'))return;
   if(e.type==='input'&&t.dataset&&t.dataset.chg)return;
   if(t.dataset&&t.dataset.hsel){var hid=t.dataset.hsel,hi=S.hSel.indexOf(hid);if(t.checked&&hi<0)S.hSel.push(hid);else if(!t.checked&&hi>-1)S.hSel.splice(hi,1);S.hDelArm=false;keepPlace(function(){refresh()},'[data-hsel="'+hid+'"]');return}
+  if(t.dataset&&t.dataset.mpg!=null&&t.type==='checkbox'){if(e.type!=='change')return;var P=S.mplan;if(P){var gi=+t.dataset.mpg,gx=P.got.indexOf(gi);if(t.checked&&gx<0)P.got.push(gi);else if(!t.checked&&gx>-1)P.got.splice(gx,1);refresh()}return}
+  if(t.dataset&&t.dataset.baid!=null&&t.type==='checkbox'){if(e.type!=='change')return;var BB=S.bai;if(BB){var di=+t.dataset.baid,dx=BB.done.indexOf(di);if(t.checked&&dx<0)BB.done.push(di);else if(!t.checked&&dx>-1)BB.done.splice(dx,1);refresh()}return}
+  if(t.id==='pg-ex'){S.progEx=t.value;refresh();return}
+  if(t.id==='g-daytgt'){if(e.type!=='change')return;if(t.checked&&!isPro()){t.checked=false;proOpen('daytgt');return}S.dayTgt=t.checked;refresh();toast(t.checked?'Training-day and rest-day targets are on.':'Same targets every day.');return}
   if(t.dataset&&t.dataset.svm){if(e.type!=='change')return;var sv=t.dataset.svm,si=SVM.sel.indexOf(sv);if(t.checked&&si<0)SVM.sel.push(sv);else if(!t.checked&&si>-1)SVM.sel.splice(si,1);svmSum();return}
   if(t.dataset&&t.dataset.msel){var id=t.dataset.msel,i=S.msel.indexOf(id);if(i>-1)S.msel.splice(i,1);else S.msel.push(id);refresh();var cb=document.querySelector('[data-msel="'+id+'"]');if(cb)cb.focus();return}
   if(t.dataset&&t.dataset.x){S.xp[t.dataset.x]=t.checked;refresh();return}
@@ -6554,7 +6749,7 @@ document.addEventListener('change',onInput);
 $('#l-text').addEventListener('input',function(){if(!t0)t0=performance.now()});
 if($('#l-cam'))$('#l-cam').addEventListener('change',function(){var f=this.files&&this.files[0];if(f)askFood('',f)});
 if($('#l-wfile'))$('#l-wfile').addEventListener('change',function(){var f=this.files&&this.files[0];if(f)wfImport(f)});
-$('#l-form').addEventListener('submit',function(e){e.preventDefault();var v=$('#l-text').value.trim();if(!t0)t0=performance.now();doLog(v,'typed');if(v)$('#l-text').value='';refresh()});
+$('#l-form').addEventListener('submit',function(e){e.preventDefault();var v=$('#l-text').value.trim();if(!v)return;if(!t0)t0=performance.now();$('#l-text').value='';if(location.protocol!=='file:'&&!ASK.busy){askFood(v,null,{noAmt:true,fallback:'typed'});return}doLog(v,'typed');refresh()});
 if($('#cm-form'))$('#cm-form').addEventListener('submit',function(e){
   e.preventDefault();var v=$('#cm-msg').value.trim();if(!v)return;
   S.thread.push({me:true,text:v});$('#cm-msg').value='';refresh();toast('Sent. A coach replies within 24 hours in a real app.');
@@ -6888,7 +7083,7 @@ function voiceLog(){
   r.onerror=function(ev){toast(ev.error==='not-allowed'||ev.error==='service-not-allowed'?'Allow microphone access for Manna to use voice.':'Could not hear that. Try again.')};
   r.onend=function(){VREC=null;btn.innerHTML='🎙 Speak it <span class="aitag">AI</span>';btn.classList.remove('primary');var t=(fin||inp.value||'').trim();
     if(!t)return;inp.value='';
-    if(aiLeft()>0&&location.protocol!=='file:'){askFood(t,null,{noAmt:true});return}
+    if(location.protocol!=='file:'){askFood(t,null,{noAmt:true,fallback:'voice'});return}
     t0=performance.now();doLog(t,'voice');refresh();if(aiLeft()<=0)toast(aiLeftText()||'No AI uses left today, so this was logged the simple way.')};
   try{r.start()}catch(e){VREC=null;btn.innerHTML='🎙 Speak it <span class="aitag">AI</span>';btn.classList.remove('primary')}
 }
