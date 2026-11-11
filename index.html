@@ -2869,7 +2869,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:157,d:'Nov 11, 2026',t:'Enter for Bible help',s:['Tidier greeting on Home: "Good morning," lines up with your name, the big letters no longer bump into it, and long names shrink to fit beside the picture (just your first name shows).','Bible help has an Enter button next to the topic box. Tap it, or press Enter, to get a devotional on what you typed.','Fixed: the Making with AI window now closes when Bible help, the weekly recap or an AI schedule finishes, instead of staying on screen.']},
+ {v:157,d:'Nov 11, 2026',t:'Enter for Bible help',s:['The Making with AI window now says what it is really doing, like "Finding fitting passages" for a devotional or "Writing your grocery list" for a meal plan, instead of "Picking exercises" for everything.','When you delete a workout, it disappears from Recent too. Recent also shows each workout once, instead of the same one several times.','Tidier greeting on Home: "Good morning," lines up with your name, the big letters no longer bump into it, and long names shrink to fit beside the picture (just your first name shows).','Bible help has an Enter button next to the topic box. Tap it, or press Enter, to get a devotional on what you typed.','Fixed: the Making with AI window now closes when Bible help, the weekly recap or an AI schedule finishes, instead of staying on screen.']},
  {v:156,d:'Nov 11, 2026',big:1,lead:'Meet Manna Overflow, named for Psalm 23: "my cup overflows." Plus free AI food logging for everyone.',t:'Manna Overflow',s:['Manna PRO is now called Manna Overflow.','Free for everyone: type or say what you ate and AI adds each food. It no longer uses up your AI uses.','Free for everyone: make a workout with AI (it uses your daily AI uses), and make one AI schedule a week.','New in Overflow: Progress charts in History, for your strength on each exercise and your weight over time. Logging your weight also updates your targets.','New in Overflow: a weekly recap, where AI sums up your week and gives one tip.','New in Overflow: Food trends on Meals, with 14 days of calories and protein against your targets.','New in Overflow: a meal plan for the day that hits your targets, with a grocery list. Add any meal with one tap.','New in Overflow: training-day and rest-day targets, in Settings › Goals.','New in Overflow: Bible help with AI, to explain a chapter, write a devotional on any topic, or build a 7-day reading plan. Reading the Bible stays free.','New in Overflow: import a recipe from a link, and AI works out the numbers per serving.','CHANGE THEME in Settings is now in capitals.']},
  {v:155,d:'Nov 11, 2026',t:'Full history for everyone',s:['Your whole workout history is now free. Free accounts see every workout, not just the last 30 days.']},
  {v:154,d:'Nov 11, 2026',t:'The Manna logo everywhere',s:['On the Fitness opening animation, the stars now sparkle into place one by one, then keep twinkling.','The Manna logo now shows as the icon in Chrome and Safari tabs, bookmarks, on your desktop and on your home screen. If you added Manna to your home screen before, remove it and add it again to get the new icon.']},
@@ -3612,7 +3612,17 @@ function renderPNotes(){
 ['gesturestart','gesturechange','gestureend'].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});
 document.addEventListener('touchmove',function(e){if(e.touches&&e.touches.length>1)e.preventDefault()},{passive:false});
 /* ----- Making with AI: one pop-up wherever AI builds something ----- */
-var MK=null,MKSTEPS={workout:['Reading what you asked for','Picking exercises','Balancing sets and reps','Checking your equipment and injuries','Adding the finishing touches'],food:['Looking at your food','Finding each item','Working out calories and protein','Picking an emoji for each food'],read:['Reading your text','Finding the exercises','Sorting out days and sets','Tidying up the names'],goal:['Reading your goal','Looking at your body and progress','Setting your food targets','Planning your workouts']},MKICON={workout:'💪',food:'🍽️',read:'📝',goal:'🎯'};
+var MK=null,MKSTEPS={workout:['Reading what you asked for','Picking exercises','Balancing sets and reps','Checking your equipment and injuries','Adding the finishing touches'],food:['Looking at your food','Finding each item','Working out calories and protein','Picking an emoji for each food'],read:['Reading your text','Finding the exercises','Sorting out days and sets','Tidying up the names'],goal:['Reading your goal','Looking at your body and progress','Setting your food targets','Planning your workouts'],
+  photo:['Looking at your photo','Spotting each food on the plate','Guessing the portion sizes','Working out calories and protein'],
+  sched:['Reading what you want from your week','Spacing out training and rest days','Choosing a workout for each day','Matching the times you have'],
+  readsched:['Reading your schedule','Finding each day','Matching days to workouts','Tidying up the names'],
+  recap:['Looking back at your week','Counting your workouts','Checking your food against your targets','Writing your recap'],
+  mplan:['Checking your daily targets','Leaving out your allergens','Choosing meals for the day','Writing your grocery list'],
+  recipe:['Opening the recipe page','Reading the ingredients','Working out the servings','Counting calories per serving'],
+  bexplain:['Reading the chapter','Finding the key ideas','Noting the verses','Writing how to live it out'],
+  bdev:['Thinking about your topic','Finding fitting passages','Writing your devotional','Adding a short prayer'],
+  bplan:['Thinking about what you are going through','Choosing passages','Ordering them across 7 days','Writing why each one helps']
+},MKICON={workout:'💪',food:'🍽️',read:'📝',goal:'🎯',photo:'📸',sched:'📅',readsched:'📅',recap:'📊',mplan:'🥗',recipe:'🍲',bexplain:'📖',bdev:'🕊️',bplan:'🗓️'};
 function mkOpen(kind,title,watch){
   MK={kind:kind,title:title,phase:'busy',watch:watch||null,t0:Date.now(),step:0};
   var c=$('#mk-card');c.dataset.h='';mkRender();modalOpen($('#mk'));document.body.classList.add('modal-open');
@@ -3621,7 +3631,7 @@ function mkOpen(kind,title,watch){
     $$('#mk-card .mkdots span').forEach(function(d,i){d.classList.toggle('on',i===MK.step)});
     if(Date.now()-MK.t0>45000){MK.phase='err';MK.msg='AI took too long. Try again in a moment.';refresh()}},1700);
 }
-var MKTAU={workout:5.5,food:4.5,read:5,goal:5};
+var MKTAU={workout:5.5,food:4.5,read:5,goal:5,photo:6,recipe:7,mplan:6,sched:6,recap:5,bexplain:5,bdev:5,bplan:5,readsched:5};
 function mkPct(){if(!MK)return 0;if(MK.fin)return 100;var t=(Date.now()-MK.t0)/1000;return Math.min(95,Math.round(95*(1-Math.exp(-t/(MKTAU[MK.kind]||5)))))}
 function mkBar(v){var b=$('#mk-bar'),p=$('#mk-pct'),w=$('#mk-barw');if(b)b.style.width=v+'%';if(p)p.textContent=v+'%';if(w)w.setAttribute('aria-valuenow',v)}
 setInterval(function(){if(MK&&MK.phase==='busy')mkBar(mkPct())},180);
@@ -3888,7 +3898,7 @@ function shaRender(){
 }
 function shaMake(){
   var t=($('#sha-text')&&$('#sha-text').value||'').trim();if(!t){toast('Tell AI what you want from your week first.');return}
-  S.shaBusy=true;S.shaMsg='';SHA=null;mkOpen('workout','Your weekly schedule',function(){return {done:!S.shaBusy,err:S.shaMsg}});
+  S.shaBusy=true;S.shaMsg='';SHA=null;mkOpen('sched','Your weekly schedule',function(){return {done:!S.shaBusy,err:S.shaMsg}});
   getSample().then(function(sm){
     if(!sm){S.shaBusy=false;S.shaMsg='AI is not available right now.';refresh();return}
     if(sm===SERVER_AI&&aiLeft()<=0){S.shaBusy=false;S.shaMsg=aiErr('limit');refresh();return}
@@ -4173,7 +4183,7 @@ function foodFree(text,amt,ids){var tokP=accOn()&&typeof authToken==='function'?
 function askFood(text,file,opt){
   if(ASK.busy)return;if(file){if(proPhotoLeft()<=0){proOpen('photo');return}proPhotoUse()}
   var amt=opt&&opt.noAmt?null:readAmt();
-  ASK={busy:true,msg:'',img:''};mkOpen('food',file?'Your photo':String(text).slice(0,60),function(){return {done:!ASK.busy,err:ASK.ok?'':ASK.msg}});
+  ASK={busy:true,msg:'',img:''};mkOpen(file?'photo':'food',file?'Your photo':String(text).slice(0,60),function(){return {done:!ASK.busy,err:ASK.ok?'':ASK.msg}});
   var prep=file?shrink(file).then(function(r){ASK.img=r.url;refresh();return r.blob}):Promise.resolve(null);
   prep.catch(function(){return null}).then(function(blob){
     if(file&&!blob){ASK={busy:false,msg:'That image could not be read. Try another photo.',img:''};refresh();return}
@@ -4781,8 +4791,8 @@ function renderRecentSaved(z){
   savedSync();
   var all=allWorkouts(),byId={};all.forEach(function(w){byId[w.id]=w});
   var show=z!==4;
-  /* Last 3 finished sessions, newest first */
-  var H=S.hist.slice().sort(function(a,b){return b.ts-a.ts}).slice(0,3),r=$('#w-recent');
+  /* Last 3 finished sessions, newest first, skipping workouts that have been deleted (one card per workout) */
+  var seen={},H=S.hist.slice().sort(function(a,b){return b.ts-a.ts}).filter(function(x){if(!x.wid||!byId[x.wid]||seen[x.wid])return false;seen[x.wid]=1;return true}).slice(0,3),r=$('#w-recent');
   r.hidden=!show||!H.length;
   if(show&&H.length){
     r.innerHTML='<div class="row spread"><h3>Recent</h3><a class="seelink small" href="#history">All history ›</a></div><div class="wgrid">'+H.map(function(x){
@@ -5974,7 +5984,7 @@ var ACT={
   },
   splan:function(b){S.planId=b.dataset.id;syncSched()},
   siread:function(){S.siMsg='';S.siRes=siParse($('#si-text').value);siAuto()},
-  siai:function(){var txt=$('#si-text').value||'';if(!txt.trim())return;S.siBusy=true;S.siMsg='';mkOpen('read','Your schedule',function(){return {done:!S.siBusy,err:S.siMsg}});
+  siai:function(){var txt=$('#si-text').value||'';if(!txt.trim())return;S.siBusy=true;S.siMsg='';mkOpen('readsched','Your schedule',function(){return {done:!S.siBusy,err:S.siMsg}});
     aiReadText('sched',txt,function(r,err){S.siBusy=false;
       if(!r||!Array.isArray(r.days)||!r.days.length){S.siMsg=err||'AI could not read that either.';refresh();return}
       var lines=[];r.days.forEach(function(d){var di=siDayIdx(String(d.day||'').trim());if(di<0)return;
@@ -6622,7 +6632,7 @@ function weekFacts(){var now=Date.now(),wk=S.hist.filter(function(h){return !h.s
   var avg=function(f){return days.length?Math.round(days.reduce(function(a,x){return a+(x[f]||0)},0)/days.length):0};
   return {workouts:wk.map(function(h){return {day:new Date(h.ts).toLocaleDateString('en-US',{weekday:'short'}),name:h.name,mins:Math.round((h.ms||0)/60000),cat:h.cat||'',prs:(h.prs||[]).length}}),
     foodDaysLogged:days.length,avgCalories:avg('k'),avgProtein:avg('p'),calorieTarget:T.kcal,proteinTarget:T.protein,streak:streakDays(),goal:S.goal}}
-function recapMake(){if(RCP.busy)return;RCP={busy:true,msg:''};mkOpen('workout','Your week',function(){return {done:!RCP.busy,err:RCP.msg}});
+function recapMake(){if(RCP.busy)return;RCP={busy:true,msg:''};mkOpen('recap','Your week',function(){return {done:!RCP.busy,err:RCP.msg}});
   getSample().then(function(sm){if(!sm)throw {code:'nokey'};
     var f=weekFacts(),pr='You are a warm, encouraging fitness and nutrition coach in a faith-friendly app. Here is the person\'s last 7 days as JSON:\n'+JSON.stringify(f)+'\nWrite a short weekly recap. Be specific to the numbers, kind and honest, never shaming. Return JSON only: {"headline": string (max 8 words), "wins": [2 or 3 short strings], "watch": string (one thing to work on, or empty), "tip": string (one practical tip for next week, one sentence)}.';
     return sm.json(pr,{modelTier:'quick'})}).then(function(r){if(!r||!r.headline)throw {code:'failed'};
@@ -6653,7 +6663,7 @@ function renderTrend(){var el=$('#m-trend');if(!el)return;var h,T=targets();
 /* meal plan + grocery list */
 var MPL={busy:false,msg:''};
 function mealPlanMake(){if(MPL.busy)return;var pref=($('#mp-pref')&&$('#mp-pref').value||'').trim().slice(0,200),T=targets(),al=Object.keys(S.allergy||{}).filter(function(k){return S.allergy[k]});
-  MPL={busy:true,msg:''};mkOpen('food','Your meal plan',function(){return {done:!MPL.busy,err:MPL.msg}});
+  MPL={busy:true,msg:''};mkOpen('mplan','Your meal plan',function(){return {done:!MPL.busy,err:MPL.msg}});
   getSample().then(function(sm){if(!sm)throw {code:'nokey'};
     var saved=(S.recipes||[]).slice(-12).map(function(r){return r.name+' ('+Math.round(r.kcal)+' kcal)'});
     var pr='Plan one day of eating for a calorie tracker. Daily targets: '+T.kcal+' kcal, '+T.protein+' g protein, '+T.carb+' g carbs, '+T.fat+' g fat, at least '+T.fiber+' g fiber, sodium under '+T.sodium+' mg.'+(al.length?' Must avoid these allergens completely: '+al.join(', ')+'.':'')+(pref?' Preferences: "'+pref.replace(/"/g,"'")+'".':'')+(saved.length?' They like these saved meals and you may reuse some: '+saved.join('; ')+'.':'')
@@ -6676,7 +6686,7 @@ function renderMealPlan(){var el=$('#m-plan');if(!el)return;var h;
 var BAI={busy:false,msg:''};
 function baiMake(kind){if(BAI.busy)return;var b=S.rb||'John',c=S.rc||1,topic=($('#bai-q')&&$('#bai-q').value||'').trim().slice(0,200);
   if(kind!=='explain'&&!topic){BAI.msg='Type a topic or what you are going through first.';refresh();return}
-  BAI={busy:true,msg:''};mkOpen('workout',kind==='explain'?b+' '+c:kind==='plan'?'Your reading plan':'Your devotional',function(){return {done:!BAI.busy,err:BAI.msg}});
+  BAI={busy:true,msg:''};mkOpen(kind==='explain'?'bexplain':kind==='plan'?'bplan':'bdev',kind==='explain'?b+' '+c:kind==='plan'?'Your reading plan':'Your devotional',function(){return {done:!BAI.busy,err:BAI.msg}});
   getSample().then(function(sm){if(!sm)throw {code:'nokey'};var pr;
     if(kind==='explain')pr='Explain '+b+' chapter '+c+' (Bible) for an everyday reader, warmly and faithfully, in a mainstream Christian way. Return JSON only: {"title": string, "summary": string (3 or 4 sentences), "points": [3 or 4 short strings: key ideas, each naming its verse numbers], "apply": string (one sentence on living it out today)}.';
     else if(kind==='dev')pr='Write a short Christian devotional about: "'+topic.replace(/"/g,"'")+'". Base it on real Bible passages and quote no more than one verse briefly. Warm, hopeful, never preachy. If the topic mentions crisis or self-harm, gently encourage reaching out to someone they trust or a crisis line. Return JSON only: {"title": string, "refs": [up to 3 Bible references like "Philippians 4:6-7"], "body": string (3 short paragraphs separated by \\n\\n), "prayer": string (2 or 3 sentences)}.';
@@ -6704,7 +6714,7 @@ function renderBai(){var el=$('#sc-bai');if(!el)return;var h;
 /* recipe from a link */
 var RLK={busy:false,msg:''};
 function recipeLink(){var u=($('#rl-url')&&$('#rl-url').value||'').trim();if(!/^https:\/\//i.test(u)){RLK.msg='Paste a full recipe link that starts with https://';refresh();return}if(RLK.busy)return;
-  RLK={busy:true,msg:''};mkOpen('food','Reading the recipe',function(){return {done:!RLK.busy,err:RLK.msg}});
+  RLK={busy:true,msg:''};mkOpen('recipe','Reading the recipe',function(){return {done:!RLK.busy,err:RLK.msg}});
   authToken().then(function(tok){var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;return fetch(API+'/api/ai',{method:'POST',headers:h,body:JSON.stringify({kind:'recipe_url',url:u})})})
   .then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})},function(){throw {code:'offline'}}).then(function(j){
     if(!j||!j.ok)throw {code:j&&j.code||'failed'};var r=j.data||{};if(!r.name)throw {code:'notrecipe'};
