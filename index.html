@@ -1170,23 +1170,6 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
 .sp-ic{color:var(--logo)}
 .sp-t{color:var(--logo)}
 </style>
-<style id="ai-style">
-@property --aia{syntax:'<angle>';initial-value:0deg;inherits:false}
-#aiglow{position:fixed;inset:0;pointer-events:none;z-index:9800;opacity:0;transition:opacity .45s ease;border-radius:0}
-@media (max-width:860px){#aiglow{border-radius:2.6rem}}
-#aiglow::before,#aiglow::after{content:'';position:absolute;inset:0;border-radius:inherit;padding:3px;
-  background:conic-gradient(from var(--aia),#0a84ff,#bf5af2,#ff375f,#ff9f0a,#ffd60a,#30d158,#64d2ff,#0a84ff);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
-  animation:aispin 2.6s linear infinite;animation-play-state:paused}
-#aiglow::after{padding:14px;filter:blur(14px);opacity:.75}
-html.aion #aiglow{opacity:1}html.aion #aiglow::before,html.aion #aiglow::after,html.aidone #aiglow::before,html.aidone #aiglow::after{animation-play-state:running}
-html.aidone #aiglow{animation:aiflash 1s ease-out forwards}
-@keyframes aispin{to{--aia:360deg}}
-@keyframes aiflash{0%{opacity:1;filter:brightness(1.7) saturate(1.3)}35%{opacity:1}100%{opacity:0;filter:none}}
-html.lite #aiglow::after{display:none}
-@media (prefers-reduced-motion:reduce){#aiglow::before,#aiglow::after{animation:none!important}html.aidone #aiglow{animation:none}}
-html.rm #aiglow::before,html.rm #aiglow::after{animation:none!important}
-</style>
 <style id="topbtn-style">
 .topl .ambbtn.ambtop{display:grid;place-items:center;width:1.9rem;height:1.9rem;padding:0;border-radius:50%;color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);box-shadow:0 4px 14px rgba(0,0,0,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:transform .25s cubic-bezier(.3,1.4,.5,1),background .3s,color .3s}
 .topl .ambbtn.ambtop svg{width:1.05rem;height:1.05rem}
@@ -1219,6 +1202,16 @@ html.rm #aiglow::before,html.rm #aiglow::after{animation:none!important}
 @keyframes frdot{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
 html.rm .frsk i,html.rm .frload-ic,html.rm .frload-dots i{animation:none}
 @media (prefers-reduced-motion:reduce){.frsk i,.frload-ic,.frload-dots i{animation:none}}
+</style>
+<style id="fxhint-style">
+.wfeedw{position:relative}.fxhint{position:absolute;top:0;left:50%;z-index:6;translate:-50% -55%;display:inline-flex;align-items:center;gap:.4rem;padding:.4rem .8rem .4rem .6rem;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(20,20,22,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 6px 18px rgba(0,0,0,.35);color:#fff;font:600 .78rem/1.1 system-ui,-apple-system,sans-serif;cursor:pointer;white-space:nowrap;animation:fxhIn .5s ease both .4s;transition:opacity .35s,transform .35s}
+.fxhint-a{display:inline-block;color:var(--ac,#30d158);font-size:1rem;animation:fxhNudge 1.4s ease-in-out infinite}
+.fxhint.gone{opacity:0;transform:translateX(-8px)}
+@keyframes fxhIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+@keyframes fxhNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@media (max-width:360px){.fxhint{font-size:.72rem}}
+html.rm .fxhint,html.rm .fxhint-a{animation:none}
+@media (prefers-reduced-motion:reduce){.fxhint,.fxhint-a{animation:none}}
 </style>
 <style id="type-style">
 /* Text system: CAPITALS only for short, important labels. Everything else is normal sentence text. */
@@ -2533,7 +2526,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:145,d:'Nov 10, 2026',t:'Right verse of the day, simpler AI schedules',s:['Fixed: the verse of the day now always matches YouVersion for your own date. In the evening Manna used to show the wrong verse, because the server was already on the next day.','Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
+ {v:145,d:'Nov 10, 2026',t:'Right verse of the day, simpler AI schedules',s:['Fixed: the verse of the day now always matches YouVersion for your own date. In the evening Manna used to show the wrong verse, because the server was already on the next day.','When you finish an exercise, Manna now takes you to the first exercise that still has sets left, starting from the top, instead of just the next one down.','A small hint at the top of your workout shows that you can swipe right to see your time, sets and controls. It goes away once you have looked.','The rainbow outline around the screen while AI works is gone. The Making with AI pop-up is still there.','Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
  {v:144,d:'Nov 10, 2026',t:'Stay on your exercise',s:['Fixed: logging a set no longer jumps you back to the first exercise on iPhone. You stay on the exercise you are doing.','The workout screen now only updates the parts that change when you log, so it feels quicker and does not flash.']},
  {v:143,d:'Nov 10, 2026',t:'Faster Friends, smoother swipes and fixes',s:['Difficulty labels (easy, intermediate, advanced) are now lowercase.','Build with AI no longer has a Length picker. If you want a set length, type it in the box, like “30 minutes”. Otherwise AI picks a sensible length.','Fixed: tapping a difficulty under Make it again as no longer changes the difficulty for every workout you build after.','Imported and self-made routines now have a red delete button on their card. Tap it, then tap Delete? to confirm.','The music button at the top now matches the settings button.','Friends opens instantly: Manna remembers your friends list on your phone and loads the latest in the background. The first time, a loading screen shows while it loads.','Swiping between pages is smoother, especially swiping right to left. Manna now keeps only the pages right next to you ready, instead of waking every page at the start of a swipe.']},
  {v:142,d:'Nov 10, 2026',t:'AI glow, bodyweight button and more',s:['Anything made with AI now has its own animation: a colourful glow flows around the edge of the screen while AI is working, then flashes when it is done.','New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default.','When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.','In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.','The welcome text on the opening animation is back in capitals, like before.']},
@@ -3155,7 +3148,7 @@ function getSample0(){
 }
 /* AI glow: a colourful light flows around the screen edge while AI works, then flashes when it is done */
 var AIFX={n:0,t:0};
-function aiFx(on,ok){var de=document.documentElement,g=document.getElementById('aiglow');
+function aiFx(on,ok){return;/* rainbow screen outline removed: the Making with AI pop-up is the animation */var de=document.documentElement,g=document.getElementById('aiglow');
   if(!g){g=document.createElement('div');g.id='aiglow';g.setAttribute('aria-hidden','true');document.body.appendChild(g)}
   if(on){AIFX.n++;clearTimeout(AIFX.t);de.classList.remove('aidone');de.classList.add('aion');return}
   AIFX.n=Math.max(0,AIFX.n-1);if(AIFX.n)return;de.classList.remove('aion');
@@ -4638,7 +4631,7 @@ function renderSession(){
       +'<div class="fxmore"><button class="chip" data-act="unit">Switch to '+(S.units==='lb'?'kg':'lb')+'</button><button class="chip" data-act="scancel">'+(S.cancelAsk?'Tap again to discard':'Discard workout')+'</button></div>'
       +(S.area!=='none'?'<p class="small muted">Checked against your '+AREAS.filter(function(a){return a[0]===S.area})[0][1].toLowerCase()+' (stage '+st+'). Stop if pain goes above 3.</p>':'')+'</section>';
     var top='<div class="fxtop"><button class="fxtopbtn" data-act="fxctl" aria-label="Show workout controls">‹</button><div class="fxclock"><span class="y" id="ss-time" data-live="time" role="timer" aria-label="Workout time"></span><span class="fxof">/ '+w.mins+':00</span></div>'+(paused?'<span class="fxpaused">Paused</span>':'<span class="fxpaused"></span>')+'</div>';
-    h+='<div class="fxh" id="fxh">'+ctl+'<section class="fxmain">'+top+'<div class="wfeedw"><div class="wfeed" id="wfeed" tabindex="-1">'+slides+endS+'</div>'+rail+rest+'</div></section></div>';
+    h+='<div class="fxh" id="fxh">'+ctl+'<section class="fxmain">'+top+'<div class="wfeedw">'+(fxHintOn()?'<button type="button" class="fxhint" id="fxhint" data-act="fxctl"><span class="fxhint-a" aria-hidden="true">›</span>Swipe right for stats</button>':'')+'<div class="wfeed" id="wfeed" tabindex="-1">'+slides+endS+'</div>'+rail+rest+'</div></section></div>';
   }else if(S.done){
     var d=S.done;
     h+='<header class="vh"><p class="eyebrow"><span class="pill done">Complete</span></p><h2>Workout complete</h2><p class="lede keep">'+esc(d.name)+'</p></header><div class="card stack complete">'+statTiles(d.ms,d.kcal,d.n,d.vol,d.unit,false)+'<p class="small muted">Saved to Today and to your workout history.'+(S.showBurn?' Calories are an estimate.':'')+'</p><div class="row"><a class="btn primary" href="#history" style="text-decoration:none">See history</a><a class="btn" href="#workouts" style="text-decoration:none">Back to library</a><a class="btn" href="#today" style="text-decoration:none">Go to Today</a></div></div>';
@@ -4656,12 +4649,18 @@ function renderSession(){
     var nf=$('#wfeed');if(nf){var keepI=WFI!=null?WFI:(ost!=null&&nf.clientHeight?Math.round(ost/nf.clientHeight):0);var put=function(){var sl=nf.querySelector('.wslide[data-i="'+keepI+'"]');if(sl)nf.scrollTop=sl.offsetTop};put();requestAnimationFrame(put)}var nh=$('#fxh');if(nh){nh.scrollLeft=ohl!=null?ohl:nh.scrollWidth}
     Object.keys(draft).forEach(function(id){var i=document.getElementById(id);if(i&&i.value==='')i.value=draft[id]});
     if(aid){var fe=document.getElementById(aid);if(fe&&fe!==ae&&/^(sw|sr)-/.test(aid))try{fe.focus({preventScroll:true})}catch(e){}}}
-  wfBind();fxLive();document.body.classList.toggle('fitmode',!!(S.sess&&curId==='session'));
+  wfBind();fxBindH();fxLive();document.body.classList.toggle('fitmode',!!(S.sess&&curId==='session'));
   if(S.wfGo!=null){var gi=S.wfGo;S.wfGo=null;setTimeout(function(){wfGo(gi,true)},S.wfGoDelay||60);S.wfGoDelay=0}
   restPaint();
 }
 function fxLive(){var w=S.sess&&sessW();if(!w)return;var ms=sessMs(),tm=clockH(ms),kc=sessKcal(ms,w);$$('[data-live=time]').forEach(function(e){if(e.textContent!==tm)e.textContent=tm});$$('[data-live=kcal]').forEach(function(e){e.textContent=kc})}
-function fxPane(i){var h=$('#fxh');if(!h)return;h.scrollTo({left:i?h.scrollWidth:0,behavior:document.documentElement.classList.contains('lite')?'auto':'smooth'})}
+/* Hint that swiping right shows the workout stats: shown for your first 3 workouts, until you open the stats once */
+function fxHintGet(){try{return JSON.parse(localStorage.getItem('manna.fxhint.v1')||'{}')||{}}catch(e){return {}}}
+function fxHintSet(o){try{localStorage.setItem('manna.fxhint.v1',JSON.stringify(o))}catch(e){}}
+function fxHintOn(){var o=fxHintGet();return !o.seen&&(o.n||0)<=3}
+function fxHintSeen(){var o=fxHintGet();if(o.seen)return;o.seen=1;fxHintSet(o);var e=$('#fxhint');if(e){e.classList.add('gone');setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e)},400)}}
+function fxBindH(){var h=$('#fxh');if(!h||h._b)return;h._b=1;var tk=0;h.addEventListener('scroll',function(){if(tk)return;tk=requestAnimationFrame(function(){tk=0;if(h.scrollLeft<h.clientWidth*.4)fxHintSeen()})},{passive:true})}
+function fxPane(i){if(!i)fxHintSeen();var h=$('#fxh');if(!h)return;h.scrollTo({left:i?h.scrollWidth:0,behavior:document.documentElement.classList.contains('lite')?'auto':'smooth'})}
 /* 3, 2, 1, Go countdown before a workout starts */
 function cdBeep(hi){try{var p=ambPref();if(!p.sfx)return;var c=ambCtx();if(!c)return;if(c.state!=='running')c.resume().catch(function(){});var t=c.currentTime+.01,x=c.createOscillator(),g=c.createGain();x.type='sine';x.frequency.value=hi?1318.5:659.25;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.22,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+(hi?.6:.25));x.connect(g);g.connect(c.destination);x.start(t);x.stop(t+.65)}catch(e){}}
 function countdown(done){
@@ -5372,7 +5371,7 @@ var ACT={
     var w=wById(b.dataset.id);if(!w)return;
     S.prep={wid:w.id};S.pd={};S.restPick=S.restDef;w.ex.forEach(function(x,i){if(x[2]>0)S.pd[i]={v:String(convW(x[2],x[3])),b:false}});location.hash='session';
   },
-  pstart:function(){
+  pstart:function(){try{var fo=fxHintGet();if(!fo.seen){fo.n=(fo.n||0)+1;fxHintSet(fo)}}catch(e){}
     var w=S.prep&&wById(S.prep.wid);if(!w)return;
     var rows=wRows(w),bad=[],tg={};
     w.ex.forEach(function(e,i){var ps=$('#ps-'+i),pr=$('#pr-'+i),sv=ps?parseInt(ps.value,10):NaN,rv=pr?parseFloat(pr.value):NaN;
@@ -5405,7 +5404,7 @@ var ACT={
     var k=w.id+'|'+i,a=S.sess,now=Date.now(),t=Math.max(1,Math.round((now-(a.mark||a.last||now))/1000));(S.sets[k]=S.sets[k]||[]).push({w:wt>0?wt:0,r:r,t:t});S.sess.tg=S.sess.tg||{};S.sess.tg[i]={s:Math.max(sessTg(w,+i).s,S.sets[k].length),r:String(r)};S.cancelAsk=false;
     var more=(S.sets[k]||[]).length<sessTg(w,+i).s;
     if(a.rest>0&&more){S.rest={until:now+a.rest*1000,tot:a.rest,i:+i};a.mark=now+a.rest*1000}else{S.rest=null;a.mark=now}
-    if(!more){S.wfGo=+i+1;S.wfGoDelay=650;toast(w.ex[+i][0]+' done.',{title:'Nice work',icon:'✅',kind:'ok'})}else{try{sfxDone(0)}catch(e){}}
+    if(!more){var nxt=w.ex.length;for(var j=0;j<w.ex.length;j++){if(j!==+i&&(S.sets[w.id+'|'+j]||[]).length<sessTg(w,j).s){nxt=j;break}}S.wfGo=nxt;S.wfGoDelay=650;toast(w.ex[+i][0]+' done.',{title:'Nice work',icon:'✅',kind:'ok'})}else{try{sfxDone(0)}catch(e){}}
   },
   tgset:function(b){var w=sessW();if(!w)return;var i=+b.dataset.i,cur=sessTg(w,i);S.sess.tg=S.sess.tg||{};var have=(S.sets[w.id+'|'+i]||[]).length;S.sess.tg[i]={s:Math.max(1,have,Math.min(20,cur.s+parseInt(b.dataset.d,10))),r:cur.r}},
   setdel:function(b){
