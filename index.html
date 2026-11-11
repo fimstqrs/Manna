@@ -2533,7 +2533,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:145,d:'Nov 10, 2026',t:'Simpler AI schedules',s:['Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
+ {v:145,d:'Nov 10, 2026',t:'Right verse of the day, simpler AI schedules',s:['Fixed: the verse of the day now always matches YouVersion for your own date. In the evening Manna used to show the wrong verse, because the server was already on the next day.','Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
  {v:144,d:'Nov 10, 2026',t:'Stay on your exercise',s:['Fixed: logging a set no longer jumps you back to the first exercise on iPhone. You stay on the exercise you are doing.','The workout screen now only updates the parts that change when you log, so it feels quicker and does not flash.']},
  {v:143,d:'Nov 10, 2026',t:'Faster Friends, smoother swipes and fixes',s:['Difficulty labels (easy, intermediate, advanced) are now lowercase.','Build with AI no longer has a Length picker. If you want a set length, type it in the box, like “30 minutes”. Otherwise AI picks a sensible length.','Fixed: tapping a difficulty under Make it again as no longer changes the difficulty for every workout you build after.','Imported and self-made routines now have a red delete button on their card. Tap it, then tap Delete? to confirm.','The music button at the top now matches the settings button.','Friends opens instantly: Manna remembers your friends list on your phone and loads the latest in the background. The first time, a loading screen shows while it loads.','Swiping between pages is smoother, especially swiping right to left. Manna now keeps only the pages right next to you ready, instead of waking every page at the start of a swipe.']},
  {v:142,d:'Nov 10, 2026',t:'AI glow, bodyweight button and more',s:['Anything made with AI now has its own animation: a colourful glow flows around the edge of the screen while AI is working, then flashes when it is done.','New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default.','When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.','In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.','The welcome text on the opening animation is back in capitals, like before.']},
@@ -6342,11 +6342,17 @@ document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.
 (function(){var cb=document.querySelector('.clockbar');if(!cb)return;var t=false;function u(){t=false;cb.classList.toggle('under',(window.scrollY||document.documentElement.scrollTop||0)>24)}
   window.addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(u)}},{passive:true});u()})();
 /* live verse of the day: only works when hosted with the /api/votd function */
-var yvLast=0;
+var yvLast={};
+/* Verses already fetched are remembered on this phone, so the right one shows straight away next time */
+(function(){try{var c=JSON.parse(localStorage.getItem('manna.yvv.v1')||'{}');Object.keys(c).forEach(function(k){if(/^\d{4}-\d\d-\d\d$/.test(k)&&typeof c[k]==='string')YVV[k]=c[k]})}catch(e){}
+  if(S.votd&&S.votd.stamp===todayStamp()&&YVV[S.votd.stamp]&&S.votd.ref!==YVV[S.votd.stamp])S.votd=dayVerse()})();
+function yvSave(){try{var keep={},ks=Object.keys(YVV).sort().slice(-21);ks.forEach(function(k){keep[k]=YVV[k]});localStorage.setItem('manna.yvv.v1',JSON.stringify(keep))}catch(e){}}
 function yvSync(){
-  if(!/^https?:$/.test(location.protocol)||Date.now()-yvLast<600000)return;yvLast=Date.now();
-  try{fetch(API+'/api/votd',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){
-    if(j&&typeof j.ref==='string'&&/^\d{4}-\d\d-\d\d$/.test(j.date)&&/^[1-3]? ?[A-Za-z ]+ \d{1,3}:\d{1,3}(-\d{1,3})?$/.test(j.ref)&&YVV[j.date]!==j.ref){YVV[j.date]=j.ref;if(S.votd&&S.votd.stamp===j.date)S.votd=dayVerse();refresh()}
+  if(!/^https?:$/.test(location.protocol))return;var st=todayStamp();
+  /* Ask for this phone's own date. Once we have it, only check again every 6 hours. */
+  var gap=YVV[st]?6*3600e3:60000;if(Date.now()-(yvLast[st]||0)<gap)return;yvLast[st]=Date.now();
+  try{fetch(API+'/api/votd?date='+st,{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){
+    if(j&&typeof j.ref==='string'&&j.date===st&&/^[1-3]? ?[A-Za-z ]+ \d{1,3}:\d{1,3}(-\d{1,3})?$/.test(j.ref)){var ch=YVV[st]!==j.ref;YVV[st]=j.ref;yvSave();if(S.votd&&S.votd.stamp===st&&S.votd.ref!==j.ref){S.votd=dayVerse();ch=true}if(ch)refresh()}
   }).catch(function(){})}catch(e){}
 }
 document.addEventListener('visibilitychange',function(){if(!document.hidden)yvSync()});
@@ -6354,7 +6360,7 @@ haInit();syncInputs();if(!S.onboarded)onbOpen(0);refresh();show();webLoad();usda
 (function(){var sp=document.getElementById('splash');if(!sp)return;var n=$('#sp-s');if(n)n.textContent=S.onboarded?'Welcome, '+(S.name||'friend'):'Welcome';
   var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,done=false;
   function end(){if(done)return;done=true;sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},900)}
-  sp.addEventListener('click',end);setTimeout(end,rm?700:2600)})();setInterval(tickClock,15000);
+  sp.addEventListener('click',end);setTimeout(end,rm?700:2600)})();setInterval(tickClock,15000);setInterval(function(){try{yvSync()}catch(e){}},60000);
 })();
 </script>
 <script>
