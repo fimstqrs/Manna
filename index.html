@@ -2533,6 +2533,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:145,d:'Nov 10, 2026',t:'Simpler AI schedules',s:['Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
  {v:144,d:'Nov 10, 2026',t:'Stay on your exercise',s:['Fixed: logging a set no longer jumps you back to the first exercise on iPhone. You stay on the exercise you are doing.','The workout screen now only updates the parts that change when you log, so it feels quicker and does not flash.']},
  {v:143,d:'Nov 10, 2026',t:'Faster Friends, smoother swipes and fixes',s:['Difficulty labels (easy, intermediate, advanced) are now lowercase.','Build with AI no longer has a Length picker. If you want a set length, type it in the box, like “30 minutes”. Otherwise AI picks a sensible length.','Fixed: tapping a difficulty under Make it again as no longer changes the difficulty for every workout you build after.','Imported and self-made routines now have a red delete button on their card. Tap it, then tap Delete? to confirm.','The music button at the top now matches the settings button.','Friends opens instantly: Manna remembers your friends list on your phone and loads the latest in the background. The first time, a loading screen shows while it loads.','Swiping between pages is smoother, especially swiping right to left. Manna now keeps only the pages right next to you ready, instead of waking every page at the start of a swipe.']},
  {v:142,d:'Nov 10, 2026',t:'AI glow, bodyweight button and more',s:['Anything made with AI now has its own animation: a colourful glow flows around the edge of the screen while AI is working, then flashes when it is done.','New setting: Keep the workout clock running when I leave. Turn it on in Settings and your workout time keeps counting even if you leave Manna or lock your phone. It is off by default.','When you set up a workout, tap All bodyweight to tick Bodyweight for every exercise at once. Tap it again to untick them all.','In the 3 2 1 countdown, the yellow and red circles now drain around the ring just like the green one.','The welcome text on the opening animation is back in capitals, like before.']},
@@ -2883,7 +2884,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='144';
+var heroLast='',APPV='145';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3486,7 +3487,7 @@ var SHA=null;
 function shaRender(){
   var el=$('#sh-ai');if(!el)return;var pro=isPro(),h='<div class="row spread"><h3 style="margin:0">Make a schedule with AI</h3><span class="badge pro">✨ Pro</span></div>';
   if(!pro)h+='<p class="small muted">Tell AI what you want from your week and it builds the whole schedule. This is part of Manna Pro.</p><textarea disabled placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea>';
-  else{h+='<textarea id="sha-text" aria-label="What do you want from your schedule" placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea><div class="row"><button class="btn primary" data-act="shamake">Make my schedule</button><span class="small muted">'+esc((AILVL[S.aiLvl]||AILVL.mid)[0])+' · about '+(S.aiMins||30)+' min · 1 AI use</span></div>';
+  else{h+='<textarea id="sha-text" aria-label="What do you want from your schedule" placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea><div class="row"><button class="btn primary" data-act="shamake">Make my schedule</button><span class="small muted">1 AI use</span></div>';
     if(S.shaMsg)h+='<p class="note warn small">'+esc(S.shaMsg)+'</p>';
     if(SHA){h+='<div class="stack shaout"><label class="f" for="sha-name">Schedule name<input type="text" id="sha-name" maxlength="40" value="'+esc(SHA.name)+'"></label><ul class="list">'+SHA.days.map(function(d,i){return '<li><div style="flex:1;min-width:0"><span class="small muted">'+DAYN[i]+'</span>'+(d?'<input type="text" class="shad" id="sha-d'+i+'" maxlength="50" value="'+esc(d.name)+'" aria-label="'+DAYN[i]+' workout name"><span class="small muted">'+d.items.length+' exercises · '+d.mins+' min · '+esc(d.items.slice(0,3).map(function(x){return x.name}).join(', '))+(d.items.length>3?'…':'')+'</span>':'<b>Rest</b>')+'</div></li>'}).join('')+'</ul><div class="row"><button class="btn primary" data-act="shasave">Save schedule</button><button class="btn" data-act="shaclr">Discard</button></div><p class="small muted">Tap a name to rename it before saving.</p></div>'}}
   var ae=document.activeElement,aid=ae&&ae.id,vals={};$$('#sh-ai input,#sh-ai textarea').forEach(function(i){if(i.id)vals[i.id]=i.value});
@@ -3501,7 +3502,7 @@ function shaMake(){
     var LV=AILVL[S.aiLvl]||AILVL.mid,inj=S.area==='none'?'none':AREAS.filter(function(a){return a[0]===S.area})[0][1]+' (stage '+stageCalc()+')';
     var pr=['You are a certified strength and conditioning coach. Write a 7-day weekly workout schedule, Monday to Sunday.','Request: '+t.slice(0,600),
       'Goals: '+goalSet().map(gName).join(', ')+'. Usual workouts a week: '+wPlan().per+'. Equipment: '+((S.have||[]).map(function(k){return EQ[k]||k}).join(', ')||'bodyweight only')+'. Injury: '+inj+'.',
-      'Difficulty: '+LV[0]+'. '+LV[1]+' Typical session: about '+(S.aiMins||30)+' minutes unless the request says otherwise.',
+      'Difficulty and session length: follow the request. If it does not say, make it intermediate with sessions of about 30 to 45 minutes.',
       'Include rest days where they make sense. Give each workout day 4 to 8 exercises with sets and reps.',
       'Reply with JSON only: {"name": "short schedule name", "days": [7 items, Monday first, each either null for rest or {"name": "workout name", "mins": 40, "items": [{"name": "exercise", "rx": "3×10"}]}]}'].join('\n');
     return sm.json(pr,{modelTier:'quick'}).then(function(r){
