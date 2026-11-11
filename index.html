@@ -1220,6 +1220,15 @@ html.rm .fxhint,html.rm .fxhint-a{animation:none}
 .fpe-row input{flex:1;min-width:0;width:auto}.fpe-ai{display:flex;gap:.5rem}.fpe-ai input{flex:1;min-width:0;width:auto}
 </style>
 <style id="ntdel-style">.ntdel{color:#ff453a;border-color:color-mix(in srgb,#ff453a 40%,transparent)}.ntdel.armed{background:#ff453a;color:#fff;border-color:#ff453a}</style>
+<style id="clkpill-style">
+/* Time and date: same pill look as the settings and music buttons */
+html body .clockbar{opacity:1!important}
+html body .clockbar .clk{display:inline-flex;align-items:center;gap:.45rem;height:1.9rem;padding:0 .8rem;border-radius:999px;background:color-mix(in srgb,var(--accent) 16%,var(--surface))!important;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);box-shadow:0 4px 14px rgba(0,0,0,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+html body .clockbar .clk,html body .clockbar .clk *{color:var(--accent)!important;font-size:.78rem!important;font-weight:600!important;letter-spacing:.01em}
+html body .clockbar .clk-date{opacity:.8}
+html.lite body .clockbar .clk{-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (max-width:860px){html body .clockbar,html body .clockbar.under{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;overflow:visible!important;min-height:34px}html body .clockbar .clk{position:fixed;z-index:30;top:calc(env(safe-area-inset-top,0px) + 3px);right:12px}}
+</style>
 <style id="type-style">
 /* Text system: CAPITALS only for short, important labels. Everything else is normal sentence text. */
 :root{--caps-ls:.1em}
@@ -2533,6 +2542,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:146,d:'Nov 10, 2026',t:'Matching clock',s:['The time and date at the top now match the settings and music buttons: the same rounded shape, colour and size.']},
  {v:145,d:'Nov 10, 2026',t:'Right verse of the day, simpler AI schedules',s:['Fixed: the verse of the day now always matches YouVersion for your own date. In the evening Manna used to show the wrong verse, because the server was already on the next day.','When you finish an exercise, Manna now takes you to the first exercise that still has sets left, starting from the top, instead of just the next one down.','A small hint at the top of your workout shows that you can swipe right to see your time, sets and controls. It goes away once you have looked.','After AI logs a food from a photo or text, you can fix it right there: change the size with − and +, type the real calories, or tell AI what was different (like “big bowl, no cheese”) and it re-estimates.','Fixed: a sharp noise when leaving the app. Sounds now fade out smoothly when you switch away and fade back in when you return.','Make your own now has a red Delete button for an imported routine you do not want. Tap it twice to remove it.','Browse foods no longer shows the “Showing 60 of 7505” count.','The rainbow outline around the screen while AI works is gone. The Making with AI pop-up is still there.','Make a schedule with AI no longer shows a difficulty and length under the button. Just type what you want, like “4 days a week, 45 minutes, beginner”, and AI follows it. If you do not say, it picks intermediate and 30 to 45 minute sessions.']},
  {v:144,d:'Nov 10, 2026',t:'Stay on your exercise',s:['Fixed: logging a set no longer jumps you back to the first exercise on iPhone. You stay on the exercise you are doing.','The workout screen now only updates the parts that change when you log, so it feels quicker and does not flash.']},
  {v:143,d:'Nov 10, 2026',t:'Faster Friends, smoother swipes and fixes',s:['Difficulty labels (easy, intermediate, advanced) are now lowercase.','Build with AI no longer has a Length picker. If you want a set length, type it in the box, like “30 minutes”. Otherwise AI picks a sensible length.','Fixed: tapping a difficulty under Make it again as no longer changes the difficulty for every workout you build after.','Imported and self-made routines now have a red delete button on their card. Tap it, then tap Delete? to confirm.','The music button at the top now matches the settings button.','Friends opens instantly: Manna remembers your friends list on your phone and loads the latest in the background. The first time, a loading screen shows while it loads.','Swiping between pages is smoother, especially swiping right to left. Manna now keeps only the pages right next to you ready, instead of waking every page at the start of a swipe.']},
@@ -2884,7 +2894,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='145';
+var heroLast='',APPV='146';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
