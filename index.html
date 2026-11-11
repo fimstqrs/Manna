@@ -1405,6 +1405,7 @@ html:not(.rm):not(.lite) .stt-bar{transform-origin:bottom;animation:sttUp .6s cu
 </style>
 <style id="clk-phone">@media (pointer:coarse) and (max-width:600px){.clockbar .clk{display:none!important}}</style>
 <style id="chipx-style">.wsumx{display:inline-flex;align-items:center;gap:.45rem}.chipx{display:inline-grid;place-items:center;width:1.25rem;height:1.25rem;border-radius:50%;background:#ff453a;color:#fff;font:700 .7rem/1 system-ui,-apple-system,sans-serif}</style>
+<style id="vnext-style">.vpg .vnext{left:auto;right:1px;bottom:auto;top:calc(50% + 40px);transform:none;width:22px;height:22px;padding:0;display:grid;place-items:center;border-radius:50%;font-size:.75rem;line-height:1;background:color-mix(in srgb,var(--surface) 80%,transparent);color:var(--muted);box-shadow:0 2px 8px rgba(0,0,0,.18)}.vpg .vnext[hidden]{display:none}.vpg .vnext span{margin-top:-1px}</style>
 <style id="pr-style">
 .prlist{display:grid;gap:.4rem;padding:.8rem .9rem;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,#ffd60a 18%,transparent),color-mix(in srgb,#ff9f0a 10%,transparent));border:1px solid color-mix(in srgb,#ffd60a 40%,transparent)}
 .prrow{display:flex;justify-content:space-between;gap:.6rem;font-size:.92rem}.prrow b{white-space:nowrap}
@@ -2824,7 +2825,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:152,d:'Nov 11, 2026',t:'Cleaner workout picker',s:['Your picks in Template workouts (like Calisthenics) now have a red ✕. Tap it to remove that choice and pick again.','The choices in What kind of workout are now in capitals with emojis, like 🏋️ GYM and 🏀 BASKETBALL.','The swipe sound now plays the moment you start swiping, not after the page has moved.','The pop-up you see after logging a food now has a Save as a meal button. If AI added a few foods at once, they are saved together as one meal.','Your targets on Eat now shows five bigger circles: protein, carbs, fat, fiber and sodium.','Pick a workout no longer shows a count like "7 of 98 workouts shown".','Workouts you made or imported are now labelled Custom instead of My workouts.']},
+ {v:152,d:'Nov 11, 2026',t:'Cleaner workout picker',s:['The floating "Next: …" bubble is now a small arrow under the section dots on the right, so it no longer covers buttons.','Importing schedules and routines now tidies names: times like "(60 min)", stars and hashes, bullets, numbering and day labels are cleaned up, so "Monday (60 min)" no longer becomes "Monday (60 min) (72 min)". If your text says how long a workout is, that time is used.','Your picks in Template workouts (like Calisthenics) now have a red ✕. Tap it to remove that choice and pick again.','The choices in What kind of workout are now in capitals with emojis, like 🏋️ GYM and 🏀 BASKETBALL.','The swipe sound now plays the moment you start swiping, not after the page has moved.','The pop-up you see after logging a food now has a Save as a meal button. If AI added a few foods at once, they are saved together as one meal.','Your targets on Eat now shows five bigger circles: protein, carbs, fat, fiber and sodium.','Pick a workout no longer shows a count like "7 of 98 workouts shown".','Workouts you made or imported are now labelled Custom instead of My workouts.']},
  {v:151,d:'Nov 11, 2026',big:1,lead:'A big one: a Screen Time style History, saved meals, smarter Today\'s plan, nutrient rings and lots of fixes.',t:'Save meals, faster deleting, matching home pictures',s:['Today\'s plan on Home: Eat now shows calories on the right, like 365 of 2,980 kcal, with protein underneath.','On phones, the time and date pill at the top is gone, since your phone already shows the time.','If you have no schedule, Today\'s plan now says Train instead of Rest day, with a nudge based on yesterday, like "Good job working out yesterday. Let\'s get another one in today."','History\'s TODAY, WEEK, MONTH and YEAR card now looks like Apple\'s Screen Time: a big daily average, how it compares with last time, bars coloured by workout type, and an average line.','A workout built with AI now has a Delete button, next to Save to library.','Deleting a workout from History no longer breaks your streak. You still did it.','Fixed: pressing Delete in History no longer jumps you to the top of the page.','When you delete, remove or discard something, Manna plays a soft little goodbye sound (if sound effects are on in Settings).','Save meals from the Meals page: tap Save as a meal, tick the foods, give it a name. Your saved meals sit right there on Meals for one-tap adding, and in Quick too.','Your targets on Eat now shows 9 circles: protein, carbs, fat, fiber, sodium, potassium, iron, vitamin B12 and vitamin D. The extra lines under each circle are gone, since the circle already shows it.','The home page picture for each theme now matches the main picture in its opening animation, like the dumbbell for Fitness.','In History\'s Edit mode, Delete now deletes the selected workouts straight away, with no second tap to confirm.']},
  {v:150,d:'Nov 11, 2026',t:'Target rings, smarter Speak it',s:['Your targets on Eat are now rings, like Meals: protein, sodium, fiber and iron show how far along you are and how much you still need.','Speak it in Quick now uses AI. Say what you ate and AI works out each food and its portion, just like a photo.','Sodium is now called a max instead of a cap.','Fixed: ticking workouts in History\'s Edit mode no longer jumps you back to the top of the page.','The home page pictures for each theme are back to how they were. The new animated pictures stay on the welcome screen.','Removed: importing a workout file in Quick.','PRO is now written in capitals everywhere, like Manna PRO.','Big updates now get a MAJOR UPDATE badge in What\'s new, in your theme\'s colours.']},
  {v:149,d:'Nov 10, 2026',big:1,lead:'Our biggest update yet. We studied 10 of the most popular faith, food and fitness apps and built what their users asked for most.',t:'Verse search, records, barcode scanning',s:['New in Faith: Search. Type a feeling or a word, like lust, worry, strength or forgiveness, and get verses for it. 26 topics with 10 to 20 verses each, plus a search of every word in the Bible.','Personal records: when you lift more, do more reps or go further than ever before, Manna celebrates it and marks it in History.','Scan a barcode on Eat to log packaged food. Free, no paywall. You can also type the number in.','Download your data from Settings › Data, as a full backup or your workout history as a spreadsheet.','Works offline: once loaded, Manna and the Bible open without internet. Fonts now load from Manna itself, so text looks right straight away.','The phone status bar now matches your theme, and a soft fade sits behind the pinned buttons at the top.','Quick now uses swipe to delete, like Meals and History, instead of a red Remove button on every food.','Loading screens (the welcome, Making with AI, and Friends) now sit in the middle of your screen.','Fixed: calories in Meals line up on the right again.']},
@@ -4844,6 +4845,20 @@ function siHead(ln){
     else spec.split(/\s*(?:\/|,|&|and|\+)\s*/).forEach(function(w){var d=siDayIdx(w);if(d>-1)days.push(d)})}
   return days.length?{days:days,rest:m[2].trim()}:null;
 }
+/* Common-sense clean-up for names that come from pasted text: drops markdown, bullets, numbering,
+   times like "(60 min)", day labels and stray punctuation, so "**Monday (60 min):**" becomes "Monday workout". */
+var DUR_RX='~?\\d+(?:\\.\\d+)?\\s*(?:-\\s*\\d+\\s*)?(?:minutes?|mins?|m|hours?|hrs?|h)\\b';
+var DAY_RX='(?:monday|mon|tuesday|tues|tue|wednesday|weds|wed|thursday|thurs|thur|thu|friday|fri|saturday|sat|sunday|sun)';
+function tidyName(t,fallback){var s=String(t||'');
+  s=s.replace(/[*_`~]+/g,'').replace(/^\s*(?:#+|>+|[-•*–—·]+|\d+[.)]|\(?[a-z][.)](?=\s))\s*/i,'');
+  s=s.replace(new RegExp('[\\(\\[\\{]\\s*(?:approx\\.?|about|~)?\\s*'+DUR_RX+'[^\\)\\]\\}]*[\\)\\]\\}]','ig'),' ');
+  s=s.replace(new RegExp('\\s*(?:[-–—:|,·@]\\s*)?(?:approx\\.?|about|~)?\\s*'+DUR_RX+'\\s*$','i'),'');
+  s=s.replace(new RegExp('^\\s*(?:'+DAY_RX+'|day\\s*\\d+|week\\s*\\d+)\\b\\s*[:\\-–—|.]+\\s*(?=\\S)','i'),'');
+  s=s.replace(/\(\s*\)|\[\s*\]/g,' ').replace(/\s+/g,' ').replace(/^[\s:;,.\-–—|]+|[\s:;,.\-–—|]+$/g,'').trim();
+  if(new RegExp('^'+DAY_RX+'$','i').test(s))s=s.charAt(0).toUpperCase()+s.slice(1).toLowerCase()+' workout';
+  if(!s)return fallback||'';return s.charAt(0).toUpperCase()+s.slice(1)}
+function nameMins(t){var m=String(t||'').match(/(\d+(?:\.\d+)?)\s*(?:-\s*(\d+)\s*)?(minutes?|mins?|m|hours?|hrs?|h)\b/i);if(!m)return 0;var v=+(m[2]||m[1]);if(/^h/i.test(m[3]))v*=60;return v>=5&&v<=300?Math.round(v):0}
+function tidyEx(t){return tidyName(String(t||'').replace(/\s*[:\-–—]\s*$/,''),'')}
 function siDur(t){var m=String(t).match(/(\d+(?:\.\d+)?)\s*(minutes|mins|min|hours|hrs|hr|h|km|k|miles|mi)\b/i);if(!m)return '';var u=m[2].toLowerCase();return m[1]+(/^h/.test(u)?' hr':/^(km|k)$/.test(u)?' km':/^mi/.test(u)?' mi':' min')}
 function siClean(t){return String(t).replace(/(\d+(?:\.\d+)?)\s*(minutes|mins|min|hours|hrs|hr|h|km|k|miles|mi)\b/ig,' ').replace(/\s+/g,' ').trim()}
 function siNorm(t){return siClean(t).toLowerCase().replace(/\(.*?\)/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\b(day|workout|session|the|a|my)\b/g,' ').replace(/\s+/g,' ').trim()}
@@ -4860,19 +4875,19 @@ function siMatch(name){
 function siParse(text){
   var lines=String(text||'').split(/\r?\n/),out=[null,null,null,null,null,null,null],seen=[],cur=null,notes=[];
   var flush=function(){if(!cur)return;var e;
-    if(cur.items.length){e={kind:'new',name:cur.label||(DAYN[cur.days[0]]+' workout'),items:cur.items}}
+    if(cur.items.length){e={kind:'new',name:tidyName(cur.label,DAYN[cur.days[0]]+' workout'),items:cur.items.map(function(it){it.name=tidyEx(it.name)||it.name;return it}),mins:cur.mins||0}}
     else if(!cur.label||/^(rest|off|recovery|none|rest day|day off|-)$/i.test(cur.label)){e={kind:'rest'}}
     else{var w=siMatch(cur.label);e=w?{kind:'match',id:w.id,label:cur.label}:{kind:'none',label:cur.label,sel:'__new'}}
     cur.days.forEach(function(d){out[d]=e;if(seen.indexOf(d)<0)seen.push(d)});cur=null};
   lines.forEach(function(raw){var ln=raw.trim();if(!ln)return;
     var h=siHead(ln);
-    if(h){flush();cur={days:h.days,label:h.rest.replace(/[:.]$/,''),items:[]};
-      var one=parseNotes(h.rest);if(one.items.length&&!/^rest/i.test(h.rest)&&!siMatch(h.rest)){cur.items=one.items;cur.label=siClean(h.rest).replace(/\s*\d+\s*[x×]\s*\d+.*$/i,'')}return}
+    if(h){flush();cur={days:h.days,label:tidyName(h.rest),items:[],mins:nameMins(h.rest)};
+      var one=parseNotes(h.rest);if(one.items.length&&!/^rest/i.test(h.rest)&&!siMatch(h.rest)){cur.items=one.items;cur.label=tidyName(siClean(h.rest).replace(/\s*\d+\s*[x×]\s*\d+.*$/i,''))}return}
     if(cur){var p=parseNotes(ln);if(p.items.length){cur.items=cur.items.concat(p.items);return}}
     notes.push(ln)});
   flush();
   var ttl=lines.map(function(x){return x.trim()}).filter(Boolean)[0]||'';
-  return {days:out,found:seen.length,skipped:notes.slice(0,5),title:(!siHead(ttl)&&!/\d/.test(ttl)&&ttl.length<31)?ttl.replace(/:$/,''):''};
+  return {days:out,found:seen.length,skipped:notes.slice(0,5),title:(!siHead(ttl)&&ttl.length<41&&!parseNotes(ttl).items.length&&tidyName(ttl).length<31&&!/\d+\s*[x×]\s*\d+/i.test(ttl))?tidyName(ttl):''};
 }
 function siOpts(sel,label){
   var o=(label?'<option value="__new"'+(sel==='__new'?' selected':'')+'>Create: '+esc(siClean(label)||label)+'</option>':'')+'<option value=""'+(sel?'':' selected')+'>Rest day</option>';
@@ -5430,16 +5445,18 @@ function parseLine(raw,rounds){
   return null;
 }
 function parseNotes(text){
-  var lines=String(text||'').split(/\r?\n/),title=null,items=[],skipped=[],rounds=0,first=true;
+  var lines=String(text||'').split(/\r?\n/),title=null,items=[],skipped=[],rounds=0,first=true,mins=0;
   lines.forEach(function(raw){var ln=raw.trim();if(!ln){rounds=0;return}
     var t=plNorm(ln),r=t.match(/^(\d+)\s*(?:rounds?|sets?|circuits?|times)\b\s*(?:of|:|-)?\s*(.*)$/i);
     if(r&&!/\d/.test(r[2])&&!/[a-z]{3,}/i.test(r[2].replace(/\b(of|the|following|each|circuit|through)\b/gi,''))){rounds=+r[1];first=false;return}
+    if(first&&nameMins(ln)&&(/^\s*(#|\*\*|__)/.test(ln)||/[\(\[]\s*(?:approx\.?|about|~)?\s*\d+[^\)\]]*(?:min|m|h|hr|hour)/i.test(ln)||/:\s*$/.test(ln))&&!/\d+\s*[x×]\s*\d+/i.test(ln)&&tidyName(ln).length>1){title=tidyName(ln.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,'').trim());mins=nameMins(ln);first=false;return}
     var it=parseLine(ln,rounds);
     if(it){items.push(it);first=false;return}
-    if(first&&!/\d/.test(ln)){title=ln.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,'').trim().replace(/\s*\(.*\)\s*$/,'').replace(/^#+\s*/,'').replace(/:$/,'');first=false;return}
+    if(first&&(!/\d/.test(ln)||(nameMins(ln)&&!/\d+\s*[x×]\s*\d+/i.test(ln)&&tidyName(ln).length>1&&!/\d/.test(tidyName(ln))))){title=tidyName(ln.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,'').trim().replace(/\s*\([^)]*\)\s*$/,''))||tidyName(ln);mins=nameMins(ln);first=false;return}
     first=false;if(/^(rest|break|warm|cool)/i.test(t))return;
     skipped.push(ln)});
-  return {title:title||'Imported routine',items:items,skipped:skipped};
+  items.forEach(function(it){var c=tidyEx(it.name);if(c)it.name=c});
+  return {title:title||'Imported routine',items:items,skipped:skipped,mins:mins};
 }
 /* If the normal reader missed lines, hand the text to AI by itself (when the person has AI uses left) */
 function aiAutoOk(){try{return aiLeft()>0}catch(e){return false}}
@@ -5903,12 +5920,12 @@ var ACT={
       var lines=[];r.days.forEach(function(d){var di=siDayIdx(String(d.day||'').trim());if(di<0)return;
         if(d.rest||!d.workout&&!(d.exercises||[]).length){lines.push(DAYN[di]+': rest');return}
         lines.push(DAYN[di]+': '+String(d.workout||DAYN[di]+' workout'));(d.exercises||[]).forEach(function(x){if(x&&x.name)lines.push('  '+x.name+' '+(x.rx||''))})});
-      var res=siParse(lines.join('\n'));if(r.title)res.title=String(r.title).slice(0,30);S.siRes=res;refresh()})},
+      var res=siParse(lines.join('\n'));if(r.title)res.title=tidyName(String(r.title)).slice(0,30);S.siRes=res;refresh()})},
   sisample:function(){$('#si-text').value=SI_SAMPLE;S.siRes=siParse(SI_SAMPLE)},
   siclear:function(){S.siRes=null},
   siapply:function(){var o=S.siRes;if(!o)return;if(!schedList().length&&!schedAdd())return;var made=0,set=0,plan=S.plans[S.planId].slice(),mk={};
     o.days.forEach(function(e,d){if(!e)return;
-      if(e.kind==='new'){var nin=$('#sin-'+d),nm0=(nin&&nin.value.trim())||e.name,key=nm0+'|'+JSON.stringify(e.items);if(!mk[key]){var id='c'+(uid++);S.customW.push({id:id,name:String(nm0).slice(0,60),mins:Math.max(10,e.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:e.items.map(function(i){return [i.name,i.rx]})});mk[key]=id;made++}plan[d]=mk[key]}
+      if(e.kind==='new'){var nin=$('#sin-'+d),nm0=(nin&&nin.value.trim())||e.name,key=nm0+'|'+JSON.stringify(e.items);if(!mk[key]){var id='c'+(uid++);S.customW.push({id:id,name:tidyName(nm0,'Imported workout').slice(0,60),mins:e.mins||Math.max(10,e.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:e.items.map(function(i){return [i.name,i.rx]})});mk[key]=id;made++}plan[d]=mk[key]}
       else if(e.kind==='rest')plan[d]=null;
       else{var sel=$('#si-'+d),v=sel?sel.value:(e.kind==='match'?e.id:e.sel||'');
         if(v==='__new'){var nin2=$('#sin-'+d),nm=(nin2&&nin2.value.trim())||siClean(e.label)||e.label,dur=siDur(e.label)||'30 min',key2='n|'+nm.toLowerCase();
@@ -6030,14 +6047,14 @@ var ACT={
     aiReadText('routine',txt,function(r,err){S.ntBusy=false;
       if(!r||!Array.isArray(r.items)||!r.items.length){S.ntMsg=err||'AI could not read that either. Try one exercise per line.';refresh();return}
       try{howFill(r.items.map(function(i){return i&&i.name}).filter(Boolean))}catch(e){}
-      S.notes={title:String(r.title||(S.notes&&S.notes.title)||'Imported routine').slice(0,60),items:r.items.slice(0,20).map(function(i){return {name:canon(String(i&&i.name||'').slice(0,50)),rx:String(i&&i.rx||'3×10').slice(0,24)}}).filter(function(i){return i.name}),skipped:[]};refresh()})},
+      S.notes={title:tidyName(String(r.title||(S.notes&&S.notes.title)||''),'Imported routine').slice(0,60),mins:nameMins(r.title)||(S.notes&&S.notes.mins)||0,items:r.items.slice(0,20).map(function(i){return {name:canon(tidyEx(String(i&&i.name||'').slice(0,50))),rx:String(i&&i.rx||'3×10').slice(0,24)}}).filter(function(i){return i.name}),skipped:[]};refresh()})},
   pbwall:function(){var cs=$$('#ss-body input[id^="pb-"]');if(!cs.length)return;var on=!cs.every(function(c){return c.checked});
     cs.forEach(function(c){c.checked=on;var i=+c.id.slice(3);S.pd[i]=Object.assign(S.pd[i]||{},{b:on})});
     toast(on?'Bodyweight on for every exercise.':'Bodyweight off for every exercise.');return false},
   ntsample:function(){$('#nt-text').value=NOTE_SAMPLE;S.notes=parseNotes(NOTE_SAMPLE)},
   ntdel:function(){if(!S.ntDelArm){S.ntDelArm=true;clearTimeout(ACT.ntdel.t);ACT.ntdel.t=setTimeout(function(){S.ntDelArm=false;refresh()},3000);return}
     clearTimeout(ACT.ntdel.t);S.ntDelArm=false;S.notes=null;S.ntMsg='';var t=$('#nt-text');if(t)t.value='';try{delete draft['nt-text']}catch(e){}toast('Imported routine deleted.')},
-  ntsave:function(){var o=S.notes;if(!o||!o.items.length)return;if(!proRoutineOk())return;var ti=$('#nt-title');if(ti&&ti.value.trim())o.title=ti.value.trim().slice(0,60);var id='c'+(uid++);S.customW.push({id:id,name:o.title,mins:Math.max(10,o.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved "'+o.title+'" to your library.')},
+  ntsave:function(){var o=S.notes;if(!o||!o.items.length)return;if(!proRoutineOk())return;var ti=$('#nt-title');if(ti&&ti.value.trim())o.title=ti.value.trim().slice(0,60);var id='c'+(uid++);S.customW.push({id:id,name:tidyName(o.title,'Imported routine'),mins:o.mins||Math.max(10,o.items.length*6),level:'Imported',cat:'custom',eq:['bodyweight'],focus:'Imported',pl:'strength',ex:o.items.map(function(i){return [i.name,i.rx]})});S.selW=id;toast('Saved "'+o.title+'" to your library.')},
   hidenums:function(){S.hideNums=true;$('#sg-hide').checked=true;toast('Calorie numbers are now hidden.')},
   maint:function(){S.goals=['maintain'];S.macroOv={p:null,c:null,f:null};S.goal='maintain';S.goalKcal=null;S.coachMsg='Switched to a maintenance week. Targets are at maintenance and the plateau check is paused.';toast('Goal set to maintenance.')},
   goal:function(b){S.goals=[{lose:'cut',maintain:'maintain',gain:'lean'}[b.dataset.k]||'maintain'];S.macroOv={p:null,c:null,f:null};S.goal=b.dataset.k;S.goalKcal=null;S.coachMsg='Goal changed. Calorie and protein targets updated on every screen.'},
@@ -6634,7 +6651,7 @@ function vpGo(v,i,instant){
   v.tr.classList.toggle('anim',!instant&&!swCalm());v.tr.style.transform='translateY('+(-i*v.h)+'px)';
   v.dots.forEach(function(d,k){d.classList.toggle('on',k===i);if(k===i)d.setAttribute('aria-current','true');else d.removeAttribute('aria-current')});
   v.secs.forEach(function(sc,k){sc.setAttribute('aria-hidden',k===i?'false':'true')});
-  var nx=v.secs[i+1];v.next.hidden=!nx;if(nx)v.next.innerHTML='Next: '+esc(nx.dataset.name)+' <span>⌄</span>';
+  var nx=v.secs[i+1];v.next.hidden=!nx;if(nx){v.next.innerHTML='<span>⌄</span>';v.next.title='Next: '+nx.dataset.name;v.next.setAttribute('aria-label','Next: '+nx.dataset.name);var vpl=function(){try{var bh=v.bar.getBoundingClientRect().height;if(bh)v.next.style.top='calc(50% + '+Math.round(bh/2+14)+'px)'}catch(e){}};vpl();requestAnimationFrame(vpl);setTimeout(vpl,400)}
   if(changed&&!instant){var r=v.root.getBoundingClientRect(),top=60;if(r.top<top-4||r.bottom>innerHeight)window.scrollTo({top:Math.max(0,scrollY+r.top-top),behavior:swCalm()?'auto':'smooth'})}
 }
 function vpSize(v){v.h=vpH();v.root.style.setProperty('--vph',v.h+'px');v.tr.classList.remove('anim');v.tr.style.transform='translateY('+(-v.i*v.h)+'px)'}
