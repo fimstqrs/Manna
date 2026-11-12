@@ -1730,30 +1730,8 @@ p,li,.note,.small,.muted{text-wrap:pretty}
     
 
     <!-- 03 SAFEGUARDS -->
-    <section class="view" id="v-safeguards" hidden>
-      <header class="vh"><p class="eyebrow">Settings</p><h2>Safety</h2>
-        <p class="lede">Calorie counting can feed restriction and compulsive exercise. These controls limit the harm: numbers can be hidden, goals have a floor, and risky weeks get a gentle check-in.</p></header>
-      <div class="grid2">
-        <div class="card stack">
-          <h3>Display</h3>
-          <label class="check" for="sg-hide"><input type="checkbox" id="sg-hide"><span>Hide calorie numbers and weight values<small>Every screen switches to plain language such as "On track".</small></span></label>
-          <label class="check" for="sg-burn"><input type="checkbox" id="sg-burn"><span>Show estimated calories burned<small>Off by default. Workouts are never framed as a way to earn food.</small></span></label>
-          <h3>Daily calorie goal</h3>
-          <div class="row"><input type="number" id="sg-goal" min="500" max="5000" step="50" style="max-width:9rem" aria-label="Daily calorie goal"><button class="btn primary" data-act="goalapply">Set goal</button><button class="btn" data-act="goalauto">Use suggested</button></div>
-          <div id="sg-msg" aria-live="polite"></div>
-        </div>
-        <div class="card stack">
-          <h3>Weekly pattern check</h3>
-          <p class="small muted">Preview two sample weeks. The check looks at counts of days, never shows calorie figures, and does not diagnose anything.</p>
-          <div class="chips" id="sg-weeks"></div>
-          <div id="sg-out"></div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Words this app avoids</h3>
-        <p class="muted">"Earned", "burn it off", "cheat meal", "good" and "bad" foods, streak shaming, and celebrating fast weight loss. Going over a target is shown without red, and the ring never turns into a warning.</p>
-      </div>
-    </section>
+    <!-- Version 160: the Safety page was removed. These hidden fields keep its saved settings working. -->
+    <div hidden aria-hidden="true"><input type="checkbox" id="sg-hide"><input type="checkbox" id="sg-burn"><input type="number" id="sg-goal"><div id="sg-msg"></div><div id="sg-weeks"></div><div id="sg-out"></div></div>
 
     <!-- 04 LABS -->
     <section class="view" id="v-labs" hidden>
@@ -1790,6 +1768,17 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div class="card stack" id="m-plan"></div>
     </section>
 
+    <section class="view" id="v-drink" hidden>
+      <header class="vh"><p class="eyebrow">Fuel</p><h2>Drink</h2>
+        <p class="lede">Tap a glass each time you drink water. Your goal fills up as you go.</p></header>
+      <div class="card stack" id="e-water" hidden>
+        <div id="e-water-body" class="stack"></div>
+        <div class="row" style="align-items:flex-end"><label class="f" for="wo-amt" style="flex:1;min-width:8rem">Other amount (oz)<input type="number" id="wo-amt" min="1" max="100" step="1" inputmode="decimal" placeholder="e.g. 10"></label><button class="btn" data-act="wcust">Add</button></div>
+        <p class="small muted" id="e-wnote">1 glass = 8 oz (about 237 mL).</p>
+      </div>
+      <div class="card stack" id="d-off" hidden><p class="muted" style="margin:0">Water tracking is turned off. Turn it back on in Settings › Extras.</p></div>
+    </section>
+
     <section class="view" id="v-eat" hidden>
       <header class="vh"><p class="eyebrow">Fuel</p><h2>Eat</h2>
         <p class="lede">Type it, say it, snap it or search it. AI adds each food, and the foods you log often show up for one tap next time.</p>
@@ -1812,19 +1801,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
           </div>
         </div>
       </div>
-      <div class="card stack" id="e-today"><h3>Today's log</h3><ul class="list" id="l-today"></ul>
-          <div id="l-save" class="stack" hidden>
-            <p class="small muted" id="l-selct">Tick the items that make up one meal, then save them to reuse.</p>
-            <div class="row"><label class="vh-only" for="l-mname">Meal name</label><input type="text" id="l-mname" placeholder="Name this meal, for example Usual breakfast" style="flex:1;min-width:12rem"><button class="btn primary sm" id="l-savebtn" data-act="savemeal">Save as a meal</button></div>
-            <div class="row"><button class="btn sm" data-act="dayshare">Share today's meals</button></div>
-          </div>
-        </div>
       <div class="card stack" id="e-qadd"><h3>Quick add</h3><div id="l-freq" class="stack"></div><div id="l-saved"></div></div>
-      <div class="card stack" id="e-water" hidden>
-        <div id="e-water-body" class="stack"></div>
-        <div class="row" style="align-items:flex-end"><label class="f" for="wo-amt" style="flex:1;min-width:8rem">Other amount (oz)<input type="number" id="wo-amt" min="1" max="100" step="1" inputmode="decimal" placeholder="e.g. 10"></label><button class="btn" data-act="wcust">Add</button></div>
-        <p class="small muted" id="e-wnote">1 glass = 8 oz (about 237 mL).</p>
-      </div>
       <div class="card stack" id="e-more"><h3>More ways to log</h3>
         <details class="msec" id="em-find"><summary><span class="msi">🔎</span>Search the food list</summary><div class="stack msb">
         <div class="row"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="What are you eating?" style="flex:1;min-width:12rem"><button class="btn" data-act="fcam">Camera</button><button class="btn" data-act="fup">Upload photo</button><button class="btn" data-act="bcopen">Scan barcode</button></div>
@@ -2950,6 +2927,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:160,d:'Nov 11, 2026',t:'Drink gets its own page',s:['Water now lives on its own Drink page, right next to Eat. Tap a glass each time you drink.','Eat is even simpler: Today\'s log is gone from Eat. See and edit everything you ate today in Meals.','Every button now makes a very soft tap sound. The bigger sounds for tabs, finishing and removing stay the same. Turn sounds off in Settings if you prefer quiet.','The Safety page has been removed from Settings.','Each page\'s background music is now its own song, with its own instruments: calm pads at home, choir and organ in Faith, guitar and whistling in Friends, electric piano and marimba in Fuel, and a beat in Fitness. Switching pages no longer blends two songs together.']},
  {v:159,d:'Nov 11, 2026',t:'Food diary, reminders and a faster start',s:['Meals now has a food diary. Tap ‹ to look back at yesterday and earlier days, remove anything wrong, or add a food to today again.','Eat is simpler: Your targets, Log it, Today\'s log, Quick add and Water, with everything else in one More ways to log section.','When you set up Manna, choose whether you want Food and Fitness. Tabs you do not use are hidden. Change it any time in Settings.','Reminders in Settings: a morning verse, breakfast, lunch, dinner and an evening check-in, each at a time you choose. Every reminder has 5 different messages so they stay fresh. On iPhone, add Manna to your Home Screen first.','Keep your progress safe: if you are not signed in, Manna reminds you to sign in or download a copy, and you can now restore from a backup file in Settings.','Manna opens faster. The Bible and the food list load just after the app is on screen, not before.','Overflow accounts get an AI check in Settings that tests every AI feature for real.','Free AI food logging now has a fair daily limit for each account.']},
  {v:158,d:'Nov 11, 2026',big:1,lead:'A cleaner Fuel tab, smarter AI logging and nicer notifications.',t:'Plays nicely with your music',s:['Quick is now part of Eat: log it, Quick add and Today\'s log all live on Eat.','Foods shows your recipes and Import from a link first. Swipe through them, then scroll the full food catalog.','Safety moved to Settings.','Notifications look better: a clear title like Saved or Removed, the main message in bold, extra detail underneath, and a thin timer line. Longer messages stay a little longer.','Tidier text across the app: balanced headings, easier line lengths and numbers that line up.','AI buttons are colour coded: free AI (typing or saying food) uses your theme colour, and AI that uses your AI credits has the Overflow colours.','When you log a dish with AI, like a ham and cheese sandwich, it is logged as one food with the total numbers. Its parts are listed underneath, and in the pop-up you can swipe to see each part on its own.','Workout types in Template workouts are back in normal case, like 🏋️ Gym and 🏀 Basketball.','Fixed: the highlight bar in the Bible now matches your theme, so the verse name, colours and buttons are easy to see in dark themes.','Opening Manna no longer pauses music or podcasts from other apps. Manna\'s sounds now mix in quietly instead.','Tidier verse on Home: the reference and Read the chapter now sit under the verse, clear of the picture.']},
  {v:157,d:'Nov 11, 2026',t:'Enter for Bible help',s:['The Making with AI window now says what it is really doing, like "Finding fitting passages" for a devotional or "Writing your grocery list" for a meal plan, instead of "Picking exercises" for everything.','When you delete a workout, it disappears from Recent too. Recent also shows each workout once, instead of the same one several times.','Tidier greeting on Home: "Good morning," lines up with your name, the big letters no longer bump into it, and long names shrink to fit beside the picture (just your first name shows).','Bible help has an Enter button next to the topic box. Tap it, or press Enter, to get a devotional on what you typed.','Fixed: the Making with AI window now closes when Bible help, the weekly recap or an AI schedule finishes, instead of staying on screen.']},
@@ -3027,7 +3005,6 @@ var TOUR=[
  {v:'schedule',sel:'#sh-plans',t:'Three schedules',p:'Name each schedule and pick a workout for every day. The selected schedule drives Today and your home page.'},
  {v:'history',sel:'#v-history .vh',t:'Workout history',p:'Every finished session with the sets you logged, plus your week at a glance.'},
  {v:'scripture',sel:'#sc-feed',t:'Word for today',p:'Swipe up through verses, one at a time. Double-tap or tap the heart to save one, and switch to Bible to read whole chapters. Your favorite verse shows here too.'},
- {v:'safeguards',sel:'#v-safeguards .vh',t:'Eating safeguards',p:'Controls that keep counting healthy: hide numbers, keep a calorie floor, and get a gentle check-in after a hard week.'},
  {v:'themes',sel:'#th-now',t:'Themes',p:'Default is plain white or black. The other twelve each match a mood in scripture. Leave it on the verse of the day, or pick one and keep it.'},
  {v:'settings',sel:'#g-card',t:'Goals and body',p:'Change your goals, age, height and activity any time. Your targets update, and you can type your own numbers.'},
  {v:'settings',sel:'#tour-set',t:'That is the tour',p:'You can replay this tutorial here any time. Welcome to Manna.'}
@@ -3193,7 +3170,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='159';
+var heroLast='',APPV='160';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3667,28 +3644,31 @@ function ambOrgan(t,n,dur,lvl){var c=AMB.ctx,b=AMB.bus;if(!b)return;var g=c.crea
 /* Friends: warm and upbeat, with guitar-like strums, snaps and a shaker */
 function ambSnap(t,v){var c=AMB.ctx,b=AMB.bus;if(!b)return;var s=c.createBufferSource();s.buffer=AMB.noise;var f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=2600;f.Q.value=1.4;var g=c.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0005,t+.09);s.connect(f);f.connect(g);g.connect(b.dry);g.connect(b.wet);s.start(t,Math.random()*.5);s.stop(t+.1)}
 function ambStrum(t,notes,v,up){var c=AMB.ctx,b=AMB.bus;if(!b)return;var L=up?notes.slice().reverse():notes;L.forEach(function(n,k){var tt=t+k*.018,x=c.createOscillator(),x2=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();x.type='sawtooth';x2.type='triangle';x.frequency.value=x2.frequency.value=mtof(n);x2.detune.value=6;f.type='lowpass';f.frequency.setValueAtTime(3200,tt);f.frequency.exponentialRampToValueAtTime(700,tt+.4);g.gain.setValueAtTime(0,tt);g.gain.linearRampToValueAtTime(v,tt+.004);g.gain.exponentialRampToValueAtTime(.0004,tt+.9);x.connect(f);x2.connect(f);f.connect(g);g.connect(b.dry);g.connect(b.wet);x.start(tt);x2.start(tt);x.stop(tt+1);x2.stop(tt+1)})}
+/* Version 160: instruments that only one soundtrack uses, so no two pages sound alike */
+function ambRhodes(t,notes,v,dur){var c=AMB.ctx,b=AMB.bus;if(!b)return;var g=c.createGain();g.connect(b.dry);g.connect(b.wet);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  notes.forEach(function(n){var x=c.createOscillator(),m=c.createOscillator(),mg=c.createGain();x.type='sine';x.frequency.value=mtof(n);m.type='sine';m.frequency.value=mtof(n)*14;mg.gain.setValueAtTime(mtof(n)*.6,t);mg.gain.exponentialRampToValueAtTime(1,t+.4);m.connect(mg);mg.connect(x.frequency);x.connect(g);x.start(t);m.start(t);x.stop(t+dur+.1);m.stop(t+dur+.1)})}
+function ambLead(t,n,dur,v){var c=AMB.ctx,b=AMB.bus;if(!b)return;var x=c.createOscillator(),vib=c.createOscillator(),vg=c.createGain(),g=c.createGain();x.type='sine';x.frequency.value=mtof(n);vib.frequency.value=5.2;vg.gain.value=mtof(n)*.006;vib.connect(vg);vg.connect(x.frequency);
+  x.connect(g);g.connect(b.dry);g.connect(b.wet);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.06);g.gain.setValueAtTime(v,t+dur*.7);g.gain.linearRampToValueAtTime(0,t+dur);x.start(t);vib.start(t);x.stop(t+dur+.05);vib.stop(t+dur+.05)}
 function ambStep(i,t){
   var M=AMBM[AMB.mood];if(!M)return;var barN=Math.floor(i/M.bar),inBar=i%M.bar,ci=Math.floor(barN/M.every)%M.chords.length,ch=M.chords[ci];
   if(AMB.mood==='food'){
     /* light kitchen groove: marimba, brushed hats, walking bass, warm jazzy chords */
-    if(inBar===0)ambPad(t,ch,M.spb*M.bar,M.cut,M.pad);
+    if(inBar===0||inBar===3||inBar===6)ambRhodes(t,ch.slice(1),inBar===0?.05:.035,M.spb*(inBar===0?2.6:1.4));
     if(inBar===0||inBar===4)ambBass(t,ch[0]-24,M.spb*1.6);else if(inBar===6)ambBass(t,ch[2]-24,M.spb*.9);
     if(i%2===1)ambHat(t+M.spb*.12,.022);else if(i%4===2)ambHat(t,.035);
     var mp=[0,2,1,3,2,1,3,null],mn=mp[(i+barN*3)%8];if(mn!=null&&Math.random()<.85)ambMarimba(t,ch[mn]+12,.11+Math.random()*.05);
     if(inBar===7&&Math.random()<.4)ambMarimba(t+M.spb*.5,ch[3]+24,.07);
   }else if(AMB.mood==='workout'){
-    if(inBar===0)ambPad(t,ch.map(function(n){return n+12}),M.spb*M.bar,M.cut,M.pad);
     if(i%4===0)ambKick(t);
     if(i%4===2)ambHat(t,.05);else if(i%2===1)ambHat(t,.018);
     if(i%2===0)ambBass(t,ch[0]-12,M.spb*1.7);
     var arp=[0,1,2,3,2,1,0,2];if(barN%2===1||i%2===0)ambPluck(t,ch[arp[i%8]]+12);
   }else if(AMB.mood==='friends'){
-    if(inBar===0)ambPad(t,ch,M.spb*M.bar,M.cut,M.pad);
     if(inBar===0)ambBass(t,ch[0]-12,M.spb*2.5);else if(inBar===3)ambBass(t,ch[2]-12,M.spb*1.2);else if(inBar===4)ambBass(t,ch[0]-12,M.spb*2);
     var sp=[1,0,0,1,0,1,1,0];if(sp[inBar])ambStrum(t,ch.map(function(n){return n+12}),inBar===0?.016:.011,inBar%2===1);
     if(inBar===2||inBar===6)ambSnap(t,.09);
     if(i%2===1)ambHat(t,.012);
-    if(inBar===5&&Math.random()<.5)ambMarimba(t,M.scale[Math.floor(Math.random()*M.scale.length)],.06);
+    var lp=[0,null,2,null,1,3,null,null],ln=lp[inBar];if(barN%2===0&&ln!=null)ambLead(t,M.scale[(ln+barN)%M.scale.length]+12,M.spb*(ln===3?2.6:1.2),.028);
   }else if(AMB.mood==='faith'){
     if(inBar===0){ambChoir(t,ch.slice(1),M.spb*M.bar,M.pad);ambOrgan(t,ch[0]-12,M.spb*M.bar,.045)}
     if(inBar===2&&Math.random()<.5)ambChime(t,M.scale[Math.floor(Math.random()*M.scale.length)],.04);
@@ -3702,12 +3682,12 @@ function ambStep(i,t){
 function ambTick(){var c=AMB.ctx;if(!c||!AMB.bus||c.state!=='running'||!ambPref().on)return;var M=AMBM[AMB.mood];if(AMB.next<c.currentTime-.05){AMB.next=c.currentTime+.05}var cap=8;while(AMB.next<c.currentTime+.35&&cap-->0){ambStep(AMB.step,AMB.next);AMB.step++;AMB.next+=M.spb}}
 function ambSetMood(m){
   var c=AMB.ctx;if(!c||m===AMB.mood)return;var now=c.currentTime,old=AMB.bus;
-  if(old){old.out.gain.cancelScheduledValues(now);old.out.gain.setValueAtTime(old.out.gain.value,now);old.out.gain.linearRampToValueAtTime(0,now+2.5);setTimeout(function(){try{old.out.disconnect()}catch(e){}},3200)}
-  var out=c.createGain(),dry=c.createGain(),wet=c.createGain();out.gain.setValueAtTime(0,now);out.gain.linearRampToValueAtTime(1,now+2.5);dry.connect(out);out.connect(AMB.master);wet.gain.value=m==='workout'?.25:m==='food'?.45:.9;wet.connect(AMB.send);
+  if(old){old.out.gain.cancelScheduledValues(now);old.out.gain.setValueAtTime(old.out.gain.value,now);old.out.gain.linearRampToValueAtTime(0,now+.7);setTimeout(function(){try{old.out.disconnect()}catch(e){}},1200)}
+  var out=c.createGain(),dry=c.createGain(),wet=c.createGain();out.gain.setValueAtTime(0,now);out.gain.setValueAtTime(0,now+.6);out.gain.linearRampToValueAtTime(1,now+1.8);dry.connect(out);out.connect(AMB.master);wet.gain.value=m==='workout'?.25:m==='food'?.45:.9;wet.connect(AMB.send);
   /* the reverb send fades with the mood too */
-  var wg=c.createGain();wg.gain.setValueAtTime(0,now);wg.gain.linearRampToValueAtTime(1,now+2.5);wet.disconnect();wet.connect(wg);wg.connect(AMB.send);out._wg=wg;
-  if(old&&old.out._wg){old.out._wg.gain.cancelScheduledValues(now);old.out._wg.gain.setValueAtTime(old.out._wg.gain.value,now);old.out._wg.gain.linearRampToValueAtTime(0,now+2.5)}
-  AMB.bus={out:out,dry:dry,wet:wet};AMB.mood=m;AMB.step=0;AMB.next=now+.08;
+  var wg=c.createGain();wg.gain.setValueAtTime(0,now+.6);wg.gain.linearRampToValueAtTime(1,now+1.8);wet.disconnect();wet.connect(wg);wg.connect(AMB.send);out._wg=wg;
+  if(old&&old.out._wg){old.out._wg.gain.cancelScheduledValues(now);old.out._wg.gain.setValueAtTime(old.out._wg.gain.value,now);old.out._wg.gain.linearRampToValueAtTime(0,now+.5)}
+  AMB.bus={out:out,dry:dry,wet:wet};AMB.mood=m;AMB.step=0;AMB.next=now+.65;
 }
 function ambLevel(){var p=ambPref(),c=AMB.ctx;if(!c)return;var v=p.on?p.vol*.42:0;if(S.rplay)v*=.25;var now=c.currentTime;AMB.master.gain.cancelScheduledValues(now);AMB.master.gain.setValueAtTime(AMB.master.gain.value,now);AMB.master.gain.linearRampToValueAtTime(v,now+1.2)}
 function ambStart(){
@@ -3735,6 +3715,13 @@ function sfxTick(hi){var c=sfxOk();if(!c)return;var t=c.currentTime+.003,x=c.cre
     var h=el.clientHeight||1,k=Math.round(el.scrollTop/h);if(Math.abs(el.scrollTop-k*h)>h*.08)return;var was=snapI.get(el);if(was===undefined){snapI.set(el,k);return}if(was!==k){snapI.set(el,k);sfxTick(true)}},true);})();
 /* A soft, sad little "you left the call" sound for anything removed, deleted or discarded: two notes stepping down. */
 var SADRX=/\b(deleted|removed|discarded|cleared)\b/i;
+/* Version 160: a very soft tap on every button press. The bigger sounds (tabs, done, removed, swipes) stay as they are. */
+var TAPL=0;
+function sfxTap(){var c=sfxOk();if(!c)return;var now=Date.now();if(now-TAPL<45)return;TAPL=now;var t=c.currentTime+.002,x=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();
+  x.type='triangle';x.frequency.setValueAtTime(820,t);x.frequency.exponentialRampToValueAtTime(520,t+.035);f.type='lowpass';f.frequency.value=2200;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.022,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+.05);x.connect(f);f.connect(g);g.connect(AMB.fx);x.start(t);x.stop(t+.06)}
+document.addEventListener('pointerdown',function(e){try{var el=e.target.closest&&e.target.closest('button,a[href],[data-act],[role=button],summary,label.check,input[type=checkbox],input[type=radio],select,.chip');if(!el)return;
+  if(el.closest('#tabs')||el.closest('#setfab')||el.matches('[data-act=instep],[data-act=sfxsty]')||el.disabled||el.getAttribute('aria-disabled')==='true')return;sfxTap()}catch(x){}},true);
 function sfxSad(){
   var p=ambPref();if(!p.sfx)return;var c=ambCtx();if(!c)return;if(c.state!=='running')c.resume().catch(function(){});
   if(!AMB.fx){AMB.fx=c.createGain();AMB.fx.gain.value=.55;AMB.fx.connect(c.destination)}
@@ -4295,10 +4282,12 @@ function renderLog(){
   var ms=$('#m-saved');if(ms)ms.innerHTML='<h3 style="margin:0">Saved meals</h3>'+(rec.length?'<p class="small muted" style="margin:0">Tap one to add the whole meal to today.</p><div class="chips">'+rec.map(function(r){return '<button class="chip" data-act="addfood" data-id="'+r.id+'">+ '+esc(r.name)+' <span class="muted">· '+kc(Math.round(r.kcal))+'</span></button>'}).join('')+'</div>':'<p class="small muted" style="margin:0">None yet. Log what you ate, then tap Save as a meal to reuse it with one tap.</p>');
   $('#l-saved').innerHTML=rec.length?'<details><summary class="small">Manage saved meals ('+rec.length+')</summary><ul class="list" style="margin-top:.5rem">'+rec.map(function(r){return '<li><div>'+esc(r.name)+'<div class="small muted mono">'+kc(r.kcal)+' kcal · '+Math.round(r.p)+' g protein</div></div><button class="btn sm" data-act="rshare" data-id="'+r.id+'" aria-label="Share '+esc(r.name)+'">Share</button><button class="btn sm" data-act="delrecipe" data-id="'+r.id+'" aria-label="Remove saved meal '+esc(r.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
   S.msel=S.msel.filter(function(id){return S.meals.some(function(m){return String(m.id)===id})});
+  if($('#l-today')){
   $('#l-today').innerHTML=S.meals.length?S.meals.map(function(m){var on=S.msel.indexOf(String(m.id))>-1;return '<li class="sdli">'+sdWrap('<div class="ltrow"><label class="row" style="gap:.5rem;flex-wrap:nowrap"><input type="checkbox" data-msel="'+m.id+'"'+(on?' checked':'')+' aria-label="Include '+esc(m.name)+' in a saved meal"><span>'+esc(m.name)+(m.q!==1?' ×'+m.q:'')+' <span class="badge">'+esc(m.via)+'</span>'+partsLine(m)+'</span></label><div class="small muted mono" style="margin-left:1.6rem">'+fmtT(m.t)+' · '+kc(m.n.kcal)+' kcal</div></div>','delmeal',String(m.k||m.id),m.name)+'</li>'}).join(''):'<li><span class="muted">Nothing logged yet.</span></li>';
   $('#l-save').hidden=!S.meals.length;
   $('#l-savebtn').disabled=!S.msel.length;
   $('#l-selct').textContent=S.msel.length?S.msel.length+' selected. Name it and save.':'Tick the items that make up one meal, then save them to reuse.';
+  }
   $('#ph-tiles').innerHTML=PHOTOS.map(function(p){var f=find(p.id);return '<button class="tile" data-act="photopick" data-id="'+p.id+'" aria-pressed="'+(S.photo===p.id?'true':'false')+'">'+esc(f.name)+'<small>'+esc(f.region)+'</small></button>'}).join('');
   var p=PHOTOS.filter(function(x){return x.id===S.photo})[0];
   $('#ph-panel').hidden=!p;
@@ -5631,10 +5620,10 @@ function renderExtras(){
   var ew=$('#e-water');
   if(ew){
     $('#e-wnote').textContent='1 glass = 8 oz (about 237 mL). Your daily goal is '+(S.waterGoal||64)+' oz, or '+(Math.round((S.waterGoal||64)/8*10)/10)+' glasses. Change it in Settings.';
-    ew.hidden=!X('water');
+    ew.hidden=!X('water');var doff=$('#d-off');if(doff)doff.hidden=X('water');
     if(X('water')){
       var G=S.waterGoal||64,p=Math.min(100,Math.round(wn/G*100));
-      $('#e-water-body').innerHTML='<div class="row spread"><h3>Water</h3>'+(S.wedit?'<span class="row"><label class="f small muted" for="wo-set" style="flex-direction:row;align-items:center;gap:.4rem">Total oz<input type="number" id="wo-set" min="0" max="300" step="1" inputmode="decimal" value="'+wn+'" style="width:5.5rem"></label><button class="btn sm primary" data-act="wsave">Save</button><button class="btn sm" data-act="wtotal">Cancel</button></span>':'<button class="badge" data-act="wtotal" aria-label="Edit water total: '+wn+' of '+G+' ounces" style="cursor:pointer">'+wn+' of '+G+' oz ✎</button>')+'</div><div class="mtrack" role="img" aria-label="'+wn+' of '+G+' ounces"><i style="width:'+p+'%"></i></div><p class="small muted">'+(Math.round(wn/8*10)/10)+' glasses so far.</p><div class="chips"><button class="chip" data-act="wadd" data-d="8">+8 oz glass</button><button class="chip" data-act="wadd" data-d="12">+12 oz can</button><button class="chip" data-act="wadd" data-d="16">+16 oz bottle</button><button class="chip" data-act="wadd" data-d="20">+20 oz bottle</button><button class="chip" data-act="wadd" data-d="-8">−8 oz</button></div>';
+      $('#e-water-body').innerHTML='<div class="row spread"><h3>Water</h3>'+(S.wedit?'<span class="row"><label class="f small muted" for="wo-set" style="flex-direction:row;align-items:center;gap:.4rem">Total oz<input type="number" id="wo-set" min="0" max="300" step="1" inputmode="decimal" value="'+wn+'" style="width:5.5rem"></label><button class="btn sm primary" data-act="wsave">Save</button><button class="btn sm" data-act="wtotal">Cancel</button></span>':'<button class="badge" data-act="wtotal" aria-label="Edit water total: '+wn+' of '+G+' ounces" style="cursor:pointer">'+wn+' of '+G+' oz ✎</button>')+'</div><div class="mtrack" role="img" aria-label="'+wn+' of '+G+' ounces"><i style="width:'+p+'%"></i></div><p class="small muted">'+(function(g){return g+(g===1?' glass':' glasses')})(Math.round(wn/8*10)/10)+' so far.</p><div class="chips"><button class="chip" data-act="wadd" data-d="8">+8 oz glass</button><button class="chip" data-act="wadd" data-d="12">+12 oz can</button><button class="chip" data-act="wadd" data-d="16">+16 oz bottle</button><button class="chip" data-act="wadd" data-d="20">+20 oz bottle</button><button class="chip" data-act="wadd" data-d="-8">−8 oz</button></div>';
     }
   }
   if(X('macros')&&!S.hideNums){
@@ -6872,8 +6861,8 @@ if($('#cm-form'))$('#cm-form').addEventListener('submit',function(e){
 });
 
 /* ---------- navigation ---------- */
-var GROUPS=[['today','Today',['today']],['friends','Friends',['friends']],['train','Fitness',['workouts','schedule','history','session']],['fuel','Fuel',['eat','meals','foods']],['faith','Faith',['scripture']],['settings','Settings',['settings','themes','safeguards']]];
-var VLABEL={friends:'Friends',today:'Today',workouts:'Workouts',schedule:'Schedule',history:'History',session:'Session',log:'Quick',eat:'Eat',meals:'Meals',foods:'Foods',labs:'Nutrients',safeguards:'Safety',sleep:'Sleep and recovery',injury:'Injury and rehab',mind:'Mind and hormones',medical:'Medical context',coach:'Adaptive coaching',scripture:'Verse of the day',themes:'Themes',community:'Community',settings:'Settings'};
+var GROUPS=[['today','Today',['today']],['friends','Friends',['friends']],['train','Fitness',['workouts','schedule','history','session']],['fuel','Fuel',['eat','drink','meals','foods']],['faith','Faith',['scripture']],['settings','Settings',['settings','themes']]];
+var VLABEL={friends:'Friends',today:'Today',workouts:'Workouts',schedule:'Schedule',history:'History',session:'Session',log:'Quick',eat:'Eat',drink:'Drink',meals:'Meals',foods:'Foods',labs:'Nutrients',safeguards:'Safety',sleep:'Sleep and recovery',injury:'Injury and rehab',mind:'Mind and hormones',medical:'Medical context',coach:'Adaptive coaching',scripture:'Verse of the day',themes:'Themes',community:'Community',settings:'Settings'};
 var VGROUP={more:'more'},VALID={more:1};
 GROUPS.forEach(function(g){g[2].forEach(function(v){VGROUP[v]=g[0];VALID[v]=1})});
 if($('#more-list'))$('#more-list').innerHTML='<h3 class="eyebrow" style="margin-top:.5rem">All pages</h3>'+GROUPS.filter(function(g){return g[0]!=='today'}).map(function(g){return '<div class="card stack"><h3>'+g[1]+'</h3><div class="morerows">'+g[2].filter(function(v){return v!=='session'&&v!=='settings'}).map(function(v){return '<a class="morerow" href="#'+v+'"><span>'+VLABEL[v]+'</span><span aria-hidden="true">›</span></a>'}).join('')+'</div></div>'}).join('');
