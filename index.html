@@ -1811,9 +1811,9 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div class="card stack" id="e-quick">
         <h3>Log it</h3>
         <form id="l-form" class="row" autocomplete="off"><input type="text" id="l-text" placeholder="2 eggs and whole wheat toast with butter" aria-label="What did you eat" style="flex:1;min-width:14rem"><button class="btn primary" type="submit">Log it</button></form>
-        <div class="row"><button class="btn sm" data-act="voice" id="l-voice">🎙 Speak it <span class="aitag">AI</span></button><button class="btn sm" data-act="lphoto">📷 Photo</button></div>
+        <div class="row"><button class="btn sm" data-act="voice" id="l-voice">🎙 Speak it <span class="aitag">AI</span></button><button class="btn sm" data-act="lphoto">📷 Photo</button><button class="btn sm" data-act="bcopen">▥ Scan barcode</button></div>
         <input type="file" id="l-cam" accept="image/*" capture="environment" hidden>
-        <p class="small muted">Speak or snap a meal. AI works out each food and its portion, then adds them to today.</p>
+        <p class="small muted">Speak or snap a meal and AI works out each food and its portion. Or scan the barcode on a packet.</p>
         <div id="l-res" aria-live="polite"></div>
         <div id="ph-box" hidden class="note stack">
           <div><b>Photo recognition demo.</b> Pick a sample dish. A real app would analyze your own photo.</div>
@@ -2955,7 +2955,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:164,d:'Nov 11, 2026',t:'Bible studies that fit you',s:['7-day reading plan now asks what you want the plan to be about first.','Plans are laid out better: a short intro, today\'s reading with a question to think about, a progress bar, and the whole week underneath. Mark each day done as you go.','A new plan waits for you to tap Start this plan. If you leave the page without starting it, it is cleared so it does not pile up.','After a devotional or a chapter explanation, Manna offers to turn it into a 7-day Bible study on what you asked.']},
+ {v:164,d:'Nov 11, 2026',t:'Bible studies that fit you',s:['7-day reading plan now asks what you want the plan to be about first.','Plans are laid out better: a short intro, today\'s reading with a question to think about, a progress bar, and the whole week underneath. Mark each day done as you go.','A new plan waits for you to tap Start this plan. If you leave the page without starting it, it is cleared so it does not pile up.','After a devotional or a chapter explanation, Manna offers to turn it into a 7-day Bible study on what you asked.','Scan barcode is now right in the Log it box at the top of Eat.']},
  {v:163,d:'Nov 11, 2026',t:'Two-a-days, and Read goes straight to the verse',s:['Overflow: plan more than one workout on the same day. Under any day in your schedule, pick Add another workout. Up to 5 a day.','Today\'s plan on Home lists every workout planned for today, each with its own Start button.','Tap Read on any verse and the Bible opens right at that verse, with a soft glow so you can see where it is.','The Add to Home Screen guide now acts out each step: the menu slides up, a tap shows exactly what to press, and the Manna icon pops onto the Home Screen.']},
  {v:162,d:'Nov 11, 2026',t:'Just Manna',s:['When you add Manna to your Home Screen, it is now always called just Manna. If yours still shows an old, longer name, remove it and add Manna again.']},
  {v:161,d:'Nov 11, 2026',t:'Sugar, and six circles everywhere',s:['Sugar is now one of your targets, with a daily max of about 10% of your calories.','Every food you add, with AI or not, now shows all six circles: protein, carbs, fat, fibre, sodium and sugar.','AI, barcodes, restaurant foods and the built-in foods all count sugar. A few foods from the big food list do not list sugar yet; those show a dash.']},
