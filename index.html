@@ -614,6 +614,26 @@ input[type=text],input[type=number],select,textarea{
   @keyframes onb-back{from{opacity:0;transform:translateX(-36px)}to{opacity:1;transform:none}}
   @keyframes onb-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 }
+.hsg{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:1rem;align-items:start}
+@media (max-width:560px){.hsg{grid-template-columns:1fr}.hsp{justify-self:center}}
+.hsp{width:100%;max-width:190px}
+.hsp-ph{position:relative;aspect-ratio:9/18.5;border-radius:26px;padding:10px 8px 8px;background:var(--bg);border:6px solid color-mix(in srgb,var(--ink) 80%,transparent);box-shadow:0 10px 30px -12px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.hsp-top{display:flex;flex-direction:column;align-items:center;gap:5px}.hsp-top i{width:38%;height:9px;border-radius:9px;background:color-mix(in srgb,var(--ink) 80%,transparent)}
+.hsp-top b{align-self:flex-start;font:600 .62rem/1.1 var(--f-display,inherit);padding:2px 3px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.hsp-ws{flex:1;display:flex;flex-direction:column;gap:5px;overflow:hidden;mask-image:linear-gradient(#000 85%,transparent);-webkit-mask-image:linear-gradient(#000 85%,transparent)}
+.hsp-w{flex:none;display:flex;align-items:flex-start;gap:4px;padding:5px 6px;border-radius:9px;background:var(--surface,color-mix(in srgb,var(--ink) 6%,transparent));border:1px solid color-mix(in srgb,var(--ink) 10%,transparent);font-size:.55rem;line-height:1.2;color:var(--ink)}
+.hsp-w span{font-size:.7rem;line-height:1}.hsp-w em{font-style:normal;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hsp-w.mv{animation:hsPop .55s cubic-bezier(.34,1.56,.64,1);border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.hsp-empty{margin:auto;font-size:.6rem;color:var(--muted);text-align:center}
+.hsp-dock{flex:none;display:flex;justify-content:space-around;padding:6px 4px;border-radius:12px;background:color-mix(in srgb,var(--ink) 7%,transparent)}.hsp-dock i{width:10px;height:10px;border-radius:4px;background:color-mix(in srgb,var(--ink) 28%,transparent)}.hsp-dock i:nth-child(1){background:var(--accent)}
+.hsl{list-style:none;margin:0;padding:0;display:grid;gap:.4rem}
+.hsl li{display:flex;align-items:center;gap:.55rem;padding:.45rem .55rem;border-radius:12px;background:color-mix(in srgb,var(--ink) 5%,transparent);border:1px solid color-mix(in srgb,var(--ink) 9%,transparent)}
+.hsl li.off{opacity:.55}.hsl li.mv{animation:hsPop .55s cubic-bezier(.34,1.56,.64,1)}
+.hsl-ic{font-size:1.05rem;width:1.5rem;text-align:center}.hsl-n{flex:1;min-width:0;font-weight:600;font-size:.9rem}.hsl-n small{display:block;font-weight:400;color:var(--muted);font-size:.72rem}
+.hsl-b{gap:.3rem;flex-wrap:nowrap}.hsl-b .btn{min-width:2.2rem;padding-left:.5rem;padding-right:.5rem}
+@keyframes hsPop{0%{transform:scale(.94)}60%{transform:scale(1.03)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.hsp-w.mv,.hsl li.mv{animation:none}}
+.onb-un{display:flex;align-items:center;gap:.35rem}.onb-un .mono{font-size:1.1rem;opacity:.7}.onb-un input{flex:1}
 .onb-themes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .onb-th{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:.7rem .8rem;border-radius:16px;border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink);font:inherit;cursor:pointer}
 .onb-th i{width:100%;height:26px;border-radius:9px;margin-bottom:6px;border:1px solid color-mix(in srgb,var(--ink) 15%,transparent)}
@@ -1991,6 +2011,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
           <label class="check" for="p-rm"><input type="checkbox" id="p-rm"><span>Reduce motion<small>Stops animations.</small></span></label>
           <label class="check" for="p-plain"><input type="checkbox" id="p-plain"><span>Plain words<small>Swaps terms like "sodium" for "salt" on the Today page.</small></span></label>
         </div>
+        <div class="card stack" id="hs-card"></div>
         <div class="card stack" id="tour-set"><div class="sh"><h3>Tutorial</h3><p class="small muted">A short walkthrough of every page. You can leave it at any time.</p></div><div class="row"><button class="btn" data-act="tourstart">Replay the tutorial</button><button class="btn" data-act="wnopen">What’s new</button></div></div>
       </div></div>
       <div class="swpage" data-name="Body" data-ic="body"><div class="grid2">
@@ -2817,7 +2838,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['hsLast','ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals;else if(p.mealsD&&Array.isArray(p.meals)&&p.meals.length){d.prevMeals={d:p.mealsD,m:p.meals};if(!d.dayLogs||typeof d.dayLogs!=='object'||Array.isArray(d.dayLogs))d.dayLogs={};if(!d.dayLogs[p.mealsD])d.dayLogs[p.mealsD]=p.meals}}}catch(e){}
   try{dayLogTrim(d)}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
@@ -2861,7 +2882,7 @@ function defaults0(){
     thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Friend',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',uname:'',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -3029,7 +3050,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.']},
+ {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
  {v:165,d:'Nov 12, 2026',t:'Good morning, good evening',s:['The opening animation now greets you by the time of day: Good morning, Good afternoon or Good evening.','The AI check card is gone from Settings.','Fixed the water bottle on the Drink page: the water now sits level with a gentle wave.','Food trends chart is clearer: grid lines with numbers, your goal and your average marked, bars that grow in, and tapping a bar shows that day with a button to open it. It also shows your best day, a shaded target zone, the numbers on each bar for the week, and a short tip about your pattern.','Tap a Repeat card in Quick add to see what you ate, with numbers, and pick only the foods you want again.','Quick add icons no longer pop in and out every time you tap something.','Meal plan no longer shows an example plan straight away. Tap Show template meal plan to see one.','Every food now gets its own icon instead of a plain plate.','The food catalog is no longer on the Recipes page. Search all foods from More ways to log on Eat.','Rename your meals: tap ✎ next to one of your meals, a recipe or any food in your diary.','Saved meals are now called Your meals, and the Diary no longer has a separate saved meals section. Find Your meals in Quick add on Eat.']},
  {v:164,d:'Nov 11, 2026',t:'Bible studies that fit you',s:['7-day reading plan now asks what you want the plan to be about first.','Plans are laid out better: a short intro, today\'s reading with a question to think about, a progress bar, and the whole week underneath. Mark each day done as you go.','A new plan waits for you to tap Start this plan. If you leave the page without starting it, it is cleared so it does not pile up.','After a devotional or a chapter explanation, Manna offers to turn it into a 7-day Bible study on what you asked.','Scan barcode is now right in the Log it box at the top of Eat.','Saved meals now keep each part. Save a sandwich or a plate of foods and, when you log it again, swipe to see each part. Saved meals now look like foods in the food list, with an icon and what is in them. Tap + to log one straight away. Everything in Quick add now has a food icon, and Repeat yesterday shows exactly what you ate. To remove one, open it and tap Remove saved meal.','Swiping between foods in the food pop-up works properly on iPhone now.','The Saved AI estimates list under Search the food list is gone. To keep something, tap Save as a meal.','Fuel tabs are renamed: Meals is now Diary, and Foods is now Recipes. The Diary no longer repeats the calorie total next to the big circle, and on past days the circle says which day it is.','The Drink page has a water bottle that fills up as you get closer to your goal.','Food trends is redone: switch between calories, protein, carbs, fat and sugar, look back 7, 14 or 30 days, see how many days you hit your goal, and tap any day to open it.']},
@@ -3103,7 +3124,7 @@ var TOUR=[
  {v:'today',sel:'.hero',t:'This is Home',p:'Your name, the verse of the day and the date. Tap "Read the chapter" to open it in the Bible reader.'},
  {v:'today',sel:'#t-energy',t:"Today's progress",p:'Calories, protein, water and workouts for the day in one place. Tap a number to change it, and choose which stats you want to see.'},
  {v:'today',sel:'#t-train',t:"Today's workout",p:'The workout from your schedule, plus your top 3 workouts. Tap one to open it.'},
- {v:'today',sel:'#t-check',t:'Daily checklist',p:'Small habits for the day. You can add your own items. Use the reorder button at the bottom of Home to move or hide any card.'},
+ {v:'today',sel:'#t-check',t:'Daily checklist',p:'Small habits for the day. You can add your own items. To move or hide any card on Home, go to Settings, then Home Screen.'},
  {v:'eat',sel:'#v-eat .vh',t:'Log what you eat',p:'Type a food, snap a photo or describe a meal. Tap a result to see its macros, change the amount and add it to today. Save anything you eat often as a meal.'},
  {v:'eat',sel:'#t-targets',t:'Your targets',p:'Your calorie and macro goals, worked out from your goals, age, height, weight and activity. You can change them in Settings.'},
  {v:'meals',sel:'#m-sum',t:"Today's meals",p:'Everything you logged today, in order, with the time you logged it.'},
@@ -3158,7 +3179,7 @@ function onbSrc(){return ONB.in||(S.onboarded?{a:S.age,kg:S.weight,h:S.height}:{
 function onbOk(x){return isFinite(x)&&x>0}
 function onbH(){var h=onbSrc().h,i=onbOk(h)?Math.round(h/2.54):NaN;return S.units==='lb'?'<div class="onb-row"><label class="f" for="onb-ft">Height (ft)<input type="number" id="onb-ft" data-oi="1" min="3" max="7" inputmode="numeric" placeholder="ft" value="'+(onbOk(i)?Math.floor(i/12):'')+'"></label><label class="f" for="onb-in">(in)<input type="number" id="onb-in" data-oi="1" min="0" max="11" inputmode="numeric" placeholder="in" value="'+(onbOk(i)?i%12:'')+'"></label></div>':'<div class="onb-row"><label class="f" for="onb-cm">Height (cm)<input type="number" id="onb-cm" data-oi="1" min="120" max="230" inputmode="numeric" placeholder="e.g. 175" value="'+(onbOk(h)?Math.round(h):'')+'"></label><span></span></div>'}
 function onbPanel(n){
-  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you? <span class="muted">(optional)</span><input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(!S.onboarded&&(S.name==='Fimi'||S.name==='Friend')?'':S.name)+'"></label><div class="onb-focus"><b>Will you use Manna for these too?</b><span class="small muted">Tap Food or Fitness to turn it off if you will not use it. You can change this in Settings.</span><div class="onb-seg" role="group" aria-label="Use Manna for">'+focusChips('data-onb')+'</div></div><div id="ob-acct" class="onb-acct"></div></div>';
+  if(n===0)return '<div class="onb-panel go"><div class="onb-ic">'+ICON.apple+'</div><h2 id="onb-h" tabindex="-1">Let\'s set up Manna</h2><p>Answer a few quick questions and Manna will work out a calorie and macro target that fits your goals. It takes about a minute, and you can change everything later in Settings.</p><label class="f" for="onb-name">What should we call you? <span class="muted">(optional)</span><input type="text" id="onb-name" maxlength="20" autocomplete="given-name" placeholder="Your name" value="'+esc(!S.onboarded&&(S.name==='Fimi'||S.name==='Friend')?'':S.name)+'"></label><label class="f" for="onb-un">Pick a username<span class="onb-un"><span class="mono" aria-hidden="true">@</span><input type="text" id="onb-un" maxlength="20" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text" placeholder="your_name" value="'+esc(S.uname||'')+'"></span><span class="small muted">Friends add you by this. 3 to 20 lowercase letters, numbers or underscores.</span></label><div class="onb-focus"><b>Will you use Manna for these too?</b><span class="small muted">Tap Food or Fitness to turn it off if you will not use it. You can change this in Settings.</span><div class="onb-seg" role="group" aria-label="Use Manna for">'+focusChips('data-onb')+'</div></div><div id="ob-acct" class="onb-acct"></div></div>';
   if(n===1)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">What are your goals?</h2><p>Pick one or more. Manna blends them into one plan.</p><div class="onb-opts" role="group" aria-label="Goals">'+GOALS.map(function(g){return '<button type="button" class="onb-opt" data-onb="gtog" data-k="'+g[0]+'" aria-pressed="'+((S.goals||[]).indexOf(g[0])>-1)+'"><b>'+g[1]+'</b><span>'+g[2]+'</span></button>'}).join('')+'</div>'
     +'<div class="onb-gx"><b>Pace</b><div class="seg" role="radiogroup" aria-label="Pace" id="onb-pace">'+['gentle','steady','fast'].map(function(k){return '<button type="button" role="radio" data-onb="gpace" data-k="'+k+'" aria-checked="'+((S.gPace||'steady')===k)+'">'+PACEN[k]+'</button>'}).join('')+'</div>'
     +'<label class="f" for="onb-gai">Or describe your goal and let AI pick<textarea id="onb-gai" data-oi="1" placeholder="Lose a little weight and get stronger for basketball"></textarea></label><button type="button" class="btn sm" data-onb="gai">Pick my goals with AI</button></div></div>';
@@ -3232,6 +3253,7 @@ var ONBACT={
   gpace:function(b){S.gPace=b.dataset.k;$$('#onb-pace [data-k]').forEach(function(x){x.setAttribute('aria-checked',String(x.dataset.k===S.gPace))})},
   gai:function(){var t=($('#onb-gai')&&$('#onb-gai').value||'').trim();if(!t){$('#onb-msg').textContent='Describe your goal first.';return}gAI('make',t,function(){if(ONB.step===1)onbRender()})},
   next:function(){
+    if(ONB.step===0){var un=(($('#onb-un')||{}).value||'').trim().replace(/^@/,'').toLowerCase();if(!/^[a-z0-9_]{3,20}$/.test(un)){$('#onb-msg').textContent=un?'Usernames use 3 to 20 lowercase letters, numbers or underscores.':'Pick a username to continue.';var ue=$('#onb-un');if(ue)ue.focus();return}S.uname=un}
     if(ONB.step===0){var nm=($('#onb-name').value||'').trim().slice(0,20);if(nm)S.name=nm;else if(!S.onboarded&&S.name==='Fimi')S.name='Friend';if($('#ob-acct')&&$('#ob-acct').innerHTML)S.acctAsked=true}
     if(ONB.step===1&&!(S.goals||[]).filter(function(x){return GOALS.some(function(y){return y[0]===x})}).length){$('#onb-msg').textContent='Pick at least one goal to continue.';return}
     if(ONB.step===2){onbReadBody();if(!onbValid())return}
@@ -3276,6 +3298,7 @@ function onbInput(e){
 (function(){var o=document.getElementById('onb');if(!o)return;
   o.addEventListener('click',function(e){var b=e.target.closest('[data-onb]');if(b&&ONBACT[b.dataset.onb])ONBACT[b.dataset.onb](b)});
   o.addEventListener('input',onbInput);
+  o.addEventListener('input',function(e){if(e.target.id==='onb-un'){var v=e.target.value,c=v.toLowerCase().replace(/^@/,'').replace(/\s+/g,'_').replace(/[^a-z0-9_]/g,'').slice(0,20);if(c!==v)e.target.value=c}});
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
@@ -4049,10 +4072,14 @@ function frCache(){try{if(FR.handle&&FR.data)localStorage.setItem('manna.fr.v1',
 function frOn(){var a=authGet();return !!(ACC.cfg&&ACC.cfg.accounts&&a&&a.id)}
 function rpc(name,args){return authToken().then(function(tok){if(!tok)throw {status:401};return fetch(ACC.cfg.url+'/rest/v1/rpc/'+name,{method:'POST',headers:sbHeaders(tok),body:JSON.stringify(args||{})}).then(sbJson)})}
 function frErr(e){return e&&e.status===404?'Friends is not set up on the server yet. The site owner needs to run supabase/friends.sql.':e&&e.status===401?'Sign in again to use Friends.':'Could not reach the server. Check your connection and try again.'}
+/* The username picked in setup is claimed for you the first time you sign in */
+function frAutoName(){var u=S.uname,a=authGet()||{};if(FR.handle!==null||!u||!/^[a-z0-9_]{3,20}$/.test(u)||FR.autoTried===a.id)return;FR.autoTried=a.id;
+  rpc('set_username',{p_username:u,p_display:S.name&&S.name!=='Friend'?S.name:''}).then(function(){FR.handle=undefined;FR.at=0;toast('You are @'+u+' on Manna. Friends can add you by that name.',{title:'Username saved',icon:'@',kind:'ok'});frLoad()})
+    .catch(function(){FR.ok=false;FR.msgAt=Date.now();FR.msg='@'+u+' is already taken. Pick another username.';refresh()})}
 function frLoad(){
   if(!frOn()||FR.busy)return;FR.busy=true;FR.err='';
   Promise.all([rpc('my_handle'),rpc('friends_list').catch(function(){return null}),rpc('shared_inbox').catch(function(e){FR.noShare=!!(e&&(e.status===404||/PGRST202|shared_inbox/.test(String(e.code||e.message||''))));return null})]).then(function(r){var h=r[0];FR.handle=h&&h.username?h:null;if(r[2]&&r[2].ok){FR.inbox=r[2].items||[];FR.noShare=false}return FR.handle?r[1]:null})
-    .then(function(d){FR.cached=false;if(!FR.handle)FR.data=null;if(d&&d.ok){FR.data=d;if(d.allow&&typeof d.allow==='object'){S.fshare={workouts:d.allow.workouts!==false,meals:!!d.allow.meals,weight:!!d.allow.weight}}}FR.at=Date.now();FR.busy=false;frCache();frPush(true);refresh()})
+    .then(function(d){FR.cached=false;if(!FR.handle)FR.data=null;if(d&&d.ok){FR.data=d;if(d.allow&&typeof d.allow==='object'){S.fshare={workouts:d.allow.workouts!==false,meals:!!d.allow.meals,weight:!!d.allow.weight}}}FR.at=Date.now();FR.busy=false;frCache();frPush(true);refresh();frAutoName()})
     .catch(function(e){FR.busy=false;FR.at=Date.now();FR.err=frErr(e);refresh()});
 }
 /* ---------- Share workouts with friends ---------- */
@@ -4113,7 +4140,7 @@ function renderFriends(){
   else if(FR.handle===undefined||(FR.busy&&!FR.data&&FR.handle===undefined))h=FR.err?'<div class="note warn">'+esc(FR.err)+'</div><div class="row" style="justify-content:center"><button class="btn sm" data-act="frrefresh">Try again</button></div>':frSkel();
   else if(!FR.handle||S.frEditName){
     h='<div class="card stack"><h3>'+(FR.handle?'Change your username':'Pick a username')+'</h3><p class="muted">Friends add you by your username. Use 3 to 20 lowercase letters, numbers or underscores. There is no public search, so only people you tell can find you.</p>'
-      +'<div class="row"><label class="vh-only" for="fr-un">Username</label><span class="mono" style="font-size:1.1rem">@</span><input type="text" id="fr-un" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="yourname" style="flex:1;min-width:10rem" value="'+esc(FR.handle?FR.handle.username:'')+'"><button class="btn primary" data-act="frname">Save</button>'+(FR.handle?'<button class="btn" data-act="frnamecancel">Cancel</button>':'')+'</div>'
+      +'<div class="row"><label class="vh-only" for="fr-un">Username</label><span class="mono" style="font-size:1.1rem">@</span><input type="text" id="fr-un" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="yourname" style="flex:1;min-width:10rem" value="'+esc(FR.handle?FR.handle.username:(S.uname||''))+'"><button class="btn primary" data-act="frname">Save</button>'+(FR.handle?'<button class="btn" data-act="frnamecancel">Cancel</button>':'')+'</div>'
       +(FR.msg?'<div class="note '+(FR.ok?'ok':'warn')+'">'+esc(FR.msg)+'</div>':'')+(FR.err?'<div class="note warn">'+esc(FR.err)+'</div>':'')+'</div>';
   }else{
     var d=FR.data||{friends:[],incoming:[],outgoing:[],blocked:[],cheers:[]},me=FR.handle.username;
@@ -4570,7 +4597,7 @@ function renderPrivacy(){
   $('#p-reset').textContent=delConfirm?'Click again to confirm':'Delete all my data';
   $('#p-units').value=S.units;$('#p-lang').value=S.lang;
   var plainTh=th.id==='plain',cols=THEMES.filter(function(t){return t.id!=='plain'}).map(function(t){return t.sw}),swbg=plainTh?'conic-gradient('+cols.concat(cols[0]).join(',')+')':sw;
-  var thh='<span class="thb-sw" style="background:'+swbg+'"></span><span class="thb-t"><b>CHANGE THEME</b><span>Now: '+esc(th.name)+' · '+(th.auto?'follows the verse':'chosen by you')+'</span></span><span class="thb-go" aria-hidden="true">›</span><span class="thb-strip" aria-hidden="true">'+THEMES.map(function(t){return '<i style="background:'+t.sw+'"></i>'}).join('')+'</span>';
+  var thh='<span class="thb-sw" style="background:'+swbg+'"></span><span class="thb-t"><b>Change theme</b><span>Now: '+esc(th.name)+' · '+(th.auto?'follows the verse':'chosen by you')+'</span></span><span class="thb-go" aria-hidden="true">›</span><span class="thb-strip" aria-hidden="true">'+THEMES.map(function(t){return '<i style="background:'+t.sw+'"></i>'}).join('')+'</span>';
   if($('#p-theme').dataset.h!==thh){$('#p-theme').dataset.h=thh;$('#p-theme').innerHTML=thh;$('#p-theme').style.setProperty('--thsw',plainTh?'#9b7cf0':sw)}
   if($('#p-share'))$('#p-share').innerHTML=[['workouts','Workouts'],['meals','Meals'],['weight','Weight']].map(function(x){return '<div class="row spread"><span>'+x[1]+'</span><span class="badge">'+esc(S.share[x[0]])+'</span></div>'}).join('');
   var ex={settings:{bible_version:ver(),theme:th.id,theme_mode:S.themeMode,units:S.units,language:S.lang,text_size:S.scale},profile:{goal:S.goal,weight_kg:S.weight,conditions:Object.keys(S.cond).filter(function(k){return S.cond[k]}),allergies:Object.keys(S.allergy).filter(function(k){return S.allergy[k]})},meals:S.meals.map(function(m){return {name:m.name,qty:m.q,time:m.t}}),labs:S.labs,sharing:S.share};
@@ -5845,10 +5872,23 @@ function renderOrder(){
   var ft=$('#appfoot');if(ft){ft.textContent='Manna · Version '+APPV+(TESTV?' (test)':'')+' · © 2026 morningfall';var mv=$('#v-settings');if(mv&&mv.nextElementSibling!==ft)mv.parentNode.insertBefore(ft,mv.nextElementSibling)}
   ord.forEach(function(k){var e=v.querySelector(':scope > [data-w="'+k+'"]');if(e)e.classList.toggle('whid',!!S.thide[k])});
   var r=$('#t-reorder'),h;
-  if(!S.tedit)h='<div class="row" style="justify-content:center"><button class="btn sm" data-act="tedit" aria-label="Reorder widgets" title="Reorder widgets" style="background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;opacity:.55;font-size:.78rem;padding:.2rem .5rem">⇅ Reorder</button></div>';
+  S.tedit=false;hsRender(ord);
+  if(!S.tedit)h='';
   else h='<div class="card stack"><div class="row spread"><h3>Reorder widgets</h3><button class="btn primary" data-act="tedit">Done</button></div><ul class="list">'+ord.map(function(k,i){var n=TW.filter(function(t){return t[0]===k})[0][1];return '<li><div>'+esc(n)+(S.thide[k]?' <span class="badge">Hidden</span>':'')+'</div><span class="row"><button class="btn sm" data-act="thide" data-id="'+k+'" aria-label="'+(S.thide[k]?'Show ':'Hide ')+esc(n)+'">'+(S.thide[k]?'Show':'Hide')+'</button><button class="btn sm" data-act="tmove" data-id="'+k+'" data-d="-1" aria-label="Move '+esc(n)+' up"'+(i===0?' disabled':'')+'>▲</button><button class="btn sm" data-act="tmove" data-id="'+k+'" data-d="1" aria-label="Move '+esc(n)+' down"'+(i===ord.length-1?' disabled':'')+'>▼</button></span></li>'}).join('')+'</ul><div class="row"><button class="btn" data-act="treset">Reset order and show all</button></div></div>';
   if(r.dataset.h!==h){r.innerHTML=h;r.dataset.h=h}
 }
+/* Settings › Home Screen: reorder and hide Home cards, with a little phone preview that updates as you go */
+var HSW={plan:['🗓️',58],actions:['⚡',30],energy:['🎯',50],streak:['🔥',36],macros:['🥗',42],check:['✅',48],tf:['⚠️',22],strip:['📖',22]};
+function hsRender(ord){var c=$('#hs-card');if(!c)return;var nm=function(k){return (TW.filter(function(t){return t[0]===k})[0]||[,k])[1]},sh=ord.filter(function(k){return !S.thide[k]});
+  var pv='<div class="hsp" aria-hidden="true"><div class="hsp-ph"><div class="hsp-top"><i></i><b>'+esc(greetWord())+(S.name&&S.name!=='Friend'?', '+esc(S.name):'')+'</b></div><div class="hsp-ws">'
+    +(sh.length?sh.map(function(k){var w=HSW[k]||['▫️',30];return '<div class="hsp-w'+(S.hsLast===k?' mv':'')+'" style="height:'+w[1]+'px"><span>'+w[0]+'</span><em>'+esc(nm(k))+'</em></div>'}).join(''):'<p class="hsp-empty">Everything is hidden</p>')
+    +'</div><div class="hsp-dock"><i></i><i></i><i></i><i></i><i></i></div></div></div>';
+  var ls='<ol class="hsl">'+ord.map(function(k,i){var n=nm(k),hid=!!S.thide[k],w=HSW[k]||['▫️'];return '<li class="'+(hid?'off':'')+(S.hsLast===k?' mv':'')+'"><span class="hsl-ic" aria-hidden="true">'+w[0]+'</span><span class="hsl-n">'+esc(n)+(hid?'<small>Hidden</small>':'')+'</span><span class="row hsl-b">'
+    +'<button class="btn sm" data-act="tmove" data-id="'+k+'" data-d="-1" aria-label="Move '+esc(n)+' up"'+(i===0?' disabled':'')+'>▲</button><button class="btn sm" data-act="tmove" data-id="'+k+'" data-d="1" aria-label="Move '+esc(n)+' down"'+(i===ord.length-1?' disabled':'')+'>▼</button>'
+    +'<button class="btn sm hsl-eye" data-act="thide" data-id="'+k+'" aria-pressed="'+!hid+'" aria-label="'+(hid?'Show ':'Hide ')+esc(n)+'">'+(hid?'Show':'Hide')+'</button></span></li>'}).join('')+'</ol>';
+  var h='<div class="sh"><h3>Home Screen</h3><p class="small muted">Choose what shows on Home and in what order. The preview updates as you go.</p></div><div class="hsg">'+pv+'<div class="stack" style="gap:.6rem">'+ls+'<div class="row"><button class="btn sm" data-act="treset">Reset order and show all</button><a class="btn sm" href="#today">See Home</a></div></div></div>';
+  if(c.dataset.h!==h){c.innerHTML=h;c.dataset.h=h}}
+function greetWord(){var h=new Date().getHours();return h<12?'Good morning':h<18?'Good afternoon':'Good evening'}
 /* Notifications: slide in at the top left, stay a moment, slide back out (like Minecraft's) */
 var TOASTK=[[/^(enter|type|give|add at least|write|tick|a session is already|that is the maximum|could not|choose|pick)/i,'warn','Heads up','!'],
   [/^(removed|deleted|session discarded|schedule cleared|removed from your meals|sample sessions removed|all demo data deleted)/i,'del','Removed','🗑'],
@@ -5925,9 +5965,9 @@ var ACT={
   wtotal:function(){S.wedit=!S.wedit;if(S.wedit)setTimeout(function(){var e=$('#wo-set');if(e){e.focus();e.select()}},50)},
   wsave:function(){var e=$('#wo-set'),v=e?Math.round(parseFloat(e.value)):NaN;if(!isFinite(v)||v<0||v>300){toast('Enter a total between 0 and 300 oz.');return}S.water={d:todayStamp(),n:v};S.wedit=false},
   tedit:function(){S.tedit=!S.tedit},
-  treset:function(){S.tord=TW.map(function(t){return t[0]});S.thide={}},
-  thide:function(b){S.thide[b.dataset.id]=!S.thide[b.dataset.id]},
-  tmove:function(b){var o=S.tord,i=o.indexOf(b.dataset.id),j=i+(+b.dataset.d);if(i<0||j<0||j>=o.length)return;var t=o[i];o[i]=o[j];o[j]=t},
+  treset:function(){S.tord=TW.map(function(t){return t[0]});S.thide={};S.hsLast=''},
+  thide:function(b){S.thide[b.dataset.id]=!S.thide[b.dataset.id];S.hsLast=b.dataset.id},
+  tmove:function(b){var o=S.tord,i=o.indexOf(b.dataset.id),j=i+(+b.dataset.d);if(i<0||j<0||j>=o.length)return;var t=o[i];o[i]=o[j];o[j]=t;S.hsLast=b.dataset.id},
   xall:function(b){XP.forEach(function(x){S.xp[x[0]]=b.dataset.k==='on'})},
   restskip:function(){S.rest=null;if(S.sess)S.sess.mark=Date.now()},
   restadd:function(){if(!S.rest)return;S.rest.until+=15000;S.rest.tot=(S.rest.tot||0)+15;if(S.sess)S.sess.mark=S.rest.until;restPaint()},
