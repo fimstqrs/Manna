@@ -3011,6 +3011,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
  {v:165,d:'Nov 12, 2026',t:'Good morning, good evening',s:['The opening animation now greets you by the time of day: Good morning, Good afternoon or Good evening.','The AI check card is gone from Settings.','Fixed the water bottle on the Drink page: the water now sits level with a gentle wave.','Food trends chart is clearer: grid lines with numbers, your goal and your average marked, bars that grow in, and tapping a bar shows that day with a button to open it. It also shows your best day, a shaded target zone, the numbers on each bar for the week, and a short tip about your pattern.','Tap a Repeat card in Quick add to see what you ate, with numbers, and pick only the foods you want again.','Quick add icons no longer pop in and out every time you tap something.','Meal plan no longer shows an example plan straight away. Tap Show template meal plan to see one.','Every food now gets its own icon instead of a plain plate.','The food catalog is no longer on the Recipes page. Search all foods from More ways to log on Eat.','Rename your meals: tap ✎ next to one of your meals, a recipe or any food in your diary.','Saved meals are now called Your meals, and the Diary no longer has a separate saved meals section. Find Your meals in Quick add on Eat.']},
  {v:164,d:'Nov 11, 2026',t:'Bible studies that fit you',s:['7-day reading plan now asks what you want the plan to be about first.','Plans are laid out better: a short intro, today\'s reading with a question to think about, a progress bar, and the whole week underneath. Mark each day done as you go.','A new plan waits for you to tap Start this plan. If you leave the page without starting it, it is cleared so it does not pile up.','After a devotional or a chapter explanation, Manna offers to turn it into a 7-day Bible study on what you asked.','Scan barcode is now right in the Log it box at the top of Eat.','Saved meals now keep each part. Save a sandwich or a plate of foods and, when you log it again, swipe to see each part. Saved meals now look like foods in the food list, with an icon and what is in them. Tap + to log one straight away. Everything in Quick add now has a food icon, and Repeat yesterday shows exactly what you ate. To remove one, open it and tap Remove saved meal.','Swiping between foods in the food pop-up works properly on iPhone now.','The Saved AI estimates list under Search the food list is gone. To keep something, tap Save as a meal.','Fuel tabs are renamed: Meals is now Diary, and Foods is now Recipes. The Diary no longer repeats the calorie total next to the big circle, and on past days the circle says which day it is.','The Drink page has a water bottle that fills up as you get closer to your goal.','Food trends is redone: switch between calories, protein, carbs, fat and sugar, look back 7, 14 or 30 days, see how many days you hit your goal, and tap any day to open it.']},
@@ -3260,7 +3261,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='166';
+var heroLast='',APPV='167';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4197,7 +4198,7 @@ function fpRender(){
     +'<div class="swp" id="fp-sw"><div class="swbar" aria-label="Foods"></div><div class="swtrack">'+pages.join('')+'</div></div>';
   swInit($('#fp-sw'));
 }
-var FOODSPEC='{"emoji": one emoji that best shows this food, "name": string, "dish": string or null (see below), "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg), "sugar": number (g, total sugars)}';
+var FOODSPEC='{"emoji": one emoji that best shows this food, "name": string, "dish": string or null (see below), "matchId": string or null, "confidence": number from 0 to 1, "count": number (how many pieces or servings they had, like 2 for \u00222 apples\u0022; 1 if it is not something you count), "unit": string (what one piece or serving is, like \u0022cookie\u0022 or \u0022medium apple\u0022), "serving": string, "grams": number (weight of the whole amount in grams), "kcal": number (for the whole amount, and the same for every number below), "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg), "sugar": number (g, total sugars)}';
 var DISHRULE=' If they describe one made dish with several parts (like a sandwich, burger, burrito, wrap, salad, bowl, pizza slice or smoothie), list its main parts as separate items and give every part the same "dish" name, like "Ham and cheese sandwich". Foods eaten on their own get "dish": null.';
 /* Group AI items that belong to one dish (a sandwich made of ham, cheese and bread) into one logged food that keeps its parts */
 function aiDishGroups(L){var out=[],by={};L.forEach(function(x){var d=typeof x.dish==='string'?x.dish.trim().slice(0,60):'';if(d){var k=d.toLowerCase(),g=by[k];if(!g){g={dish:d,items:[]};by[k]=g;out.push(g)}g.items.push(x)}else out.push({items:[x]})});
@@ -4213,14 +4214,22 @@ function partName(p){return String(typeof p==='string'?p:(p&&p.name)||'').split(
 function partsLine(m){var P=(m.parts||((find(m.fid)||{}).parts)||[]).map(partName).filter(Boolean);return P.length?'<span class="mparts">'+P.slice(0,6).map(esc).join(' · ')+(P.length>6?' …':'')+'</span>':''}
 /* Turn one AI item into a food: a database match with the right amount, or a saved estimate */
 function aiMeal(m,via){var meal=mkMeal(m.f,m.q,via);if(meal.n.sug==null&&m.sug!=null)meal.n.sug=m.sug;return meal}
+/* How many pieces the AI says they had (2 apples = 2), so the food shows 2 × one apple instead of 1 × both */
+function aiCount(r,amt){if(amt)return 1;var c=Math.round(num(r.count,50)*4)/4;return c>1&&c<=50?c:1}
+function aiUnit(r,c,g){var u=String(r.unit||'').replace(/^(1|one|a|an)\s+/i,'').trim().slice(0,30),pg=g>=1?Math.round(g/c):0;
+  if(!u&&!pg)return '1 serving';return u?('1 '+u+(pg?' ('+pg+' g)':'')):pg+' g'}
 function aiFoodItem(r,amt,blob){
-  var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000);
-  if(m&&num(r.confidence,1)>=.5)return {f:m,q:g>=1?Math.min(30,Math.max(.05,Math.round(g/servG(m).g*1000)/1000)):1,sug:r.sugar!=null&&isFinite(+r.sugar)?Math.round(num(r.sugar,500)*10)/10:null};
-  var o=F('e'+(uid++),String(r.name).slice(0,60),'Estimate',(g>=1?Math.round(g)+' g':String(r.serving||'1 serving').slice(0,40)),Math.round(num(r.kcal,5000)),Math.round(num(r.protein,300)*10)/10,Math.round(num(r.carbs,600)*10)/10,Math.round(num(r.fat,400)*10)/10,Math.round(num(r.fiber,100)*10)/10,0,0,0,Math.round(num(r.sodium,10000)),0,[],'estimate',[String(r.name).toLowerCase()]);
-  o.sug=r.sugar!=null&&isFinite(+r.sugar)?Math.round(num(r.sugar,500)*10)/10:null;o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how=blob?'photo':'description';
+  var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000),c=aiCount(r,amt),sgT=r.sugar!=null&&isFinite(+r.sugar)?Math.round(num(r.sugar,500)*10)/10:null;
+  if(m&&num(r.confidence,1)>=.5){var sg=servG(m).g||0,per=g>=1?g/c:0;
+    /* A counted food whose pieces match the list serving: 2 apples = 2 × 1 medium apple */
+    if(c>1&&(!per||!sg||(per/sg>.6&&per/sg<1.6)))return {f:m,q:c,sug:sgT};
+    if(c<=1)return {f:m,q:g>=1&&sg?Math.min(30,Math.max(.05,Math.round(g/sg*1000)/1000)):1,sug:sgT}}
+  var nm=String((m&&c>1?m.name:r.name)).slice(0,60),sv=c>1?aiUnit(r,c,g):(g>=1?Math.round(g)+' g':String(r.serving||'1 serving').slice(0,40)),d=function(v,mx,p){return Math.round(num(v,mx)/c*p)/p};
+  var o=F('e'+(uid++),nm,'Estimate',sv,d(r.kcal,5000,1),d(r.protein,300,10),d(r.carbs,600,10),d(r.fat,400,10),d(r.fiber,100,10),0,0,0,d(r.sodium,10000,1),0,(m&&m.al)||[],'estimate',[nm.toLowerCase()]);
+  o.sug=sgT==null?null:Math.round(sgT/c*10)/10;o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how=blob?'photo':'description';
   o.id='e'+Date.now().toString(36)+(uid++);o.saved=Date.now();var dk=o.name.toLowerCase()+'|'+o.serv;
   S.est=S.est.filter(function(x){return (x.name.toLowerCase()+'|'+x.serv)!==dk});S.est.unshift(o);S.est=S.est.slice(0,300);estSave();
-  return {f:o,q:1};
+  return {f:o,q:c};
 }
 /* Fix one AI-logged food with a short note, like "it was a big bowl, no cheese" */
 var FPFIX={};
@@ -4230,8 +4239,8 @@ function fpFix(m,note){var key=m.k||m.id;if(FPFIX[key])return;FPFIX[key]=1;fpRen
     +'\nReturn JSON only: '+FOODSPEC.replace('"matchId": string or null, "confidence": number from 0 to 1, ','');
   getSample().then(function(sm){if(!sm)throw {code:'offline'};return sm.json(inst,{modelTier:'quick'})}).then(function(r){
     if(!r||!r.name||!(num(r.kcal,5000)>=0))throw {code:'failed'};
-    var it=aiFoodItem({name:r.name,serving:r.serving,grams:r.grams,kcal:r.kcal,protein:r.protein,carbs:r.carbs,fat:r.fat,fiber:r.fiber,sodium:r.sodium,sugar:r.sugar,matchId:null},0,null),nf=it.f;
-    m.fid=nf.id;m.name=nf.name;m.q=1;m.sc=1;KEYS.forEach(function(k){m.n[k]=+(nf[k]||0).toFixed(2)});m.n.sug=sugOf(nf);m.al=nf.al;var em=emojiOk(r.emoji);if(em)m.em=em;
+    var it=aiFoodItem({name:r.name,count:r.count,unit:r.unit,serving:r.serving,grams:r.grams,kcal:r.kcal,protein:r.protein,carbs:r.carbs,fat:r.fat,fiber:r.fiber,sodium:r.sodium,sugar:r.sugar,matchId:null},0,null),nf=it.f,fq=it.q||1;
+    m.fid=nf.id;m.name=nf.name;m.q=fq;m.sc=1;KEYS.forEach(function(k){m.n[k]=+((nf[k]||0)*fq).toFixed(2)});var fsg=sugOf(nf);m.n.sug=fsg==null?null:+(fsg*fq).toFixed(1);m.al=nf.al;var em=emojiOk(r.emoji);if(em)m.em=em;
     delete FPFIX[key];toast('Updated to '+Math.round(m.n.kcal)+' kcal.',{title:'Fixed with AI',icon:'✨',kind:'ok'});refresh();fpRender();
   }).catch(function(e){delete FPFIX[key];var c=e&&e.code;toast(['limit','food_limit','nokey','rate_limited','offline','too_big','timeout','login'].indexOf(c)>-1?aiErr(c):'AI could not fix that. Try saying it another way.');fpRender()});
 }
@@ -4242,6 +4251,13 @@ function foodFree(text,amt,ids){var tokP=accOn()&&typeof authToken==='function'?
     return fetch(API+'/api/ai',{method:'POST',headers:h,body:JSON.stringify({kind:'food',text:String(text).slice(0,300),amt:amt||null,catalog:ids})})})
   .then(function(r){return r.json().catch(function(){return {ok:false,code:'failed'}})},function(){throw {code:'offline'}})
   .then(function(j){if(!j||!j.ok)throw {code:(j&&j.code)||'failed'};return j.data})}
+/* Look up each typed food in the full food database first, so AI can pick a real entry before it estimates */
+function dbWait(){if(GENF.length)return Promise.resolve();usdaLoad();return new Promise(function(ok){var n=0,t=setInterval(function(){if(GENF.length||++n>40||!usdaLoad.on){clearInterval(t);ok()}},100)})}
+function dbCands(text){return dbWait().then(function(){
+  var seen={},out=[],add=function(f){if(f&&!seen[f.id]&&/^[\w-]{1,40}$/.test(f.id)){seen[f.id]=1;out.push(f.id+' = '+String(f.name).replace(/[\r\n]/g,' ').slice(0,70)+' ('+String(f.serv||'serving').slice(0,40)+')')}};
+  String(text||'').toLowerCase().split(/\s+and\s+|,|\+|\s+with\s+|\s*&\s*|\s+plus\s+/).map(function(x){return x.replace(/^(\d+(\.\d+)?|a|an|one|two|three|four|five|six|seven|eight|nine|ten|half|some|a few)\b\s*(x\s*)?/,'').replace(/\b(\d+(\.\d+)?\s*(g|grams?|oz|ounces?|cups?|tbsp|tsp|slices?|pieces?|bowls?|plates?|of))\b/g,' ').replace(/\s+/g,' ').trim()}).filter(function(x){return x.length>1}).slice(0,12)
+    .forEach(function(q){var L=foodList(q,'all');if(!L.length){var w=q.split(' ');if(w.length>1)L=foodList(w.slice(-2).join(' '),'all')}L.slice(0,8).forEach(add)});
+  BASE.concat(CHAIN).forEach(add);return out.slice(0,400).join('\n')})}
 function askFood(text,file,opt){
   if(ASK.busy)return;if(file){if(proPhotoLeft()<=0){proOpen('photo');return}proPhotoUse()}
   var amt=opt&&opt.noAmt?null:readAmt();
@@ -4251,11 +4267,10 @@ function askFood(text,file,opt){
     if(file&&!blob){ASK={busy:false,msg:'That image could not be read. Try another photo.',img:''};refresh();return}
     return getSample().then(function(sample){
       if(!sample){ASK={busy:false,msg:'AI estimates are not available here. Search the list or type a food name instead.',img:''};refresh();return}
-      var go=function(){
-        var ids=BASE.concat(CHAIN).map(function(f){return f.id+' = '+f.name+' ('+f.serv+')'}).join('\n');
+      var go=function(){return dbCands(blob?'':text).then(function(ids){
         var inst='You identify food for a calorie tracker. '+(blob?'The attached photo shows what the person is eating.':'The person says they are eating: "'+String(text).slice(0,300)+'".')
           +(amt?' It is one food. The portion is exactly '+amt+' g ('+Math.round(amt/28.3495*10)/10+' oz). Every number you return must be for exactly that amount.':' List every separate food or drink they mention (or the photo shows) as its own item, up to 12, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs). Do not split one dish into its ingredients.')
-          +' For each item, if one entry in this list is clearly the same food, give its id as matchId, otherwise null:\n'+ids
+          +' First check this food list for each item: if one entry is the same food, give its id as matchId and use its numbers. Only if nothing in the list fits, estimate it yourself and use null:\n'+ids
           +DISHRULE+'\nReturn JSON only: {"foods": [ '+FOODSPEC+' ]}. If you cannot tell what any of it is, return {"foods": []}.';
         return (blob||!isServerAI(sample)?sample.json(inst,blob?{images:[blob],modelTier:'quick'}:{modelTier:'quick'}):foodFree(text,amt,ids)).then(function(r){
           var L=r&&Array.isArray(r.foods)?r.foods:(r&&r.name?[r]:[]);
@@ -4266,7 +4281,7 @@ function askFood(text,file,opt){
           ASK={busy:false,ok:true,msg:'Added '+added.length+' food'+(added.length>1?'s':'')+' to today.'+(hit.length?' Heads up: this contains '+hit.join(', ')+'.':''),img:''};
           refresh();fpOpen(added,'logged');
         });
-      };
+      })};
       return (blob?Promise.resolve(sample.limits()).then(function(l){if(!l||!l.images)throw {code:'noimg'}}):Promise.resolve()).then(go);
     }).catch(function(e){
       var code=e&&e.code;

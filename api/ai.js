@@ -49,12 +49,12 @@ function foodOver(ip) {
   if (foodHits.size > 5000) foodHits.clear();
   return n > FOOD_PER_IP_DAY;
 }
-const FOODSPEC = '{"emoji": one emoji that best shows this food, "name": string, "dish": string or null (see below), "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg), "sugar": number (g, total sugars)}';
+const FOODSPEC = '{"emoji": one emoji that best shows this food, "name": string, "dish": string or null (see below), "matchId": string or null, "confidence": number from 0 to 1, "count": number (how many pieces or servings they had, like 2 for 2 apples; 1 if it is not something you count), "unit": string (what one piece or serving is, like cookie or medium apple), "serving": string, "grams": number (weight of the whole amount in grams), "kcal": number (for the whole amount, and the same for every number below), "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg), "sugar": number (g, total sugars)}';
 function foodPrompt(text, amt, catalog) {
   return 'You identify food for a calorie tracker. The person says they are eating: "' + text + '".' +
     (amt ? ' It is one food. The portion is exactly ' + amt + ' g (' + Math.round(amt / 28.3495 * 10) / 10 + ' oz). Every number you return must be for exactly that amount.'
       : ' List every separate food or drink they mention as its own item, up to 12, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs).') +
-    (catalog ? ' For each item, if one entry in this list is clearly the same food, give its id as matchId, otherwise null:\n' + catalog : ' Use null for matchId.') +
+    (catalog ? ' First check this food list for each item: if one entry is the same food, give its id as matchId and use its numbers. Only if nothing in the list fits, estimate it yourself and use null:\n' + catalog : ' Use null for matchId.') +
     (amt ? '' : ' If they describe one made dish with several parts (like a sandwich, burger, burrito, wrap, salad, bowl, pizza slice or smoothie), list its main parts as separate items and give every part the same "dish" name, like "Ham and cheese sandwich". Foods eaten on their own get "dish": null.') +
     '\nIf the text is not about food or drink, return {"foods": []}. Return JSON only: {"foods": [ ' + FOODSPEC + ' ]}.';
 }
@@ -64,6 +64,7 @@ function cleanFoods(d) {
   return L.slice(0, 12).filter(x => x && typeof x.name === 'string' && x.name.trim()).map(x => ({
     emoji: typeof x.emoji === 'string' ? x.emoji.slice(0, 8) : '', name: x.name.slice(0, 80), dish: typeof x.dish === 'string' && x.dish.trim() ? x.dish.trim().slice(0, 60) : null,
     matchId: typeof x.matchId === 'string' ? x.matchId.slice(0, 40) : null, confidence: num(x.confidence, 1),
+    count: num(x.count, 50) || 1, unit: typeof x.unit === 'string' ? x.unit.slice(0, 40) : '',
     serving: typeof x.serving === 'string' ? x.serving.slice(0, 60) : '', grams: num(x.grams, 5000), kcal: num(x.kcal, 10000),
     protein: num(x.protein, 1000), carbs: num(x.carbs, 2000), fat: num(x.fat, 1000), fiber: num(x.fiber, 300), sodium: num(x.sodium, 50000), sugar: num(x.sugar, 500),
   }));
