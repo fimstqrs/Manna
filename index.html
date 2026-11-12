@@ -1446,6 +1446,44 @@ p.name[data-len=xl]{font-size:clamp(2.3rem,7.4vw,3.4rem)}
 </style>
 <style id="wtype-case">#w-types .chip,#w-sports .chip,#w-sum .chip{text-transform:none!important;letter-spacing:normal!important}</style>
 <style id="dish-style">.mparts{display:block;font-size:.78rem;color:var(--muted);font-weight:400;margin-top:.1rem;white-space:normal}.fparts{margin:.1rem 0 .2rem;text-align:center;color:var(--muted);font-size:.9rem;line-height:1.4}</style>
+<style id="type-polish">
+/* ---- Site-wide text polish ---- */
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+body{font-feature-settings:"kern" 1,"liga" 1;font-kerning:normal}
+h1,h2,h3,h4,.vh h2,.card h3{text-wrap:balance}
+p,li,.lede,.small,.note,label span{text-wrap:pretty}
+.lede{max-width:58ch;line-height:1.55;font-size:.98rem}
+.small{line-height:1.45}
+.muted{color:var(--muted)}
+.eyebrow{letter-spacing:.12em;font-weight:600}
+.mono,.mkc,.fkc b,.stt-big,.pg-big b,.ft-sum b,.cin b,.badge,.mrow .mono,[class*=kcal]{font-variant-numeric:tabular-nums}
+.card h3{line-height:1.15}
+.card p{margin-block:.15rem}
+a:not(.btn):not(.chip){text-underline-offset:.18em;text-decoration-thickness:.07em}
+strong,b{font-weight:650}
+input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--muted) 85%,transparent)}
+::selection{background:color-mix(in srgb,var(--accent) 35%,transparent)}
+/* ---- Notifications ---- */
+.mtoast{position:relative;overflow:hidden;align-items:center;box-shadow:0 12px 34px rgba(0,0,0,.30),inset 0 0 0 .5px rgba(255,255,255,.14)!important}
+.mt-ic{width:36px;height:36px;font-size:1.05rem;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.mt-tx{gap:.08rem}
+.mt-tx b{font-size:.68rem!important;font-weight:700!important;letter-spacing:.09em!important;text-transform:uppercase;color:var(--mtc,rgba(255,255,255,.7))!important}
+.mt-tx .mt-m{font-size:.95rem;font-weight:600;color:#fff;line-height:1.28;letter-spacing:-.005em;text-wrap:pretty}
+.mt-tx .mt-s{font-size:.82rem;font-weight:400;color:rgba(255,255,255,.72);line-height:1.35;text-wrap:pretty}
+.k-ok{--mtc:#4ade80}.k-warn{--mtc:#ffb340}.k-del{--mtc:#ff6961}.k-info{--mtc:color-mix(in srgb,var(--accent,#0a84ff) 70%,#fff)}
+.mt-bar{position:absolute;left:14px;right:14px;bottom:4px;height:2px;border-radius:2px;background:var(--mtc,#fff);opacity:.55;transform-origin:left center;animation:mtBar linear forwards}
+@keyframes mtBar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.rm .mt-bar,html.lite .mt-bar{animation:none;opacity:0}
+@media (prefers-reduced-motion:reduce){.mt-bar{animation:none;opacity:0}}
+</style>
+<style id="ai-colours">
+/* AI that uses credits: Overflow colours */
+:is([data-act=lphoto],[data-act=fcam],[data-act=fup],[data-act=fpfix],[data-act=aigen],[data-act=wbuildai],[data-act=wsearchai],[data-act=gaimake],[data-act=gairefine],[data-act=ntai],[data-act=siai],[data-act=shamake],[data-act=mkagain],[data-act=recapgo],[data-act=mpgo],[data-act=baigo],[data-act=rlgo]).btn{background:linear-gradient(120deg,#B565D9,#6EC1FF)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 16px rgba(110,140,255,.28)!important}
+:is([data-act=lphoto],[data-act=fcam],[data-act=fup],[data-act=fpfix],[data-act=aigen],[data-act=wbuildai],[data-act=wsearchai],[data-act=gaimake],[data-act=gairefine],[data-act=ntai],[data-act=siai],[data-act=shamake],[data-act=mkagain],[data-act=recapgo],[data-act=mpgo],[data-act=baigo],[data-act=rlgo]).btn:disabled{opacity:.55}
+/* AI that is free: the theme's own colour */
+:is([data-act=eestimate],[data-act=festimate],#l-form button[type=submit],[data-act=voice],[data-act=howai]).btn{background:var(--accent)!important;color:var(--accent-ink)!important;border-color:transparent!important}
+[data-act=voice] .aitag{background:color-mix(in srgb,var(--accent-ink) 22%,transparent);color:inherit}
+</style>
 <style id="pr-style">
 .prlist{display:grid;gap:.4rem;padding:.8rem .9rem;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,#ffd60a 18%,transparent),color-mix(in srgb,#ff9f0a 10%,transparent));border:1px solid color-mix(in srgb,#ffd60a 40%,transparent)}
 .prrow{display:flex;justify-content:space-between;gap:.6rem;font-size:.92rem}.prrow b{white-space:nowrap}
@@ -1530,7 +1568,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div id="t-reorder"></div>
       <div class="actions" data-w="actions">
         <a class="action" href="#workouts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 6.5v11M3.5 9v6M17.5 6.5v11M20.5 9v6M6.5 12h11"/></svg><span id="t-logw">Log Workout</span></a>
-        <a class="action" href="#log"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 19v-6.3A3.6 3.6 0 0 1 4.5 9.6C4.5 7 7 5.5 9 5.5h6c2 0 4.5 1.5 4.5 4.1a3.6 3.6 0 0 1-1.5 3.1V19z"/><path d="M9.5 9.5l1.2 2.2M13.3 9.5l1.2 2.2"/></svg><span id="t-logf">Log Food</span></a>
+        <a class="action" href="#eat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 19v-6.3A3.6 3.6 0 0 1 4.5 9.6C4.5 7 7 5.5 9 5.5h6c2 0 4.5 1.5 4.5 4.1a3.6 3.6 0 0 1-1.5 3.1V19z"/><path d="M9.5 9.5l1.2 2.2M13.3 9.5l1.2 2.2"/></svg><span id="t-logf">Log Food</span></a>
       </div>
       <div class="card stack tplan" id="t-plan" data-w="plan"></div>
       <div class="card" id="t-energy" data-w="energy"></div>
@@ -1681,7 +1719,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
 
     <!-- 03 SAFEGUARDS -->
     <section class="view" id="v-safeguards" hidden>
-      <header class="vh"><p class="eyebrow">Fuel</p><h2>Safety</h2>
+      <header class="vh"><p class="eyebrow">Settings</p><h2>Safety</h2>
         <p class="lede">Calorie counting can feed restriction and compulsive exercise. These controls limit the harm: numbers can be hidden, goals have a floor, and risky weeks get a gentle check-in.</p></header>
       <div class="grid2">
         <div class="card stack">
@@ -1742,22 +1780,47 @@ p,li,.note,.small,.muted{text-wrap:pretty}
 
     <section class="view" id="v-eat" hidden>
       <header class="vh"><p class="eyebrow">Fuel</p><h2>Eat</h2>
-        <p class="lede">Type it, snap it, or describe it. Tap a result to see its macros, change the amount in grams or ounces, and add it to today.</p>
+        <p class="lede">Type it, say it, snap it or search it. AI adds each food, and the foods you log often show up for one tap next time.</p>
 </header>
       <div class="card" id="t-targets"></div>
+      <div class="card stack" id="e-quick">
+        <h3>Log it</h3>
+        <form id="l-form" class="row" autocomplete="off"><input type="text" id="l-text" placeholder="2 eggs and whole wheat toast with butter" aria-label="What did you eat" style="flex:1;min-width:14rem"><button class="btn primary" type="submit">Log it</button></form>
+        <div class="row"><button class="btn sm" data-act="voice" id="l-voice">🎙 Speak it <span class="aitag">AI</span></button><button class="btn sm" data-act="lphoto">📷 Photo</button></div>
+        <input type="file" id="l-cam" accept="image/*" capture="environment" hidden>
+        <p class="small muted">Speak or snap a meal. AI works out each food and its portion, then adds them to today.</p>
+        <div id="l-res" aria-live="polite"></div>
+        <div id="ph-box" hidden class="note stack">
+          <div><b>Photo recognition demo.</b> Pick a sample dish. A real app would analyze your own photo.</div>
+          <div class="tiles" id="ph-tiles"></div>
+          <div id="ph-panel" hidden class="stack">
+            <div id="ph-info"></div>
+            <label class="f" for="ph-portion"><span class="row spread"><span>Portion</span><span class="mono" id="ph-pv"></span></span><input type="range" id="ph-portion" min="0.5" max="1.5" step="0.25" value="1"></label>
+            <div class="row"><button class="btn primary sm" data-act="photoadd">Add to log</button><button class="btn sm" data-act="photoclose">Cancel</button></div>
+          </div>
+        </div>
+      </div>
       <div class="card stack" aria-label="Find a food">
         <div class="row"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="What are you eating?" style="flex:1;min-width:12rem"><button class="btn" data-act="fcam">Camera</button><button class="btn" data-act="fup">Upload photo</button><button class="btn" data-act="bcopen">Scan barcode</button></div>
         <input type="file" id="f-cam" accept="image/*" capture="environment" hidden><input type="file" id="f-up" accept="image/*" hidden>
         <div id="f-ask-out" aria-live="polite"></div>
         <div class="fgrid" id="e-res"></div>
       </div>
+      <div class="card stack" id="e-qadd"><h3>Quick add</h3><div id="l-freq" class="stack"></div><div id="l-saved"></div></div>
+      <div class="card stack" id="e-today"><h3>Today's log</h3><ul class="list" id="l-today"></ul>
+          <div id="l-save" class="stack" hidden>
+            <p class="small muted" id="l-selct">Tick the items that make up one meal, then save them to reuse.</p>
+            <div class="row"><label class="vh-only" for="l-mname">Meal name</label><input type="text" id="l-mname" placeholder="Name this meal, for example Usual breakfast" style="flex:1;min-width:12rem"><button class="btn primary sm" id="l-savebtn" data-act="savemeal">Save as a meal</button></div>
+            <div class="row"><button class="btn sm" data-act="dayshare">Share today's meals</button></div>
+          </div>
+        </div>
       <div class="card stack">
         <h3>Don't know what's in it?</h3>
         <p class="small muted">Write it the way you would say it, like "two slices of pepperoni pizza and a cola". AI estimates the calories, protein and more, and you can adjust the amount before adding it.</p>
         <textarea id="e-ai" aria-label="Describe what you ate" placeholder="What did you eat, and about how much?"></textarea>
         <div class="row" style="align-items:flex-end"><label class="f" for="e-amt" style="flex:1;min-width:9rem">Amount, if you know it (optional)<input type="number" id="e-amt" min="0" step="any" inputmode="decimal" placeholder="e.g. 250"></label><div class="chips" id="e-unit" role="group" aria-label="Amount units"></div></div>
         <p class="small muted">If you enter an amount, the estimate is for exactly that much, and the amount carries over to the food's details.</p>
-        <div class="row"><button class="btn primary" data-act="eestimate">Estimate with AI</button><span class="small muted">Free for typed food</span></div>
+        <div class="row"><button class="btn primary" data-act="eestimate">Estimate with AI</button></div>
       </div>
       <div class="card stack" id="e-water" hidden>
         <div id="e-water-body" class="stack"></div>
@@ -1778,13 +1841,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
     <!-- FOODS (browse) -->
     <section class="view" id="v-foods" hidden>
       <header class="vh"><p class="eyebrow">Fuel</p><h2>Foods</h2>
-        <p class="lede">Everyday foods and fast food, scored for the targets you set in Settings. Tap a food to see the details.</p></header>
-      <div class="card stack">
-        <div class="row"><input type="text" id="b-q" placeholder="Search the list" aria-label="Search foods" style="flex:1;min-width:12rem"><a class="btn" href="#eat" style="text-decoration:none">What are you eating?</a></div>
-        <div class="chips" id="f-cats"></div>
-        <p class="small muted" id="f-meta" aria-live="polite"></p>
-        <div class="fgrid" id="f-res"></div>
-      </div>
+        <p class="lede">Your recipes first, then the full food catalog. Swipe through recipes, then scroll the catalog.</p></header>
       <div class="card stack" id="r-link"></div>
       <div class="card stack">
         <h3>Build a home-cooked recipe</h3>
@@ -1794,39 +1851,17 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         <div class="row"><input type="text" id="r-name" placeholder="Recipe name" aria-label="Recipe name" style="flex:2;min-width:10rem"><label class="row small" for="r-serv">Makes <input type="number" id="r-serv" min="1" max="20" step="1" value="2" style="width:5rem"> servings</label></div>
         <div id="r-tot"></div>
       </div>
+      <div class="card stack fcatalog" id="f-catalog">
+        <h3>Food catalog</h3>
+        <div class="row"><input type="text" id="b-q" placeholder="Search the list" aria-label="Search foods" style="flex:1;min-width:12rem"><a class="btn" href="#eat" style="text-decoration:none">What are you eating?</a></div>
+        <div class="chips" id="f-cats"></div>
+        <p class="small muted" id="f-meta" aria-live="polite"></p>
+        <div class="fgrid" id="f-res"></div>
+      </div>
     </section>
 
-    <!-- 06 LOG -->
-    <section class="view" id="v-log" hidden>
-      <header class="vh"><p class="eyebrow">Fuel</p><h2>Quick</h2>
-        <p class="lede">Type a sentence to log a meal. Foods you log, and meals you save, show up here for one-tap logging next time.</p></header>
-      <div class="card stack">
-        <form id="l-form" class="row" autocomplete="off"><input type="text" id="l-text" placeholder="2 eggs and whole wheat toast with butter" aria-label="What did you eat" style="flex:1;min-width:14rem"><button class="btn primary" type="submit">Log it</button></form>
-        <div class="row"><button class="btn sm" data-act="voice" id="l-voice">🎙 Speak it <span class="aitag">AI</span></button><button class="btn sm" data-act="lphoto">📷 Photo</button></div>
-        <input type="file" id="l-cam" accept="image/*" capture="environment" hidden>
-        <p class="small muted">Speak or snap a meal. AI works out each food and its portion, then adds them to today.</p>
-        <div id="l-res" aria-live="polite"></div>
-        <div id="ph-box" hidden class="note stack">
-          <div><b>Photo recognition demo.</b> Pick a sample dish. A real app would analyze your own photo.</div>
-          <div class="tiles" id="ph-tiles"></div>
-          <div id="ph-panel" hidden class="stack">
-            <div id="ph-info"></div>
-            <label class="f" for="ph-portion"><span class="row spread"><span>Portion</span><span class="mono" id="ph-pv"></span></span><input type="range" id="ph-portion" min="0.5" max="1.5" step="0.25" value="1"></label>
-            <div class="row"><button class="btn primary sm" data-act="photoadd">Add to log</button><button class="btn sm" data-act="photoclose">Cancel</button></div>
-          </div>
-        </div>
-      </div>
-      <div class="grid2">
-        <div class="card stack"><h3>Quick add</h3><div id="l-freq" class="stack"></div><div id="l-saved"></div></div>
-        <div class="card stack"><h3>Today's log</h3><ul class="list" id="l-today"></ul>
-          <div id="l-save" class="stack" hidden>
-            <p class="small muted" id="l-selct">Tick the items that make up one meal, then save them to reuse.</p>
-            <div class="row"><label class="vh-only" for="l-mname">Meal name</label><input type="text" id="l-mname" placeholder="Name this meal, for example Usual breakfast" style="flex:1;min-width:12rem"><button class="btn primary sm" id="l-savebtn" data-act="savemeal">Save as a meal</button></div>
-            <div class="row"><button class="btn sm" data-act="dayshare">Share today's meals</button></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Quick now lives in Eat -->
+    <section class="view" id="v-log" hidden></section>
 
     <!-- 07 COACH -->
     
@@ -2882,7 +2917,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:158,d:'Nov 11, 2026',t:'Plays nicely with your music',s:['When you log a dish with AI, like a ham and cheese sandwich, it is logged as one food with the total numbers. Its parts are listed underneath, and in the pop-up you can swipe to see each part on its own.','Workout types in Template workouts are back in normal case, like 🏋️ Gym and 🏀 Basketball.','Fixed: the highlight bar in the Bible now matches your theme, so the verse name, colours and buttons are easy to see in dark themes.','Opening Manna no longer pauses music or podcasts from other apps. Manna\'s sounds now mix in quietly instead.','Tidier verse on Home: the reference and Read the chapter now sit under the verse, clear of the picture.']},
+ {v:158,d:'Nov 11, 2026',big:1,lead:'A cleaner Fuel tab, smarter AI logging and nicer notifications.',t:'Plays nicely with your music',s:['Quick is now part of Eat: log it, Quick add and Today\'s log all live on Eat.','Foods shows your recipes and Import from a link first. Swipe through them, then scroll the full food catalog.','Safety moved to Settings.','Notifications look better: a clear title like Saved or Removed, the main message in bold, extra detail underneath, and a thin timer line. Longer messages stay a little longer.','Tidier text across the app: balanced headings, easier line lengths and numbers that line up.','AI buttons are colour coded: free AI (typing or saying food) uses your theme colour, and AI that uses your AI credits has the Overflow colours.','When you log a dish with AI, like a ham and cheese sandwich, it is logged as one food with the total numbers. Its parts are listed underneath, and in the pop-up you can swipe to see each part on its own.','Workout types in Template workouts are back in normal case, like 🏋️ Gym and 🏀 Basketball.','Fixed: the highlight bar in the Bible now matches your theme, so the verse name, colours and buttons are easy to see in dark themes.','Opening Manna no longer pauses music or podcasts from other apps. Manna\'s sounds now mix in quietly instead.','Tidier verse on Home: the reference and Read the chapter now sit under the verse, clear of the picture.']},
  {v:157,d:'Nov 11, 2026',t:'Enter for Bible help',s:['The Making with AI window now says what it is really doing, like "Finding fitting passages" for a devotional or "Writing your grocery list" for a meal plan, instead of "Picking exercises" for everything.','When you delete a workout, it disappears from Recent too. Recent also shows each workout once, instead of the same one several times.','Tidier greeting on Home: "Good morning," lines up with your name, the big letters no longer bump into it, and long names shrink to fit beside the picture (just your first name shows).','Bible help has an Enter button next to the topic box. Tap it, or press Enter, to get a devotional on what you typed.','Fixed: the Making with AI window now closes when Bible help, the weekly recap or an AI schedule finishes, instead of staying on screen.']},
  {v:156,d:'Nov 11, 2026',big:1,lead:'Meet Manna Overflow, named for Psalm 23: "my cup overflows." Plus free AI food logging for everyone.',t:'Manna Overflow',s:['Manna PRO is now called Manna Overflow.','Free for everyone: type or say what you ate and AI adds each food. It no longer uses up your AI uses.','Free for everyone: make a workout with AI (it uses your daily AI uses), and make one AI schedule a week.','New in Overflow: Progress charts in History, for your strength on each exercise and your weight over time. Logging your weight also updates your targets.','New in Overflow: a weekly recap, where AI sums up your week and gives one tip.','New in Overflow: Food trends on Meals, with 14 days of calories and protein against your targets.','New in Overflow: a meal plan for the day that hits your targets, with a grocery list. Add any meal with one tap.','New in Overflow: training-day and rest-day targets, in Settings › Goals.','New in Overflow: Bible help with AI, to explain a chapter, write a devotional on any topic, or build a 7-day reading plan. Reading the Bible stays free.','New in Overflow: import a recipe from a link, and AI works out the numbers per serving.','CHANGE THEME in Settings is now in capitals.']},
  {v:155,d:'Nov 11, 2026',t:'Full history for everyone',s:['Your whole workout history is now free. Free accounts see every workout, not just the last 30 days.']},
@@ -3082,7 +3117,7 @@ var TOUR=[
  {v:'eat',sel:'#t-targets',t:'Your targets',p:'Your calorie and macro goals, worked out from your goals, age, height, weight and activity. You can change them in Settings.'},
  {v:'meals',sel:'#m-sum',t:"Today's meals",p:'Everything you logged today, in order, with the time you logged it.'},
  {v:'foods',sel:'#v-foods .vh',t:'Browse foods',p:'About 7,500 everyday foods plus fast food, scored against your targets. Search or filter, then tap a food for details.'},
- {v:'log',sel:'#v-log .vh',t:'Fast logging',p:'Type a sentence like "two eggs and toast" to log a meal. Foods you log often show up here for one tap.'},
+ {v:'eat',sel:'#e-quick',t:'Fast logging',p:'Type a sentence like "two eggs and toast" to log a meal. Foods you log often show up in Quick add for one tap.'},
  {v:'workouts',sel:'#w-sbox',t:'Find a workout',p:'Search by name, sport or exercise, or answer a few questions: what kind of workout, then the muscles. Sports go straight to a list from easy to hard.'},
  {v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and AI builds it. Every workout can be changed with the Configure button.'},
  {v:'schedule',sel:'#sh-plans',t:'Three schedules',p:'Name each schedule and pick a workout for every day. The selected schedule drives Today and your home page.'},
@@ -4258,7 +4293,7 @@ function renderFoods(){
   $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try What are you eating? to search or estimate it.</p>';
   var qq=($('#f-q').value||'').trim(),el=foodList(qq,'all');
   var multi=qq&&/,|&|\+|\band\b|\bwith\b/i.test(qq);
-  $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">AI adds each food. Free, and it doesn\'t use up your AI uses.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">AI adds each food. Free, and it doesn\'t use up your AI uses.</p>':'')+'</div>'):'';
+  $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">AI adds each food.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">AI adds each food.</p>':'')+'</div>'):'';
   var _se=S.est.length?'<details><summary class="small">Saved AI estimates ('+S.est.length+')</summary><p class="small muted">Every food AI estimates is saved here on this device, so you can search and add it again without asking.</p><ul class="list" style="margin-top:.5rem">'+S.est.slice(0,50).map(function(o){return '<li><div>'+esc(o.name)+'<div class="small muted mono">'+esc(o.serv)+' · '+kc(o.kcal)+' kcal</div></div><button class="btn sm" data-act="estdel" data-id="'+o.id+'" aria-label="Remove saved estimate '+esc(o.name)+'">Remove</button></li>'}).join('')+'</ul></details>':'';
   $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking AI. This takes a few seconds.</div>':(ASK.msg?'<div class="note '+(ASK.ok?'ok':'warn')+'">'+esc(ASK.msg)+'</div>':''));
   renderFoodModal();
@@ -5713,19 +5748,25 @@ function renderOrder(){
 var TOASTK=[[/^(enter|type|give|add at least|write|tick|a session is already|that is the maximum|could not|choose|pick)/i,'warn','Heads up','!'],
   [/^(removed|deleted|session discarded|schedule cleared|saved meal removed|sample sessions removed|all demo data deleted)/i,'del','Removed','🗑'],
   [/^(saved|added|imported|loaded|signed in|synced|copied|workout saved|goal set|schedules are on|sent|selected)/i,'ok','Done','✓']];
+/* Proper typography for messages: curly quotes, real dashes and ellipses */
+function smartText(t){return String(t).replace(/\.\.\./g,'…').replace(/ -- | - /g,' — ').replace(/(^|[\s(\[{\u2014])"/g,'$1\u201C').replace(/"/g,'\u201D').replace(/(^|[\s(\[{\u2014])'/g,'$1\u2018').replace(/'/g,'\u2019')}
 function toast(msg,o){
   o=o||{};msg=String(msg||'');var box=$('#toast');if(!box)return;
   var k=['info','Manna','✦'];for(var i=0;i<TOASTK.length;i++)if(TOASTK[i][0].test(msg)){k=TOASTK[i].slice(1);break}
   var last=box.lastElementChild;
-  if(last&&last.dataset.m===msg&&!last.classList.contains('out')){clearTimeout(last._t);last._t=setTimeout(function(){toastOut(last)},3600);return}
+  if(last&&last.dataset.m===msg&&!last.classList.contains('out')){clearTimeout(last._t);last._t=setTimeout(function(){toastOut(last)},last._dur||3600);var bar=last.querySelector('.mt-bar');if(bar){bar.style.animation='none';void bar.offsetWidth;bar.style.animation=''}return}
   var el=document.createElement('div');el.className='mtoast k-'+(o.kind||k[0]);el.dataset.m=msg;
-  el.innerHTML='<span class="mt-ic" aria-hidden="true">'+esc(o.icon||k[2])+'</span><span class="mt-tx"><b>'+esc(o.title||k[1])+'</b><span>'+esc(msg)+'</span></span>';
+  var nice=smartText(msg),sp=nice.match(/^(.+?[.!?…])\s+(\S[\s\S]*)$/),main=sp&&sp[1].length>14?sp[1]:nice,sub=sp&&sp[1].length>14?sp[2]:'';
+  var ttl=o.title||(function(){var w=(msg.match(/^([A-Za-z]+)/)||[])[1]||'',W={saved:'Saved',added:'Added',logged:'Logged',removed:'Removed',deleted:'Deleted',copied:'Copied',imported:'Imported',signed:'Signed in',synced:'Synced',sent:'Sent',loaded:'Loaded',selected:'Selected',discarded:'Discarded',cleared:'Cleared'}[w.toLowerCase()];return W||k[1]})();
+  var dur=Math.max(3400,Math.min(7500,2600+nice.split(/\s+/).length*190));el._dur=dur;
+  el.setAttribute('role',(o.kind||k[0])==='warn'?'alert':'status');
+  el.innerHTML='<span class="mt-ic" aria-hidden="true">'+esc(o.icon||k[2])+'</span><span class="mt-tx"><b>'+esc(ttl)+'</b><span class="mt-m">'+esc(main)+'</span>'+(sub?'<span class="mt-s">'+esc(sub)+'</span>':'')+'</span><i class="mt-bar" aria-hidden="true" style="animation-duration:'+dur+'ms"></i>';
   box.hidden=false;box.appendChild(el);
   while(box.children.length>2)box.removeChild(box.firstElementChild);
   try{var kd=o.kind||k[0];if(o.sad||(!o.kind&&SADRX.test(msg)))sfxSad();else if(kd==='ok'||/[✓✅🎉]/.test(o.icon||''))sfxDone(o.big?2:1)}catch(e){}
   void el.offsetWidth;el.classList.add('in');
   el.addEventListener('click',function(){toastOut(el)});
-  el._t=setTimeout(function(){toastOut(el)},3600);
+  el._t=setTimeout(function(){toastOut(el)},el._dur||3600);
 }
 function toastOut(el){if(!el||el.classList.contains('out'))return;clearTimeout(el._t);el.classList.remove('in');el.classList.add('out');
   setTimeout(function(){var box=el.parentNode;if(box){box.removeChild(el);if(!box.children.length)box.hidden=true}},460)}
@@ -5870,7 +5911,7 @@ var ACT={
   shsave:function(){var p=S.shIn;if(!p)return;var f;
     if(p.i.length===1){f=shFood(p.i[0])}else{f=shFood({n:p.t,s:'1 meal',a:[],v:KEYS.map(function(k,j){return p.i.reduce(function(t,x){return t+(+x.v[j]||0)},0)})})}
     f.id='r'+(uid++);f.region=p.k==='recipe'?'My recipes':'My meals';f.src='recipe';f.keys=[f.name.toLowerCase()];S.recipes.push(f);
-    toast('Saved "'+f.name+'". It is now in Quick add.',{title:'Saved',icon:'★'});ACT.shclose()},
+    toast('Saved "'+f.name+'". It is now in Quick add on Eat.',{title:'Saved',icon:'★'});ACT.shclose()},
   ffav:function(){var id=S.fsel;if(!id)return;if(S.favs[id])delete S.favs[id];else S.favs[id]=1},
   totop:function(){window.scrollTo({top:0,behavior:'smooth'})},
   tgl:function(b){S.track[b.dataset.k]=!S.track[b.dataset.k]},
@@ -5915,7 +5956,7 @@ var ACT={
     S.recipe.forEach(function(r){var f=find(r.id);KEYS.forEach(function(k){t[k]+=f[k]*r.q});f.al.forEach(function(a){if(al.indexOf(a)<0)al.push(a)})});
     var o={id:'r'+(uid++),name:name,region:'My recipes',serv:'1 serving',al:al,src:'recipe',keys:[name.toLowerCase()]};
     KEYS.forEach(function(k){o[k]=+(t[k]/sv).toFixed(2)});
-    S.recipes.push(o);S.recipe=[];$('#r-name').value='';toast('Saved "'+name+'". It is now in Quick add.');
+    S.recipes.push(o);S.recipe=[];$('#r-name').value='';toast('Saved "'+name+'". It is now in Quick add on Eat.');
   },
   goalapply:function(){
     var v=parseFloat($('#sg-goal').value);if(isNaN(v))return;
@@ -6618,7 +6659,7 @@ function saveMealFrom(sel,nm){
   sel.forEach(function(m){KEYS.forEach(function(k){t[k]+=+m.n[k]||0});(m.al||[]).forEach(function(a){if(al.indexOf(a)<0)al.push(a)})});
   var o={id:'r'+Date.now().toString(36)+(uid++),name:name,region:'My meals',serv:'1 meal',al:al,src:'recipe',keys:[name.toLowerCase()],parts:sel.map(function(m){return m.name}).slice(0,20)};
   KEYS.forEach(function(k){o[k]=+t[k].toFixed(2)});
-  S.recipes.push(o);toast('Saved "'+name+'". Add it any time from Meals or Quick.',{title:'Meal saved',icon:'🍽',kind:'ok'});return true}
+  S.recipes.push(o);toast('Saved "'+name+'". Add it any time from Meals or Eat.',{title:'Meal saved',icon:'🍽',kind:'ok'});return true}
 function svmRender(){var L=$('#svm-list');if(!L)return;
   L.innerHTML=S.meals.map(function(m){var on=SVM.sel.indexOf(String(m.id))>-1;return '<li><label class="row" style="gap:.6rem;flex-wrap:nowrap;width:100%"><input type="checkbox" data-svm="'+m.id+'"'+(on?' checked':'')+'><span style="flex:1">'+esc(m.name)+'</span><span class="small muted mono">'+kc(Math.round(m.n.kcal))+' kcal</span></label></li>'}).join('');
   svmSum()}
@@ -6813,7 +6854,7 @@ if($('#cm-form'))$('#cm-form').addEventListener('submit',function(e){
 });
 
 /* ---------- navigation ---------- */
-var GROUPS=[['today','Today',['today']],['friends','Friends',['friends']],['train','Fitness',['workouts','schedule','history','session']],['fuel','Fuel',['eat','meals','foods','log','safeguards']],['faith','Faith',['scripture']],['settings','Settings',['settings','themes']]];
+var GROUPS=[['today','Today',['today']],['friends','Friends',['friends']],['train','Fitness',['workouts','schedule','history','session']],['fuel','Fuel',['eat','meals','foods']],['faith','Faith',['scripture']],['settings','Settings',['settings','themes','safeguards']]];
 var VLABEL={friends:'Friends',today:'Today',workouts:'Workouts',schedule:'Schedule',history:'History',session:'Session',log:'Quick',eat:'Eat',meals:'Meals',foods:'Foods',labs:'Nutrients',safeguards:'Safety',sleep:'Sleep and recovery',injury:'Injury and rehab',mind:'Mind and hormones',medical:'Medical context',coach:'Adaptive coaching',scripture:'Verse of the day',themes:'Themes',community:'Community',settings:'Settings'};
 var VGROUP={more:'more'},VALID={more:1};
 GROUPS.forEach(function(g){g[2].forEach(function(v){VGROUP[v]=g[0];VALID[v]=1})});
@@ -6937,8 +6978,8 @@ function vpAuto(){
     var cards=[].filter.call(host.children,function(c){return c.classList.contains('card')});
     if(host!==pg)host.classList.add('vgrid');
     vpWrap(cards,'vp-p'+k)});
-  ['v-eat','v-schedule','v-safeguards','v-labs','v-community'].forEach(function(vid){var v=$('#'+vid);if(!v)return;
-    vpWrap([].filter.call(v.children,function(c){return c.classList.contains('card')}),'vp-'+vid)});
+  ['v-eat','v-schedule','v-safeguards','v-labs','v-community','v-foods'].forEach(function(vid){var v=$('#'+vid);if(!v)return;
+    vpWrap([].filter.call(v.children,function(c){return c.classList.contains('card')&&!c.classList.contains('fcatalog')}),'vp-'+vid)});
 }
 function vpReveal(el){var sc=el&&el.closest&&el.closest('.vsec');if(!sc)return;var root=sc.closest('.vpg'),v=root&&VPG[root.id];if(!v)return;v.touched=1;var k=v.secs.indexOf(sc);if(k>-1&&k!==v.i)vpGo(v,k,true)}
 function vpInit(root){
@@ -7189,7 +7230,7 @@ function vEnter(id,prev){var el=document.getElementById('v-'+id);if(!el||!prev||
 function show(){
   var id=(location.hash||'').replace('#','');
   if(id.indexOf('share=')===0){var raw=id.slice(6);try{history.replaceState(null,'',location.pathname+location.search+'#today')}catch(e){}id='today';setTimeout(function(){shOpen(raw)},300)}
-  if(id==='privacy'||id==='more')id='settings';if(id==='community')id='today';
+  if(id==='privacy'||id==='more')id='settings';if(id==='log')id='eat';if(id==='community')id='today';
   if(!VALID[id])id='today';
   var prevId=curId;$$('.view').forEach(function(s){s.hidden=s.id!=='v-'+id});
   try{vEnter(id,prevId)}catch(e){}
