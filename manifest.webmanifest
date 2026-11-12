@@ -3,6 +3,7 @@
   "short_name": "Manna",
   "description": "Food, workouts and faith in one place.",
   "id": "./",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
