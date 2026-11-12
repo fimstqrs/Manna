@@ -28,17 +28,18 @@ create table if not exists public.push_subs (
   endpoint   text primary key,
   user_id    uuid references auth.users(id) on delete cascade,
   sub        jsonb not null,
-  morning    boolean not null default true,
-  evening    boolean not null default true,
+  prefs      jsonb not null default '{}',
+  last       jsonb not null default '{}',
   tz         text not null default 'America/New_York',
   created_at timestamptz not null default now()
 );
 alter table public.push_subs enable row level security;
 
--- 3) Makes sure each reminder goes out only once a day.
-create table if not exists public.push_runs (
-  day  date not null,
-  slot text not null,
-  primary key (day, slot)
-);
-alter table public.push_runs enable row level security;
+alter table public.push_subs add column if not exists prefs jsonb not null default '{}';
+alter table public.push_subs add column if not exists last  jsonb not null default '{}';
+
+-- 3) Every 5 minutes, ask Manna to send any reminders that are due (each person picks their own times).
+create extension if not exists pg_cron;
+create extension if not exists pg_net;
+select cron.schedule('manna-reminders', '*/5 * * * *',
+  $$select net.http_get('https://manna-beta-five.vercel.app/api/push?run=tick')$$);

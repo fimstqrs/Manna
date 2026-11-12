@@ -1,8 +1,9 @@
 // Reminders (web push). Version 159.
 //   GET  /api/push                -> { ready, key } the public key phones subscribe with
-//   POST /api/push   {sub, morning, evening, tz}  -> saves this phone's subscription
+//   POST /api/push   {sub, prefs, tz}  -> saves this phone's subscription and its reminder times
+//        prefs = { verse, breakfast, lunch, dinner, log }: each "HH:MM" in the person's own time, or null for off
 //   DELETE /api/push {endpoint}   -> stops reminders for this phone
-//   GET  /api/push?run=morning|evening  -> called by Vercel Cron; sends today's reminders once
+//   GET  /api/push?run=tick       -> called every 5 minutes by Supabase (pg_cron); sends what is due
 //
 // No extra packages: the VAPID signature and the message encryption (RFC 8291, aes128gcm)
 // are done with Node's own crypto. The signing key is derived from a server secret, so no
@@ -70,30 +71,94 @@ function rest(env, path, opt = {}) {
   return fetch(env.url + '/rest/v1/' + path, { ...opt, headers: h, signal: AbortSignal.timeout(8000) });
 }
 
-const MSG = {
-  morning: { title: 'Good morning ☀️', body: 'Your verse for today is ready. Take a minute with it before the day starts.', url: '/#scripture', tag: 'manna-morning' },
-  evening: { title: 'How did today go?', body: 'Log what you ate and any workout, so your streak and targets stay right.', url: '/#eat', tag: 'manna-evening' },
+// Five messages for each kind of reminder. One is picked at random each time.
+const MSGS = {
+  verse: { url: '/#scripture', list: [
+    ['Good morning ☀️', 'Your verse for today is ready. Take a minute with it before the day starts.'],
+    ['A word for today 📖', 'Start the day with God’s Word. Today’s verse is waiting for you in Manna.'],
+    ['Rise and shine 🌅', '“This is the day the Lord has made.” Open today’s verse and carry it with you.'],
+    ['Before the rush begins 🙏', 'One verse, one minute, one quiet breath. Your verse of the day is here.'],
+    ['Fresh manna this morning 🍞', 'His mercies are new every morning. Come read today’s verse.'],
+  ] },
+  breakfast: { url: '/#eat', list: [
+    ['Breakfast time 🍳', 'Fuel up for the day, then log it in Manna so your targets stay on track.'],
+    ['Good morning, hungry? 🥣', 'What’s for breakfast? Type it, say it or snap it and Manna does the rest.'],
+    ['Start strong 💪', 'A good breakfast sets up the whole day. Don’t forget to log it.'],
+    ['First meal of the day ☕', 'Eating now? Add it to today’s log in a few seconds.'],
+    ['Breakfast check-in 🍓', 'Give thanks, eat well, and log your breakfast in Manna.'],
+  ] },
+  lunch: { url: '/#eat', list: [
+    ['Lunch time 🥗', 'Take a proper break and refuel. Log your lunch when you’re done.'],
+    ['Midday refuel 🍽️', 'Halfway through the day. What’s for lunch? Add it to Manna.'],
+    ['Time to eat 🥪', 'Your body has been working hard. Grab lunch and log it in a tap.'],
+    ['Lunch break 🌯', 'Step away for a minute, eat something good, and keep your log up to date.'],
+    ['Don’t skip lunch 🍲', 'Steady energy for the afternoon starts now. Log what you eat.'],
+  ] },
+  dinner: { url: '/#eat', list: [
+    ['Dinner time 🍝', 'Sit down, slow down and enjoy it. Log your dinner in Manna after.'],
+    ['What’s for dinner? 🍛', 'Type it, say it or snap a photo, and your day’s totals update straight away.'],
+    ['Evening meal 🥘', 'See how much protein you still need today before you plate up.'],
+    ['Time to refuel 🍗', 'Dinner is a great chance to hit your targets. Check Manna, then eat well.'],
+    ['Dinner check-in 🌙', 'Give thanks for the meal, then add it to today’s log.'],
+  ] },
+  log: { url: '/#eat', list: [
+    ['How did today go? ✍️', 'Log what you ate and any workout, so your streak and targets stay right.'],
+    ['Wrap up your day 🌙', 'A quick check: is everything you ate and did today in Manna?'],
+    ['Day’s almost done ✨', 'Add anything you missed today. It only takes a minute.'],
+    ['Keep your streak going 🔥', 'Did you train today? Log it before bed so it counts.'],
+    ['End the day well 🙏', 'Finish your log, then rest. Tomorrow is a fresh start.'],
+  ] },
 };
+const SLOTS = Object.keys(MSGS);
+function cleanPrefs(p) { const o = {}; for (const k of SLOTS) { const t = p && p[k]; o[k] = hhmm(t) === null ? null : t; } return o; }
+function pick(slot) { const m = MSGS[slot], x = m.list[Math.floor(Math.random() * m.list.length)]; return { title: x[0], body: x[1], url: m.url, tag: 'manna-' + slot }; }
 
-async function run(env, v, slot, res) {
-  // Send each slot once a day, even if this address is called more than once.
-  const day = new Date().toISOString().slice(0, 10);
-  const claim = await rest(env, 'push_runs', { method: 'POST', headers: { prefer: 'return=minimal' }, body: JSON.stringify({ day, slot }) });
-  if (claim.status === 409) return res.status(200).json({ ok: true, skipped: 'already sent today' });
-  if (!claim.ok) return res.status(503).json({ ok: false, code: 'db' });
-  const r = await rest(env, 'push_subs?select=endpoint,sub&' + slot + '=eq.true&limit=5000');
-  const rows = r.ok ? await r.json() : [];
-  let sent = 0, gone = [];
-  for (let i = 0; i < rows.length; i += 20) {
-    await Promise.all(rows.slice(i, i + 20).map(async row => {
+// The time and date where this person is.
+function localNow(tz) {
+  let p;
+  try { p = new Intl.DateTimeFormat('en-CA', { timeZone: tz || 'UTC', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()); }
+  catch { p = new Intl.DateTimeFormat('en-CA', { timeZone: 'UTC', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()); }
+  const g = t => (p.find(x => x.type === t) || {}).value;
+  return { day: g('year') + '-' + g('month') + '-' + g('day'), mins: (+g('hour') % 24) * 60 + +g('minute') };
+}
+const hhmm = t => { const m = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(t || '')); return m ? +m[1] * 60 + +m[2] : null; };
+
+// Called every few minutes. Sends each reminder that is due for each phone, once a day.
+// Safe to call any number of times: each reminder is claimed in the database before it is sent.
+async function tick(env, v, res) {
+  const r = await rest(env, 'push_subs?select=endpoint,sub,prefs,last,tz&limit=5000');
+  if (!r.ok) return res.status(503).json({ ok: false, code: 'db' });
+  const rows = await r.json();
+  const jobs = [];
+  for (const row of rows) {
+    const pr = row.prefs || {}, last = row.last || {}, now = localNow(row.tz);
+    for (const slot of SLOTS) {
+      const t = hhmm(pr[slot]);
+      if (t === null || last[slot] === now.day) continue;
+      const late = now.mins - t;
+      if (late >= 0 && late <= 25) jobs.push({ row, slot, day: now.day });
+    }
+  }
+  let sent = 0;
+  const gone = new Set();
+  for (let i = 0; i < jobs.length; i += 20) {
+    await Promise.all(jobs.slice(i, i + 20).map(async ({ row, slot, day }) => {
+      if (gone.has(row.endpoint)) return;
+      // Claim it: only one call can move last[slot] to today.
+      const f = 'push_subs?endpoint=eq.' + encodeURIComponent(row.endpoint) + '&or=(last->>' + slot + '.is.null,last->>' + slot + '.neq.' + day + ')';
+      const cur = { ...(row.last || {}) };
+      cur[slot] = day; row.last = cur;
+      const c = await rest(env, f, { method: 'PATCH', headers: { prefer: 'return=representation' }, body: JSON.stringify({ last: cur }) }).catch(() => null);
+      const got = c && c.ok ? await c.json().catch(() => []) : [];
+      if (!got.length) return;
       try {
-        const st = await send(v, row.sub, MSG[slot]);
-        if (st === 404 || st === 410 || st === 403) gone.push(row.endpoint); else if (st < 300) sent++;
+        const st = await send(v, row.sub, pick(slot));
+        if (st === 404 || st === 410 || st === 403) gone.add(row.endpoint); else if (st < 300) sent++;
       } catch {}
     }));
   }
   for (const ep of gone) await rest(env, 'push_subs?endpoint=eq.' + encodeURIComponent(ep), { method: 'DELETE' }).catch(() => {});
-  return res.status(200).json({ ok: true, sent, removed: gone.length });
+  return res.status(200).json({ ok: true, due: jobs.length, sent, removed: gone.size });
 }
 
 export default async function handler(req, res) {
@@ -104,11 +169,9 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     const slot = String(req.query?.run || '');
     if (slot) {
-      if (!MSG[slot]) return res.status(400).json({ ok: false });
-      const cs = process.env.CRON_SECRET;
-      if (cs && bearer(req) !== cs) return res.status(401).json({ ok: false });
+      if (slot !== 'tick') return res.status(400).json({ ok: false });
       if (!ready) return res.status(503).json({ ok: false, code: 'off' });
-      return run(env, v, slot, res);
+      return tick(env, v, res);
     }
     return res.status(200).json({ ok: true, ready, key: ready ? b64u(v.pub) : null });
   }
@@ -129,12 +192,12 @@ export default async function handler(req, res) {
   const row = {
     endpoint: s.endpoint, user_id: user ? user.id : null,
     sub: { endpoint: s.endpoint, keys: { p256dh: s.keys.p256dh, auth: s.keys.auth } },
-    morning: body.morning !== false, evening: body.evening !== false,
+    prefs: cleanPrefs(body.prefs),
     tz: String(body.tz || '').slice(0, 60) || 'UTC',
   };
   const r = await rest(env, 'push_subs?on_conflict=endpoint', { method: 'POST', headers: { prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(row) });
   if (!r.ok) return res.status(503).json({ ok: false, code: 'db' });
   // A welcome notification, so people can see it works straight away.
-  if (body.hello) { try { await send(v, row.sub, { title: 'Reminders are on ✓', body: 'Manna will nudge you in the morning and the evening.', url: '/#settings', tag: 'manna-hello' }); } catch {} }
+  if (body.hello) { try { await send(v, row.sub, { title: 'Reminders are on ✓', body: 'This is how Manna’s reminders will look. Change the times any time in Settings.', url: '/#settings', tag: 'manna-hello' }); } catch {} }
   return res.status(200).json({ ok: true });
 }

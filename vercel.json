@@ -72,15 +72,5 @@
         }
       ]
     }
-  ],
-  "crons": [
-    {
-      "path": "/api/push?run=morning",
-      "schedule": "0 12 * * *"
-    },
-    {
-      "path": "/api/push?run=evening",
-      "schedule": "0 23 * * *"
-    }
   ]
 }
