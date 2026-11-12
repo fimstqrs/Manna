@@ -34,3 +34,21 @@ self.addEventListener('fetch', e => {
     e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => { if (r.ok) { const copy = r.clone(); caches.open(CACHE).then(c => c.put(req, copy)); } return r; })));
   }
 });
+
+/* Version 159: reminders. The server sends a small message; show it, and open Manna when tapped. */
+self.addEventListener('push', e => {
+  let m = {};
+  try { m = e.data ? e.data.json() : {}; } catch (err) {}
+  const title = m.title || 'Manna';
+  e.waitUntil(self.registration.showNotification(title, {
+    body: m.body || '', tag: m.tag || 'manna', icon: '/icons/manna-icon-192.png', badge: '/icons/manna-icon-32.png', data: { url: m.url || '/' },
+  }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || '/';
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+    for (const c of list) { if ('focus' in c) { c.navigate(url).catch(() => {}); return c.focus(); } }
+    return self.clients.openWindow(url);
+  }));
+});

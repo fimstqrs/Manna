@@ -41,6 +41,7 @@ function howPrompt(names) {
 // so this can't be used as a general AI. It never counts as one of the person's AI uses.
 const foodHits = new Map();
 const FOOD_PER_IP_DAY = 200;
+const FOOD_PER_USER_DAY = 120;
 function foodOver(ip) {
   const k = ip + '|' + new Date().toISOString().slice(0, 10);
   const n = (foodHits.get(k) || 0) + 1;
@@ -249,6 +250,12 @@ export default async function handler(req, res) {
     const amt = Number(body.amt) > 0 && Number(body.amt) < 5000 ? Math.round(Number(body.amt)) : null;
     const catalog = String(body.catalog || '').split('\n').filter(l => /^[\w-]{1,40} = [^\n]{1,120}$/.test(l)).slice(0, 900).join('\n');
     if (!pro && foodOver(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
+    // Signed-in people also get a daily cap on their account, so it holds on any network.
+    // If the counter table is missing (supabase/v159.sql not run yet), the network cap above still applies.
+    if (user && !pro) {
+      const n = await rpc(env, 'use_food', { p_user: user.id }).catch(() => null);
+      if (typeof n === 'number' && n > FOOD_PER_USER_DAY) return res.status(429).json({ ok: false, code: 'food_limit' });
+    }
     try {
       const out = await (ant ? askClaude(ant, foodPrompt(text, amt, catalog), null) : askGemini(gem, foodPrompt(text, amt, catalog), null));
       return res.status(200).json({ ok: true, data: { foods: cleanFoods(parseJson(out)) }, free: true });
