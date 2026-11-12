@@ -48,19 +48,20 @@ function foodOver(ip) {
   if (foodHits.size > 5000) foodHits.clear();
   return n > FOOD_PER_IP_DAY;
 }
-const FOODSPEC = '{"emoji": one emoji that best shows this food, "name": string, "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg)}';
+const FOODSPEC = '{"emoji": one emoji that best shows this food, "name": string, "dish": string or null (see below), "matchId": string or null, "confidence": number from 0 to 1, "serving": string, "grams": number (weight of the portion in grams), "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg)}';
 function foodPrompt(text, amt, catalog) {
   return 'You identify food for a calorie tracker. The person says they are eating: "' + text + '".' +
     (amt ? ' It is one food. The portion is exactly ' + amt + ' g (' + Math.round(amt / 28.3495 * 10) / 10 + ' oz). Every number you return must be for exactly that amount.'
-      : ' List every separate food or drink they mention as its own item, up to 8, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs).') +
+      : ' List every separate food or drink they mention as its own item, up to 12, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs).') +
     (catalog ? ' For each item, if one entry in this list is clearly the same food, give its id as matchId, otherwise null:\n' + catalog : ' Use null for matchId.') +
+    (amt ? '' : ' If they describe one made dish with several parts (like a sandwich, burger, burrito, wrap, salad, bowl, pizza slice or smoothie), list its main parts as separate items and give every part the same "dish" name, like "Ham and cheese sandwich". Foods eaten on their own get "dish": null.') +
     '\nIf the text is not about food or drink, return {"foods": []}. Return JSON only: {"foods": [ ' + FOODSPEC + ' ]}.';
 }
 function cleanFoods(d) {
   const L = d && Array.isArray(d.foods) ? d.foods : [];
   const num = (v, max) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? Math.min(n, max) : 0; };
-  return L.slice(0, 8).filter(x => x && typeof x.name === 'string' && x.name.trim()).map(x => ({
-    emoji: typeof x.emoji === 'string' ? x.emoji.slice(0, 8) : '', name: x.name.slice(0, 80),
+  return L.slice(0, 12).filter(x => x && typeof x.name === 'string' && x.name.trim()).map(x => ({
+    emoji: typeof x.emoji === 'string' ? x.emoji.slice(0, 8) : '', name: x.name.slice(0, 80), dish: typeof x.dish === 'string' && x.dish.trim() ? x.dish.trim().slice(0, 60) : null,
     matchId: typeof x.matchId === 'string' ? x.matchId.slice(0, 40) : null, confidence: num(x.confidence, 1),
     serving: typeof x.serving === 'string' ? x.serving.slice(0, 60) : '', grams: num(x.grams, 5000), kcal: num(x.kcal, 10000),
     protein: num(x.protein, 1000), carbs: num(x.carbs, 2000), fat: num(x.fat, 1000), fiber: num(x.fiber, 300), sodium: num(x.sodium, 50000),
