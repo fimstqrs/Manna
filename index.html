@@ -2973,6 +2973,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:165,d:'Nov 12, 2026',t:'Good morning',s:['The first time you open Manna each morning, it greets you with Good morning. Every other time it says Welcome.']},
  {v:164,d:'Nov 11, 2026',t:'Bible studies that fit you',s:['7-day reading plan now asks what you want the plan to be about first.','Plans are laid out better: a short intro, today\'s reading with a question to think about, a progress bar, and the whole week underneath. Mark each day done as you go.','A new plan waits for you to tap Start this plan. If you leave the page without starting it, it is cleared so it does not pile up.','After a devotional or a chapter explanation, Manna offers to turn it into a 7-day Bible study on what you asked.','Scan barcode is now right in the Log it box at the top of Eat.','Saved meals now keep each part. Save a sandwich or a plate of foods and, when you log it again, swipe to see each part. Saved meals now look like foods in the food list, with an icon and what is in them. Tap + to log one straight away. Everything in Quick add now has a food icon, and Repeat yesterday shows exactly what you ate. To remove one, open it and tap Remove saved meal.','Swiping between foods in the food pop-up works properly on iPhone now.','The Saved AI estimates list under Search the food list is gone. To keep something, tap Save as a meal.','Fuel tabs are renamed: Meals is now Diary, and Foods is now Recipes. The Diary no longer repeats the calorie total next to the big circle, and on past days the circle says which day it is.','The Drink page has a water bottle that fills up as you get closer to your goal.','Food trends is redone: switch between calories, protein, carbs, fat and sugar, look back 7, 14 or 30 days, see how many days you hit your goal, and tap any day to open it.']},
  {v:163,d:'Nov 11, 2026',t:'Two-a-days, and Read goes straight to the verse',s:['Overflow: plan more than one workout on the same day. Under any day in your schedule, pick Add another workout. Up to 5 a day.','Today\'s plan on Home lists every workout planned for today, each with its own Start button.','Tap Read on any verse and the Bible opens right at that verse, with a soft glow so you can see where it is.','The Add to Home Screen guide now acts out each step: the menu slides up, a tap shows exactly what to press, and the Manna icon pops onto the Home Screen.']},
  {v:162,d:'Nov 11, 2026',t:'Just Manna',s:['When you add Manna to your Home Screen, it is now always called just Manna. If yours still shows an old, longer name, remove it and add Manna again.']},
@@ -3220,7 +3221,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='164';
+var heroLast='',APPV='165';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -7467,7 +7468,10 @@ function spTheme(sp,rm){try{var id=currentTheme().id,art=SPART[id]||HEROART[id];
     if(st&&!fl&&e.getTotalLength){var L=Math.ceil(e.getTotalLength()+2);e.style.strokeDasharray=L;e.style.strokeDashoffset=L;e.style.animation='spDraw 1.1s cubic-bezier(.5,0,.2,1) '+delay.toFixed(2)+'s forwards'}
     else{e.style.transformBox='fill-box';e.style.transformOrigin='50% 100%';e.style.animation='spGrow .75s cubic-bezier(.34,1.45,.6,1) '+delay.toFixed(2)+'s backwards'}});
   return true}catch(e){return false}}
-(function(){var sp=document.getElementById('splash');if(!sp)return;var n=$('#sp-s');if(n)n.textContent=S.onboarded?'Welcome, '+(S.name||'friend'):'Welcome';
+(function(){var sp=document.getElementById('splash');if(!sp)return;var n=$('#sp-s');
+  /* Version 165: the first time Manna opens each morning it says Good morning; every other time it says Welcome */
+  var gm=false;if(S.onboarded){try{var hr=new Date().getHours(),td=todayStamp();if(hr>=4&&hr<12&&localStorage.getItem('manna.gm.v1')!==td){gm=true;localStorage.setItem('manna.gm.v1',td)}}catch(e){}}
+  if(n)n.textContent=S.onboarded?(gm?'Good morning, ':'Welcome, ')+(S.name||'friend'):'Welcome';
   var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches,done=false,th=spTheme(sp,rm);
   function end(){if(done)return;done=true;sp.classList.add('out');setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},900)}
   sp.addEventListener('click',end);setTimeout(end,rm?700:th?3000:2600)})();setInterval(tickClock,15000);setInterval(function(){try{yvSync()}catch(e){}},60000);
