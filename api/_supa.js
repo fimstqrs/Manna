@@ -67,3 +67,17 @@ export async function deleteUser(env, id) {
   });
   return r.ok;
 }
+
+// Make a new email-and-password account that is already confirmed. Returns { ok } or { ok:false, code }.
+export async function createUser(env, email, password) {
+  const r = await fetch(env.url + '/auth/v1/admin/users', {
+    method: 'POST', headers: { ...keyHeaders(env.service), 'content-type': 'application/json' },
+    body: JSON.stringify({ email, password, email_confirm: true }), signal: AbortSignal.timeout(8000),
+  });
+  if (r.ok) return { ok: true };
+  const j = await r.json().catch(() => ({}));
+  const c = String(j.error_code || j.code || '') + ' ' + String(j.msg || j.message || '');
+  if (r.status === 422 && /exist|registered/i.test(c)) return { ok: false, code: 'exists' };
+  if (/weak|password/i.test(c)) return { ok: false, code: 'weak' };
+  return { ok: false, code: 'failed' };
+}
