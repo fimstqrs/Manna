@@ -670,6 +670,16 @@ input[type=text],input[type=number],select,textarea{
 @keyframes msOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .shake{animation:onbShake .4s ease}
 @media (prefers-reduced-motion:reduce){#e-more .msec[open]>.msb,#e-more .msc,.shake{animation:none;transition:none}}
+.gsch{padding:.8rem .85rem;border-radius:16px;background:color-mix(in srgb,var(--accent) 9%,transparent);border:1px solid color-mix(in srgb,var(--accent) 25%,transparent);gap:.65rem;animation:msOpen .35s cubic-bezier(.22,1,.36,1) both}
+.gsch-h{display:flex;gap:.65rem;align-items:flex-start}.gsch-h>div{display:flex;flex-direction:column;gap:.15rem}.gsch-i{font-size:1.4rem;line-height:1}
+.gsch-l li{gap:.6rem;align-items:flex-start}.gsch-l li>div{display:flex;flex-direction:column;gap:.1rem}.gsch-d{flex:none;width:2.4rem;font-weight:700;font-size:.8rem;color:var(--muted);padding-top:.1rem}
+.gsch-old{text-decoration:line-through;opacity:.75}.gsch-l li.chg .gsch-d{color:var(--accent)}
+#r-build .rbyhand{border-top:1px solid var(--line);margin-top:.2rem}#r-build .rbyhand>summary{list-style:none;display:flex;align-items:center;gap:.75rem;padding:.7rem 0;cursor:pointer}#r-build .rbyhand>summary::-webkit-details-marker{display:none}#r-build .rbyhand>summary::after,#r-build .rbyhand>summary::before{content:none!important;display:none!important}
+#r-build .mst{flex:1;display:flex;flex-direction:column;gap:.1rem}#r-build .mst span{font-size:.78rem;color:var(--muted);font-weight:400}
+#r-build .msc{flex:none;width:.6rem;height:.6rem;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .3s}#r-build .rbyhand[open] .msc{transform:rotate(225deg) translate(-2px,-2px)}
+.raout{gap:.7rem;padding:.8rem;border-radius:16px;background:color-mix(in srgb,var(--accent) 7%,transparent);animation:msOpen .35s cubic-bezier(.22,1,.36,1) both}
+.raing li{gap:.6rem;align-items:center}.raing li>div{display:flex;flex-direction:column}.raing .femo{font-size:1.3rem;width:1.8rem;text-align:center}
+.raper{display:flex;flex-direction:column;gap:.35rem}
 .hsg{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:1rem;align-items:start}
 @media (max-width:560px){.hsg{grid-template-columns:1fr}.hsp{justify-self:center}}
 .hsp{width:100%;max-width:190px}
@@ -2025,13 +2035,18 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <header class="vh"><p class="eyebrow">Fuel</p><h2>Recipes</h2>
         <p class="lede">Your recipes first, then the full food catalog. Swipe through recipes, then scroll the catalog.</p></header>
       <div class="card stack" id="r-link"></div>
-      <div class="card stack">
-        <h3>Build a home-cooked recipe</h3>
-        <p class="small muted">Combine verified ingredients into one entry with correct per-serving numbers.</p>
+      <div class="card stack" id="r-build">
+        <div class="row spread"><h3 style="margin:0">Build a home-cooked recipe</h3><span class="badge">✨ AI</span></div>
+        <p class="small muted" style="margin:0">Describe what you made and how many it serves. AI lists the ingredients and works out the numbers per serving.</p>
+        <textarea id="ra-text" rows="3" aria-label="Describe your recipe" placeholder="Chicken stir fry: 1 lb chicken breast, 2 cups rice, a head of broccoli, 3 tbsp soy sauce. Makes 4 servings."></textarea>
+        <div class="row"><button class="btn primary" data-act="ramake">✨ Build my recipe</button><span class="small muted">1 AI use</span></div>
+        <div id="ra-out"></div>
+        <details class="msec rbyhand"><summary><span class="mst"><b>Build it by hand instead</b><span>Pick each ingredient from the food list</span></span><span class="msc" aria-hidden="true"></span></summary><div class="stack msb">
         <div class="row"><select id="r-ing" aria-label="Ingredient" style="flex:2;min-width:12rem"></select><input type="number" id="r-qty" min="0.25" step="0.25" value="1" aria-label="Servings of ingredient" style="width:6rem"><button class="btn" data-act="recipeadd">Add ingredient</button></div>
         <ul class="list" id="r-list"></ul>
         <div class="row"><input type="text" id="r-name" placeholder="Recipe name" aria-label="Recipe name" style="flex:2;min-width:10rem"><label class="row small" for="r-serv">Makes <input type="number" id="r-serv" min="1" max="20" step="1" value="2" style="width:5rem"> servings</label></div>
         <div id="r-tot"></div>
+        </div></details>
       </div>
     </section>
 
@@ -2104,6 +2119,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
           <div id="g-cur"></div>
           <div class="grid2" id="g-tp"><label class="f" for="g-tgt" id="g-tgtw"><span id="g-tgtl">Target weight</span><input type="number" id="g-tgt" data-chg="1" min="30" max="600" step="0.1" inputmode="decimal" placeholder="Optional"></label>
           <div class="stack" style="gap:.3rem" id="g-pacew"><b class="small">Pace</b><div class="seg" role="radiogroup" aria-label="Pace" id="g-pace"><button type="button" role="radio" data-act="gpace" data-k="gentle">Gentle</button><button type="button" role="radio" data-act="gpace" data-k="steady">Steady</button><button type="button" role="radio" data-act="gpace" data-k="fast">Faster</button></div><span class="small muted" id="g-pacex"></span></div></div>
+          <div class="stack gsch" id="g-sch" hidden></div>
           <p class="small" id="g-eta"></p>
           <p class="small" id="g-plan"></p>
           <label class="check dtg" for="g-daytgt"><input type="checkbox" id="g-daytgt"><span><b>Training-day and rest-day targets</b> <span class="badge pro">✨ PRO</span><br><span class="small muted">Eat about 10% more on days you train (mostly carbs) and a little less on rest days.</span></span></label>
@@ -2924,7 +2940,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['thPrev','gStep','hsLast','ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['raBusy','raMsg','schBusy','schMsg','thPrev','gStep','hsLast','ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals;else if(p.mealsD&&Array.isArray(p.meals)&&p.meals.length){d.prevMeals={d:p.mealsD,m:p.meals};if(!d.dayLogs||typeof d.dayLogs!=='object'||Array.isArray(d.dayLogs))d.dayLogs={};if(!d.dayLogs[p.mealsD])d.dayLogs[p.mealsD]=p.meals}}}catch(e){}
   try{dayLogTrim(d)}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
@@ -2968,7 +2984,7 @@ function defaults0(){
     thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Friend',uname:'',qwOff:0,pnTie:'votd',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',uname:'',qwOff:0,pnTie:'votd',schAdj:null,schRes:null,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -3136,7 +3152,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Faith has a new Notes tab. Write a private prayer note there and see every note you have ever written, newest first. Notes from Home show up there too.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Rings now show clearly when you hit or pass a target: a ✓ badge and "Goal met" when you reach it, and past 100% the ring keeps going, each lap darker than the last, plus a "+12 g over" pill. Sodium and sugar turn red with a ! when you go over.','AI logging no longer shows what you typed as a heading or lumps separate foods together. Each food is logged on its own, and "2 apples" logs as 2 × 1 apple.','Cardio and sport has a new 🏅 icon.','Workout search no longer shows the count line above the results.','More ways to log has a new Browse the catalog section with every food, filters by type and a search box. It is also cleaner: each option has an icon, a one-line description and a smooth open, the calorie option has quick amounts, and results and problems now pop in as notifications instead of text stuck in the card.','In Stats, your daily target is now called your recommended daily intake.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
+ {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Faith has a new Notes tab. Write a private prayer note there and see every note you have ever written, newest first. Notes from Home show up there too.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Rings now show clearly when you hit or pass a target: a ✓ badge and "Goal met" when you reach it, and past 100% the ring keeps going, each lap darker than the last, plus a "+12 g over" pill. Sodium and sugar turn red with a ! when you go over.','AI logging no longer shows what you typed as a heading or lumps separate foods together. Each food is logged on its own, and "2 apples" logs as 2 × 1 apple.','Cardio and sport has a new 🏅 icon.','Workout search no longer shows the count line above the results.','More ways to log has a new Browse the catalog section with every food, filters by type and a search box. It is also cleaner: each option has an icon, a one-line description and a smooth open, the calorie option has quick amounts, and results and problems now pop in as notifications instead of text stuck in the card.','In Stats, your daily target is now called your recommended daily intake.','Build a home-cooked recipe is now AI: describe what you made and how many it serves, check the ingredients and per-serving numbers, then save it to Your meals. Building by hand is still there underneath.','Fixed: AI did not work for people who were not signed in.','Pro: when you change your goal, Manna offers to adjust your AI-made schedule to fit it, adding or dropping workouts and making days harder or easier. You see every change day by day before you apply it.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
@@ -3226,7 +3242,7 @@ var TOUR=[
  {g:'fuel',v:'eat',sel:'#t-targets',t:'Your targets',p:'Six rings for today: protein, carbs, fat, fiber, sodium and sugar. They fill as you log, and the goals come from your goal and your body.'},
  {g:'fuel',v:'drink',sel:function(){return $('#e-water')&&!$('#e-water').hidden?'#e-water':'#d-off'},t:'Drink',p:'Tap a glass each time you drink water and watch your bottle fill up.'},
  {g:'fuel',v:'meals',sel:function(){return tourId($('#m-list')&&$('#m-list').closest('.card'),'tour-mlist')||'#m-sum'},t:'Diary',p:'Everything you logged, day by day. Swipe back to see earlier days.'},
- {g:'fuel',v:'foods',sel:function(){return tourId($('#r-name')&&$('#r-name').closest('.card'),'tour-rbuild')||'#r-link'},t:'Recipes',p:'Build a home-cooked recipe from real ingredients and Manna works out the numbers per serving. It saves to Your meals, ready to add in one tap.'},
+ {g:'fuel',v:'foods',sel:function(){return tourId($('#r-name')&&$('#r-name').closest('.card'),'tour-rbuild')||'#r-link'},t:'Recipes',p:'Describe a home-cooked recipe in your own words and AI lists the ingredients and works out the numbers per serving. It saves to Your meals, ready to add in one tap.'},
  {g:'friends',v:'friends',sel:function(){return tourId($('#fr-body > .card'),'tour-fr')||'#fr-body'},t:'Friends',p:'Add friends by username, cheer each other on and share workouts.'},
  {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Five tabs: Daily verses, the ones you Saved, the Bible for whole chapters and reading plans, Search to find any verse, and Notes for your private prayer notes.'},
  {g:'faith',v:'scripture',sel:function(){var e=$('#sc-feed .vslide');return tourId(e,'tour-verse')||'#sc-feed'},t:'Daily verses',p:'Swipe up for the next verse. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
@@ -4074,6 +4090,63 @@ function glRender(){var c=$('#gl-card');if(!c||!GL)return;var b=GL.b,a=GL.a,h=''
   if(a.eta)h+='<p class="gleta">'+esc(a.eta)+'</p>';
   h+='<div class="row" style="justify-content:flex-end"><button class="btn" data-act="glundo">Undo</button><button class="btn primary" data-act="glkeep">Keep these changes</button></div>';
   if(c.dataset.h!==h){c.dataset.h=h;c.innerHTML=h}}
+/* Recipes: describe a home-cooked recipe and AI builds it, ingredient by ingredient, with per-serving numbers */
+var RA=null;
+function raRender(){var el=$('#ra-out');if(!el)return;var h='';
+  if(RA){var R=RA;h='<div class="stack raout"><label class="f" for="ra-name">Recipe name<input type="text" id="ra-name" maxlength="60" value="'+esc(R.name)+'"></label>'
+    +'<div class="row" style="gap:.4rem;align-items:center"><span class="small">Makes</span><button class="btn sm" data-act="raserv" data-d="-1" aria-label="Fewer servings">−</button><b>'+R.serv+'</b><button class="btn sm" data-act="raserv" data-d="1" aria-label="More servings">+</button><span class="small">serving'+(R.serv===1?'':'s')+'</span></div>'
+    +'<ul class="list raing">'+R.items.map(function(x,i){return '<li><span class="femo" aria-hidden="true">'+esc(emojiFor(x.name))+'</span><div style="flex:1;min-width:0"><b>'+esc(x.name)+'</b><span class="small muted">'+esc(x.amount)+' · '+fmt(Math.round(x.kcal))+' kcal</span></div><button class="btn sm" data-act="radel" data-i="'+i+'" aria-label="Remove '+esc(x.name)+'">✕</button></li>'}).join('')+'</ul>';
+    var t=raTot(),sv=R.serv;h+='<div class="raper"><span class="eyebrow">Per serving</span><div class="st-tiles"><div><span>Calories</span><b>'+fmt(Math.round(t.kcal/sv))+'</b></div><div><span>Protein</span><b>'+Math.round(t.p/sv)+' g</b></div><div><span>Carbs</span><b>'+Math.round(t.c/sv)+' g</b></div><div><span>Fat</span><b>'+Math.round(t.f/sv)+' g</b></div></div></div>'
+    +'<div class="row"><button class="btn primary" data-act="rasave">Save to Your meals</button><button class="btn" data-act="raclr">Start over</button></div></div>'}
+  if(el.dataset.h!==h){var nm=$('#ra-name'),nv=nm?nm.value:null;el.dataset.h=h;el.innerHTML=h;var n2=$('#ra-name');if(n2&&nv!=null)n2.value=nv}}
+function raTot(){var t={};KEYS.forEach(function(k){t[k]=0});t.sug=0;(RA?RA.items:[]).forEach(function(x){t.kcal+=x.kcal;t.p+=x.p;t.c+=x.c;t.f+=x.f;t.fib+=x.fib;t.na+=x.na;t.sug+=x.sug});return t}
+function raMake(){var t=($('#ra-text')&&$('#ra-text').value||'').trim();if(!t){try{sfxSad()}catch(e){}var ta=$('#ra-text');if(ta){ta.classList.remove('shake');void ta.offsetWidth;ta.classList.add('shake');ta.focus()}toast('Describe your recipe first.',{title:'Build a recipe',icon:'🍲',kind:'warn'});return}
+  S.raBusy=true;S.raMsg='';RA=null;mkOpen('recipe','Building your recipe',function(){return {done:!S.raBusy,err:S.raMsg}});
+  getSample().then(function(sm){
+    if(!sm){S.raBusy=false;S.raMsg='AI is not available right now.';refresh();return}
+    if(sm===SERVER_AI&&aiLeft()<=0){S.raBusy=false;S.raMsg=aiErr('limit');refresh();return}
+    var pr=['You are a nutrition expert. Turn this home-cooked recipe into a list of ingredients with nutrition for the whole amount of each ingredient as written.','Recipe: '+t.slice(0,1200),
+      'If the number of servings is not given, choose a sensible number. Use realistic amounts when they are vague (a head of broccoli is about 300 g).',
+      'Reply with JSON only: {"name": "short recipe name", "servings": 4, "items": [{"name": "ingredient", "amount": "1 lb (454 g)", "kcal": number, "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg), "sugar": number (g)}]}'].join('\n');
+    return sm.json(pr,{modelTier:'quick'}).then(function(r){var L=(Array.isArray(r&&r.items)?r.items:[]).slice(0,30).map(function(x){return {name:String(x&&x.name||'').trim().slice(0,50),amount:String(x&&x.amount||'').slice(0,40),kcal:num(x&&x.kcal,8000),p:num(x&&x.protein,600),c:num(x&&x.carbs,1200),f:num(x&&x.fat,800),fib:num(x&&x.fiber,200),na:num(x&&x.sodium,20000),sug:num(x&&x.sugar,800)}}).filter(function(x){return x.name&&x.kcal>0});
+      if(!L.length)throw {code:'failed'};RA={name:String(r.name||'My recipe').slice(0,60),serv:clamp(parseInt(r.servings,10)||2,1,30),items:L};S.raBusy=false;refresh();setTimeout(function(){var o=$('#ra-out');if(o)o.scrollIntoView({block:'start',behavior:'smooth'})},500)})
+  }).catch(function(e){S.raBusy=false;S.raMsg=aiErr(e&&e.code)+' Try again in a moment.';refresh()})}
+function raSave(){if(!RA||!RA.items.length)return;var nm=(($('#ra-name')&&$('#ra-name').value)||RA.name).trim().slice(0,60)||'My recipe',sv=RA.serv,t=raTot();
+  var o={id:'r'+Date.now().toString(36)+(uid++),name:nm,region:'My meals',serv:'1 serving',al:[],src:'recipe',keys:[nm.toLowerCase()],em:emojiFor(nm+' '+RA.items.map(function(x){return x.name}).join(' ')),
+    parts:RA.items.slice(0,20).map(function(x){var n={};KEYS.forEach(function(k){n[k]=+((x[k]||0)/sv).toFixed(2)});n.sug=+(x.sug/sv).toFixed(1);return {name:x.name,em:emojiFor(x.name),serv:x.amount+' ÷ '+sv,n:n}})};
+  KEYS.forEach(function(k){o[k]=+((t[k]||0)/sv).toFixed(2)});o.sug=Math.round(t.sug/sv*10)/10;
+  S.recipes.push(o);RA=null;var ta=$('#ra-text');if(ta)ta.value='';toast('Saved "'+nm+'" to Your meals, one serving at a time. Add it any time from Quick add on Eat.',{title:'Recipe saved',icon:'🍲',kind:'ok'});try{sfxTap()}catch(e){}}
+/* Pro: after a goal change, offer to adjust the AI-made schedule (more or fewer workouts, harder or easier days) to fit the new goal */
+function aiSchedId(){var isAi=function(id){return (S.plans[id]||[]).some(function(w){var c=w&&S.customW.filter(function(x){return x.id===w})[0];return c&&c.focus==='Built by AI'})};if(S.plans[S.planId]&&isAi(S.planId))return S.planId;return (schedList()||[]).filter(isAi)[0]||''}
+function schDays(pid){return (S.plans[pid]||[]).map(function(w){if(!w)return null;var c=S.customW.filter(function(x){return x.id===w})[0]||wById(w);if(!c)return null;return {id:w,name:c.name,mins:c.mins,items:(c.ex||[]).map(function(e){return {name:e[0],rx:e[1]}})}})}
+function gSchRender(){var el=$('#g-sch');if(!el)return;var A=S.schAdj,pid=A&&A.pid;if(!A||!isPro()||!S.plans[pid]){el.hidden=true;el.innerHTML='';return}
+  var nm=schedName(pid),R=S.schRes,h;el.hidden=false;
+  if(!R)h='<div class="gsch-h"><span class="gsch-i" aria-hidden="true">📅</span><div><b>Adjust "'+esc(nm)+'" for your new goal?</b><span class="small muted">AI can add or drop workouts and make days harder or easier to fit '+esc(goalSet().map(gLabel).join(' + '))+' at a '+esc(S.gPace||'steady')+' pace. You see every change first.</span></div></div><div class="row"><button class="btn primary sm" data-act="gschgo">✨ Suggest changes</button><button class="btn sm" data-act="gschno">Not now</button><span class="small muted">1 AI use</span></div>';
+  else{var old=schDays(pid);h='<div class="gsch-h"><span class="gsch-i" aria-hidden="true">📅</span><div><b>Suggested changes to "'+esc(nm)+'"</b><span class="small muted">'+esc(R.why||'Adjusted for your new goal.')+'</span></div></div>'
+    +'<ul class="list gsch-l">'+R.days.map(function(d,i){var o=old[i],a=o?(o.name+' · '+o.mins+' min · '+o.items.length+' ex'):'Rest',b=d?(d.name+' · '+d.mins+' min · '+d.items.length+' ex'):'Rest',rx=function(x){return x?x.items.map(function(e){return e.name+e.rx}).join('|'):''},same=a===b&&rx(o)===rx(d);if(a===b&&!same&&d&&!d.note)d.note='Sets and reps adjusted';
+      return '<li class="'+(same?'same':'chg')+'"><span class="gsch-d">'+DAYN[i].slice(0,3)+'</span><div style="flex:1;min-width:0">'+(same?'<span class="small muted">'+esc(b)+' · no change</span>':'<span class="small muted gsch-old">'+esc(a)+'</span><b class="gsch-new">'+esc(b)+'</b>'+(d&&d.note?'<span class="small muted">'+esc(d.note)+'</span>':''))+'</div></li>'}).join('')+'</ul>'
+    +'<div class="row"><button class="btn primary sm" data-act="gschapply">Apply changes</button><button class="btn sm" data-act="gschno">Keep my schedule</button></div>'}
+  if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}}
+function gSchMake(){var A=S.schAdj;if(!A||!isPro())return;var pid=A.pid,old=schDays(pid);S.schBusy=true;S.schMsg='';mkOpen('sched','Adjusting your schedule',function(){return {done:!S.schBusy,err:S.schMsg}});
+  getSample().then(function(sm){
+    if(!sm){S.schBusy=false;S.schMsg='AI is not available right now.';refresh();return}
+    if(sm===SERVER_AI&&aiLeft()<=0){S.schBusy=false;S.schMsg=aiErr('limit');refresh();return}
+    var pl=wPlan(),pr=['You are a certified strength and conditioning coach. Adjust this 7-day workout schedule (Monday first) so it fits the person\'s new goal.',
+      'New goal: '+goalSet().map(gName).join(', ')+'. Pace: '+(S.gPace||'steady')+'. Recommended workouts a week: '+pl.per+'. Typical reps: '+pl.reps+'. Session length: about '+pl.mins+' minutes.',
+      'Current schedule: '+JSON.stringify(old.map(function(d){return d?{name:d.name,mins:d.mins,items:d.items}:null})),
+      'Keep what already fits. Only change what the new goal needs: add or remove workout days, add or remove sets or exercises, or make a day harder or easier. Keep the workout names unless the focus really changes.',
+      'Reply with JSON only: {"why": "one short sentence on what changed and why", "days": [7 items, Monday first, each null for rest or {"name": "workout name", "mins": 40, "note": "short note on what changed, or empty", "items": [{"name": "exercise", "rx": "3×10"}]}]}'].join('\n');
+    return sm.json(pr,{modelTier:'quick'}).then(function(r){var ds=Array.isArray(r&&r.days)?r.days.slice(0,7):[];while(ds.length<7)ds.push(null);var st=stageCalc();
+      var days=ds.map(function(d){if(!d||!Array.isArray(d.items)||!d.items.length)return null;var items=d.items.slice(0,10).map(function(i){return {name:String(i&&i.name||'').trim().slice(0,50),rx:String(i&&i.rx||'3×10').slice(0,20)}}).filter(function(x){return x.name&&exState(x.name,S.area,st)!=='avoid'});if(!items.length)return null;return {name:String(d.name||'Workout').slice(0,50),mins:clamp(parseInt(d.mins,10)||30,10,120),note:String(d.note||'').slice(0,90),items:items}});
+      if(!days.some(Boolean))throw {code:'failed'};
+      S.schRes={why:String(r.why||'').slice(0,160),days:days};S.schBusy=false;try{howFill([].concat.apply([],days.filter(Boolean).map(function(d){return d.items.map(function(i){return i.name})})))}catch(e){}refresh()})
+  }).catch(function(e){try{console.warn('schedule adjust',e)}catch(x){}S.schBusy=false;S.schMsg=aiErr(e&&e.code)+' Try again in a moment.';refresh()})}
+function gSchApply(){var A=S.schAdj,R=S.schRes;if(!A||!R)return;var pid=A.pid,cur=S.plans[pid].slice();
+  R.days.forEach(function(d,i){var w=cur[i],c=w&&S.customW.filter(function(x){return x.id===w&&x.focus==='Built by AI'})[0];
+    if(!d){cur[i]=null;if(S.plansX&&S.plansX[pid])S.plansX[pid][i]=[];return}
+    if(c){c.name=d.name;c.mins=d.mins;c.ex=d.items.map(function(x){return [x.name,x.rx]})}
+    else{var wid='c'+(uid++);S.customW.push({id:wid,name:d.name,mins:d.mins,level:'Custom',cat:'custom',eq:['bodyweight'],focus:'Built by AI',pl:'strength',ex:d.items.map(function(x){return [x.name,x.rx]})});cur[i]=wid}});
+  S.plans[pid]=cur;syncSched();var nm=schedName(pid);S.schAdj=null;S.schRes=null;toast('"'+nm+'" now fits your new goal.',{title:'Schedule updated',icon:'📅',kind:'ok'})}
 /* Settings › Body › Goals: step 1 picks the goal, step 2 shows the options that fit it */
 var GPICK=[['cut','Cut','Lose fat and keep your muscle','📉'],['bulk','Bulk','Gain size and strength','💪'],['maintain','Keep stable','Stay at the weight you are','⚖️'],['recomp','Get lean','Lose fat and build muscle together','✨']],GMORE=[['lean','Gain lean muscle'],['endurance','Endurance'],['health','General health']];
 function gPickPaint(){var pk=$('#g-pick'),op=$('#g-opts');if(!pk||!op)return;var g=goalSet(),chosen=(S.goals||[]).length>0,step=S.gStep||(chosen?'opts':'pick'),cur=g[0],h;
@@ -4092,6 +4165,8 @@ function gPickPaint(){var pk=$('#g-pick'),op=$('#g-opts');if(!pk||!op)return;var
 function gLabel(k){var a=GPICK.filter(function(x){return x[0]===k})[0];if(a)return a[1];var b=GMORE.filter(function(x){return x[0]===k})[0];return b?b[1]:gName(k)}
 function goalPaint(){
   try{gPickPaint()}catch(err){}
+  try{raRender()}catch(err){}
+  try{gSchRender()}catch(err){}
   var e=$('#g-eta');if(e){var x=gEta();e.textContent=x?x.txt:'Add a target weight to see when you could reach it.'}
   $$('#g-pace [data-k]').forEach(function(b){b.setAttribute('aria-checked',String((S.gPace||'steady')===b.dataset.k))});
   var t=$('#g-tgt');if(t&&document.activeElement!==t)t.value=S.gTarget>0?(S.units==='lb'?Math.round(S.gTarget*2.20462):Math.round(S.gTarget*10)/10):'';var tl=$('#g-tgtl');if(tl)tl.textContent='Target weight ('+S.units+')';
@@ -4437,13 +4512,13 @@ var AITXT='';var NUMW={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,
 function textCounts(text){return String(text||'').toLowerCase().split(/\s+and\s+|,|\+|\s+with\s+|\s*&\s*|\s+plus\s+/).map(function(seg){var m=seg.trim().match(/^(\d+(?:\.\d+)?|a couple of|a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|dozen|couple|pair|half)\s*(?:x\s*)?(?:of\s+)?(.*)$/);if(!m)return null;var n=/^\d/.test(m[1])?+m[1]:NUMW[m[1]];if(!(n>1))return null;
   var w=m[2].replace(/\b(\d+(\.\d+)?\s*(g|grams?|oz|ounces?|ml|cups?|tbsp|tsp))\b/g,' ').split(/[^a-z]+/).filter(function(x){return x.length>2}).map(wStem);return w.length?{n:n,w:w}:null}).filter(Boolean)}
 function wStem(x){return x.replace(/ies$/,'y').replace(/(ches|shes|xes|sses)$/,function(m){return m.slice(0,-2)}).replace(/([^s])s$/,'$1')}
-function aiCount(r,amt,text){if(amt)return 1;var c=Math.round(num(r.count,50)*4)/4;if(c>1&&c<=50)return c;
+function aiPieces(r,amt,text){if(amt)return 1;var c=Math.round(num(r.count,50)*4)/4;if(c>1&&c<=50)return c;
   var nm=String(r.name||'').toLowerCase().split(/[^a-z]+/).filter(function(x){return x.length>2}).map(wStem),best=1;
   textCounts(text).forEach(function(tc){if(tc.w.some(function(w){return nm.indexOf(w)>-1}))best=tc.n});return best>1&&best<=50?best:1}
 function aiUnit(r,c,g){var u=String(r.unit||'').replace(/^(1|one|a|an)\s+/i,'').trim().slice(0,30),pg=g>=1?Math.round(g/c):0;
   if(!u&&!pg)return '1 serving';return u?('1 '+u+(pg?' ('+pg+' g)':'')):pg+' g'}
 function aiFoodItem(r,amt,blob,text){
-  var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000),c=aiCount(r,amt,text||AITXT),sgT=r.sugar!=null&&isFinite(+r.sugar)?Math.round(num(r.sugar,500)*10)/10:null;
+  var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000),c=aiPieces(r,amt,text||AITXT),sgT=r.sugar!=null&&isFinite(+r.sugar)?Math.round(num(r.sugar,500)*10)/10:null;
   if(m&&num(r.confidence,1)>=.5){var sg=servG(m).g||0,per=g>=1?g/c:0;
     /* A counted food whose pieces match the list serving: 2 apples = 2 × 1 medium apple */
     if(c>1&&(!per||!sg||(per/sg>.6&&per/sg<1.6)))return {f:m,q:c,sug:sgT};
@@ -6205,7 +6280,15 @@ var ACT={
   gpace:function(b){var k=b.dataset.k;gChange(function(){S.gPace=k})},
   gpick:function(b){var k=b.dataset.k;gChange(function(){S.goals=[k];S.goalKcal=null;S.macroOv={p:null,c:null,f:null};S.gPlan=null;S.gNote='';if(k==='maintain'||k==='health')S.gTarget=null});S.gStep='opts';try{sfxTap()}catch(e){}},
   gstep:function(b){S.gStep=b.dataset.k;setTimeout(function(){var f=$(b.dataset.k==='pick'?'#g-pick .gpk-o':'#g-cur .btn');if(f)f.focus()},60)},
-  glkeep:function(){glClose();toast('Your goals are saved.',{title:'Goals',icon:'🎯',kind:'ok'})},
+  glkeep:function(){var ch=GL&&(GL.b.goals!==GL.a.goals||GL.b.pace!==GL.a.pace||GL.b.per!==GL.a.per);glClose();toast('Your goals are saved.',{title:'Goals',icon:'🎯',kind:'ok'});if(ch&&isPro()&&aiSchedId()){S.schAdj={pid:aiSchedId(),at:Date.now()};S.schRes=null;setTimeout(function(){var e=$('#g-sch');if(e)e.scrollIntoView({block:'center',behavior:'smooth'})},400)}},
+  ramake:function(){raMake()},
+  raserv:function(b){if(!RA)return;RA.serv=clamp(RA.serv+(+b.dataset.d),1,30)},
+  radel:function(b){if(!RA)return;RA.items.splice(+b.dataset.i,1);if(!RA.items.length)RA=null},
+  rasave:function(){raSave()},
+  raclr:function(){RA=null},
+  gschgo:function(){if(!proNeed('sched'))return;gSchMake()},
+  gschapply:function(){gSchApply()},
+  gschno:function(){S.schAdj=null;S.schRes=null},
   glundo:function(){if(GL)gRestore(GL.undo);glClose();toast('Changes undone.')},
   gluserec:function(){if(!GL)return;S.goalKcal=null;S.macroOv={p:null,c:null,f:null};GL.a=gSnap();glRender()},
   gaimake:function(){if(!proNeed('goal'))return;gAI('make',$('#g-ai')&&$('#g-ai').value)},
