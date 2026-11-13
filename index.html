@@ -645,6 +645,15 @@ input[type=text],input[type=number],select,textarea{
 #thpv .btn{flex:none;white-space:nowrap}
 @keyframes thpvIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}@media (prefers-reduced-motion:reduce){#thpv{animation:none}}
 .qwn{min-width:2.4rem;padding-left:.55rem;padding-right:.55rem}
+.rbadge{position:absolute;top:2%;right:2%;z-index:2;display:grid;place-items:center;width:1.45rem;height:1.45rem;border-radius:50%;font-size:.78rem;font-weight:800;line-height:1;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);animation:rbPop .5s cubic-bezier(.34,1.56,.64,1) both}
+.rbadge.big{width:2rem;height:2rem;font-size:1rem;top:6%;right:6%}.rbadge.ok{background:#30b864}.rbadge.up{background:#ff9f0a}.rbadge.bad{background:#ff453a}
+.rpill{display:inline-block;max-width:100%;margin-top:.3rem;padding:.12rem .45rem;border-radius:99px;font-size:.66rem;overflow:hidden;text-overflow:ellipsis;font-weight:700;line-height:1.35;white-space:nowrap}
+.rpill.ok{background:color-mix(in srgb,#30b864 16%,transparent);color:#1f8a4a}.rpill.up{background:color-mix(in srgb,#ff9f0a 18%,transparent);color:#a35f00}.rpill.bad{background:color-mix(in srgb,#ff453a 16%,transparent);color:#c62f27}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rpill.ok{color:#7fe0a6}:root:not([data-theme="light"]) .rpill.up{color:#ffc266}:root:not([data-theme="light"]) .rpill.bad{color:#ff8a83}}
+:root[data-theme="dark"] .rpill.ok{color:#7fe0a6}:root[data-theme="dark"] .rpill.up{color:#ffc266}:root[data-theme="dark"] .rpill.bad{color:#ff8a83}
+.mring.st-over .mr,.crw.st-over .cring{animation:rbPulse 2.4s ease-in-out infinite}.cring{position:relative}
+@keyframes rbPop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}@keyframes rbPulse{50%{transform:scale(1.03)}}
+@media (prefers-reduced-motion:reduce){.rbadge,.mring.st-over .mr,.crw.st-over .cring{animation:none}}
 .hsg{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:1rem;align-items:start}
 @media (max-width:560px){.hsg{grid-template-columns:1fr}.hsp{justify-self:center}}
 .hsp{width:100%;max-width:190px}
@@ -833,8 +842,8 @@ html{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100
 /* Faith feed: one verse per screen, swipe up for the next (Version 131) */
 .vis-hide{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .sc-vh{margin-bottom:0}
-.sctabs{display:flex;justify-content:center;gap:4px;padding:3px;margin:0 auto;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent)}
-.sctab{appearance:none;border:0;background:none;font:inherit;font-weight:600;font-size:.92rem;color:var(--muted);padding:.42rem 1rem;border-radius:99px;cursor:pointer;transition:background .2s,color .2s}
+.sctabs{display:flex;justify-content:center;gap:2px;padding:3px;margin:0 auto;max-width:100%;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.sctab{appearance:none;border:0;background:none;font:inherit;font-weight:600;font-size:clamp(.78rem,3.4vw,.92rem);color:var(--muted);padding:.42rem clamp(.5rem,2.6vw,1rem);white-space:nowrap;border-radius:99px;cursor:pointer;transition:background .2s,color .2s}
 .sctab[aria-selected=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 6px rgba(0,0,0,.12)}
 .sctab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .vfeed{position:relative;height:var(--fh,72vh);width:100%;max-width:520px;margin:0 auto;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;border-radius:24px;scrollbar-width:none;-webkit-overflow-scrolling:touch;outline:none}
@@ -1764,6 +1773,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
           <button type="button" role="tab" class="sctab" data-act="sctab" data-k="saved" id="sct-saved" aria-controls="sc-feed">Saved</button>
           <button type="button" role="tab" class="sctab" data-act="sctab" data-k="bible" id="sct-bible" aria-controls="sc-bible">Bible</button>
           <button type="button" role="tab" class="sctab" data-act="sctab" data-k="find" id="sct-find" aria-controls="sc-find">Search</button>
+          <button type="button" role="tab" class="sctab" data-act="sctab" data-k="notes" id="sct-notes" aria-controls="sc-notes">Notes</button>
         </div></header>
       <div class="vfeed" id="sc-feed" role="feed" aria-label="Verses. Swipe up for the next one." tabindex="0"></div>
       <div class="stack" id="sc-find" hidden><div class="card stack vfind">
@@ -1773,8 +1783,8 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div class="stack" id="sc-bible" hidden>
       <div class="card stack" id="sc-reader"></div>
       <div class="card stack" id="sc-bai"></div>
-      <div class="card stack" id="sc-pnotes"></div>
       </div>
+      <div class="stack" id="sc-notes" hidden><div class="card stack" id="sc-pnotes"></div></div>
     </section>
 
     <!-- THEMES -->
@@ -2444,7 +2454,7 @@ function renderHeroVerse(){
 /* ---------- workout library ---------- */
 var MUS={chest:'Chest',back:'Back',shoulders:'Shoulders',biceps:'Biceps',triceps:'Triceps',core:'Core',glutes:'Glutes',quads:'Quads',hamstrings:'Hamstrings',calves:'Calves'};
 var MKEYS=Object.keys(MUS);
-var CATEMO={all:'✨',gym:'🏋️',home:'🏠',body:'🤸',cali:'💪',run:'🏃',ball:'🏀',cardio:'❤️',mobility:'🧘',custom:'⭐',soccer:'⚽',fball:'🏈',base:'⚾',tennis:'🎾',golf:'⛳',swim:'🏊',volley:'🏐',hockey:'🏒',cycle:'🚴',treadmill:'👟',wrestle:'🤼',bjj:'🥋'};
+var CATEMO={all:'✨',gym:'🏋️',home:'🏠',body:'🤸',cali:'💪',run:'🏃',ball:'🏀',cardio:'🏅',mobility:'🧘',custom:'⭐',soccer:'⚽',fball:'🏈',base:'⚾',tennis:'🎾',golf:'⛳',swim:'🏊',volley:'🏐',hockey:'🏒',cycle:'🚴',treadmill:'👟',wrestle:'🤼',bjj:'🥋'};
 function catChip(k,lab){return (CATEMO[k]?CATEMO[k]+' ':'')+String(lab||'')}
 var CATS={gym:'Gym',home:'Home equipment',body:'Bodyweight',cali:'Calisthenics',run:'Running',ball:'Basketball',cardio:'Cardio and sport',mobility:'Mobility',custom:'Custom',soccer:'Soccer',fball:'Football',base:'Baseball',tennis:'Tennis',golf:'Golf',swim:'Swimming',volley:'Volleyball',hockey:'Hockey',cycle:'Cycling',treadmill:'Treadmill',wrestle:'Wrestling',bjj:'Jiu Jitsu'};
 var SPORTS=['soccer','ball','fball','base','tennis','golf','swim','volley','hockey','cycle','wrestle','bjj'];
@@ -3119,7 +3129,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','You can now write prayer notes in Faith too (Bible tab, under the reader), and link a note to today\'s verse, the chapter you are reading, or no verse.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
+ {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Faith has a new Notes tab. Write a private prayer note there and see every note you have ever written, newest first. Notes from Home show up there too.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Rings now show clearly when you hit or pass a target: a ✓ badge and "Goal met" when you reach it, and past 100% the ring keeps going with a darker second lap plus a "+12 g over" pill. Sodium and sugar turn red with a ! when you go over.','AI logging no longer shows what you typed as a heading or lumps separate foods together. Each food is logged on its own, and "2 apples" logs as 2 × 1 apple.','Cardio and sport has a new 🏅 icon.','Workout search no longer shows the count line above the results.','In Stats, your daily target is now called your recommended daily intake.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
@@ -3211,7 +3221,7 @@ var TOUR=[
  {g:'fuel',v:'meals',sel:function(){return tourId($('#m-list')&&$('#m-list').closest('.card'),'tour-mlist')||'#m-sum'},t:'Diary',p:'Everything you logged, day by day. Swipe back to see earlier days.'},
  {g:'fuel',v:'foods',sel:function(){return tourId($('#r-name')&&$('#r-name').closest('.card'),'tour-rbuild')||'#r-link'},t:'Recipes',p:'Build a home-cooked recipe from real ingredients and Manna works out the numbers per serving. It saves to Your meals, ready to add in one tap.'},
  {g:'friends',v:'friends',sel:function(){return tourId($('#fr-body > .card'),'tour-fr')||'#fr-body'},t:'Friends',p:'Add friends by username, cheer each other on and share workouts.'},
- {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Four tabs: Daily verses, the ones you Saved, the Bible for whole chapters and reading plans, and Search to find any verse.'},
+ {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Five tabs: Daily verses, the ones you Saved, the Bible for whole chapters and reading plans, Search to find any verse, and Notes for your private prayer notes.'},
  {g:'faith',v:'scripture',sel:function(){var e=$('#sc-feed .vslide');return tourId(e,'tour-verse')||'#sc-feed'},t:'Daily verses',p:'Swipe up for the next verse. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
  {g:'set',v:'settings',sel:'#g-goals',t:'Goals',p:'Pick your goal first, like Cut or Bulk. Then set your pace and target weight, and your calorie and protein targets update to match.'},
  {g:'set',v:'settings',sel:'#hs-card',t:'Home Screen',p:'Choose which cards show on Home and in what order.'},
@@ -3792,12 +3802,10 @@ function typingIn(el){var a=document.activeElement;return !!(a&&el&&el.contains(
 document.addEventListener('focusout',function(e){var t=e.target;if(t&&(t.tagName==='TEXTAREA'||t.tagName==='INPUT'))setTimeout(function(){var a=document.activeElement;if(!a||(a.tagName!=='TEXTAREA'&&a.tagName!=='INPUT'))refresh()},80)});
 function renderPNotes(){
   var el=$('#sc-pnotes');if(!el)return;var L=S.pnotes.slice().reverse(),h;
-  var vref=S.votd&&S.votd.ref||'',cref=S.rb&&S.rc?S.rb+' '+S.rc:'',tie=S.pnTie||'votd',tref=tie==='none'?'':tie==='ch'&&cref?cref:vref;
-  h='<div class="row spread"><h3>Prayer notes</h3><span class="badge">Private</span></div>'
+  h='<div class="row spread"><h3>Prayer notes</h3><span class="badge">Private</span></div>'+(L.length?'<p class="small muted" style="margin:0">'+L.length+' note'+(L.length===1?'':'s')+', newest first.</p>':'')
     +'<div class="stack pncomp" style="gap:.5rem"><label class="vh-only" for="pn-in2">Write a prayer note</label><textarea id="pn-in2" maxlength="1000" rows="3" placeholder="Write a private prayer, a thank-you, or what is on your heart"></textarea>'
-    +'<div class="chips" role="radiogroup" aria-label="Link this note to">'+[['votd','Today\'s verse'+(vref?' · '+vref:'')],cref?['ch',cref]:null,['none','No verse']].filter(Boolean).map(function(o){var on=tie===o[0]||(o[0]==='votd'&&tie==='ch'&&!cref);return '<button type="button" class="chip" role="radio" data-act="pntie" data-k="'+o[0]+'" aria-checked="'+on+'" aria-pressed="'+on+'">'+esc(o[1])+'</button>'}).join('')+'</div>'
-    +'<div class="row"><button class="btn primary sm" data-act="pnsave2" data-ref="'+esc(tref)+'">Save note</button></div></div>'
-    +(L.length?'<ul class="list">'+L.slice(0,50).map(function(n){return '<li><div><div class="small muted">'+esc(new Date(n.d+'T12:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))+(n.ref?' · '+esc(n.ref):'')+'</div><div style="white-space:pre-wrap">'+esc(n.t)+'</div></div><button class="btn sm" data-act="pndel" data-id="'+esc(n.id)+'" aria-label="Delete note">Delete</button></li>'}).join('')+'</ul>':'<p class="muted small">No notes yet. Your notes will show here, newest first.</p>')+'<p class="small muted">Only you can see these. They are never shared.</p>';
+    +'<div class="row"><button class="btn primary sm" data-act="pnsave2">Save note</button></div></div>'
+    +(L.length?'<ul class="list pnlist">'+L.map(function(n){return '<li><div><div class="small muted">'+esc(new Date(n.d+'T12:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))+(n.ref?' · '+esc(n.ref):'')+'</div><div style="white-space:pre-wrap">'+esc(n.t)+'</div></div><button class="btn sm" data-act="pndel" data-id="'+esc(n.id)+'" aria-label="Delete note">Delete</button></li>'}).join('')+'</ul>':'<p class="muted small">No notes yet. Your notes will show here, newest first.</p>')+'<p class="small muted">Only you can see these. They are never shared.</p>';
   if(typingIn(el))return;
   if(el.dataset.h!==h){var k=$('#pn-in2'),kv=k?k.value:'',kf=k&&document.activeElement===k;el.dataset.h=h;el.innerHTML=h;var k2=$('#pn-in2');if(k2&&kv)k2.value=kv;if(k2&&kf)k2.focus()}
 }
@@ -4337,10 +4345,14 @@ var RIC={kcal:'<path d="M12 2c1.5 4.5 7.5 7.5 7.5 15a7.5 7.5 0 0 1-15 0c0-3.5 1.
   f:'<path d="M12 3c3 4.5 6 8 6 11.5a6 6 0 0 1-12 0C6 11 9 7.5 12 3z" fill="currentColor"/>'};
 function ringSvg(frac,col,size,w){var r=(size-w)/2,c=2*Math.PI*r,f=Math.max(0,Math.min(1,frac||0));
   return '<svg class="rg" viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="'+w+'"/><circle class="rgv" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')"/></svg>'}
+/* Past 100% the ring keeps going: a second, darker lap shows how far over you are */
+function ringLap(frac,col,size,w){if(!(frac>1))return '';var r=(size-w)/2,c=2*Math.PI*r,f=Math.min(.999,frac-1);
+  return '<svg class="rg rgo" viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')" style="filter:brightness(.62) saturate(1.2)"/><circle cx="'+(size/2+r*Math.sin(2*Math.PI*f)).toFixed(1)+'" cy="'+(size/2-r*Math.cos(2*Math.PI*f)).toFixed(1)+'" r="'+(w*.42).toFixed(1)+'" fill="#fff" opacity=".9"/></svg>'}
 function gfmt(n,u){return S.hideNums?'•••':Math.round(n)+(u||' g')}
 var MC={kcal:'var(--accent)',p:'#ff5d5d',c:'#3fbf6a',f:'#4a9dff'};
 function bigRing(eaten,goal,sub,lab){
-  return '<div class="crw"><div class="cring" style="color:'+MC.kcal+'">'+ringSvg(goal?eaten/goal:0,MC.kcal,200,14)+'<div class="cin"><svg viewBox="0 0 24 24" class="cic" aria-hidden="true">'+RIC.kcal+'</svg><b>'+kc(Math.round(eaten))+'</b><span>of '+kc(Math.round(goal))+' kcal</span></div></div><p class="clab">'+(lab||'Calories eaten today')+'</p>'+(sub?'<p class="small muted">'+sub+'</p>':'')+'</div>'}
+  var fr=goal?eaten/goal:0,ov=!S.hideNums&&goal&&eaten>goal*1.02;
+  return '<div class="crw'+(ov?' st-over':'')+'"><div class="cring" style="color:'+MC.kcal+'">'+ringSvg(fr,MC.kcal,200,14)+ringLap(fr,MC.kcal,200,14)+(ov?'<span class="rbadge up big" aria-hidden="true">↑</span>':fr>=.98&&goal&&!S.hideNums?'<span class="rbadge ok big" aria-hidden="true">✓</span>':'')+'<div class="cin"><svg viewBox="0 0 24 24" class="cic" aria-hidden="true">'+RIC.kcal+'</svg><b>'+kc(Math.round(eaten))+'</b><span>of '+kc(Math.round(goal))+' kcal</span></div></div><p class="clab">'+(lab||'Calories eaten today')+'</p>'+(ov?'<span class="rpill up">+'+kc(Math.round(eaten-goal))+' kcal over your target</span>':'')+(sub?'<p class="small muted">'+sub+'</p>':'')+'</div>'}
 function macroRings(v,T,label){
   return '<div class="mrings">'+[['p','Protein',T.protein],['c','Carbs',T.carb],['f','Fat',T.fat]].map(function(x){
     return '<div class="mring"><div class="mr" style="color:'+MC[x[0]]+'">'+ringSvg(x[2]?v[x[0]]/x[2]:0,MC[x[0]],96,9)+'<div class="cin"><svg viewBox="0 0 24 24" class="mic" aria-hidden="true">'+RIC[x[0]]+'</svg><b>'+gfmt(v[x[0]])+'</b></div></div><p class="mlab">'+x[1]+'</p><p class="small muted">'+(label==='of'?'of '+gfmt(x[2]):label)+'</p></div>'}).join('')+'</div>'}
@@ -4351,7 +4363,10 @@ function targetRings(t,T){var hide=S.hideNums,f1=function(n){return S.hideNums?'
     var have=+x[2]||0,goal=+x[3]||0,left=goal-have,msg;
     if(x[6])msg=left>=0?f1(left)+' '+x[4]+' left':'<span class="tover">'+f1(-left)+' '+x[4]+' over</span>';
     else msg=left>0?'need '+f1(left)+' '+x[4]:'<span class="tdone">✓ done</span>';
-    return '<div class="mring"><div class="mr" style="color:'+x[5]+'">'+ringSvg(goal?have/goal:0,x[6]&&have>goal?'#ff453a':x[5],96,9)+'<div class="cin"><b>'+f1(have)+'</b><span class="tu">of '+f1(goal)+' '+x[4]+'</span></div></div><p class="mlab">'+x[1]+(x[6]?' <span class="small muted">(max)</span>':'')+'</p></div>'}).join('')+'</div>'}
+    var fr=goal?have/goal:0,col=x[6]&&have>goal?'#ff453a':x[5],st=!goal||hide?'':x[6]?(have>goal?'over':''):(fr>=1.1?'extra':fr>=1?'met':''),
+      bd=st==='met'?'<span class="rbadge ok" aria-hidden="true">✓</span>':st==='extra'?'<span class="rbadge up" aria-hidden="true">↑</span>':st==='over'?'<span class="rbadge bad" aria-hidden="true">!</span>':'',
+      pill=st==='met'?'<span class="rpill ok">✓ Goal met</span>':st==='extra'?'<span class="rpill up">+'+f1(have-goal)+' '+x[4]+' over</span>':st==='over'?'<span class="rpill bad">+'+f1(have-goal)+' '+x[4]+' over</span>':'';
+    return '<div class="mring'+(st?' st-'+st:'')+'"><div class="mr" style="color:'+x[5]+'">'+ringSvg(fr,col,96,9)+ringLap(fr,col,96,9)+bd+'<div class="cin"><b>'+f1(have)+'</b><span class="tu">of '+f1(goal)+' '+x[4]+'</span></div></div><p class="mlab">'+x[1]+(x[6]?' <span class="small muted">(max)</span>':'')+'</p>'+pill+'</div>'}).join('')+'</div>'}
 /* Today's totals as rings: used on Today's meals and in the pop-up */
 function todayRings(extra){var t=totals(),T=targets();return bigRing(t.kcal,T.kcal,extra)+targetRings(t,T)}
 /* ---------- Pop-up: the foods just logged (or one food from Today's meals) ---------- */
@@ -4386,9 +4401,12 @@ function fpRender(){
   swInit($('#fp-sw'));
 }
 var FOODSPEC='{"emoji": one emoji that best shows this food, "name": string, "dish": string or null (see below), "matchId": string or null, "confidence": number from 0 to 1, "count": number (how many pieces or servings they had, like 2 for \u00222 apples\u0022; 1 if it is not something you count), "unit": string (what one piece or serving is, like \u0022cookie\u0022 or \u0022medium apple\u0022), "serving": string, "grams": number (weight of the whole amount in grams), "kcal": number (for the whole amount, and the same for every number below), "protein": number, "carbs": number, "fat": number, "fiber": number, "sodium": number (mg), "sugar": number (g, total sugars)}';
-var DISHRULE=' If they describe one made dish with several parts (like a sandwich, burger, burrito, wrap, salad, bowl, pizza slice or smoothie), list its main parts as separate items and give every part the same "dish" name, like "Ham and cheese sandwich". Foods eaten on their own get "dish": null.';
+var DISHRULE=' If they describe one made dish with several parts (like a sandwich, burger, burrito, wrap, salad, bowl, pizza slice or smoothie), list its main parts as separate items and give every part the same "dish" name, like "Ham and cheese sandwich". Foods eaten on their own get "dish": null. Separate foods listed together (like 2 apples and a cookie) are never a dish, and never use what the person typed as a dish name. Give each food its own item with its own count.';
 /* Group AI items that belong to one dish (a sandwich made of ham, cheese and bread) into one logged food that keeps its parts */
-function aiDishGroups(L){var out=[],by={};L.forEach(function(x){var d=typeof x.dish==='string'?x.dish.trim().slice(0,60):'';if(d){var k=d.toLowerCase(),g=by[k];if(!g){g={dish:d,items:[]};by[k]=g;out.push(g)}g.items.push(x)}else out.push({items:[x]})});
+/* A dish is one prepared thing made of parts (a sandwich). Separate foods typed together, or a "dish" that is just what was typed, stay separate. */
+function aiDishOk(d,text){d=String(d||'').toLowerCase().trim();if(!d)return false;var t=String(text||'').toLowerCase().replace(/\s+/g,' ').trim();
+  if(/\d/.test(d)||/,|\+|&|\band\b.*\band\b/.test(d))return false;if(t&&(d===t||t.indexOf(d)===0&&d.length>t.length*.7))return false;return true}
+function aiDishGroups(L,text){L.forEach(function(x){if(x.dish&&!aiDishOk(x.dish,text))x.dish=null});var out=[],by={};L.forEach(function(x){var d=typeof x.dish==='string'?x.dish.trim().slice(0,60):'';if(d){var k=d.toLowerCase(),g=by[k];if(!g){g={dish:d,items:[]};by[k]=g;out.push(g)}g.items.push(x)}else out.push({items:[x]})});
   return out.reduce(function(a,g){if(g.dish&&g.items.length<2){a.push({items:g.items})}else a.push(g);return a},[])}
 function aiDishMeal(g,amt,blob){var parts=g.items.map(function(x){var m=aiFoodItem(x,null,blob),pm=aiMeal(m,'AI');return {name:pm.name,em:emojiOk(x.emoji)||emojiFor(pm.name),serv:(m.q!==1?(Math.round(m.q*100)/100)+' × ':'')+((find(pm.fid)||m.f).serv||'serving'),n:pm.n,al:pm.al||[]}});
   var t={};KEYS.forEach(function(k){t[k]=0});var al=[];parts.forEach(function(p){KEYS.forEach(function(k){t[k]+=+p.n[k]||0});p.al.forEach(function(a){if(al.indexOf(a)<0)al.push(a)})});
@@ -4402,11 +4420,18 @@ function partsLine(m){var P=(m.parts||((find(m.fid)||{}).parts)||[]).map(partNam
 /* Turn one AI item into a food: a database match with the right amount, or a saved estimate */
 function aiMeal(m,via){var meal=mkMeal(m.f,m.q,via);if(meal.n.sug==null&&m.sug!=null)meal.n.sug=m.sug;return meal}
 /* How many pieces the AI says they had (2 apples = 2), so the food shows 2 × one apple instead of 1 × both */
-function aiCount(r,amt){if(amt)return 1;var c=Math.round(num(r.count,50)*4)/4;return c>1&&c<=50?c:1}
+var AITXT='';var NUMW={a:1,an:1,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,dozen:12,couple:2,'a couple of':2,pair:2,half:.5};
+/* "2 apples and 3 cookies" → [{n:2,w:['apple']},{n:3,w:['cookie']}] so a count the AI misses can still be picked up */
+function textCounts(text){return String(text||'').toLowerCase().split(/\s+and\s+|,|\+|\s+with\s+|\s*&\s*|\s+plus\s+/).map(function(seg){var m=seg.trim().match(/^(\d+(?:\.\d+)?|a couple of|a|an|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|dozen|couple|pair|half)\s*(?:x\s*)?(?:of\s+)?(.*)$/);if(!m)return null;var n=/^\d/.test(m[1])?+m[1]:NUMW[m[1]];if(!(n>1))return null;
+  var w=m[2].replace(/\b(\d+(\.\d+)?\s*(g|grams?|oz|ounces?|ml|cups?|tbsp|tsp))\b/g,' ').split(/[^a-z]+/).filter(function(x){return x.length>2}).map(wStem);return w.length?{n:n,w:w}:null}).filter(Boolean)}
+function wStem(x){return x.replace(/ies$/,'y').replace(/(ches|shes|xes|sses)$/,function(m){return m.slice(0,-2)}).replace(/([^s])s$/,'$1')}
+function aiCount(r,amt,text){if(amt)return 1;var c=Math.round(num(r.count,50)*4)/4;if(c>1&&c<=50)return c;
+  var nm=String(r.name||'').toLowerCase().split(/[^a-z]+/).filter(function(x){return x.length>2}).map(wStem),best=1;
+  textCounts(text).forEach(function(tc){if(tc.w.some(function(w){return nm.indexOf(w)>-1}))best=tc.n});return best>1&&best<=50?best:1}
 function aiUnit(r,c,g){var u=String(r.unit||'').replace(/^(1|one|a|an)\s+/i,'').trim().slice(0,30),pg=g>=1?Math.round(g/c):0;
   if(!u&&!pg)return '1 serving';return u?('1 '+u+(pg?' ('+pg+' g)':'')):pg+' g'}
-function aiFoodItem(r,amt,blob){
-  var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000),c=aiCount(r,amt),sgT=r.sugar!=null&&isFinite(+r.sugar)?Math.round(num(r.sugar,500)*10)/10:null;
+function aiFoodItem(r,amt,blob,text){
+  var m=r.matchId&&find(String(r.matchId)),g=amt||num(r.grams,5000),c=aiCount(r,amt,text||AITXT),sgT=r.sugar!=null&&isFinite(+r.sugar)?Math.round(num(r.sugar,500)*10)/10:null;
   if(m&&num(r.confidence,1)>=.5){var sg=servG(m).g||0,per=g>=1?g/c:0;
     /* A counted food whose pieces match the list serving: 2 apples = 2 × 1 medium apple */
     if(c>1&&(!per||!sg||(per/sg>.6&&per/sg<1.6)))return {f:m,q:c,sug:sgT};
@@ -4448,7 +4473,7 @@ function dbCands(text){return dbWait().then(function(){
 function askFood(text,file,opt){
   if(ASK.busy)return;if(file){if(proPhotoLeft()<=0){proOpen('photo');return}proPhotoUse()}
   var amt=opt&&opt.noAmt?null:readAmt();
-  ASK={busy:true,msg:'',img:''};mkOpen(file?'photo':'food',file?'Your photo':String(text).slice(0,60),function(){return {done:!ASK.busy,err:ASK.ok?'':ASK.msg}});
+  ASK={busy:true,msg:'',img:''};mkOpen(file?'photo':'food',file?'Your photo':'Finding your foods',function(){return {done:!ASK.busy,err:ASK.ok?'':ASK.msg}});
   var prep=file?shrink(file).then(function(r){ASK.img=r.url;refresh();return r.blob}):Promise.resolve(null);
   prep.catch(function(){return null}).then(function(blob){
     if(file&&!blob){ASK={busy:false,msg:'That image could not be read. Try another photo.',img:''};refresh();return}
@@ -4463,7 +4488,7 @@ function askFood(text,file,opt){
           var L=r&&Array.isArray(r.foods)?r.foods:(r&&r.name?[r]:[]);
           L=L.filter(function(x){return x&&x.name}).slice(0,12);
           if(!L.length){ASK={busy:false,msg:'Could not tell what that is. Try again, or type the food name.',img:''};refresh();return}
-          var added=(amt?L.map(function(x){return {items:[x]}}):aiDishGroups(L)).map(function(g){var meal;if(g.dish){meal=aiDishMeal(g,amt,blob)}else{var x=g.items[0],m=aiFoodItem(x,amt,blob);meal=aiMeal(m,'AI');meal.em=emojiOk(x.emoji)||emojiFor(m.f.name)}S.meals.push(meal);return meal});
+          AITXT=blob?'':String(text||'');var added=(amt?L.map(function(x){return {items:[x]}}):aiDishGroups(L,text)).map(function(g){var meal;if(g.dish){meal=aiDishMeal(g,amt,blob)}else{var x=g.items[0],m=aiFoodItem(x,amt,blob);meal=aiMeal(m,'AI');meal.em=emojiOk(x.emoji)||emojiFor(m.f.name)}S.meals.push(meal);return meal});
           var hit=[];added.forEach(function(m){(m.al||[]).forEach(function(a){if(S.allergy[a]&&hit.indexOf(a)<0)hit.push(a)})});
           ASK={busy:false,ok:true,msg:'Added '+added.length+' food'+(added.length>1?'s':'')+' to today.'+(hit.length?' Heads up: this contains '+hit.join(', ')+'.':''),img:''};
           refresh();fpOpen(added,'logged');
@@ -4847,12 +4872,12 @@ function vfFind(){var o=$('#vf-out'),qi=$('#vf-q');if(!o)return;var q=qi?qi.valu
   if(q&&!VFS.topic){var L=vfWordSearch(q);if(!WEBB)h+='<p class="muted">Loading the Bible…</p>';else if(L.length)h+='<p class="eyebrow" style="margin:'+(t?'1rem':'.3rem')+' 0 0">Verses with “'+esc(q)+'”'+(L.length>=60?' (first 60)':'')+'</p><div class="vflist">'+L.map(function(x){return vfVerseCard(x[0],x[1],q.split(/\s+/)[0])}).join('')+'</div>';else if(!t)h+='<p class="muted">No verses found for “'+esc(q)+'”. Try a single word, like hope or strength.</p>'}
   o.innerHTML=h}
 function renderScripture(){renderPNotes();
-  if(['feed','saved','bible','find'].indexOf(S.sctab)<0)S.sctab='feed';
-  ['feed','saved','bible','find'].forEach(function(k){var b=$('#sct-'+k);if(b){b.setAttribute('aria-selected',S.sctab===k);b.tabIndex=S.sctab===k?0:-1}});
+  if(['feed','saved','bible','find','notes'].indexOf(S.sctab)<0)S.sctab='feed';
+  ['feed','saved','bible','find','notes'].forEach(function(k){var b=$('#sct-'+k);if(b){b.setAttribute('aria-selected',S.sctab===k);b.tabIndex=S.sctab===k?0:-1}});
   var f=$('#sc-feed'),bb=$('#sc-bible');if(!f||!bb)return;
   vfWire();
-  var bible=S.sctab==='bible',find=S.sctab==='find',fd=$('#sc-find');f.hidden=bible||find;bb.hidden=!bible;if(fd)fd.hidden=!find;
-  if(find){vfFind();return}
+  var bible=S.sctab==='bible',find=S.sctab==='find',notes=S.sctab==='notes',fd=$('#sc-find'),nt=$('#sc-notes');f.hidden=bible||find||notes;bb.hidden=!bible;if(fd)fd.hidden=!find;if(nt)nt.hidden=!notes;
+  if(find){vfFind();return}if(notes)return;
   if(bible)return;
   var pk=pickVerse()[0],key=[S.sctab,WEBB?1:0,S.votd.ref,S.favVerse||'',pk,todayStamp(),S.sctab==='saved'?((S.vsaved||[]).length?1:0):''].join('§');
   if(key!==VF.key){VF.key=key;vfBuild()}else vfSync();
@@ -4874,7 +4899,7 @@ function vfWire(){
     if(now-last<320&&Math.abs(t.clientX-lx)<30&&Math.abs(t.clientY-ly)<30){e.preventDefault();dbl(e,t.clientX,t.clientY);last=0}else{last=now;lx=t.clientX;ly=t.clientY}},{passive:false});
   f.addEventListener('dblclick',function(e){dbl(e,e.clientX,e.clientY)});
   f.addEventListener('keydown',function(e){if(e.key!=='l'&&e.key!=='L')return;var h=f.clientHeight||1,sl=f.children[Math.round(f.scrollTop/h)];if(sl&&sl.dataset.ref){var r=sl.getBoundingClientRect();dbl({target:sl},r.left+r.width/2,r.top+r.height/2)}});
-  $('.sctabs')&&$('.sctabs').addEventListener('keydown',function(e){var k=['feed','saved','bible'],i=k.indexOf(S.sctab);if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();var n=k[(i+(e.key==='ArrowRight'?1:2))%3];S.sctab=n;refresh();var b=$('#sct-'+n);if(b)b.focus()}});}
+  $('.sctabs')&&$('.sctabs').addEventListener('keydown',function(e){var k=['feed','saved','bible','find','notes'],i=Math.max(0,k.indexOf(S.sctab));if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();var n=k[(i+(e.key==='ArrowRight'?1:k.length-1))%k.length];S.sctab=n;refresh();var b=$('#sct-'+n);if(b)b.focus()}});}
 var HLC=[['y','#FFD84D','Yellow'],['g','#7BE08A','Green'],['b','#6EC1FF','Blue'],['p','#FF8FC0','Pink'],['o','#FFAE5C','Orange']];
 function rStreak(){var L=(S.rdays||[]).slice().sort(),n=0,d=new Date();for(;;){var st=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);if(L.indexOf(st)>-1){n++;d.setDate(d.getDate()-1)}else if(n===0&&st===todayStamp()){d.setDate(d.getDate()-1)}else break}return n}
 function bRef(b,c,list){list=list.slice().sort(function(x,y){return x-y});var parts=[],i=0;while(i<list.length){var j=i;while(j+1<list.length&&list[j+1]===list[j]+1)j++;parts.push(j>i?list[i]+'-'+list[j]:String(list[i]));i=j+1}return b+' '+c+':'+parts.join(',')}
@@ -5157,7 +5182,7 @@ function renderWorkouts(){
   var z=S.wz,A=ACCESS.filter(function(a){return a[0]===S.wf.access})[0][1],T=S.wf.cat==='all'?'All types':CATS[S.wf.cat],M=S.wf.mu==='all'?'Any muscle':muNames(S.wf.mu);
   for(var zi=0;zi<4;zi++)$('#ws-'+zi).hidden=z!==zi;
   renderRecentSaved(z);
-  var SR=wSearch();$('#w-sres').innerHTML=SR?'<p class="small muted">'+SR.length+' of '+allWorkouts().length+' workouts, easiest first</p>'+(SR.length?'<div class="wgrid">'+SR.map(function(w){return wcardHtml(w)}).join('')+'</div>':'<div class="stack wnone"><p class="muted">No workouts match "'+esc(S.wq.trim())+'".</p><div class="row"><button class="btn primary" data-act="wsearchai">✨ Make it with AI</button></div></div>'):'';
+  var SR=wSearch();$('#w-sres').innerHTML=SR?(SR.length?'<div class="wgrid">'+SR.map(function(w){return wcardHtml(w)}).join('')+'</div>':'<div class="stack wnone"><p class="muted">No workouts match "'+esc(S.wq.trim())+'".</p><div class="row"><button class="btn primary" data-act="wsearchai">✨ Make it with AI</button></div></div>'):'';
   $('#w-wiz').hidden=z===4;$('#w-sw').hidden=z===4;$('#w-cur').hidden=z!==4;
   var NA=needsAcc(),SQ=wseq(),tot=SQ.length,sn=Math.max(1,SQ.indexOf(z)+1);$('#w-step').textContent='Step '+sn+' of '+tot;
   $('#w-back').disabled=z===0;$('#w-next').hidden=z===3||z===0;
@@ -6034,7 +6059,7 @@ function stRender(){var c=$('#st-body');if(!c)return;var B=bodyStats(),hid=S.hid
     var act=B.tdee-B.bmr,adj=B.tgt-B.tdee,mx=Math.max(B.tdee,B.tgt)||1,pc=function(n){return Math.max(0,Math.round(n/mx*1000)/10)};
     put('st-burn','<h3>Daily calories</h3><div class="st-row"><span>Resting (BMR)</span><b>'+N(B.bmr)+'</b></div><div class="st-row"><span>Moving around ('+esc(B.act[1].toLowerCase())+')</span><b>+'+N(act)+'</b></div><div class="st-row tot"><span>Total burned a day</span><b>'+N(B.tdee)+' kcal</b></div>'
       +'<div class="st-bar" aria-hidden="true"><i class="a" style="width:'+pc(B.bmr)+'%"></i><i class="b" style="width:'+pc(act)+'%"></i></div>'
-      +'<div class="st-row"><span>Your daily target</span><b>'+N(B.tgt)+' kcal</b></div><p class="small muted" style="margin:0">'+(Math.abs(adj)<25?'Your target is about what you burn, so your weight should stay steady.':adj<0?'That is about '+N(-adj)+' kcal under what you burn, for slow, steady loss.':'That is about '+N(adj)+' kcal over what you burn, to help you build.')+'</p>');
+      +'<div class="st-row"><span>Recommended daily intake</span><b>'+N(B.tgt)+' kcal</b></div><p class="small muted" style="margin:0">'+(Math.abs(adj)<25?'Your target is about what you burn, so your weight should stay steady.':adj<0?'That is about '+N(-adj)+' kcal under what you burn, for slow, steady loss.':'That is about '+N(adj)+' kcal over what you burn, to help you build.')+'</p>');
     if(hid)put('st-bmi','<h3>BMI</h3><p class="muted">Hidden because you turned on hide numbers in Settings.</p>');
     else{var bd=bmiBand(B.bmi),pos=Math.max(0,Math.min(100,(B.bmi-15)/(40-15)*100));
       put('st-bmi','<h3>Body mass index (BMI)</h3><div class="st-bmi-n"><b class="st-big">'+B.bmi.toFixed(1)+'</b><span class="st-pill '+bd[1]+'">'+bd[0]+'</span></div><div class="st-scale" role="img" aria-label="BMI '+B.bmi.toFixed(1)+' on a scale from 15 to 40"><i style="left:'+pos+'%"></i></div><div class="st-scale-l small muted"><span>18.5</span><span>25</span><span>30</span></div><p class="small muted" style="margin:0">BMI only uses height and weight, so it can read high for people with a lot of muscle. Use it as a rough guide, not a verdict.</p>')}
@@ -6231,11 +6256,10 @@ var ACT={
     pm.m.filter(function(m){return mealGroup(m.t)===k}).forEach(function(m){var c=JSON.parse(JSON.stringify(m));c.id=uid++;c.k=Date.now().toString(36)+Math.random().toString(36).slice(2,7);c.t=tt;c.via='repeat';S.meals.push(c);n++});
     toast('Logged '+n+' food'+(n>1?'s':'')+' from '+prevDayLabel()+' '+MGN[k]+'.',{title:'Repeated',icon:'↻'})},
   pntog:function(){S.pnOpen=!S.pnOpen;S.pnFocus=S.pnOpen},
-  pnsave:function(){var e=$('#pn-in'),t=e?(e.value||'').trim():'';if(!t){toast('Write something first.');return}S.pnotes.push({id:'pn'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d:todayStamp(),ref:S.votd&&S.votd.ref||'',t:t.slice(0,1000)});if(S.pnotes.length>500)S.pnotes=S.pnotes.slice(-500);e.value='';S.pnOpen=false;toast('Saved privately.',{title:'Prayer note',icon:'🙏'})},
-  pntie:function(b){S.pnTie=b.dataset.k},
-  pnsave2:function(b){var e=$('#pn-in2'),t=e?(e.value||'').trim():'';if(!t){toast('Write something first.');if(e)e.focus();return}S.pnotes.push({id:'pn'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d:todayStamp(),ref:b.dataset.ref||'',t:t.slice(0,1000)});if(S.pnotes.length>500)S.pnotes=S.pnotes.slice(-500);e.value='';toast('Saved privately.',{title:'Prayer note',icon:'🙏'});try{sfxTap()}catch(x){}},
+  pnsave:function(){var e=$('#pn-in'),t=e?(e.value||'').trim():'';if(!t){toast('Write something first.');return}S.pnotes.push({id:'pn'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d:todayStamp(),ref:S.votd&&S.votd.ref||'',t:t.slice(0,1000)});if(S.pnotes.length>500)S.pnotes=S.pnotes.slice(-500);e.value='';e.blur();S.pnOpen=false;toast('Saved privately.',{title:'Prayer note',icon:'🙏'})},
+  pnsave2:function(b){var e=$('#pn-in2'),t=e?(e.value||'').trim():'';if(!t){toast('Write something first.');if(e)e.focus();return}S.pnotes.push({id:'pn'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d:todayStamp(),ref:'',t:t.slice(0,1000)});if(S.pnotes.length>500)S.pnotes=S.pnotes.slice(-500);e.value='';e.blur();toast('Saved privately.',{title:'Prayer note',icon:'🙏'});try{sfxTap()}catch(x){}},
   pndel:function(b){S.pnotes=S.pnotes.filter(function(n){return n.id!==b.dataset.id});toast('Note deleted.')},
-  pnlist:function(){S.sctab='bible';VF.key='';setTimeout(function(){var e=$('#sc-pnotes');if(e)e.scrollIntoView({block:'start'})},250)},
+  pnlist:function(){S.sctab='notes';VF.key='';setTimeout(function(){window.scrollTo(0,0)},120)},
   checkin:function(b){var k=b.dataset.k;S.checkin=S.checkin&&S.checkin.d===todayStamp()&&S.checkin.v===k?{d:'',v:''}:{d:todayStamp(),v:k}},
   fshare:function(){var f=S.fsel&&find(S.fsel);if(f)shSend('food',f.name,[shItem(f,S.fq||1,emojiFor(f.name))])},
   fpshare:function(b){var m=fpFind(b.dataset.id);if(m)shSend('food',m.name,[shMeal(m)])},
@@ -6345,7 +6369,7 @@ var ACT={
   scalereset:function(b){if(b.dataset.d){S.scaleD=1;$('#p-scaled').value=1}else{S.scale=1;$('#p-scale').value=1}},
   vftopic:function(b){VFS.topic=b.dataset.k;var q=$('#vf-q');if(q)q.value='';var o=$('#vf-out');if(o)o.dataset.k='';var c=$('#sc-find');if(c)c.scrollIntoView({block:'start'})},
   vfclear:function(){VFS.topic=null;var q=$('#vf-q');if(q)q.value='';var o=$('#vf-out');if(o)o.dataset.k=''},
-  sctab:function(b){var k=b.dataset.k;if(['feed','saved','bible','find'].indexOf(k)<0)return;S.sctab=k;VF.key='';window.scrollTo(0,0)},
+  sctab:function(b){var k=b.dataset.k;if(['feed','saved','bible','find','notes'].indexOf(k)<0)return;S.sctab=k;VF.key='';window.scrollTo(0,0)},
   vsave:function(b){var on=vfToggle(b.dataset.ref);toast(on?'Saved to your verses.':'Removed from saved verses.')},
   vshare:function(b){var ref=b.dataset.ref,t=webLookup(ref)||'',msg=qt(t)+' ('+ref+', BSB)';
     if(navigator.share){navigator.share({text:msg}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){toast('Verse copied.')},function(){toast('Could not copy the verse.')})}else toast('Sharing is not available on this device.')},

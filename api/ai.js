@@ -55,7 +55,7 @@ function foodPrompt(text, amt, catalog) {
     (amt ? ' It is one food. The portion is exactly ' + amt + ' g (' + Math.round(amt / 28.3495 * 10) / 10 + ' oz). Every number you return must be for exactly that amount.'
       : ' List every separate food or drink they mention as its own item, up to 12, with numbers for the amount they describe, or one typical serving if they give no amount (for example "two eggs" is one item covering 2 eggs).') +
     (catalog ? ' First check this food list for each item: if one entry is the same food, give its id as matchId and use its numbers. Only if nothing in the list fits, estimate it yourself and use null:\n' + catalog : ' Use null for matchId.') +
-    (amt ? '' : ' If they describe one made dish with several parts (like a sandwich, burger, burrito, wrap, salad, bowl, pizza slice or smoothie), list its main parts as separate items and give every part the same "dish" name, like "Ham and cheese sandwich". Foods eaten on their own get "dish": null.') +
+    (amt ? '' : ' If they describe one made dish with several parts (like a sandwich, burger, burrito, wrap, salad, bowl, pizza slice or smoothie), list its main parts as separate items and give every part the same "dish" name, like "Ham and cheese sandwich". Foods eaten on their own get "dish": null. Separate foods listed together (like 2 apples and a cookie) are never a dish, and never use what the person typed as a dish name. Give each food its own item with its own count.') +
     '\nIf the text is not about food or drink, return {"foods": []}. Return JSON only: {"foods": [ ' + FOODSPEC + ' ]}.';
 }
 function cleanFoods(d) {
