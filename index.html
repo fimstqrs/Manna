@@ -644,19 +644,6 @@ input[type=text],input[type=number],select,textarea{
 .thpv-sw{flex:none;width:2rem;height:2rem;border-radius:10px;border:1px solid var(--line)}.thpv-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}.thpv-t b{font-size:.92rem}.thpv-t span{font-size:.75rem;color:var(--muted)}
 #thpv .btn{flex:none;white-space:nowrap}
 @keyframes thpvIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}@media (prefers-reduced-motion:reduce){#thpv{animation:none}}
-#twel{position:fixed;inset:0;z-index:9400;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 45%,color-mix(in srgb,var(--accent) 30%,var(--bg)) 0%,var(--bg) 70%);color:var(--ink);overflow:hidden;animation:twelIn .5s ease both;cursor:pointer}
-#twel.bye{animation:twelOut .7s cubic-bezier(.65,0,.35,1) both}
-.twel-rays{position:absolute;left:50%;top:46%;width:180vmax;height:180vmax;transform:translate(-50%,-50%);background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--accent) 14%,transparent) 0deg 6deg,transparent 6deg 18deg);mask-image:radial-gradient(circle,#000 0%,transparent 55%);-webkit-mask-image:radial-gradient(circle,#000 0%,transparent 55%);animation:twelSpin 14s linear infinite,twelFade 1.2s ease both}
-.twel-c{position:relative;display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;padding:0 16px}
-.twel-k{font-size:.85rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);animation:twelUp .6s cubic-bezier(.22,1,.36,1) .1s both}
-.twel-m{display:flex;font-family:var(--f-display,'Cormorant Garamond',serif);font-style:italic;font-weight:600;font-size:clamp(4.2rem,22vw,8.5rem);line-height:.95;letter-spacing:-.01em}
-.twel-m i{display:inline-block;font-style:inherit;animation:twelLetter .9s cubic-bezier(.22,1.4,.36,1) var(--d) both}
-.twel-n{font-size:1.05rem;color:var(--muted);animation:twelUp .7s cubic-bezier(.22,1,.36,1) .85s both}
-@keyframes twelIn{from{opacity:0}to{opacity:1}}@keyframes twelOut{to{opacity:0;transform:scale(1.06);filter:blur(6px)}}
-@keyframes twelSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}@keyframes twelFade{from{opacity:0}to{opacity:1}}
-@keyframes twelUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@keyframes twelLetter{0%{opacity:0;transform:translateY(.5em) scale(.6) rotate(-8deg);filter:blur(8px)}100%{opacity:1;transform:none;filter:none}}
-@media (prefers-reduced-motion:reduce){#twel,#twel *,#twel.bye{animation:none!important}.twel-rays{display:none}}
 .qwn{min-width:2.4rem;padding-left:.55rem;padding-right:.55rem}
 .hsg{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:1rem;align-items:start}
 @media (max-width:560px){.hsg{grid-template-columns:1fr}.hsp{justify-self:center}}
@@ -901,7 +888,7 @@ html.touring,html.touring body{overflow:hidden;overscroll-behavior:none}
 #tour-card.tswap #tour-n,#tour-card.tswap h3,#tour-card.tswap p{animation:tourTxt .42s cubic-bezier(.22,1,.36,1) both}#tour-card.tswap h3{animation-delay:.04s}#tour-card.tswap p{animation-delay:.08s}
 #tour-card h3{margin:.15rem 0 .35rem;outline:0}#tour-card p{margin:0 0 .85rem}
 .tour-prog{height:3px;border-radius:3px;background:color-mix(in srgb,var(--ink) 10%,transparent);overflow:hidden;margin:0 0 .65rem}.tour-prog i{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0);transition:transform .5s cubic-bezier(.65,0,.35,1)}
-#tour-n{display:flex;flex-direction:column;gap:.35rem;margin:0}.tsec{display:flex;flex-wrap:wrap;gap:.25rem}.tsec i{font-style:normal;font-size:.66rem;letter-spacing:.06em;padding:.15rem .45rem;border-radius:99px;color:var(--muted);background:color-mix(in srgb,var(--ink) 6%,transparent);transition:background .3s,color .3s}.tsec i.done{color:var(--ink)}.tsec i.done::before{content:"✓ "}.tsec i.on{background:var(--accent);color:var(--accent-ink,#fff)}
+#tour-n{display:flex;flex-direction:column;gap:.35rem;margin:0}.tsec{display:flex;flex-wrap:wrap;gap:.2rem}.tsec i{flex:none;white-space:nowrap;font-style:normal;font-size:.62rem;letter-spacing:.02em;text-transform:none;padding:.15rem .4rem;border-radius:99px;color:var(--muted);background:color-mix(in srgb,var(--ink) 6%,transparent);transition:background .3s,color .3s}.tsec i.done{color:var(--ink)}.tsec i.done::before{content:"✓";margin-right:.15em}.tsec i.on{background:var(--accent);color:var(--accent-ink,#fff)}
 .tstep{font-size:.72rem}
 @keyframes tourDim{from{opacity:0}to{opacity:1}}@keyframes tourCardIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}@keyframes tourOut{to{opacity:0}}
 @keyframes tourTxt{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -3118,7 +3105,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. The schedule step now points at your week. Pressing Done ends with a big Welcome to Manna.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
+ {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
@@ -3198,18 +3185,19 @@ var TOUR=[
  {g:'home',v:'today',sel:'#t-check',t:'Daily checklist',p:'Small habits for the day. You can add your own.'},
  {g:'fit',v:'workouts',sel:'#w-sbox',t:'Find a workout',p:'Search by name, sport or exercise, or answer a few questions and Manna finds one for you.'},
  {g:'fit',v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and AI builds it for you.'},
- {g:'fit',v:'schedule',sel:'#sh-week',t:'Your schedule',p:'Pick a workout for each day of the week. Today\'s workout from here shows on Home.'},
+ {g:'fit',v:'schedule',sel:function(){return $('#sh-week .sempty')?'#sh-week .sempty':'#sh-week'},t:'Your schedule',p:'Plan a workout for each day of the week, and today\'s shows on Home. Free accounts get 1 schedule. Pro gets up to 3, for things like two-a-days or a separate summer plan.'},
  {g:'fit',v:'history',sel:'#v-history .vh',t:'History',p:'Every workout you finish, with the sets you logged and your week at a glance.'},
  {g:'fit',v:'stats',sel:'#st-body',t:'Stats',p:'Your BMR, how much you burn a day, your BMI and your training numbers.'},
- {g:'fuel',v:'eat',sel:'#e-quick',t:'Log what you eat',p:'Type something like "two eggs and toast", scan a barcode or snap a photo. Foods you log often show up in Quick add.'},
- {g:'fuel',v:'eat',sel:'#t-targets',t:'Your targets',p:'Your calorie and macro goals for the day, worked out from your goal and your body.'},
+ {g:'fuel',v:'eat',sel:'#e-quick',t:'Log what you eat',p:'Type what you ate, like "2 eggs and toast", say it out loud, snap a photo or scan a barcode. Manna checks its food list first, then AI estimates anything it cannot find.'},
+ {g:'fuel',v:'eat',sel:'#t-targets',t:'Your targets',p:'Six rings for today: calories, protein, carbs, fat, fiber and sugar. They fill as you log, and the goals come from your goal and your body.'},
  {g:'fuel',v:'drink',sel:'#v-drink .vh',t:'Drink',p:'Tap a glass each time you drink water and watch your bottle fill up.'},
  {g:'fuel',v:'meals',sel:'#m-sum',t:'Diary',p:'Everything you logged, day by day. Swipe back to see earlier days.'},
  {g:'fuel',v:'foods',sel:'#v-foods .vh',t:'Recipes',p:'Your saved meals and recipes, ready to add in one tap.'},
  {g:'friends',v:'friends',sel:'#v-friends .vh',t:'Friends',p:'Add friends by username, cheer each other on and share workouts.'},
- {g:'faith',v:'scripture',sel:'#sc-feed',t:'Word for today',p:'Swipe through verses one at a time. Tap the heart to save one, or switch to Bible to read whole chapters.'},
- {g:'set',v:'themes',sel:'#th-now',t:'Themes',p:'Pick a look for the whole app, or let it change with the verse of the day.'},
- {g:'set',v:'settings',sel:'#g-goals',t:'Goals',p:'Pick your goal, then set your pace and target weight. Your targets update straight away.'},
+ {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Four tabs: Daily verses, the ones you Saved, the Bible for whole chapters and reading plans, and Search to find any verse.'},
+ {g:'faith',v:'scripture',sel:'#sc-feed',t:'Daily verses',p:'Swipe up for the next verse. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
+ {g:'set',v:'themes',sel:function(){var l=document.querySelector('#th-grid .tp.tlk');if(l){var c=l.closest('.tcard');if(c&&!c.id)c.id='tour-lockth';return c?'#tour-lockth':'#th-grid'}return '#th-grid'},t:'Themes',p:'Pick a look for the whole app. Free themes are ready to use. Pro themes show a 🔒 and a Preview button so you can try them first.'},
+ {g:'set',v:'settings',sel:'#g-goals',t:'Goals',p:'Pick your goal first, like Cut or Bulk. Then set your pace and target weight, and your calorie and protein targets update to match.'},
  {g:'set',v:'settings',sel:'#hs-card',t:'Home Screen',p:'Choose which cards show on Home and in what order.'},
  {g:'set',v:'settings',sel:'#tour-set',t:'That is the tour',p:'You can replay it here any time.'}
 ];
@@ -3219,14 +3207,11 @@ function tourBlock(e){if(!TS.on)return;var card=$('#tour-card');if(e.type==='key
   if(card&&card.contains(e.target)&&e.type!=='wheel'&&e.type!=='touchmove')return;if(e.target.closest&&e.target.closest('#tour-card .tour-btns'))return;e.preventDefault();e.stopPropagation()}
 ['wheel','touchmove','keydown'].forEach(function(t){window.addEventListener(t,tourBlock,{capture:true,passive:false})});
 function tourStart(){TS.L=TOUR.filter(function(s){try{return !focusHidden(s.v)}catch(e){return true}});TS.i=0;TS.on=true;TS.v='';var t=$('#tour');t.hidden=false;t.classList.remove('in');void t.offsetWidth;t.classList.add('in');document.documentElement.classList.add('touring');tourShow()}
-function tourFinale(){var f=document.createElement('div');f.id='twel';f.setAttribute('role','status');var nm=S.name&&S.name!=='Friend'?S.name:'';
-  f.innerHTML='<div class="twel-rays" aria-hidden="true"></div><div class="twel-c"><span class="twel-k">Welcome to</span><b class="twel-m">'+'Manna'.split('').map(function(ch,i){return '<i style="--d:'+(i*70+250)+'ms">'+ch+'</i>'}).join('')+'</b>'+(nm?'<span class="twel-n">'+esc(nm)+', you are all set.</span>':'<span class="twel-n">You are all set.</span>')+'</div>';
-  document.body.appendChild(f);try{sfxPop('today','chime')}catch(e){}var go=function(){if(f.dataset.gone)return;f.dataset.gone=1;f.classList.add('bye');setTimeout(function(){f.remove()},700)};f.addEventListener('click',go);setTimeout(go,matchMedia('(prefers-reduced-motion:reduce)').matches?1600:2700)}
-function tourEnd(done){if(done===true)setTimeout(tourFinale,120);TS.on=false;clearTimeout(TS.t);clearTimeout(TS.t2);var t=$('#tour');t.classList.add('out');document.documentElement.classList.remove('touring');setTimeout(function(){t.hidden=true;t.classList.remove('out')},260);var first=!S.toured;S.toured=true;location.hash='#today';window.scrollTo(0,0);refresh();if(done!==true)toast(first?'You can replay the tutorial in Settings.':'Tutorial closed.')}
+function tourEnd(done){TS.on=false;clearTimeout(TS.t);clearTimeout(TS.t2);var t=$('#tour');t.classList.add('out');document.documentElement.classList.remove('touring');setTimeout(function(){t.hidden=true;t.classList.remove('out')},260);var first=!S.toured;S.toured=true;location.hash='#today';window.scrollTo(0,0);refresh();toast(done===true?(first?'All set. You can replay the tutorial in Settings.':'Tutorial done.'):(first?'You can replay the tutorial in Settings.':'Tutorial closed.'))}
 function tourShow(){
   var L=TS.L,st=L[TS.i],c=$('#tour-card'),gi=TOURSEC.map(function(x){return x[0]}).indexOf(st.g),inSec=L.filter(function(x){return x.g===st.g}),k=inSec.indexOf(st)+1;
   c.classList.remove('tswap');void c.offsetWidth;c.classList.add('tswap');
-  $('#tour-n').innerHTML='<span class="tsec">'+TOURSEC.filter(function(x){return L.some(function(y){return y.g===x[0]})}).map(function(x){var j=TOURSEC.indexOf(x);return '<i class="'+(j<gi?'done':j===gi?'on':'')+'">'+x[1]+'</i>'}).join('')+'</span><span class="tstep">'+esc(TOURSEC[gi][1])+' · '+k+' of '+inSec.length+'</span>';
+  $('#tour-n').innerHTML='<span class="tsec">'+TOURSEC.filter(function(x){return L.some(function(y){return y.g===x[0]})}).map(function(x){var j=TOURSEC.indexOf(x);return '<i class="'+(j<gi?'done':j===gi?'on':'')+'">'+x[1]+(j===gi&&inSec.length>1?' '+k+'/'+inSec.length:'')+'</i>'}).join('')+'</span>';
   $('#tour-t').textContent=st.t;$('#tour-p').textContent=st.p;
   $('#tour-back').hidden=!TS.i;$('#tour-next').textContent=TS.i===L.length-1?'Done':'Next';
   var bar=$('#tour-bar');if(bar)bar.style.transform='scaleX('+((TS.i+1)/L.length)+')';
@@ -3238,7 +3223,7 @@ function tourShow(){
 /* Wait until the page stops moving (smooth scroll, page swipes), then call back */
 function tourSettle(el,cb){var last=null,same=0,t0=Date.now();(function f(){if(!TS.on)return;var r=el.getBoundingClientRect(),k=Math.round(r.top)+','+Math.round(r.left);if(k===last)same++;else{same=0;last=k}if(same>=3||Date.now()-t0>1200)cb();else requestAnimationFrame(f)})()}
 function tourPlace(nav){
-  if(!TS.on)return;var st=TS.L[TS.i],el=st.sel&&document.querySelector(st.sel),hl=$('#tour-hl'),c=$('#tour-card');
+  if(!TS.on)return;var st=TS.L[TS.i],sl=typeof st.sel==='function'?st.sel():st.sel,el=sl&&document.querySelector(sl),hl=$('#tour-hl'),c=$('#tour-card');
   /* An empty or hidden target falls back to its card, then to the page heading */
   if(el&&el.getBoundingClientRect().height<24){var cd=el.closest('.card');el=cd&&cd.getBoundingClientRect().height>=24?cd:document.querySelector('#v-'+st.v+' .vh')}
   if(!(el&&el.getClientRects().length)){hl.classList.add('away');tourCard(null);return}
