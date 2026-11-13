@@ -2951,7 +2951,7 @@ function defaults0(){
     thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Friend',uname:'',qwOff:0,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',uname:'',qwOff:0,pnTie:'votd',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -3119,7 +3119,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
+ {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','You can now write prayer notes in Faith too (Bible tab, under the reader), and link a note to today\'s verse, the chapter you are reading, or no verse.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
@@ -3783,13 +3783,23 @@ function renderPlan(){
     +(S.pnOpen?'<label class="vh-only" for="pn-in">Prayer note</label><textarea id="pn-in" maxlength="1000" placeholder="Write a private prayer or note"></textarea><div class="row"><button class="btn sm primary" data-act="pnsave">Save note</button><button class="btn sm" data-act="pntog">Cancel</button></div><span class="small muted">Only you can see your notes. If you are signed in, they sync to your own devices.</span>'
       :'<div class="row"><button class="btn sm" data-act="pntog">Write a prayer note</button>'+(S.pnotes.length?'<a class="small" href="#scripture" data-act="pnlist">Your notes ('+S.pnotes.length+')</a>':'')+'</div>')
     +'</div></div>';
+  if(typingIn(el))return;
   var keep=$('#pn-in'),kv=keep?keep.value:'',kf=keep&&document.activeElement===keep;
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;var k2=$('#pn-in');if(k2&&kv){k2.value=kv}if(k2&&(kf||S.pnFocus)){k2.focus();S.pnFocus=false}}
 }
+/* While you are typing in a box, the screen around it does not redraw (that would drop the keyboard). It catches up when you tap out. */
+function typingIn(el){var a=document.activeElement;return !!(a&&el&&el.contains(a)&&(a.tagName==='TEXTAREA'||(a.tagName==='INPUT'&&/^(text|search|email|number|tel|url)$/.test(a.type))))}
+document.addEventListener('focusout',function(e){var t=e.target;if(t&&(t.tagName==='TEXTAREA'||t.tagName==='INPUT'))setTimeout(function(){var a=document.activeElement;if(!a||(a.tagName!=='TEXTAREA'&&a.tagName!=='INPUT'))refresh()},80)});
 function renderPNotes(){
   var el=$('#sc-pnotes');if(!el)return;var L=S.pnotes.slice().reverse(),h;
-  h='<div class="row spread"><h3>Prayer notes</h3><span class="badge">Private</span></div>'+(L.length?'<ul class="list">'+L.slice(0,50).map(function(n){return '<li><div><div class="small muted">'+esc(new Date(n.d+'T12:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))+(n.ref?' · '+esc(n.ref):'')+'</div><div style="white-space:pre-wrap">'+esc(n.t)+'</div></div><button class="btn sm" data-act="pndel" data-id="'+esc(n.id)+'" aria-label="Delete note">Delete</button></li>'}).join('')+'</ul>':'<p class="muted small">No notes yet. Write one from Today\'s plan on the Today page.</p>')+'<p class="small muted">Only you can see these. They are never shared.</p>';
-  if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}
+  var vref=S.votd&&S.votd.ref||'',cref=S.rb&&S.rc?S.rb+' '+S.rc:'',tie=S.pnTie||'votd',tref=tie==='none'?'':tie==='ch'&&cref?cref:vref;
+  h='<div class="row spread"><h3>Prayer notes</h3><span class="badge">Private</span></div>'
+    +'<div class="stack pncomp" style="gap:.5rem"><label class="vh-only" for="pn-in2">Write a prayer note</label><textarea id="pn-in2" maxlength="1000" rows="3" placeholder="Write a private prayer, a thank-you, or what is on your heart"></textarea>'
+    +'<div class="chips" role="radiogroup" aria-label="Link this note to">'+[['votd','Today\'s verse'+(vref?' · '+vref:'')],cref?['ch',cref]:null,['none','No verse']].filter(Boolean).map(function(o){var on=tie===o[0]||(o[0]==='votd'&&tie==='ch'&&!cref);return '<button type="button" class="chip" role="radio" data-act="pntie" data-k="'+o[0]+'" aria-checked="'+on+'" aria-pressed="'+on+'">'+esc(o[1])+'</button>'}).join('')+'</div>'
+    +'<div class="row"><button class="btn primary sm" data-act="pnsave2" data-ref="'+esc(tref)+'">Save note</button></div></div>'
+    +(L.length?'<ul class="list">'+L.slice(0,50).map(function(n){return '<li><div><div class="small muted">'+esc(new Date(n.d+'T12:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))+(n.ref?' · '+esc(n.ref):'')+'</div><div style="white-space:pre-wrap">'+esc(n.t)+'</div></div><button class="btn sm" data-act="pndel" data-id="'+esc(n.id)+'" aria-label="Delete note">Delete</button></li>'}).join('')+'</ul>':'<p class="muted small">No notes yet. Your notes will show here, newest first.</p>')+'<p class="small muted">Only you can see these. They are never shared.</p>';
+  if(typingIn(el))return;
+  if(el.dataset.h!==h){var k=$('#pn-in2'),kv=k?k.value:'',kf=k&&document.activeElement===k;el.dataset.h=h;el.innerHTML=h;var k2=$('#pn-in2');if(k2&&kv)k2.value=kv;if(k2&&kf)k2.focus()}
 }
 /* ----- No pinch or double-tap zoom (Safari ignores user-scalable=no, so block its gestures) ----- */
 ['gesturestart','gesturechange','gestureend'].forEach(function(t){document.addEventListener(t,function(e){e.preventDefault()},{passive:false})});
@@ -4894,6 +4904,7 @@ function renderReader(){
       +(S.bnote?'<label class="vh-only" for="bn-in">Note</label><textarea id="bn-in" maxlength="1000" placeholder="Your note on '+esc(ref)+'"></textarea><div class="row"><button class="btn sm primary" data-act="bnsave">Save note</button><button class="btn sm" data-act="bnote">Cancel</button></div>'
         :'<div class="row"><button class="btn sm" data-act="bcopy">Copy</button><button class="btn sm" data-act="bshare">Share</button><button class="btn sm" data-act="bnote">Note</button></div>');
   }
+  if(typingIn(bar))return;
   if(bar.dataset.h!==bh){var kv=$('#bn-in')?$('#bn-in').value:'';bar.dataset.h=bh;bar.innerHTML=bh;bar.hidden=!bh;var t2=$('#bn-in');if(t2){t2.value=kv;if(S.bnoteF){t2.focus();S.bnoteF=false}}}
   /* picker */
   var bp=$('#bp');if(!bp.hidden)bpRender();
@@ -5998,7 +6009,7 @@ function renderOrder(){
   if(S.tord.indexOf('plan')<0)S.tord.unshift('plan');
   if(S.tord.indexOf('streak')<0){var ei=S.tord.indexOf('energy');S.tord.splice(ei<0?0:ei+1,0,'streak')}
   var ord=S.tord.filter(function(k){return TW.some(function(t){return t[0]===k})});TW.forEach(function(t){if(ord.indexOf(t[0])<0)ord.push(t[0])});S.tord=ord;
-  var v=$('#v-today'),cur=$$('#v-today > [data-w]').map(function(e){return e.dataset.w}).join();
+  var v=$('#v-today'),cur=$$('#v-today > [data-w]').map(function(e){return e.dataset.w}).filter(function(k){return ord.indexOf(k)>-1}).join();
   if(cur!==ord.join())ord.forEach(function(k){var e=v.querySelector(':scope > [data-w="'+k+'"]');if(e)v.appendChild(e)});
   v.classList.toggle('reordering',!!S.tedit);
   var ft=$('#appfoot');if(ft){ft.textContent='Manna · Version '+APPV+(TESTV?' (test)':'')+' · © 2026 Morningfall Corp.';var mv=$('#v-settings');if(mv&&mv.nextElementSibling!==ft)mv.parentNode.insertBefore(ft,mv.nextElementSibling)}
@@ -6221,8 +6232,10 @@ var ACT={
     toast('Logged '+n+' food'+(n>1?'s':'')+' from '+prevDayLabel()+' '+MGN[k]+'.',{title:'Repeated',icon:'↻'})},
   pntog:function(){S.pnOpen=!S.pnOpen;S.pnFocus=S.pnOpen},
   pnsave:function(){var e=$('#pn-in'),t=e?(e.value||'').trim():'';if(!t){toast('Write something first.');return}S.pnotes.push({id:'pn'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d:todayStamp(),ref:S.votd&&S.votd.ref||'',t:t.slice(0,1000)});if(S.pnotes.length>500)S.pnotes=S.pnotes.slice(-500);e.value='';S.pnOpen=false;toast('Saved privately.',{title:'Prayer note',icon:'🙏'})},
+  pntie:function(b){S.pnTie=b.dataset.k},
+  pnsave2:function(b){var e=$('#pn-in2'),t=e?(e.value||'').trim():'';if(!t){toast('Write something first.');if(e)e.focus();return}S.pnotes.push({id:'pn'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d:todayStamp(),ref:b.dataset.ref||'',t:t.slice(0,1000)});if(S.pnotes.length>500)S.pnotes=S.pnotes.slice(-500);e.value='';toast('Saved privately.',{title:'Prayer note',icon:'🙏'});try{sfxTap()}catch(x){}},
   pndel:function(b){S.pnotes=S.pnotes.filter(function(n){return n.id!==b.dataset.id});toast('Note deleted.')},
-  pnlist:function(){setTimeout(function(){var e=$('#sc-pnotes');if(e)e.scrollIntoView({block:'start'})},80)},
+  pnlist:function(){S.sctab='bible';VF.key='';setTimeout(function(){var e=$('#sc-pnotes');if(e)e.scrollIntoView({block:'start'})},250)},
   checkin:function(b){var k=b.dataset.k;S.checkin=S.checkin&&S.checkin.d===todayStamp()&&S.checkin.v===k?{d:'',v:''}:{d:todayStamp(),v:k}},
   fshare:function(){var f=S.fsel&&find(S.fsel);if(f)shSend('food',f.name,[shItem(f,S.fq||1,emojiFor(f.name))])},
   fpshare:function(b){var m=fpFind(b.dataset.id);if(m)shSend('food',m.name,[shMeal(m)])},
@@ -7505,7 +7518,7 @@ function vpInit(root){
   var at=function(dir){var sc=v.secs[v.i];if(!sc)return false;return dir>0?sc.scrollTop+sc.clientHeight>=sc.scrollHeight-2:sc.scrollTop<=1};
   /* Touch: inside a section scroll normally; at its edge the swipe moves to the next or previous section */
   var T=null;
-  root.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;var t=e.touches[0];T={x:t.clientX,y:t.clientY,t:e.timeStamp,mode:null,dy:0,v:0,lt:e.timeStamp,ly:t.clientY,top:at(-1),bot:at(1)}},{passive:true});
+  root.addEventListener('touchstart',function(e){if(e.touches.length!==1)return;if(e.target.closest&&e.target.closest('textarea,input,select,[contenteditable]')){T=null;return}var t=e.touches[0];T={x:t.clientX,y:t.clientY,t:e.timeStamp,mode:null,dy:0,v:0,lt:e.timeStamp,ly:t.clientY,top:at(-1),bot:at(1)}},{passive:true});
   root.addEventListener('touchmove',function(e){if(!T)return;var t=e.touches[0],dx=t.clientX-T.x,dy=t.clientY-T.y;
     if(!T.mode){if(Math.abs(dx)<8&&Math.abs(dy)<8)return;
       if(Math.abs(dx)>Math.abs(dy))T.mode='x';
