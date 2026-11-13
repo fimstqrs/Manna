@@ -112,7 +112,7 @@ function recipePrompt(page) {
 }
 
 // Pro accounts: no daily AI limit. Add more emails in Vercel as PRO_EMAILS (comma separated).
-const PRO = new Set(['themorningfallcorp@gmail.com', 'brownmicah@gmail.com', ...String(process.env.PRO_EMAILS || '').split(',')]
+const PRO = new Set(['themorningfallcorp@gmail.com', 'brownmicah2908@gmail.com', ...String(process.env.PRO_EMAILS || '').split(',')]
   .map(e => e.trim().toLowerCase()).filter(Boolean));
 // Pro by Manna username too. Add more in Vercel as PRO_USERNAMES (comma separated).
 const PRO_USERS = new Set(['brownmicah', ...String(process.env.PRO_USERNAMES || '').split(',')]
