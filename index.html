@@ -583,7 +583,7 @@ input[type=text],input[type=number],select,textarea{
 .onb-dots i.on{width:26px;background:var(--accent)}
 .onb-stage{flex:1;max-width:560px;width:100%;margin:0 auto;display:flex;flex-direction:column;justify-content:center;padding:18px 0}
 .onb-panel h2{font:italic 600 clamp(1.9rem,8vw,2.6rem)/1.1 var(--f-display);margin:0 0 .6rem;outline:0}
-.onb-panel>p{color:var(--muted);margin:0 0 1.1rem}
+.onb-panel>p,.onb-lead>p{color:var(--muted);margin:0 0 1.1rem}
 .onb-ic{width:76px;height:76px;color:var(--accent);margin-bottom:1rem}.onb-ic svg{width:100%;height:100%}
 .onb-opts{display:grid;gap:10px}
 .onb-opt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;width:100%;padding:.8rem 1rem;border-radius:18px;border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink);font:inherit;cursor:pointer;transition:transform .2s ease,background .2s ease,border-color .2s ease}
@@ -603,6 +603,38 @@ input[type=text],input[type=number],select,textarea{
 .onb-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .onb-nav{display:flex;justify-content:space-between;gap:12px;max-width:560px;width:100%;margin:0 auto}
 .onb-nav .btn{min-width:7rem}
+/* Setup, two layouts. Phone / portrait keeps the single column; computers and landscape get a side rail and a two-column step. */
+.onb-rail{display:none}.onb-lead,.onb-main{display:contents}
+@media (orientation:landscape) and (min-width:700px){
+  #onb{display:grid;grid-template-columns:minmax(210px,28%) minmax(0,1fr);grid-template-rows:auto 1fr auto auto;grid-template-areas:"rail top" "rail stage" "rail msg" "rail nav";column-gap:clamp(20px,4vw,56px);padding:max(16px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  .onb-rail{grid-area:rail;display:flex;flex-direction:column;gap:.9rem;position:sticky;top:0;align-self:start;height:calc(100dvh - 32px);padding:clamp(18px,3vh,32px) clamp(16px,2vw,28px);border-radius:24px;background:linear-gradient(170deg,color-mix(in srgb,var(--accent) 16%,var(--surface)),color-mix(in srgb,var(--accent) 5%,var(--surface)));border:1px solid color-mix(in srgb,var(--accent) 20%,var(--line));overflow:auto}
+  .orl-brand{display:flex;align-items:center;gap:.55rem;color:var(--accent);font:italic 600 1.6rem/1 var(--f-display)}.orl-brand svg{width:30px;height:30px}
+  .orl-k{margin:0;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .orl-l{list-style:none;margin:0;padding:0;display:grid;gap:.25rem}
+  .orl-l li{display:flex;align-items:center;gap:.65rem;padding:.5rem .6rem;border-radius:14px;color:var(--muted);font-size:.92rem;transition:background .3s ease,color .3s ease}
+  .orl-l i{flex:none;display:grid;place-items:center;width:1.6rem;height:1.6rem;border-radius:50%;font:700 .74rem var(--f-body);font-style:normal;border:1.5px solid color-mix(in srgb,var(--ink) 22%,transparent)}
+  .orl-l li.done{color:var(--ink)}.orl-l li.done i{background:color-mix(in srgb,var(--accent) 22%,transparent);border-color:transparent;color:var(--accent)}
+  .orl-l li.on{background:var(--card,var(--surface));color:var(--ink);font-weight:600;box-shadow:0 4px 18px rgba(0,0,0,.07)}.orl-l li.on i{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff)}
+  .orl-f{margin:auto 0 0;font-size:.8rem;color:var(--muted)}
+  .onb-top{grid-area:top;max-width:none}.onb-dots{visibility:hidden}
+  .onb-stage{grid-area:stage;max-width:1040px;margin:0;padding:clamp(12px,3vh,32px) 0}
+  #onb #onb-msg{grid-area:msg;max-width:1040px;margin:0 0 .6rem}
+  #onb .onb-nav{grid-area:nav;max-width:1040px;margin:0}
+  .onb-panel{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(20px,4vw,56px);align-items:start}
+  .onb-lead{display:block;position:sticky;top:12px}.onb-main{display:block;min-width:0}
+  .onb-main>*+*{margin-top:.9rem}
+  .onb-panel h2{font-size:clamp(2rem,3.6vw,3rem)}
+  .onb-ring{width:min(30vw,240px)}
+}
+@media (orientation:landscape) and (min-width:1100px){.onb-main .onb-opts{grid-template-columns:1fr 1fr}}
+@media (orientation:landscape) and (min-width:700px) and (max-height:560px){
+  #onb{grid-template-columns:3.4rem minmax(0,1fr);column-gap:18px;padding-top:max(10px,env(safe-area-inset-top));padding-bottom:max(10px,env(safe-area-inset-bottom))}
+  .onb-rail{height:calc(100dvh - 20px);padding:12px 0;gap:.7rem;border-radius:18px;align-items:center}
+  .orl-brand span,.orl-k,.orl-f,.orl-l li span{display:none}.orl-brand{justify-content:center}.orl-brand svg{width:22px;height:22px}
+  .orl-l{gap:.35rem;justify-items:center}.orl-l li{padding:0;background:none!important;box-shadow:none!important}.orl-l i{width:1.6rem;height:1.6rem;font-size:.7rem}
+  .onb-ic{display:none}.onb-panel h2{font-size:1.7rem}.onb-stage{padding:8px 0}
+  .onb-lead>p{font-size:.88rem}
+}
 #onb-msg{max-width:560px;width:100%;margin:0 auto .6rem;min-height:1.2em;color:var(--warn)}
 @media (prefers-reduced-motion:no-preference){
   .onb-panel{animation:onb-in .55s cubic-bezier(.2,.8,.2,1) both}
@@ -610,6 +642,9 @@ input[type=text],input[type=number],select,textarea{
   .onb-panel.go>*{animation:onb-up .6s cubic-bezier(.2,.8,.2,1) both}
   .onb-panel.go>*:nth-child(2){animation-delay:.08s}.onb-panel.go>*:nth-child(3){animation-delay:.16s}.onb-panel.go>*:nth-child(4){animation-delay:.24s}.onb-panel.go>*:nth-child(5){animation-delay:.32s}
   .onb-opt:active{transform:scale(.98)}
+  .onb-panel.go>.onb-lead>*,.onb-panel.go>.onb-main>*{animation:onb-up .6s cubic-bezier(.2,.8,.2,1) both}
+  .onb-panel.go>.onb-lead>*:nth-child(2){animation-delay:.08s}.onb-panel.go>.onb-lead>*:nth-child(3){animation-delay:.16s}
+  .onb-panel.go>.onb-main>*:nth-child(1){animation-delay:.2s}.onb-panel.go>.onb-main>*:nth-child(2){animation-delay:.28s}.onb-panel.go>.onb-main>*:nth-child(n+3){animation-delay:.36s}
   @keyframes onb-in{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
   @keyframes onb-back{from{opacity:0;transform:translateX(-36px)}to{opacity:1;transform:none}}
   @keyframes onb-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -1264,6 +1299,7 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
 .oauthrow{gap:.5rem}
 .acwho{display:flex;align-items:center;gap:.75rem;padding:.7rem .8rem;border-radius:14px;border:1px solid var(--line);background:color-mix(in srgb,var(--ink) 5%,transparent)}
 .acav{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:600 1.1rem var(--f-body);background:var(--accent);color:var(--accent-ink)}
+.acav.acimg{object-fit:cover;padding:0;background:var(--surface)}.onb-awho{display:flex!important;flex-direction:row!important;align-items:center;gap:.7rem}.onb-awho>div{display:flex;flex-direction:column;min-width:0}
 .acav[data-p=google]{background:#fff;color:#1f1f1f;border:1px solid #747775}.acav[data-p=apple]{background:#000;color:#fff}
 .acwt{display:flex;flex-direction:column;min-width:0;flex:1}.acwt b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pbadge{display:inline-flex;align-items:center;font:600 .74rem var(--f-body);padding:.18rem .55rem;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
@@ -1759,7 +1795,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
 
   <main>
     <div id="onb" role="dialog" aria-modal="true" aria-labelledby="onb-h" hidden>
-      <div class="onb-top"><div class="onb-dots" id="onb-dots" aria-hidden="true"></div><button class="btn sm" data-onb="skip" id="onb-skip">Skip for now</button></div>
+      <aside class="onb-rail" id="onb-rail" aria-hidden="true"></aside><div class="onb-top"><div class="onb-dots" id="onb-dots" aria-hidden="true"></div><button class="btn sm" data-onb="skip" id="onb-skip">Skip for now</button></div>
       <div class="onb-stage" id="onb-body"></div>
       <p class="small" id="onb-msg" aria-live="polite" role="status"></p>
       <div class="onb-nav"><button class="btn" data-onb="back" id="onb-back">Back</button><button class="btn primary" data-onb="next" id="onb-next">Next</button></div>
@@ -3002,7 +3038,7 @@ function defaults0(){
     thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Friend',uname:'',shaPerDay:'auto',qwOff:0,pnTie:'votd',schAdj:null,schRes:null,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',uname:'',myPic:'',shaPerDay:'auto',qwOff:0,pnTie:'votd',schAdj:null,schRes:null,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -3170,6 +3206,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:171,d:'Nov 13, 2026',t:'Setup that fits your screen',s:['Setup now has two layouts. On a phone held upright it stays one simple column. On a computer or a sideways screen, a side panel lists every step and ticks off the ones you have done, and each step sits in two columns: the question on the left, your answers on the right. On short sideways phones the side panel shrinks to just the step numbers.','Your account picture now matches everywhere. Settings, the signed-in box in setup and your Friends card all show your profile photo, or the same initial if you have not added one.']},
  {v:170,d:'Nov 13, 2026',t:'Small touches',s:['When you have not logged anything lately, Quick add now just says Nothing recently logged.','The tutorial now waits for you to tap each page button at the top too, like Drink or Diary, not just the bottom bar.','Every button now makes a soft tap sound, even with the music off.','Goals: every goal now has its own icon, and you can pick up to 3 before tapping Continue. Goals that pull in opposite directions, like Cut and Bulk, swap each other out.','Make a schedule with AI: pick how many workouts a day (Auto reads what you write, or 1, 2 or 3 with Pro). The suggestion now has Edit, to change workout names, exercises and sets, and Cancel.','Faith Notes no longer shows the "1 note, newest first" line above your notes.','Log food in your Diary now takes you straight to Log it on Eat, ready to type. The Save as a meal button is gone from the Diary.','The numbers inside the rings are smaller and easier to read at a glance.','Rings that go over a target show a small, softer badge again: ↑ when you pass it, ↑↑ when you are well past it, and ! or !! for limits like sodium and sugar.','Foods logged with AI, from a photo or by barcode now get tidy names, like Grilled chicken breast instead of GRILLED CHICKEN BREAST (ESTIMATE), and barcode foods show the brand after a dot.','Schedules: the Add a schedule card no longer shows how many more you can add.','Friends: add a profile photo. Tap your picture on the Friends page, pick a photo, and your friends see it next to your name.']},
  {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Faith has a new Notes tab. Write a private prayer note there and see every note you have ever written, newest first. Notes from Home show up there too.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Rings now show clearly when you hit or pass a target: a ✓ badge and "Goal met" when you reach it, and past 100% the ring keeps going, each lap darker than the last, plus a "+12 g over" pill. Sodium and sugar turn red with a ! when you go over.','AI logging no longer shows what you typed as a heading or lumps separate foods together. Each food is logged on its own, and "2 apples" logs as 2 × 1 apple.','Cardio and sport has a new 🏅 icon.','Workout search no longer shows the count line above the results.','More ways to log has a new Browse the catalog section with every food, filters by type and a search box. It is also cleaner: each option has an icon, a one-line description and a smooth open, the calorie option has quick amounts, and results and problems now pop in as notifications instead of text stuck in the card.','In Stats, your daily target is now called your recommended daily intake.','Build a home-cooked recipe is now AI: describe what you made and how many it serves, check the ingredients and per-serving numbers, then save it to Your meals. Building by hand is still there underneath.','On computers, Settings cards now sit in two tidy columns at their own height, with no stretched empty boxes, and the version log scrolls inside its own card.','Pro: when you change your goal, Manna offers to adjust your AI-made schedule to fit it, adding or dropping workouts and making days harder or easier. You see every change day by day before you apply it.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.','Fixed: AI did not work for people who were not signed in.']},
@@ -3385,11 +3422,19 @@ function onbWL(){
   $('#onb-wl').innerHTML=L.length?L.map(function(w){return wcardHtml(w,S.topW.indexOf(w.id)>-1)}).join(''):'<p class="muted">No workouts match. Try fewer filters.</p>';
 }
 function wpLabel(n){return n>=3?'All 3 picked':n+' of 3 picked'}
+/* Side rail for setup on computers and landscape screens: every step, where you are, what is done */
+var ONBT=null;
+function onbRail(){var r=$('#onb-rail');if(!r)return;if(!ONBT){ONBT=[];for(var i=0;i<ONBN;i++){var m=/id="onb-h"[^>]*>([^<]*)/.exec(onbPanel(i));ONBT.push(m?m[1].replace(/\\'/g,"'"):'Step '+(i+1))}ONBT[0]='Welcome'}
+  r.innerHTML='<div class="orl-brand"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M12 40V26.2C7.6 24.6 5 21.2 5 17.2 5 11.2 10.9 7 18 7h12c7.1 0 13 4.2 13 10.2 0 4-2.6 7.4-7 9V40a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3z"/></svg><span>Manna</span></div><p class="orl-k">Setup · step '+(ONB.step+1)+' of '+ONBN+'</p><ol class="orl-l">'+ONBT.map(function(t,i){return '<li class="'+(i<ONB.step?'done':i===ONB.step?'on':'')+'"><i>'+(i<ONB.step?'✓':i+1)+'</i><span>'+esc(t)+'</span></li>'}).join('')+'</ol><p class="orl-f">You can change all of this later in Settings.</p>'}
 function onbRender(){setTimeout(function(){if(typeof obAcct==='function'){ACC.obsig='';obAcct()}},0);
   /* Redrawing the same step (kg/lb, a chip) is instant and keeps the scroll; only moving between steps animates */
   var same=ONB.drawn===ONB.step,o=$('#onb'),keep=o?o.scrollTop:0;ONB.drawn=ONB.step;
   var b=$('#onb-body');b.innerHTML=onbPanel(ONB.step);var pn=$('.onb-panel',b);
   if(same){if(pn){pn.classList.remove('go');pn.classList.add('still')}}else if(ONB.back&&pn)pn.classList.add('back');
+  if(pn){var ld=document.createElement('div'),mn=document.createElement('div'),kids=[].slice.call(pn.children),inLead=true,hadH=false,hadP=false;ld.className='onb-lead';mn.className='onb-main';
+    kids.forEach(function(k){if(inLead&&(k.classList.contains('onb-ic')||(k.tagName==='H2'&&!hadH)||(k.tagName==='P'&&hadH&&!hadP&&!k.querySelector('input,button')))){if(k.tagName==='H2')hadH=true;if(k.tagName==='P')hadP=true;ld.appendChild(k)}else{inLead=false;mn.appendChild(k)}});
+    pn.appendChild(ld);pn.appendChild(mn)}
+  onbRail();
   $('#onb-dots').innerHTML=Array.apply(null,Array(ONBN)).map(function(_,i){return '<i class="'+(i===ONB.step?'on':'')+'"></i>'}).join('');
   $('#onb-back').style.visibility=ONB.step===0?'hidden':'visible';
   $('#onb-next').textContent=ONB.step===0?'Get started':(ONB.step===ONBN-1?'Finish and take the tour':'Next');
@@ -3469,7 +3514,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='170';
+var heroLast='',APPV='171';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -4411,7 +4456,7 @@ function renderFriends(){
       +(FR.msg?'<div class="note '+(FR.ok?'ok':'warn')+'">'+esc(FR.msg)+'</div>':'')+(FR.err?'<div class="note warn">'+esc(FR.err)+'</div>':'')+'</div>';
   }else{
     var d=FR.data||{friends:[],incoming:[],outgoing:[],blocked:[],cheers:[]},me=FR.handle.username;
-    var myPic=(FR.pics||{})[me];
+    var myPic=myPicGet();
     h+='<div class="card stack"><div class="frme"><button type="button" class="frpic" data-act="frpic" aria-label="'+(myPic?'Change':'Add')+' your profile photo">'+frAv(me,FR.handle.display||S.name,myPic,true)+'<span class="frpic-e" aria-hidden="true">📷</span></button><div style="flex:1;min-width:0"><p class="eyebrow" style="margin:0">Your username</p><h3 style="margin:.1rem 0 0">@'+esc(me)+'</h3><span class="row" style="gap:.35rem;margin-top:.35rem"><button class="btn sm" data-act="frpic">'+(myPic?'Change photo':'Add photo')+'</button>'+(myPic?'<button class="btn sm" data-act="frpicdel">Remove</button>':'')+'</span></div><span class="row" style="gap:.4rem;flex-direction:column;align-items:stretch"><button class="btn sm" data-act="frshareme">Share</button><button class="btn sm" data-act="freditname">Change</button></span></div><input type="file" id="fr-picin" accept="image/*" hidden>'
       +'<div class="row"><label class="vh-only" for="fr-add">Friend\'s username</label><input type="text" id="fr-add" maxlength="21" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Add a friend by username" style="flex:1;min-width:10rem"><button class="btn primary" data-act="fradd">Send request</button></div>'
       +(FR.msg?'<div class="note '+(FR.ok?'ok':'warn')+'">'+esc(FR.msg)+'</div>':'')+(FR.err?'<div class="note warn">'+esc(FR.err)+'</div>':'')+'</div>';
@@ -4442,9 +4487,13 @@ function renderFriends(){
 }
 /* Friends: profile photos. Shrunk to a small square on the phone before it is uploaded. */
 function frAv(u,nm,pic,big){return pic?'<img class="av avp'+(big?' big':'')+'" src="'+esc(pic)+'" alt="" width="'+(big?64:40)+'" height="'+(big?64:40)+'">':'<span class="av'+(big?' big':'')+'" aria-hidden="true">'+esc(String(nm||u||'?').charAt(0).toUpperCase())+'</span>'}
-function frPicsLoad(){if(!frOn())return;rpc('friend_pics',{}).then(function(m){FR.pics=m&&typeof m==='object'?m:{};FR.picErr=false;refresh()}).catch(function(){FR.picErr=true})}
+/* Your own avatar: the profile photo if you have one, else your initial. Same on Settings, setup and Friends. */
+function myPicGet(){var me=FR&&FR.handle&&FR.handle.username;return (me&&FR.pics&&FR.pics[me])||S.myPic||''}
+function myInit(){var a=(typeof authGet==='function'&&authGet())||{};return String((FR&&FR.handle&&FR.handle.display)||(S.name&&S.name!=='Friend'?S.name:'')||a.name||(FR&&FR.handle&&FR.handle.username)||a.email||'?').trim().charAt(0).toUpperCase()||'?'}
+function myAv(cls,pv){var p=myPicGet();return p?'<img class="'+cls+' acimg" src="'+esc(p)+'" alt="" data-p="'+esc(pv||'')+'">':'<span class="'+cls+'" data-p="'+esc(pv||'')+'" aria-hidden="true">'+esc(myInit())+'</span>'}
+function frPicsLoad(){if(!frOn())return;rpc('friend_pics',{}).then(function(m){FR.pics=m&&typeof m==='object'?m:{};FR.picErr=false;var me=FR.handle&&FR.handle.username;if(me){var mp=FR.pics[me]||'';if(mp!==(S.myPic||'')){S.myPic=mp;prefSave()}}refresh()}).catch(function(){FR.picErr=true})}
 function frPicSquare(file){return new Promise(function(ok,no){var img=new Image(),u=URL.createObjectURL(file);img.onload=function(){try{var s=Math.min(img.naturalWidth,img.naturalHeight),c=document.createElement('canvas');c.width=c.height=128;var x=c.getContext('2d');x.drawImage(img,(img.naturalWidth-s)/2,(img.naturalHeight-s)/2,s,s,0,0,128,128);URL.revokeObjectURL(u);var d=c.toDataURL('image/jpeg',.82);if(d.length>40000)d=c.toDataURL('image/jpeg',.6);ok(d)}catch(e){no(e)}};img.onerror=function(){URL.revokeObjectURL(u);no('bad')};img.src=u})}
-function frPicSave(d){var me=FR.handle&&FR.handle.username;rpc('set_pic',{p_pic:d||''}).then(function(r){if(r&&r.ok===false)throw r;FR.pics=FR.pics||{};if(d)FR.pics[me]=d;else delete FR.pics[me];toast(d?'Your friends will see your new photo.':'Photo removed.',{title:'Profile photo',icon:'📷',kind:'ok'});refresh()})
+function frPicSave(d){var me=FR.handle&&FR.handle.username;rpc('set_pic',{p_pic:d||''}).then(function(r){if(r&&r.ok===false)throw r;FR.pics=FR.pics||{};if(d)FR.pics[me]=d;else delete FR.pics[me];S.myPic=d||'';prefSave();toast(d?'Your friends will see your new photo.':'Photo removed.',{title:'Profile photo',icon:'📷',kind:'ok'});refresh()})
   .catch(function(){toast('Photos need a quick update on the server first. Try again soon.',{title:'Could not save photo',icon:'!',kind:'warn'})})}
 document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='fr-picin'||!t.files||!t.files[0])return;var f=t.files[0];t.value='';if(!/^image\//.test(f.type)){toast('Pick a photo.',{kind:'warn'});return}frPicSquare(f).then(frPicSave,function(){toast('That photo could not be read. Try another.',{title:'Profile photo',icon:'!',kind:'warn'})})});
 function frAct(p,msgOk){FR.msg='';FR.err='';return p.then(function(r){if(r&&r.ok===false){FR.ok=false;FR.msg=({not_found:'No one has that username. Check the spelling.',self:'That is your own username.',no_username:'Pick a username first.',too_many:'You have too many requests waiting. Cancel some first.',not_friends:'You can only cheer friends.',taken:'That username is taken. Try another.',invalid:'Use 3 to 20 lowercase letters, numbers or underscores.'})[r.error]||'Something went wrong. Try again.'}else if(msgOk){FR.ok=true;FR.msg=typeof msgOk==='function'?msgOk(r):msgOk}FR.msgAt=Date.now();FR.at=0;FR.busy=false;frLoad();return r}).catch(function(e){FR.ok=false;FR.err=frErr(e);refresh()})}
@@ -7009,7 +7058,7 @@ function accRender(){
     var u=ACC.usage,plan=u&&u.plan==='pro'?'Pro':u&&u.plan==='paid'?'Paid':'Free';
     var pv=a.prov||'email',linked=(a.provs&&a.provs.length?a.provs:[pv]);
     h+='<p class="small muted">Signed in as <b>'+esc(a.email)+'</b></p></div>'+note
-      +'<div class="acwho"><span class="acav" data-p="'+esc(pv)+'" aria-hidden="true">'+esc(((a.name||a.email||'?').trim()[0]||'?').toUpperCase())+'</span><div class="acwt">'+(a.name?'<b>'+esc(a.name)+'</b>':'')+'<span class="small">'+(pv==='email'?'Signed in with email and password':'Signed in with '+esc(PROVN[pv]||pv))+'</span></div>'+provBadge(pv)+'</div>'
+      +'<div class="acwho">'+myAv('acav',pv)+'<div class="acwt">'+(a.name?'<b>'+esc(a.name)+'</b>':'')+'<span class="small">'+(pv==='email'?'Signed in with email and password':'Signed in with '+esc(PROVN[pv]||pv))+'</span></div>'+provBadge(pv)+'</div>'
       +(linked.length>1?'<div class="kv"><span>Sign-in methods</span><span>'+linked.map(provBadge).join(' ')+'</span></div>':'');
     if(ACC.conflict){
       h+='<div class="note stack"><b>This device and your account both have Manna data.</b><p class="small">Which one should Manna keep? The other is replaced.</p><div class="row"><button class="btn primary" data-act="acuse">Use my account’s data</button><button class="btn" data-act="acmine">Keep this device’s data</button></div></div>';
@@ -7109,7 +7158,7 @@ function obAcct(){
   var keep={e:($('#ob-email')||{}).value||'',p:($('#ob-pass')||{}).value||''};
   var msg=ACC.msg?'<p class="small onb-amsg'+(ACC.err?' err':'')+'" role="status">'+esc(ACC.msg)+'</p>':'';
   if(inn){
-    el.innerHTML='<div class="onb-abox done"><b>Signed in'+(a.prov&&a.prov!=='email'?' with '+esc(PROVN[a.prov]||a.prov):'')+'</b><span class="small">'+esc(a.email)+'. Your setup will be saved to your account.</span></div>'+msg;
+    el.innerHTML='<div class="onb-abox done onb-awho">'+myAv('acav',a.prov)+'<div><b>Signed in'+(a.prov&&a.prov!=='email'?' with '+esc(PROVN[a.prov]||a.prov):'')+'</b><span class="small">'+esc(a.email)+'. Your setup will be saved to your account.</span></div></div>'+msg;
     return;
   }
   var pv=ACC.prov,em=ACC.obmode==='email';
