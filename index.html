@@ -647,6 +647,12 @@ input[type=text],input[type=number],select,textarea{
 .qwn{min-width:2.4rem;padding-left:.55rem;padding-right:.55rem}
 .rbadge{position:absolute;top:2%;right:2%;z-index:2;display:grid;place-items:center;width:1.45rem;height:1.45rem;border-radius:50%;font-size:.78rem;font-weight:800;line-height:1;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);animation:rbPop .5s cubic-bezier(.34,1.56,.64,1) both}
 .rbadge.big{width:2rem;height:2rem;font-size:1rem;top:6%;right:6%}.rbadge.ok{background:#30b864}.rbadge.up{background:#ff9f0a}.rbadge.bad{background:#ff453a}
+.rbadge.up,.rbadge.bad{width:auto;min-width:1.15rem;height:1.15rem;padding:0 .22rem;border-radius:99px;font-size:.62rem;letter-spacing:-.04em;box-shadow:none;top:4%;right:4%}
+.rbadge.up{background:color-mix(in srgb,#ff9f0a 20%,var(--card,#fff));color:#b86e00;border:1px solid color-mix(in srgb,#ff9f0a 45%,transparent)}
+.rbadge.bad{background:color-mix(in srgb,#ff453a 18%,var(--card,#fff));color:#c62f27;border:1px solid color-mix(in srgb,#ff453a 45%,transparent)}
+.rbadge.far{font-weight:900}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rbadge.up{color:#ffc266}:root:not([data-theme="light"]) .rbadge.bad{color:#ff8a83}}
+:root[data-theme="dark"] .rbadge.up{color:#ffc266}:root[data-theme="dark"] .rbadge.bad{color:#ff8a83}
 .rpill{display:inline-block;max-width:100%;margin-top:.3rem;padding:.12rem .45rem;border-radius:99px;font-size:.66rem;overflow:hidden;text-overflow:ellipsis;font-weight:700;line-height:1.35;white-space:nowrap}
 .rpill.ok{background:color-mix(in srgb,#30b864 16%,transparent);color:#1f8a4a}.rpill.up{background:color-mix(in srgb,#ff9f0a 18%,transparent);color:#a35f00}.rpill.bad{background:color-mix(in srgb,#ff453a 16%,transparent);color:#c62f27}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rpill.ok{color:#7fe0a6}:root:not([data-theme="light"]) .rpill.up{color:#ffc266}:root:not([data-theme="light"]) .rpill.bad{color:#ff8a83}}
@@ -685,6 +691,13 @@ input[type=text],input[type=number],select,textarea{
 #v-settings .grid2:has(> .card) > .card{break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 16px;width:100%;box-sizing:border-box}
 #v-settings .grid2:has(> .card) > .card[hidden]{display:none}}
 #vl-list{max-height:min(60vh,560px);overflow:auto;overscroll-behavior:contain;padding-right:4px}
+.frme{display:flex;align-items:center;gap:.8rem}.frpic{position:relative;flex:none;padding:0;border:0;background:none;border-radius:50%;cursor:pointer}
+.av.big{width:64px;height:64px;font-size:1.6rem}.avp{object-fit:cover;border-radius:50%;flex:none;display:block}
+.frpic-e{position:absolute;right:-2px;bottom:-2px;display:grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--accent);font-size:.72rem;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.gpk-o{position:relative}.gpk-ck{position:absolute;top:.55rem;right:.6rem;display:grid;place-items:center;width:1.35rem;height:1.35rem;border-radius:50%;background:var(--accent);color:#fff;font-style:normal;font-size:.75rem;font-weight:800;animation:rbPop .35s cubic-bezier(.34,1.56,.64,1) both}
+.shal li>div{min-width:0}.sha-w{display:flex;flex-direction:column;gap:.15rem;padding:.45rem .55rem;border-radius:12px;background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.sha-ex{list-style:none;margin:.3rem 0;padding:0;display:grid;gap:.3rem}.sha-ex li{display:flex;gap:.3rem;align-items:center}.sha-ex input{flex:1;min-width:0}.sha-ex .sha-rx{flex:0 0 5.5rem}
+.sha-nm{font-size:1.05rem}
 .hsg{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-start}.hsg>.hsp{flex:0 0 190px;margin:0 auto}.hsg>.stack{flex:1 1 300px;min-width:0}
 @media (max-width:560px){.hsg{grid-template-columns:1fr}.hsp{justify-self:center}}
 .hsp{width:100%;max-width:190px}
@@ -1167,14 +1180,14 @@ html.lite .modal.closing,html.rm .modal.closing{opacity:0;transition:opacity .12
 .cring .rg,.mr .rg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 10px color-mix(in srgb,currentColor 35%,transparent))}
 .rgv{transition:stroke-dasharray .8s cubic-bezier(.2,.8,.2,1)}
 .cin{position:relative;display:flex;flex-direction:column;align-items:center;line-height:1.05;text-align:center}
-.cin b{font-size:2.3rem;font-weight:800;font-variant-numeric:tabular-nums;color:currentColor}
+.cin b{font-size:1.95rem;font-weight:800;font-variant-numeric:tabular-nums;color:currentColor}
 .cin span{font-size:.8rem;color:var(--muted);margin-top:.2rem}
 .cic{width:30px;height:30px;margin-bottom:.25rem}
 .clab{font-weight:700;margin-top:.4rem}
 .mrings{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1rem;text-align:center}
 .mring{display:flex;flex-direction:column;align-items:center}
 .mr{width:min(96px,25vw);aspect-ratio:1}
-.mr .cin b{font-size:1.05rem}
+.mr .cin b{font-size:.92rem}
 .mic{width:20px;height:20px;margin-bottom:.15rem}
 .mlab{font-weight:700;margin-top:.45rem}
 .mring .small{margin-top:0}
@@ -1496,7 +1509,7 @@ body.fitmode{overscroll-behavior:none}body.fitmode footer,body.fitmode .foot,bod
 .vfhead{align-items:flex-end}
 </style>
 <style id="wnbig-style">.wnbig{align-self:flex-start;justify-self:start;width:max-content;display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem .5rem .8rem;margin:.15rem 0 .1rem;border-radius:99px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%,var(--heart,#bf5af2)));color:var(--accent-ink,#fff);font:800 .82rem/1.2 var(--f-body);letter-spacing:.14em;box-shadow:0 4px 16px color-mix(in srgb,var(--accent) 35%,transparent),inset 0 0 0 1px color-mix(in srgb,#fff 25%,transparent);position:relative;overflow:hidden}.wnbig .wnbs{font-size:.95rem;letter-spacing:0}html:not(.rm):not(.lite) .wnbig::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);transform:translateX(-120%);animation:wnShine 2.6s ease-in-out .6s infinite}@keyframes wnShine{0%{transform:translateX(-120%)}45%,100%{transform:translateX(120%)}}.wnlead{margin:.1rem 0 .2rem;opacity:.75;font-size:.95rem;line-height:1.45}.wnall summary b .wnstar{color:var(--accent)}</style>
-<style id="trings-style">.trings{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:.9rem;column-gap:.4rem;margin-top:.7rem}.trings .mr{width:min(104px,26vw)}.trings .cin b{font-size:1.3rem}.trings .cin .tu{font-size:.7rem!important}.trings .mlab{font-size:.86rem!important}.trings .mlab{font-size:.88rem;line-height:1.2;text-align:center}.trings .mlab .small{display:block;font-weight:500}.trings .cin .tu{font-size:.68rem;opacity:.65;line-height:1.1;margin-top:1px}.trings .tover{color:#ff453a;font-weight:600}.trings .tdone{color:#30d158;font-weight:600}</style>
+<style id="trings-style">.trings{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:.9rem;column-gap:.4rem;margin-top:.7rem}.trings .mr{width:min(104px,26vw)}.trings .cin b{font-size:1.05rem}.trings .cin .tu{font-size:.6rem!important}.trings .mlab{font-size:.86rem!important}.trings .mlab{font-size:.88rem;line-height:1.2;text-align:center}.trings .mlab .small{display:block;font-weight:500}.trings .cin .tu{font-size:.6rem;opacity:.65;line-height:1.1;margin-top:1px}.trings .tover{color:#ff453a;font-weight:600}.trings .tdone{color:#30d158;font-weight:600}</style>
 <style id="aitag-style">.aitag{display:inline-block;margin-left:.3rem;padding:.05rem .4rem;border-radius:99px;background:linear-gradient(135deg,#0a84ff,#bf5af2);color:#fff;font:700 .62rem/1.4 var(--f-body);letter-spacing:.06em;vertical-align:middle}</style>
 <style id="svm-style">.svmcard{max-width:30rem;width:100%;max-height:88vh;overflow:auto}#svm-list li{padding:.55rem 0}#svm-list input[type=checkbox]{width:1.2rem;height:1.2rem;flex:none}#svm-name{width:100%}</style>
 <style id="aidel-style">.btn.aidelbtn{color:#ff453a;border-color:color-mix(in srgb,#ff453a 45%,transparent)}</style>
@@ -1970,7 +1983,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         <p class="lede">Everything you have logged today, in order, with the time you logged it.</p></header>
       <div class="card stack" id="m-sum"></div>
       <div class="card stack"><ul class="list" id="m-list"></ul>
-        <div class="row"><a class="btn primary" href="#eat">Log food</a><button class="btn" data-act="svmopen">Save as a meal</button></div></div>
+        <div class="row"><a class="btn primary" href="#eat" data-act="logfood">Log food</a></div></div>
       <div class="card stack" id="m-trend"></div>
       <div class="card stack" id="m-plan"></div>
     </section>
@@ -2945,7 +2958,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['raBusy','raMsg','schBusy','schMsg','thPrev','gStep','hsLast','ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['gSel','raBusy','raMsg','schBusy','schMsg','thPrev','gStep','hsLast','ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals;else if(p.mealsD&&Array.isArray(p.meals)&&p.meals.length){d.prevMeals={d:p.mealsD,m:p.meals};if(!d.dayLogs||typeof d.dayLogs!=='object'||Array.isArray(d.dayLogs))d.dayLogs={};if(!d.dayLogs[p.mealsD])d.dayLogs[p.mealsD]=p.meals}}}catch(e){}
   try{dayLogTrim(d)}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
@@ -2989,7 +3002,7 @@ function defaults0(){
     thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Friend',uname:'',qwOff:0,pnTie:'votd',schAdj:null,schRes:null,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',uname:'',shaPerDay:'auto',qwOff:0,pnTie:'votd',schAdj:null,schRes:null,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -3157,7 +3170,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:170,d:'Nov 13, 2026',t:'Small touches',s:['When you have not logged anything lately, Quick add now just says Nothing recently logged.']},
+ {v:170,d:'Nov 13, 2026',t:'Small touches',s:['When you have not logged anything lately, Quick add now just says Nothing recently logged.','The tutorial now waits for you to tap each page button at the top too, like Drink or Diary, not just the bottom bar.','Every button now makes a soft tap sound, even with the music off.','Goals: every goal now has its own icon, and you can pick up to 3 before tapping Continue. Goals that pull in opposite directions, like Cut and Bulk, swap each other out.','Make a schedule with AI: pick how many workouts a day (Auto reads what you write, or 1, 2 or 3 with Pro). The suggestion now has Edit, to change workout names, exercises and sets, and Cancel.','Faith Notes no longer shows the "1 note, newest first" line above your notes.','Log food in your Diary now takes you straight to Log it on Eat, ready to type. The Save as a meal button is gone from the Diary.','The numbers inside the rings are smaller and easier to read at a glance.','Rings that go over a target show a small, softer badge again: ↑ when you pass it, ↑↑ when you are well past it, and ! or !! for limits like sodium and sugar.','Foods logged with AI, from a photo or by barcode now get tidy names, like Grilled chicken breast instead of GRILLED CHICKEN BREAST (ESTIMATE), and barcode foods show the brand after a dot.','Schedules: the Add a schedule card no longer shows how many more you can add.','Friends: add a profile photo. Tap your picture on the Friends page, pick a photo, and your friends see it next to your name.']},
  {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Faith has a new Notes tab. Write a private prayer note there and see every note you have ever written, newest first. Notes from Home show up there too.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Rings now show clearly when you hit or pass a target: a ✓ badge and "Goal met" when you reach it, and past 100% the ring keeps going, each lap darker than the last, plus a "+12 g over" pill. Sodium and sugar turn red with a ! when you go over.','AI logging no longer shows what you typed as a heading or lumps separate foods together. Each food is logged on its own, and "2 apples" logs as 2 × 1 apple.','Cardio and sport has a new 🏅 icon.','Workout search no longer shows the count line above the results.','More ways to log has a new Browse the catalog section with every food, filters by type and a search box. It is also cleaner: each option has an icon, a one-line description and a smooth open, the calorie option has quick amounts, and results and problems now pop in as notifications instead of text stuck in the card.','In Stats, your daily target is now called your recommended daily intake.','Build a home-cooked recipe is now AI: describe what you made and how many it serves, check the ingredients and per-serving numbers, then save it to Your meals. Building by hand is still there underneath.','On computers, Settings cards now sit in two tidy columns at their own height, with no stretched empty boxes, and the version log scrolls inside its own card.','Pro: when you change your goal, Manna offers to adjust your AI-made schedule to fit it, adding or dropping workouts and making days harder or easier. You see every change day by day before you apply it.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.','Fixed: AI did not work for people who were not signed in.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
@@ -3233,7 +3246,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#wn').h
 var TOURSEC=[['home','Home'],['fit','Fitness'],['fuel','Fuel'],['friends','Friends'],['faith','Faith'],['set','Settings']];
 /* Between sections the tutorial waits for a tap on that section's button in the bottom bar (or the gear for Settings) */
 var TOURGATE={fit:['#tabs [data-tab=workouts]','Fitness'],fuel:['#tabs [data-tab=eat]','Fuel'],friends:['#tabs [data-tab=friends]','Friends'],faith:['#tabs [data-tab=scripture]','Faith'],set:['#setfab','the gear']};
-function tourList(){var L=TOUR.filter(function(s){try{return !focusHidden(s.v)}catch(e){return true}}),out=[];L.forEach(function(st,i){var pv=L[i-1];if(pv&&pv.g!==st.g&&TOURGATE[st.g]){var gt=TOURGATE[st.g],sec=TOURSEC.filter(function(x){return x[0]===st.g})[0][1];out.push({gate:true,g:st.g,v:pv.v,sel:gt[0],t:'Next up: '+sec,p:st.g==='set'?'Tap the gear at the top left to open Settings.':'Tap '+gt[1]+' in the bar at the bottom to keep going.'})}out.push(st)});return out}
+function tourList(){var L=TOUR.filter(function(s){try{return !focusHidden(s.v)}catch(e){return true}}),out=[];L.forEach(function(st,i){var pv=L[i-1];if(pv&&pv.g!==st.g&&TOURGATE[st.g]){var gt=TOURGATE[st.g],sec=TOURSEC.filter(function(x){return x[0]===st.g})[0][1];out.push({gate:true,g:st.g,v:pv.v,sel:gt[0],t:'Next up: '+sec,p:st.g==='set'?'Tap the gear at the top left to open Settings.':'Tap '+gt[1]+' in the bar at the bottom to keep going.'})}
+    /* Inside a section, moving to another page waits for a tap on that page's button at the top */
+    else if(pv&&pv.g===st.g&&pv.v!==st.v){var lab=VLABEL[st.v]||st.v,sel=st.v==='themes'?'#p-theme':st.v==='settings'?'#setfab':'#subnav a[href="#'+st.v+'"]';
+      out.push({gate:true,g:st.g,v:pv.v,sel:sel,t:'Next: '+lab,p:st.v==='themes'?'Tap Change theme to see every theme.':st.v==='settings'?'Tap the gear at the top left to go back to Settings.':'Tap '+lab+' at the top to keep going.'})}
+    out.push(st)});return out}
 var TOUR=[
  {g:'home',v:'today',sel:'.hero',t:'This is Home',p:'Your name, the verse of the day and the date. Tap "Read the chapter" to open it in the Bible reader.'},
  {g:'home',v:'today',sel:'#t-energy',t:"Today's progress",p:'Calories, protein, water and workouts for the day in one place. Tap a number to change it.'},
@@ -3253,8 +3270,8 @@ var TOUR=[
  {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Five tabs: Daily verses, the ones you Saved, the Bible for whole chapters and reading plans, Search to find any verse, and Notes for your private prayer notes.'},
  {g:'faith',v:'scripture',sel:function(){var e=$('#sc-feed .vslide');return tourId(e,'tour-verse')||'#sc-feed'},t:'Daily verses',p:'Swipe up for the next verse. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
  {g:'set',v:'settings',sel:'#g-goals',t:'Goals',p:'Pick your goal first, like Cut or Bulk. Then set your pace and target weight, and your calorie and protein targets update to match.'},
- {g:'set',v:'settings',sel:'#hs-card',t:'Home Screen',p:'Choose which cards show on Home and in what order.'},
- {g:'set',v:'themes',sel:function(){var l=document.querySelector('#th-grid .tp.tlk');if(l){var c=l.closest('.tcard');if(c&&!c.id)c.id='tour-lockth';return c?'#tour-lockth':'#th-grid'}return '#th-grid'},t:'Themes',p:'Pick a look for the whole app. Free themes are ready to use. Pro themes show a 🔒 and a Preview button so you can try them first.'},
+ {g:'set',v:'settings',sel:'#hs-card .hsp',t:'Home Screen',p:'Choose which cards show on Home and in what order. This little phone shows how Home will look as you move or hide cards.'},
+ {g:'set',v:'themes',sel:function(){var l=document.querySelector('#th-grid .tp.tlk');if(l){var c=l.closest('.tcard');if(c&&!c.id)c.id='tour-lockth';return c?'#tour-lockth':'#th-grid'}var f=document.querySelector('#th-grid .tcard');if(f){if(!f.id)f.id='tour-th1';return '#'+f.id}return '#th-grid'},t:'Themes',p:'Pick a look for the whole app. Free themes are ready to use. Pro themes show a 🔒 and a Preview button so you can try them first.'},
  {g:'set',v:'settings',sel:'#tour-set',t:'That is the tour',p:'You can replay it here any time.'}
 ];
 var TS={i:0,on:false,t:0,L:TOUR,v:''};
@@ -3290,11 +3307,12 @@ function tourFit(el,maxH){var R=el.getBoundingClientRect(),top=R.bottom,bot=R.to
 function tourPlace(nav){
   if(!TS.on)return;var st=TS.L[TS.i],sl=typeof st.sel==='function'?st.sel():st.sel,el=sl&&document.querySelector(sl),hl=$('#tour-hl'),c=$('#tour-card');
   /* An empty or hidden target falls back to its card, then to the page heading */
-  if(st.gate&&el){hl.classList.remove('away');var g=el.getBoundingClientRect(),gp=6;hl.style.left=(g.left-gp)+'px';hl.style.top=(g.top-gp)+'px';hl.style.width=(g.width+gp*2)+'px';hl.style.height=(g.height+gp*2)+'px';hl.classList.add('gate');
+  if(st.gate&&el){var g0=el.getBoundingClientRect();if(g0.top<8||g0.bottom>innerHeight-8){window.scrollTo({top:0,behavior:'instant'});var g1=el.getBoundingClientRect();if(g1.top<8||g1.bottom>innerHeight-8)el.scrollIntoView({block:'center',behavior:'instant'})}
+    hl.classList.remove('away');var g=el.getBoundingClientRect(),gp=6;hl.style.left=(g.left-gp)+'px';hl.style.top=(g.top-gp)+'px';hl.style.width=(g.width+gp*2)+'px';hl.style.height=(g.height+gp*2)+'px';hl.classList.add('gate');
     var gch=c.offsetHeight;c.style.top=(g.top>innerHeight/2?Math.max(14,g.top-gch-22):Math.min(innerHeight-gch-14,g.bottom+22))+'px';return}
   hl.classList.remove('gate');
   if(el&&el.getBoundingClientRect().height<24){var cd=el.closest('.card');el=cd&&cd.getBoundingClientRect().height>=24?cd:document.querySelector('#v-'+st.v+' .vh')}
-  if(!(el&&el.getClientRects().length)){hl.classList.add('away');tourCard(null);return}
+  if(!(el&&el.getClientRects().length)){hl.classList.add('away');if(st.gate)$('#tour-next').hidden=false;tourCard(null);return}
   try{swReveal(el)}catch(e){}try{vpReveal(el)}catch(e){}
   var ch=c.offsetHeight,pad=14,gap=14,topSafe=innerHeight<700?50:58,avail=innerHeight-ch-pad-gap-topSafe;
   tourSettle(el,function(){
@@ -3832,7 +3850,7 @@ document.addEventListener('toggle',function(e){if(e.target&&e.target.id==='em-br
 document.addEventListener('focusout',function(e){var t=e.target;if(t&&(t.tagName==='TEXTAREA'||t.tagName==='INPUT'))setTimeout(function(){var a=document.activeElement;if(!a||(a.tagName!=='TEXTAREA'&&a.tagName!=='INPUT'))refresh()},80)});
 function renderPNotes(){
   var el=$('#sc-pnotes');if(!el)return;var L=S.pnotes.slice().reverse(),h;
-  h='<div class="row spread"><h3>Prayer notes</h3><span class="badge">Private</span></div>'+(L.length?'<p class="small muted" style="margin:0">'+L.length+' note'+(L.length===1?'':'s')+', newest first.</p>':'')
+  h='<div class="row spread"><h3>Prayer notes</h3><span class="badge">Private</span></div>'+''
     +'<div class="stack pncomp" style="gap:.5rem"><label class="vh-only" for="pn-in2">Write a prayer note</label><textarea id="pn-in2" maxlength="1000" rows="3" placeholder="Write a private prayer, a thank-you, or what is on your heart"></textarea>'
     +'<div class="row"><button class="btn primary sm" data-act="pnsave2">Save note</button></div></div>'
     +(L.length?'<ul class="list pnlist">'+L.map(function(n){return '<li><div><div class="small muted">'+esc(new Date(n.d+'T12:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}))+(n.ref?' · '+esc(n.ref):'')+'</div><div style="white-space:pre-wrap">'+esc(n.t)+'</div></div><button class="btn sm" data-act="pndel" data-id="'+esc(n.id)+'" aria-label="Delete note">Delete</button></li>'}).join('')+'</ul>':'<p class="muted small">No notes yet. Your notes will show here, newest first.</p>')+'<p class="small muted">Only you can see these. They are never shared.</p>';
@@ -3998,7 +4016,7 @@ function ambPaint(){var p=ambPref();$$('.ambbtn').forEach(function(b){b.setAttri
 document.addEventListener('pointerdown',function(e){var a=e.target.closest&&e.target.closest('#setfab');if(a)sfxPop('more')});
 var SFXSTY=[['pop','Pop'],['bubble','Bubble'],['click','Click'],['chime','Chime'],['wood','Wood']];
 /* Soft sounds for swiping between pages and scrolling through cards */
-function sfxOk(){var p=ambPref();if(!p.sfx)return null;var c=AMB.ctx;if(!c||c.state!=='running')return null;if(!AMB.fx){AMB.fx=c.createGain();AMB.fx.gain.value=.55;AMB.fx.connect(c.destination)}return c}
+function sfxOk(){var p=ambPref();if(!p.sfx)return null;var c=AMB.ctx||ambCtx();if(!c||c.state==='closed')return null;if(c.state!=='running'){try{c.resume()}catch(e){}}if(!AMB.fx){AMB.fx=c.createGain();AMB.fx.gain.value=.55;AMB.fx.connect(c.destination)}return c}
 function sfxSwish(dir){var c=sfxOk();if(!c||!AMB.noise)return;var t=c.currentTime+.005,n=c.createBufferSource(),bp=c.createBiquadFilter(),g=c.createGain();n.buffer=AMB.noise;bp.type='bandpass';bp.Q.value=1.4;
   bp.frequency.setValueAtTime(dir>0?900:2600,t);bp.frequency.exponentialRampToValueAtTime(dir>0?2600:900,t+.18);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.16,t+.05);g.gain.exponentialRampToValueAtTime(.001,t+.22);n.connect(bp);bp.connect(g);g.connect(AMB.fx);n.start(t,Math.random()*.5);n.stop(t+.24)}
 function sfxTick(hi){var c=sfxOk();if(!c)return;var t=c.currentTime+.003,x=c.createOscillator(),g=c.createGain();x.type='sine';x.frequency.value=hi?1760:1320;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(hi?.09:.045,t+.003);g.gain.exponentialRampToValueAtTime(.0005,t+(hi?.09:.05));x.connect(g);g.connect(AMB.fx);x.start(t);x.stop(t+.1)}
@@ -4013,7 +4031,8 @@ var TAPL=0;
 function sfxTap(){var c=sfxOk();if(!c)return;var now=Date.now();if(now-TAPL<45)return;TAPL=now;var t=c.currentTime+.002,x=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();
   x.type='triangle';x.frequency.setValueAtTime(820,t);x.frequency.exponentialRampToValueAtTime(520,t+.035);f.type='lowpass';f.frequency.value=2200;
   g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.022,t+.003);g.gain.exponentialRampToValueAtTime(.0001,t+.05);x.connect(f);f.connect(g);g.connect(AMB.fx);x.start(t);x.stop(t+.06)}
-document.addEventListener('pointerdown',function(e){try{var el=e.target.closest&&e.target.closest('button,a[href],[data-act],[role=button],summary,label.check,input[type=checkbox],input[type=radio],select,.chip');if(!el)return;
+document.addEventListener('keydown',function(e){if(e.key!=='Enter'&&e.key!==' ')return;var el=e.target;if(!el||!el.matches||!el.matches('button,a[href],[role=button],[role=tab],[role=radio],summary,.chip'))return;if(el.disabled||el.getAttribute('aria-disabled')==='true')return;try{sfxTap()}catch(x){}},true);
+document.addEventListener('pointerdown',function(e){try{var el=e.target.closest&&e.target.closest('button,a[href],[data-act],[data-onb],[data-tour],[role=button],[role=tab],[role=radio],[role=switch],summary,label.check,label.chk,input[type=checkbox],input[type=radio],input[type=range],select,.chip,.vdot');if(!el)return;
   if(el.closest('#tabs')||el.closest('#setfab')||el.matches('[data-act=instep],[data-act=sfxsty]')||el.disabled||el.getAttribute('aria-disabled')==='true')return;sfxTap()}catch(x){}},true);
 function sfxSad(){
   var p=ambPref();if(!p.sfx)return;var c=ambCtx();if(!c)return;if(c.state!=='running')c.resume().catch(function(){});
@@ -4154,14 +4173,14 @@ function gSchApply(){var A=S.schAdj,R=S.schRes;if(!A||!R)return;var pid=A.pid,cu
     else{var wid='c'+(uid++);S.customW.push({id:wid,name:d.name,mins:d.mins,level:'Custom',cat:'custom',eq:['bodyweight'],focus:'Built by AI',pl:'strength',ex:d.items.map(function(x){return [x.name,x.rx]})});cur[i]=wid}});
   S.plans[pid]=cur;syncSched();var nm=schedName(pid);S.schAdj=null;S.schRes=null;toast('"'+nm+'" now fits your new goal.',{title:'Schedule updated',icon:'📅',kind:'ok'})}
 /* Settings › Body › Goals: step 1 picks the goal, step 2 shows the options that fit it */
-var GPICK=[['cut','Cut','Lose fat and keep your muscle','📉'],['bulk','Bulk','Gain size and strength','💪'],['maintain','Keep stable','Stay at the weight you are','⚖️'],['recomp','Get lean','Lose fat and build muscle together','✨']],GMORE=[['lean','Gain lean muscle'],['endurance','Endurance'],['health','General health']];
+var GPICK=[['cut','Cut','Lose fat and keep your muscle','📉'],['bulk','Bulk','Gain size and strength','💪'],['maintain','Keep stable','Stay at the weight you are','⚖️'],['recomp','Get lean','Lose fat and build muscle together','✨'],['lean','Gain lean muscle','Slow, clean muscle gain','🌱'],['endurance','Endurance','Go longer and get fitter','🏃'],['health','General health','Feel better day to day','🍎']],GMORE=[];
 function gPickPaint(){var pk=$('#g-pick'),op=$('#g-opts');if(!pk||!op)return;var g=goalSet(),chosen=(S.goals||[]).length>0,step=S.gStep||(chosen?'opts':'pick'),cur=g[0],h;
   pk.hidden=step!=='pick';op.hidden=step==='pick';var hh=$('#g-h');if(hh)hh.textContent=step==='pick'?'What is your goal?':'Goals';
-  if(step==='pick'){h='<p class="small muted" style="margin:0">Pick one. Next you can set your pace and target weight.</p><div class="gpk" role="radiogroup" aria-label="Your goal">'+GPICK.map(function(x){var on=chosen&&g.length===1&&cur===x[0];return '<button type="button" class="gpk-o" role="radio" aria-checked="'+on+'" data-act="gpick" data-k="'+x[0]+'"><span class="gpk-e" aria-hidden="true">'+x[3]+'</span><b>'+x[1]+'</b><span>'+x[2]+'</span></button>'}).join('')+'</div>'
-      +'<div class="stack" style="gap:.35rem"><span class="small muted">Something else?</span><div class="chips">'+GMORE.map(function(x){return '<button type="button" class="chip" data-act="gpick" data-k="'+x[0]+'" aria-pressed="'+(chosen&&g.length===1&&cur===x[0])+'">'+x[1]+'</button>'}).join('')+'</div></div>'
-      +(chosen?'<div class="row"><button class="btn sm" data-act="gstep" data-k="opts">Keep '+esc(g.map(gLabel).join(' + '))+'</button></div>':'');
+  if(step==='pick'){var sel=Array.isArray(S.gSel)?S.gSel:(chosen?g.slice(0,3):[]);
+    h='<div class="row spread"><p class="small muted" style="margin:0">Pick up to 3. Next you can set your pace and target weight.</p><span class="badge">'+sel.length+' of 3</span></div><div class="gpk" role="group" aria-label="Your goals">'+GPICK.map(function(x){var on=sel.indexOf(x[0])>-1;return '<button type="button" class="gpk-o" role="checkbox" aria-checked="'+on+'" data-act="gpick" data-k="'+x[0]+'"><span class="gpk-e" aria-hidden="true">'+x[3]+'</span><b>'+x[1]+'</b><span>'+x[2]+'</span>'+(on?'<i class="gpk-ck" aria-hidden="true">✓</i>':'')+'</button>'}).join('')+'</div>'
+      +'<div class="row"><button class="btn primary" data-act="gpickgo"'+(sel.length?'':' disabled')+'>Continue</button>'+(chosen?'<button class="btn" data-act="gstep" data-k="opts">Cancel</button>':'')+'</div>';
     if(pk.dataset.h!==h){pk.dataset.h=h;pk.innerHTML=h}return}
-  var nm=g.map(gLabel).join(' + '),em=(GPICK.filter(function(x){return x[0]===cur})[0]||[,,,'🎯'])[3],T=targets(),showT=g.some(function(k){return k!=='maintain'&&k!=='health'}),showP=g.some(function(k){return ['cut','bulk','lean','recomp'].indexOf(k)>-1});
+  var nm=g.map(gLabel).join(' + '),em=g.map(function(k){return (GPICK.filter(function(x){return x[0]===k})[0]||[,,,'🎯'])[3]}).join(''),T=targets(),showT=g.some(function(k){return k!=='maintain'&&k!=='health'}),showP=g.some(function(k){return ['cut','bulk','lean','recomp'].indexOf(k)>-1});
   h='<div class="gcur"><span class="gpk-e" aria-hidden="true">'+em+'</span><div style="flex:1;min-width:0"><span class="small muted">Your goal</span><b>'+esc(nm)+'</b><span class="small muted">'+kc(T.kcal)+' kcal a day · '+T.protein+' g protein</span></div><button class="btn sm" data-act="gstep" data-k="pick">Change</button></div>';
   var c=$('#g-cur');if(c&&c.dataset.h!==h){c.dataset.h=h;c.innerHTML=h}
   var tw=$('#g-tgtw'),pw=$('#g-pacew'),tp=$('#g-tp'),px=$('#g-pacex');if(tw)tw.hidden=!showT;if(pw)pw.hidden=!showP;if(tp)tp.hidden=!showT&&!showP;
@@ -4209,14 +4228,21 @@ function gAI(mode,text,after){
 /* ---------- AI schedule (Pro) ---------- */
 var SHA=null;
 function shaRender(){
-  var el=$('#sh-ai');if(!el)return;var pro=isPro(),used=!pro&&S.shaFreeWk===dk(weekStart().getTime()),h='<div class="row spread"><h3 style="margin:0">Make a schedule with AI</h3>'+(pro?'<span class="badge pro">✨ PRO</span>':'<span class="small muted">'+(used?'Free one used this week':'1 free a week')+'</span>')+'</div>';
+  var el=$('#sh-ai');if(!el)return;if(SHA){if(SHA.np)delete SHA.np;else shaPull()}var pro=isPro(),used=!pro&&S.shaFreeWk===dk(weekStart().getTime()),h='<div class="row spread"><h3 style="margin:0">Make a schedule with AI</h3>'+(pro?'<span class="badge pro">✨ PRO</span>':'<span class="small muted">'+(used?'Free one used this week':'1 free a week')+'</span>')+'</div>';
   if(used)h+='<p class="small muted">You have used this week\'s free AI schedule. It comes back on Monday, or get unlimited with Manna Pro.</p><button class="btn sm" data-act="proopen">See Pro</button>';
-  else{h+='<textarea id="sha-text" aria-label="What do you want from your schedule" placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea><div class="row"><button class="btn primary" data-act="shamake">Make my schedule</button><span class="small muted">1 AI use</span></div>';
+  else{var pd=S.shaPerDay||'auto';h+='<textarea id="sha-text" aria-label="What do you want from your schedule" placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea>'
+    +'<div class="stack" style="gap:.35rem"><span class="small"><b>Workouts a day</b></span><div class="chips" role="radiogroup" aria-label="Workouts a day">'+[['auto','Auto'],['1','1'],['2','2'],['3','3']].map(function(o){var on=String(pd)===o[0],lk=!pro&&(o[0]==='2'||o[0]==='3');return '<button type="button" class="chip" role="radio" data-act="shapd" data-k="'+o[0]+'" aria-checked="'+on+'" aria-pressed="'+on+'">'+o[1]+(lk?' 🔒':'')+'</button>'}).join('')+'</div><span class="small muted">'+(pd==='auto'?'Auto reads what you wrote. Say "twice a day" or "two-a-days" for more than one.':pd==='1'?'One workout on each training day.':pd+' workouts on each training day, like a morning and an evening session.')+'</span></div>'
+    +'<div class="row"><button class="btn primary" data-act="shamake">Make my schedule</button><span class="small muted">1 AI use</span></div>';
     if(S.shaMsg)h+='<p class="note warn small">'+esc(S.shaMsg)+'</p>';
-    if(SHA){h+='<div class="stack shaout"><label class="f" for="sha-name">Schedule name<input type="text" id="sha-name" maxlength="40" value="'+esc(SHA.name)+'"></label><ul class="list">'+SHA.days.map(function(d,i){return '<li><div style="flex:1;min-width:0"><span class="small muted">'+DAYN[i]+'</span>'+(d?'<input type="text" class="shad" id="sha-d'+i+'" maxlength="50" value="'+esc(d.name)+'" aria-label="'+DAYN[i]+' workout name"><span class="small muted">'+d.items.length+' exercises · '+d.mins+' min · '+esc(d.items.slice(0,3).map(function(x){return x.name}).join(', '))+(d.items.length>3?'…':'')+'</span>':'<b>Rest</b>')+'</div></li>'}).join('')+'</ul><div class="row"><button class="btn primary" data-act="shasave">Save schedule</button><button class="btn" data-act="shaclr">Discard</button></div><p class="small muted">Tap a name to rename it before saving.</p></div>'}}
-  var ae=document.activeElement,aid=ae&&ae.id,vals={};$$('#sh-ai input,#sh-ai textarea').forEach(function(i){if(i.id)vals[i.id]=i.value});
+    if(SHA){var ed=!!SHA.edit;h+='<div class="stack shaout">'+(ed?'<label class="f" for="sha-name">Schedule name<input type="text" id="sha-name" maxlength="40" value="'+esc(SHA.name)+'"></label>':'<div class="row spread"><b class="sha-nm">'+esc(SHA.name)+'</b><span class="small muted">'+SHA.days.filter(Boolean).length+' training days</span></div>')
+      +'<ul class="list shal">'+SHA.days.map(function(L,i){return '<li><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:.35rem"><span class="small muted">'+DAYN[i]+(L&&L.length>1?' · '+L.length+' workouts':'')+'</span>'+(L?L.map(function(d,j){return ed?'<div class="sha-w"><input type="text" class="shad" id="sha-d'+i+'-'+j+'" maxlength="50" value="'+esc(d.name)+'" aria-label="'+DAYN[i]+' workout name"><ul class="sha-ex">'+d.items.map(function(x,k){return '<li><input type="text" id="sha-x'+i+'-'+j+'-'+k+'" maxlength="50" value="'+esc(x.name)+'" aria-label="Exercise"><input type="text" class="sha-rx" id="sha-r'+i+'-'+j+'-'+k+'" maxlength="20" value="'+esc(x.rx)+'" aria-label="Sets and reps"><button class="btn sm" data-act="shaxdel" data-i="'+i+'" data-j="'+j+'" data-k="'+k+'" aria-label="Remove '+esc(x.name)+'">✕</button></li>'}).join('')+'</ul><button class="btn sm" data-act="shawdel" data-i="'+i+'" data-j="'+j+'">Remove this workout</button></div>'
+        :'<div class="sha-w"><b>'+esc(d.name)+'</b><span class="small muted">'+d.items.length+' exercises · '+d.mins+' min · '+esc(d.items.slice(0,3).map(function(x){return x.name}).join(', '))+(d.items.length>3?'…':'')+'</span></div>'}).join(''):'<b>Rest</b>')+'</div></li>'}).join('')+'</ul>'
+      +'<div class="row">'+(ed?'<button class="btn primary" data-act="shaeditdone">Done editing</button>':'<button class="btn primary" data-act="shasave">Save schedule</button><button class="btn" data-act="shaedit">Edit</button>')+'<button class="btn" data-act="shaclr">Cancel</button></div></div>'}}
+  var ae=document.activeElement,aid=ae&&ae.id,vals={};$$('#sh-ai input,#sh-ai textarea').forEach(function(i){if(i.id&&!/^sha-[dxrn]/.test(i.id))vals[i.id]=i.value});
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;Object.keys(vals).forEach(function(k){var i=document.getElementById(k);if(i&&vals[k]!=null)i.value=vals[k]});if(aid){var f=document.getElementById(aid);if(f)f.focus()}}
 }
+/* Read the edit boxes back into the AI schedule before redrawing or saving */
+function shaPull(){if(!SHA||!SHA.edit)return;var n=$('#sha-name');if(n)SHA.name=n.value.trim().slice(0,40)||SHA.name;SHA.days.forEach(function(L,i){(L||[]).forEach(function(d,j){var w=$('#sha-d'+i+'-'+j);if(w&&w.value.trim())d.name=w.value.trim().slice(0,50);d.items.forEach(function(x,k){var a=$('#sha-x'+i+'-'+j+'-'+k),b=$('#sha-r'+i+'-'+j+'-'+k);if(a&&a.value.trim())x.name=a.value.trim().slice(0,50);if(b&&b.value.trim())x.rx=b.value.trim().slice(0,20)})})})}
 function shaMake(){
   var t=($('#sha-text')&&$('#sha-text').value||'').trim();if(!t){toast('Tell AI what you want from your week first.');return}
   S.shaBusy=true;S.shaMsg='';SHA=null;mkOpen('sched','Your weekly schedule',function(){return {done:!S.shaBusy,err:S.shaMsg}});
@@ -4227,14 +4253,16 @@ function shaMake(){
     var pr=['You are a certified strength and conditioning coach. Write a 7-day weekly workout schedule, Monday to Sunday.','Request: '+t.slice(0,600),
       'Goals: '+goalSet().map(gName).join(', ')+'. Usual workouts a week: '+wPlan().per+'. Equipment: '+((S.have||[]).map(function(k){return EQ[k]||k}).join(', ')||'bodyweight only')+'. Injury: '+inj+'.',
       'Difficulty and session length: follow the request. If it does not say, make it intermediate with sessions of about 30 to 45 minutes.',
-      'Include rest days where they make sense. Give each workout day 4 to 8 exercises with sets and reps.',
-      'Reply with JSON only: {"name": "short schedule name", "days": [7 items, Monday first, each either null for rest or {"name": "workout name", "mins": 40, "items": [{"name": "exercise", "rx": "3×10"}]}]}'].join('\n');
+      'Include rest days where they make sense. Give each workout 4 to 8 exercises with sets and reps.',
+      (function(){var pd=S.shaPerDay||'auto';if(!isPro())pd='1';return pd==='auto'?'Workouts a day: read the request. If it asks for more than one a day (like twice a day or two-a-days), give each training day that many separate workouts, up to 3; otherwise one.':'Workouts a day: give exactly '+pd+' separate workout'+(pd==='1'?'':'s')+' on each training day'+(pd==='1'?'.':', like a morning and an evening session, each with its own focus.')})(),
+      'Reply with JSON only: {"name": "short schedule name", "days": [7 items, Monday first, each either null for rest or a list of workouts: [{"name": "workout name", "mins": 40, "items": [{"name": "exercise", "rx": "3×10"}]}]]}'].join('\n');
     return sm.json(pr,{modelTier:'quick'}).then(function(r){
       var ds=Array.isArray(r&&r.days)?r.days.slice(0,7):[];while(ds.length<7)ds.push(null);
-      var days=ds.map(function(d){if(!d||d.rest||!Array.isArray(d.items)||!d.items.length)return null;var st=stageCalc();var items=d.items.slice(0,10).map(function(i){var n=String(i&&i.name||'').trim().slice(0,50);return {name:n,rx:String(i&&i.rx||'3×10').slice(0,20)}}).filter(function(x){return x.name&&exState(x.name,S.area,st)!=='avoid'});if(!items.length)return null;return {name:String(d.name||'Workout').slice(0,50),mins:clamp(parseInt(d.mins,10)||S.aiMins||30,10,120),items:items}});
+      var st=stageCalc(),one=function(d){if(!d||d.rest||!Array.isArray(d.items)||!d.items.length)return null;var items=d.items.slice(0,10).map(function(i){var n=String(i&&i.name||'').trim().slice(0,50);return {name:n,rx:String(i&&i.rx||'3×10').slice(0,20)}}).filter(function(x){return x.name&&exState(x.name,S.area,st)!=='avoid'});if(!items.length)return null;return {name:String(d.name||'Workout').slice(0,50),mins:clamp(parseInt(d.mins,10)||S.aiMins||30,10,120),items:items}},
+        cap=isPro()?3:1,days=ds.map(function(d){var L=(Array.isArray(d)?d:Array.isArray(d&&d.workouts)?d.workouts:[d]).map(one).filter(Boolean).slice(0,cap);return L.length?L:null});
       if(!days.some(Boolean))throw {code:'failed'};
       SHA={name:String(r.name||'My AI schedule').slice(0,40),days:days};S.shaBusy=false;if(!isPro())S.shaFreeWk=dk(weekStart().getTime());
-      try{howFill([].concat.apply([],days.filter(Boolean).map(function(d){return d.items.map(function(i){return i.name})})))}catch(e){}
+      try{howFill([].concat.apply([],[].concat.apply([],days.filter(Boolean)).map(function(d){return d.items.map(function(i){return i.name})})))}catch(e){}
       refresh();setTimeout(function(){var o=$('#sh-ai');if(o)o.scrollIntoView({block:'start',behavior:'smooth'})},700);
     });
   }).catch(function(e){S.shaBusy=false;S.shaMsg=aiErr(e&&e.code)+' Try again in a moment.';refresh()});
@@ -4318,7 +4346,7 @@ function frAutoName(){var u=S.uname,a=authGet()||{};if(FR.handle!==null||!u||!/^
 function frLoad(){
   if(!frOn()||FR.busy)return;FR.busy=true;FR.err='';
   Promise.all([rpc('my_handle'),rpc('friends_list').catch(function(){return null}),rpc('shared_inbox').catch(function(e){FR.noShare=!!(e&&(e.status===404||/PGRST202|shared_inbox/.test(String(e.code||e.message||''))));return null})]).then(function(r){var h=r[0];FR.handle=h&&h.username?h:null;if(r[2]&&r[2].ok){FR.inbox=r[2].items||[];FR.noShare=false}return FR.handle?r[1]:null})
-    .then(function(d){FR.cached=false;if(!FR.handle)FR.data=null;if(d&&d.ok){FR.data=d;if(d.allow&&typeof d.allow==='object'){S.fshare={workouts:d.allow.workouts!==false,meals:!!d.allow.meals,weight:!!d.allow.weight}}}FR.at=Date.now();FR.busy=false;frCache();frPush(true);refresh();frAutoName()})
+    .then(function(d){FR.cached=false;if(!FR.handle)FR.data=null;if(d&&d.ok){FR.data=d;if(d.allow&&typeof d.allow==='object'){S.fshare={workouts:d.allow.workouts!==false,meals:!!d.allow.meals,weight:!!d.allow.weight}}}FR.at=Date.now();FR.busy=false;frCache();frPush(true);refresh();frAutoName();frPicsLoad()})
     .catch(function(e){FR.busy=false;FR.at=Date.now();FR.err=frErr(e);refresh()});
 }
 /* ---------- Share workouts with friends ---------- */
@@ -4383,17 +4411,18 @@ function renderFriends(){
       +(FR.msg?'<div class="note '+(FR.ok?'ok':'warn')+'">'+esc(FR.msg)+'</div>':'')+(FR.err?'<div class="note warn">'+esc(FR.err)+'</div>':'')+'</div>';
   }else{
     var d=FR.data||{friends:[],incoming:[],outgoing:[],blocked:[],cheers:[]},me=FR.handle.username;
-    h+='<div class="card stack"><div class="row spread"><div><p class="eyebrow" style="margin:0">Your username</p><h3 style="margin:.1rem 0 0">@'+esc(me)+'</h3></div><span class="row" style="gap:.4rem"><button class="btn sm" data-act="frshareme">Share</button><button class="btn sm" data-act="freditname">Change</button></span></div>'
+    var myPic=(FR.pics||{})[me];
+    h+='<div class="card stack"><div class="frme"><button type="button" class="frpic" data-act="frpic" aria-label="'+(myPic?'Change':'Add')+' your profile photo">'+frAv(me,FR.handle.display||S.name,myPic,true)+'<span class="frpic-e" aria-hidden="true">📷</span></button><div style="flex:1;min-width:0"><p class="eyebrow" style="margin:0">Your username</p><h3 style="margin:.1rem 0 0">@'+esc(me)+'</h3><span class="row" style="gap:.35rem;margin-top:.35rem"><button class="btn sm" data-act="frpic">'+(myPic?'Change photo':'Add photo')+'</button>'+(myPic?'<button class="btn sm" data-act="frpicdel">Remove</button>':'')+'</span></div><span class="row" style="gap:.4rem;flex-direction:column;align-items:stretch"><button class="btn sm" data-act="frshareme">Share</button><button class="btn sm" data-act="freditname">Change</button></span></div><input type="file" id="fr-picin" accept="image/*" hidden>'
       +'<div class="row"><label class="vh-only" for="fr-add">Friend\'s username</label><input type="text" id="fr-add" maxlength="21" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Add a friend by username" style="flex:1;min-width:10rem"><button class="btn primary" data-act="fradd">Send request</button></div>'
       +(FR.msg?'<div class="note '+(FR.ok?'ok':'warn')+'">'+esc(FR.msg)+'</div>':'')+(FR.err?'<div class="note warn">'+esc(FR.err)+'</div>':'')+'</div>';
     if(d.incoming.length||d.outgoing.length){
-      h+='<div class="card stack"><h3>Requests</h3><ul class="list">'+d.incoming.map(function(r){return '<li><div><b>'+esc(r.display||r.username)+'</b> <span class="small muted">@'+esc(r.username)+' wants to be friends</span></div><span class="row" style="gap:.35rem"><button class="btn sm primary" data-act="fracc" data-u="'+esc(r.username)+'">Accept</button><button class="btn sm" data-act="frrem" data-u="'+esc(r.username)+'">Decline</button></span></li>'}).join('')
+      h+='<div class="card stack"><h3>Requests</h3><ul class="list">'+d.incoming.map(function(r){return '<li>'+frAv(r.username,r.display||r.username,(FR.pics||{})[r.username])+'<div style="flex:1;min-width:0"><b>'+esc(r.display||r.username)+'</b> <span class="small muted">@'+esc(r.username)+' wants to be friends</span></div><span class="row" style="gap:.35rem"><button class="btn sm primary" data-act="fracc" data-u="'+esc(r.username)+'">Accept</button><button class="btn sm" data-act="frrem" data-u="'+esc(r.username)+'">Decline</button></span></li>'}).join('')
         +d.outgoing.map(function(r){return '<li><div><span class="small muted">Waiting for</span> <b>@'+esc(r.username)+'</b></div><button class="btn sm" data-act="frrem" data-u="'+esc(r.username)+'">Cancel</button></li>'}).join('')+'</ul></div>'}
     h+=inboxHtml();
     if(d.cheers.length)h+='<div class="card stack"><h3>Cheers for you</h3><ul class="list">'+d.cheers.slice(0,8).map(function(c){var k=CHEER[c.kind]||['👏',''];return '<li><div><span aria-hidden="true">'+k[0]+'</span> <b>@'+esc(c.username)+'</b> <span class="small muted">'+esc(k[1])+'</span></div><span class="small muted">'+frAgo(c.at)+'</span></li>'}).join('')+'</ul></div>';
     if(!d.friends.length)h+='<div class="card stack"><h3>No friends yet</h3><p class="muted">Send someone your username, or add theirs above. When they accept, you will see what they choose to share here.</p></div>';
     d.friends.forEach(function(f){var nm=f.name||f.display||f.username,ch=f.cheered||[],cf=S.frConfirm&&S.frConfirm.u===f.username?S.frConfirm.a:'';
-      var x='<div class="card frc"><div class="fh"><span class="av" aria-hidden="true">'+esc(String(nm).charAt(0).toUpperCase())+'</span><div class="nm"><b>'+esc(nm)+'</b><span class="small muted">@'+esc(f.username)+(f.updated?' · updated '+frAgo(f.updated):'')+'</span></div>'+(f.streak>1?'<span class="badge">🔥 '+f.streak+' days</span>':'')+'</div>';
+      var x='<div class="card frc"><div class="fh">'+frAv(f.username,nm,(FR.pics||{})[f.username])+'<div class="nm"><b>'+esc(nm)+'</b><span class="small muted">@'+esc(f.username)+(f.updated?' · updated '+frAgo(f.updated):'')+'</span></div>'+(f.streak>1?'<span class="badge">🔥 '+f.streak+' days</span>':'')+'</div>';
       if(f.workouts){x+='<div class="frsec"><p class="eyebrow">This week</p>'+(f.workouts.length?'<ul class="fl">'+f.workouts.slice(0,6).map(function(w){return '<li><span>💪 '+esc(w.n)+(w.min?' <span class="muted">· '+w.min+' min</span>':'')+'</span><span class="small muted">'+esc(new Date(w.ts).toLocaleDateString(undefined,{weekday:'short'}))+'</span></li>'}).join('')+'</ul>':'<span class="small muted">No workouts yet this week.</span>')+'</div>'}
       if(f.meals){var today=f.meals.d===todayStamp();x+='<div class="frsec"><p class="eyebrow">'+(today?'Eaten today':'Last day they logged')+'</p>'+(f.meals.items&&f.meals.items.length?'<ul class="fl">'+f.meals.items.slice(0,10).map(function(m){return '<li><span>'+esc(m.em||'🍽️')+' '+esc(m.n)+'</span><span class="small muted">'+(S.hideNums?'':kc(m.kcal)+' kcal')+'</span></li>'}).join('')+'</ul>'+(S.hideNums?'':'<span class="small"><b>'+kc(f.meals.kcal)+' kcal</b> in total</span>'):'<span class="small muted">Nothing logged yet.</span>')+(today&&f.meals.water?'<div class="frwater"><span>💧 Water</span><b>'+f.meals.water+' oz</b></div>':'')+'</div>'}
       if(f.weight&&f.weight.ch!=null){var lb=S.units==='lb',cv=lb?Math.round(f.weight.ch*2.20462*10)/10:f.weight.ch;x+='<div class="frsec"><p class="eyebrow">Weight</p><span class="small">'+(cv>0?'+':cv<0?'−':'')+Math.abs(cv)+(lb?' lb':' kg')+' over '+f.weight.days+' days</span></div>'}
@@ -4411,6 +4440,13 @@ function renderFriends(){
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h;Object.keys(av).forEach(function(i){var e=$('#'+i);if(e&&av[i])e.value=av[i]});if(aid){var e2=$('#'+aid);if(e2&&e2!==ae){e2.focus();try{var n=e2.value.length;e2.setSelectionRange(n,n)}catch(_){}}}}
   if(frOn()&&!FR.busy&&(FR.handle===undefined||FR.cached||Date.now()-FR.at>45000)&&!FR.err)frLoad();
 }
+/* Friends: profile photos. Shrunk to a small square on the phone before it is uploaded. */
+function frAv(u,nm,pic,big){return pic?'<img class="av avp'+(big?' big':'')+'" src="'+esc(pic)+'" alt="" width="'+(big?64:40)+'" height="'+(big?64:40)+'">':'<span class="av'+(big?' big':'')+'" aria-hidden="true">'+esc(String(nm||u||'?').charAt(0).toUpperCase())+'</span>'}
+function frPicsLoad(){if(!frOn())return;rpc('friend_pics',{}).then(function(m){FR.pics=m&&typeof m==='object'?m:{};FR.picErr=false;refresh()}).catch(function(){FR.picErr=true})}
+function frPicSquare(file){return new Promise(function(ok,no){var img=new Image(),u=URL.createObjectURL(file);img.onload=function(){try{var s=Math.min(img.naturalWidth,img.naturalHeight),c=document.createElement('canvas');c.width=c.height=128;var x=c.getContext('2d');x.drawImage(img,(img.naturalWidth-s)/2,(img.naturalHeight-s)/2,s,s,0,0,128,128);URL.revokeObjectURL(u);var d=c.toDataURL('image/jpeg',.82);if(d.length>40000)d=c.toDataURL('image/jpeg',.6);ok(d)}catch(e){no(e)}};img.onerror=function(){URL.revokeObjectURL(u);no('bad')};img.src=u})}
+function frPicSave(d){var me=FR.handle&&FR.handle.username;rpc('set_pic',{p_pic:d||''}).then(function(r){if(r&&r.ok===false)throw r;FR.pics=FR.pics||{};if(d)FR.pics[me]=d;else delete FR.pics[me];toast(d?'Your friends will see your new photo.':'Photo removed.',{title:'Profile photo',icon:'📷',kind:'ok'});refresh()})
+  .catch(function(){toast('Photos need a quick update on the server first. Try again soon.',{title:'Could not save photo',icon:'!',kind:'warn'})})}
+document.addEventListener('change',function(e){var t=e.target;if(!t||t.id!=='fr-picin'||!t.files||!t.files[0])return;var f=t.files[0];t.value='';if(!/^image\//.test(f.type)){toast('Pick a photo.',{kind:'warn'});return}frPicSquare(f).then(frPicSave,function(){toast('That photo could not be read. Try another.',{title:'Profile photo',icon:'!',kind:'warn'})})});
 function frAct(p,msgOk){FR.msg='';FR.err='';return p.then(function(r){if(r&&r.ok===false){FR.ok=false;FR.msg=({not_found:'No one has that username. Check the spelling.',self:'That is your own username.',no_username:'Pick a username first.',too_many:'You have too many requests waiting. Cancel some first.',not_friends:'You can only cheer friends.',taken:'That username is taken. Try another.',invalid:'Use 3 to 20 lowercase letters, numbers or underscores.'})[r.error]||'Something went wrong. Try again.'}else if(msgOk){FR.ok=true;FR.msg=typeof msgOk==='function'?msgOk(r):msgOk}FR.msgAt=Date.now();FR.at=0;FR.busy=false;frLoad();return r}).catch(function(e){FR.ok=false;FR.err=frErr(e);refresh()})}
 /* ----- weight log ----- */
 function wlogAdd(kg){var d=new Date(),st=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');if(!Array.isArray(S.wlog))S.wlog=[];S.wlog=S.wlog.filter(function(x){return x&&x.d!==st});S.wlog.push({d:st,kg:Math.round(kg*10)/10});S.wlog.sort(function(a,b){return a.d<b.d?-1:1});if(S.wlog.length>400)S.wlog=S.wlog.slice(-400)}
@@ -4457,7 +4493,8 @@ function targetRings(t,T){var hide=S.hideNums,f1=function(n){return S.hideNums?'
     if(x[6])msg=left>=0?f1(left)+' '+x[4]+' left':'<span class="tover">'+f1(-left)+' '+x[4]+' over</span>';
     else msg=left>0?'need '+f1(left)+' '+x[4]:'<span class="tdone">✓ done</span>';
     var fr=goal?have/goal:0,col=x[6]&&have>goal?'#ff453a':x[5],st=!goal||hide?'':x[6]?(have>goal?'over':''):(fr>=1.1?'extra':fr>=1?'met':''),
-      bd=st==='met'?'<span class="rbadge ok" aria-hidden="true">✓</span>':st==='extra'?'<span class="rbadge up" aria-hidden="true">↑</span>':st==='over'?'<span class="rbadge bad" aria-hidden="true">!</span>':'',
+      far=x[6]?fr>=1.25:fr>=1.5,
+      bd=st==='met'?'<span class="rbadge ok" aria-hidden="true">✓</span>':st==='extra'?(far?'<span class="rbadge up far" aria-hidden="true" title="Well over">↑↑</span>':'<span class="rbadge up" aria-hidden="true" title="Over">↑</span>'):st==='over'?(far?'<span class="rbadge bad far" aria-hidden="true" title="Well over">!!</span>':'<span class="rbadge bad" aria-hidden="true" title="Over">!</span>'):'',
       pill=st==='met'?'<span class="rpill ok">✓ Goal met</span>':st==='extra'?'<span class="rpill up">+'+f1(have-goal)+' '+x[4]+' over</span>':st==='over'?'<span class="rpill bad">+'+f1(have-goal)+' '+x[4]+' over</span>':'';
     return '<div class="mring'+(st?' st-'+st:'')+'"><div class="mr" style="color:'+x[5]+'">'+ringSvg(fr,col,96,9)+ringLap(fr,col,96,9)+bd+'<div class="cin"><b>'+f1(have)+'</b><span class="tu">of '+f1(goal)+' '+x[4]+'</span></div></div><p class="mlab">'+x[1]+(x[6]?' <span class="small muted">(max)</span>':'')+'</p>'+pill+'</div>'}).join('')+'</div>'}
 /* Today's totals as rings: used on Today's meals and in the pop-up */
@@ -4501,7 +4538,12 @@ function aiDishOk(d,text){d=String(d||'').toLowerCase().trim();if(!d)return fals
   if(/\d/.test(d)||/,|\+|&|\band\b.*\band\b/.test(d))return false;if(t&&(d===t||t.indexOf(d)===0&&d.length>t.length*.7))return false;return true}
 function aiDishGroups(L,text){L.forEach(function(x){if(x.dish&&!aiDishOk(x.dish,text))x.dish=null});var out=[],by={};L.forEach(function(x){var d=typeof x.dish==='string'?x.dish.trim().slice(0,60):'';if(d){var k=d.toLowerCase(),g=by[k];if(!g){g={dish:d,items:[]};by[k]=g;out.push(g)}g.items.push(x)}else out.push({items:[x]})});
   return out.reduce(function(a,g){if(g.dish&&g.items.length<2){a.push({items:g.items})}else a.push(g);return a},[])}
-function aiDishMeal(g,amt,blob){var parts=g.items.map(function(x){var m=aiFoodItem(x,null,blob),pm=aiMeal(m,'AI');return {name:pm.name,em:emojiOk(x.emoji)||emojiFor(pm.name),serv:(m.q!==1?(Math.round(m.q*100)/100)+' × ':'')+((find(pm.fid)||m.f).serv||'serving'),n:pm.n,al:pm.al||[]}});
+/* Tidy food names from AI, photos and barcodes: "GRILLED chicken breast (estimate)" -> "Grilled chicken breast" */
+function foodNm(x,max){var s=String(x||'').replace(/[_\s]+/g,' ').replace(/\(\s*(?:ai\s+)?(?:estimate[ds]?|approx(?:imate)?\.?|about)\s*\)/ig,'').replace(/^\s*\d+(?:\.\d+)?\s*(?:x|×)\s+/i,'').replace(/^[\s\-–—•*,.:;]+|[\s\-–—•*,.:;]+$/g,'').replace(/\s+,/g,',').trim();if(!s)return 'Food';
+  var up=s===s.toUpperCase();s=s.split(' ').map(function(w){var b=w.replace(/[^A-Za-z&]/g,'');return !up&&b.length>=2&&b.length<=4&&b===b.toUpperCase()&&/[A-Z]/.test(b)?w:w.toLowerCase()}).join(' ');
+  s=s.charAt(0).toUpperCase()+s.slice(1);return s.slice(0,max||60).trim()}
+function brandNm(x){var s=String(x||'').split(',')[0].replace(/\s+/g,' ').trim().slice(0,24);if(!s)return '';return s===s.toUpperCase()||s===s.toLowerCase()?s.toLowerCase().replace(/(^|[\s\-(&\/])([a-z])/g,function(m,a,b){return a+b.toUpperCase()}):s}
+function aiDishMeal(g,amt,blob){g.dish=foodNm(g.dish);var parts=g.items.map(function(x){var m=aiFoodItem(x,null,blob),pm=aiMeal(m,'AI');return {name:pm.name,em:emojiOk(x.emoji)||emojiFor(pm.name),serv:(m.q!==1?(Math.round(m.q*100)/100)+' × ':'')+((find(pm.fid)||m.f).serv||'serving'),n:pm.n,al:pm.al||[]}});
   var t={};KEYS.forEach(function(k){t[k]=0});var al=[];parts.forEach(function(p){KEYS.forEach(function(k){t[k]+=+p.n[k]||0});p.al.forEach(function(a){if(al.indexOf(a)<0)al.push(a)})});
   var sgk=parts.every(function(p){return p.n.sug!=null});
   var o=F('e'+(uid++),g.dish,'Estimate',(g.dish.toLowerCase().replace(/[^a-z ]/g,'').trim().split(/\s+/).pop()||'serving'),Math.round(t.kcal),Math.round(t.p*10)/10,Math.round(t.c*10)/10,Math.round(t.f*10)/10,Math.round(t.fib*10)/10,Math.round(t.fe*10)/10,Math.round(t.b12*10)/10,Math.round(t.vd*10)/10,Math.round(t.na),Math.round(t.k),al,'estimate',[g.dish.toLowerCase()]);
@@ -4529,7 +4571,7 @@ function aiFoodItem(r,amt,blob,text){
     /* A counted food whose pieces match the list serving: 2 apples = 2 × 1 medium apple */
     if(c>1&&(!per||!sg||(per/sg>.6&&per/sg<1.6)))return {f:m,q:c,sug:sgT};
     if(c<=1)return {f:m,q:g>=1&&sg?Math.min(30,Math.max(.05,Math.round(g/sg*1000)/1000)):1,sug:sgT}}
-  var nm=String((m&&c>1?m.name:r.name)).slice(0,60),sv=c>1?aiUnit(r,c,g):(g>=1?Math.round(g)+' g':String(r.serving||'1 serving').slice(0,40)),d=function(v,mx,p){return Math.round(num(v,mx)/c*p)/p};
+  var nm=m&&c>1?m.name:foodNm(r.name),sv=c>1?aiUnit(r,c,g):(g>=1?Math.round(g)+' g':String(r.serving||'1 serving').slice(0,40)),d=function(v,mx,p){return Math.round(num(v,mx)/c*p)/p};
   var o=F('e'+(uid++),nm,'Estimate',sv,d(r.kcal,5000,1),d(r.protein,300,10),d(r.carbs,600,10),d(r.fat,400,10),d(r.fiber,100,10),0,0,0,d(r.sodium,10000,1),0,(m&&m.al)||[],'estimate',[nm.toLowerCase()]);
   o.sug=sgT==null?null:Math.round(sgT/c*10)/10;o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how=blob?'photo':'description';
   o.id='e'+Date.now().toString(36)+(uid++);o.saved=Date.now();var dk=o.name.toLowerCase()+'|'+o.serv;
@@ -5459,7 +5501,7 @@ function renderSchedule(){
   $('#sh-plans').innerHTML=SL.map(function(id,ti2){
     var n=S.plans[id].filter(Boolean).length;
     return '<button class="scard" data-act="splan" data-id="'+id+'" aria-pressed="'+(S.planId===id?'true':'false')+'"><span class="sl">'+(ti2+1)+'</span><b data-sn="'+id+'">'+esc(schedName(id))+'</b><span class="mono small">'+n+(n===1?' workout':' workouts')+' a week</span></button>';
-  }).join('')+(SL.length<max?'<button class="scard sadd" data-act="sadd"><span class="sl">+</span><b>Add a schedule</b><span class="mono small">'+(max-SL.length)+' more '+(isPro()?'with Pro':'')+'</span></button>'
+  }).join('')+(SL.length<max?'<button class="scard sadd" data-act="sadd"><span class="sl">+</span><b>Add a schedule</b></button>'
     :!isPro()?'<div class="scard slock" aria-disabled="true"><span class="sl">🔒</span><b>More schedules</b><span class="small muted">Pro accounts get up to 3</span></div>':'');
   var days=planDays(),tpl=SCHED_T.filter(function(t){return t.id===S.planId})[0],ti=todayIdx(),done=0,total=0;
   var opts=function(sel){
@@ -5789,7 +5831,7 @@ function bcLookup(code){fetch('https://world.openfoodfacts.org/api/v2/product/'+
     var pr=j&&j.status===1&&j.product;if(!pr){BC.busy=false;bcMsg('That barcode is not in the food database yet. Try searching by name instead.');return}
     var nu=pr.nutriments||{},g=parseFloat(pr.serving_quantity)||0,per=function(k){var v=parseFloat(nu[k+'_100g']);return isFinite(v)?v:0};
     var kcal=per('energy-kcal')||(per('energy')/4.184);if(!kcal&&!per('proteins')&&!per('carbohydrates')){BC.busy=false;bcMsg('That product has no nutrition facts listed. Try searching by name instead.');return}
-    var f=g>0?g/100:1,nm=String(pr.product_name_en||pr.product_name||'Packaged food').slice(0,50)+(pr.brands?' ('+String(pr.brands).split(',')[0].trim().slice(0,24)+')':'');
+    var f=g>0?g/100:1,nm=(function(){var n=foodNm(pr.product_name_en||pr.product_name||'Packaged food',50),b=brandNm(pr.brands);if(b&&n.toLowerCase().indexOf(b.toLowerCase())===0)n=foodNm(n.slice(b.length),50);return b&&n.toLowerCase().indexOf(b.toLowerCase())<0?n+' · '+b:n})();
     var o=F('e'+(uid++),nm,'Packaged',g>0?String(pr.serving_size||Math.round(g)+' g').slice(0,40):'100 g',Math.round(kcal*f),Math.round(per('proteins')*f*10)/10,Math.round(per('carbohydrates')*f*10)/10,Math.round(per('fat')*f*10)/10,Math.round(per('fiber')*f*10)/10,0,0,0,Math.round(per('sodium')*1000*f),0,[],'estimate',[nm.toLowerCase()]);
     o.sug=(function(v){v=parseFloat(nu['sugars_100g']);return isFinite(v)?Math.round(v*f*10)/10:null})();o.nl=['fe','b12','vd','k'];o.alUnk=true;o.how='barcode';o.id='e'+Date.now().toString(36)+(uid++);o.saved=Date.now();
     S.est=S.est.filter(function(x){return (x.name+'|'+x.serv)!==(o.name+'|'+o.serv)});S.est.unshift(o);S.est=S.est.slice(0,300);estSave();
@@ -6284,8 +6326,13 @@ var ACT={
   cmpopen:function(b){if(!proNeed('cmp'))return;cmpOpen(b.dataset.k)},
   cmpclose:function(){var m=$('#cmp');if(m&&!m.hidden){modalHide(m);document.body.classList.remove('modal-open')}},
   gpace:function(b){var k=b.dataset.k;gChange(function(){S.gPace=k})},
-  gpick:function(b){var k=b.dataset.k;gChange(function(){S.goals=[k];S.goalKcal=null;S.macroOv={p:null,c:null,f:null};S.gPlan=null;S.gNote='';if(k==='maintain'||k==='health')S.gTarget=null});S.gStep='opts';try{sfxTap()}catch(e){}},
-  gstep:function(b){S.gStep=b.dataset.k;setTimeout(function(){var f=$(b.dataset.k==='pick'?'#g-pick .gpk-o':'#g-cur .btn');if(f)f.focus()},60)},
+  gpick:function(b){var k=b.dataset.k,sel=Array.isArray(S.gSel)?S.gSel.slice():((S.goals||[]).length?goalSet().slice(0,3):[]),i=sel.indexOf(k);
+    if(i>-1)sel.splice(i,1);else{var opp={cut:['bulk','lean'],bulk:['cut','recomp'],lean:['cut'],recomp:['bulk']}[k]||[];var clash=sel.filter(function(x){return opp.indexOf(x)>-1});
+      if(clash.length){toast(gLabel(k)+' and '+gLabel(clash[0])+' pull in opposite directions, so '+gLabel(clash[0])+' was swapped out.',{title:'Goals',icon:'🎯'});sel=sel.filter(function(x){return clash.indexOf(x)<0})}
+      if(sel.length>=3){try{sfxSad()}catch(e){}toast('You can pick up to 3 goals. Tap one to unpick it first.',{title:'Goals',icon:'🎯',kind:'warn'});return}sel.push(k)}
+    S.gSel=sel},
+  gpickgo:function(){var sel=Array.isArray(S.gSel)?S.gSel.slice(0,3):goalSet().slice(0,3);if(!sel.length)return;S.gSel=null;gChange(function(){S.goals=sel;S.goalKcal=null;S.macroOv={p:null,c:null,f:null};S.gPlan=null;S.gNote='';if(sel.every(function(k){return k==='maintain'||k==='health'}))S.gTarget=null});S.gStep='opts'},
+  gstep:function(b){S.gStep=b.dataset.k;S.gSel=null;setTimeout(function(){var f=$(b.dataset.k==='pick'?'#g-pick .gpk-o':'#g-cur .btn');if(f)f.focus()},60)},
   glkeep:function(){var ch=GL&&(GL.b.goals!==GL.a.goals||GL.b.pace!==GL.a.pace||GL.b.per!==GL.a.per);glClose();toast('Your goals are saved.',{title:'Goals',icon:'🎯',kind:'ok'});if(ch&&isPro()&&aiSchedId()){S.schAdj={pid:aiSchedId(),at:Date.now()};S.schRes=null;setTimeout(function(){var e=$('#g-sch');if(e)e.scrollIntoView({block:'center',behavior:'smooth'})},400)}},
   ramake:function(){raMake()},
   raserv:function(b){if(!RA)return;RA.serv=clamp(RA.serv+(+b.dataset.d),1,30)},
@@ -6300,11 +6347,18 @@ var ACT={
   gaimake:function(){if(!proNeed('goal'))return;gAI('make',$('#g-ai')&&$('#g-ai').value)},
   gairefine:function(){if(!proNeed('goal'))return;gAI('refine',$('#g-ai')&&$('#g-ai').value)},
   shamake:function(){if(!isPro()&&S.shaFreeWk===dk(weekStart().getTime())){proOpen('sched');return}shaMake()},
-  shaclr:function(){SHA=null},
+  logfood:function(b,e){if(e&&e.preventDefault)e.preventDefault();if(location.hash!=='#eat')location.hash='#eat';setTimeout(function(){var c=$('#e-quick'),t=$('#l-text');if(c)c.scrollIntoView({block:'start',behavior:'smooth'});if(t)try{t.focus({preventScroll:true})}catch(x){t.focus()}},350)},
+  shaclr:function(){SHA=null;toast('Suggestion cancelled.',{title:'AI schedule',icon:'📅'})},
+  shaedit:function(){if(SHA)SHA.edit=true},
+  shaeditdone:function(){if(!SHA)return;shaPull();SHA.np=true;SHA.edit=false},
+  shaxdel:function(b){if(!SHA)return;shaPull();SHA.np=true;var L=SHA.days[+b.dataset.i],d=L&&L[+b.dataset.j];if(!d)return;d.items.splice(+b.dataset.k,1);if(!d.items.length){L.splice(+b.dataset.j,1);if(!L.length)SHA.days[+b.dataset.i]=null}},
+  shawdel:function(b){if(!SHA)return;shaPull();SHA.np=true;var L=SHA.days[+b.dataset.i];if(!L)return;L.splice(+b.dataset.j,1);if(!L.length)SHA.days[+b.dataset.i]=null},
+  shapd:function(b){var k=b.dataset.k;if((k==='2'||k==='3')&&!isPro()){proOpen('multi');return}S.shaPerDay=k},
   shasave:function(){if(!SHA)return;var L=schedList();if(L.length>=schedMax()){toast('You already have '+schedMax()+' schedules. Delete one first.');return}
-    var nm=(($('#sha-name')&&$('#sha-name').value)||SHA.name).trim().slice(0,40)||'My AI schedule',id=schedAdd();if(!id){toast('Could not add a schedule.');return}
-    S.planNames[id]=nm;SHA.days.forEach(function(d,i){if(!d){S.plans[id][i]=null;return}var dn=(($('#sha-d'+i)&&$('#sha-d'+i).value)||d.name).trim().slice(0,50)||d.name,wid='c'+(uid++);
-      S.customW.push({id:wid,name:dn,mins:d.mins,level:LVLNAME[S.aiLvl]||'Custom',cat:'custom',eq:['bodyweight'],focus:'Built by AI',pl:'strength',ex:d.items.map(function(x){return [x.name,x.rx]})});S.plans[id][i]=wid});
+    shaPull();var nm=(SHA.name||'').trim().slice(0,40)||'My AI schedule',id=schedAdd();if(!id){toast('Could not add a schedule.');return}
+    shaPull();S.planNames[id]=nm;SHA.days.forEach(function(L,i){if(!L||!L.length){S.plans[id][i]=null;dayXSet(id,i,[]);return}
+      var ids=L.map(function(d){var wid='c'+(uid++);S.customW.push({id:wid,name:d.name,mins:d.mins,level:LVLNAME[S.aiLvl]||'Custom',cat:'custom',eq:['bodyweight'],focus:'Built by AI',pl:'strength',ex:d.items.map(function(x){return [x.name,x.rx]})});return wid});
+      S.plans[id][i]=ids[0];dayXSet(id,i,isPro()?ids.slice(1):[])});
     S.planId=id;syncSched();SHA=null;toast('"'+nm+'" is saved and selected.',{title:'Schedule saved',icon:'📅',kind:'ok'})},
   ailvl:function(b){S.aiLvl=b.dataset.k},
   aimins:function(b){S.aiMins=+b.dataset.m},
@@ -6327,6 +6381,8 @@ var ACT={
   frcancel:function(){S.frConfirm=null},
   frdo:function(b){var a=b.dataset.a,u=b.dataset.u;S.frConfirm=null;frAct(rpc('friend_update',{p_username:u,p_action:a}),a==='block'?'Blocked @'+u+'.':a==='unblock'?'Unblocked @'+u+'.':'Removed @'+u+'.')},
   frcheer:function(b){var u=b.dataset.u,k=b.dataset.k;if(b.getAttribute('aria-pressed')==='true'){toast('You already sent that today.');return}var f=FR.data&&FR.data.friends.filter(function(x){return x.username===u})[0];if(f){f.cheered=(f.cheered||[]).concat([k])}rpc('send_cheer',{p_username:u,p_kind:k}).then(function(){toast('Sent '+CHEER[k][0]+' to @'+u+'.',{title:'Cheer sent',icon:CHEER[k][0]})}).catch(function(e){toast(frErr(e))})},
+  frpic:function(){var i=$('#fr-picin');if(i)i.click()},
+  frpicdel:function(){frPicSave('')},
   frshareme:function(){var t='Add me on Manna: @'+FR.handle.username,u=location.origin+location.pathname+'#friends';if(navigator.share)navigator.share({title:'Manna',text:t,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(t+' '+u).then(function(){toast('Copied. Paste it to a friend.',{title:'Copied',icon:'📋'})})},
   frrefresh:function(){FR.at=0;frLoad()},
   bpopen:function(){S.bpBook=null;bpRender();modalOpen($('#bp'));document.body.classList.add('modal-open')},
