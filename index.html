@@ -637,6 +637,27 @@ input[type=text],input[type=number],select,textarea{
 .gcur b{display:block;font-size:1.1rem}.gcur span.small{display:block}
 #g-opts{gap:.8rem}.g-aid summary{cursor:pointer;font-weight:600;font-size:.9rem;color:var(--accent)}
 @media (prefers-reduced-motion:reduce){.gpk-o{transition:none}}
+.tp{position:relative}.lkb{position:absolute;right:6px;bottom:6px;z-index:2;display:grid;place-items:center;width:1.6rem;height:1.6rem;border-radius:50%;background:rgba(0,0,0,.55);font-size:.8rem;line-height:1;font-style:normal;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.onb-th.lock i{position:relative}.onb-th.lock i em.lkb{right:-5px;bottom:-5px;top:auto;transform:none;width:1.3rem;height:1.3rem;font-size:.62rem}
+#thpv{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 96px);z-index:400;display:flex;align-items:center;gap:.6rem;width:min(560px,calc(100% - 24px));padding:.6rem .7rem;border-radius:18px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);color:var(--ink);box-shadow:0 12px 32px -12px rgba(0,0,0,.4);animation:thpvIn .35s cubic-bezier(.34,1.56,.64,1)}
+#thpv.insetup{z-index:2147483000;bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
+.thpv-sw{flex:none;width:2rem;height:2rem;border-radius:10px;border:1px solid var(--line)}.thpv-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}.thpv-t b{font-size:.92rem}.thpv-t span{font-size:.75rem;color:var(--muted)}
+#thpv .btn{flex:none;white-space:nowrap}
+@keyframes thpvIn{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}@media (prefers-reduced-motion:reduce){#thpv{animation:none}}
+#twel{position:fixed;inset:0;z-index:9400;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 45%,color-mix(in srgb,var(--accent) 30%,var(--bg)) 0%,var(--bg) 70%);color:var(--ink);overflow:hidden;animation:twelIn .5s ease both;cursor:pointer}
+#twel.bye{animation:twelOut .7s cubic-bezier(.65,0,.35,1) both}
+.twel-rays{position:absolute;left:50%;top:46%;width:180vmax;height:180vmax;transform:translate(-50%,-50%);background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--accent) 14%,transparent) 0deg 6deg,transparent 6deg 18deg);mask-image:radial-gradient(circle,#000 0%,transparent 55%);-webkit-mask-image:radial-gradient(circle,#000 0%,transparent 55%);animation:twelSpin 14s linear infinite,twelFade 1.2s ease both}
+.twel-c{position:relative;display:flex;flex-direction:column;align-items:center;gap:.4rem;text-align:center;padding:0 16px}
+.twel-k{font-size:.85rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);animation:twelUp .6s cubic-bezier(.22,1,.36,1) .1s both}
+.twel-m{display:flex;font-family:var(--f-display,'Cormorant Garamond',serif);font-style:italic;font-weight:600;font-size:clamp(4.2rem,22vw,8.5rem);line-height:.95;letter-spacing:-.01em}
+.twel-m i{display:inline-block;font-style:inherit;animation:twelLetter .9s cubic-bezier(.22,1.4,.36,1) var(--d) both}
+.twel-n{font-size:1.05rem;color:var(--muted);animation:twelUp .7s cubic-bezier(.22,1,.36,1) .85s both}
+@keyframes twelIn{from{opacity:0}to{opacity:1}}@keyframes twelOut{to{opacity:0;transform:scale(1.06);filter:blur(6px)}}
+@keyframes twelSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}@keyframes twelFade{from{opacity:0}to{opacity:1}}
+@keyframes twelUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes twelLetter{0%{opacity:0;transform:translateY(.5em) scale(.6) rotate(-8deg);filter:blur(8px)}100%{opacity:1;transform:none;filter:none}}
+@media (prefers-reduced-motion:reduce){#twel,#twel *,#twel.bye{animation:none!important}.twel-rays{display:none}}
+.qwn{min-width:2.4rem;padding-left:.55rem;padding-right:.55rem}
 .hsg{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:1rem;align-items:start}
 @media (max-width:560px){.hsg{grid-template-columns:1fr}.hsp{justify-self:center}}
 .hsp{width:100%;max-width:190px}
@@ -868,15 +889,26 @@ html{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100
 #wel[hidden]{display:none}#wel.out{opacity:0}
 .wel-ic{width:84px;height:84px;margin:0 auto 1rem;color:var(--accent)}.wel-ic svg{width:100%;height:100%}
 #wel h2{font:italic 600 clamp(2rem,9vw,3rem)/1.1 var(--f-display);margin:0 0 .5rem}#wel p{color:var(--muted);margin:0}
-#tour{position:fixed;inset:0;z-index:9300}
+#tour{position:fixed;inset:0;z-index:9300;touch-action:none;overscroll-behavior:none}
 #tour[hidden]{display:none}
-#tour-hl{position:fixed;border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.58),0 0 0 3px var(--accent);pointer-events:none;transition:left .35s ease,top .35s ease,width .35s ease,height .35s ease}
-#tour-card{position:fixed;left:12px;right:12px;max-width:520px;margin:0 auto;background:var(--card,var(--bg));color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-radius:22px;padding:16px 18px;box-shadow:0 12px 40px rgba(0,0,0,.35);max-height:46vh;overflow:auto}
-#tour-card.top{top:max(12px,env(safe-area-inset-top))}#tour-card.bot{bottom:calc(88px + env(safe-area-inset-bottom))}
-#tour-card h3{margin:.1rem 0 .4rem;outline:0}#tour-card p{margin:0 0 .8rem}
+html.touring,html.touring body{overflow:hidden;overscroll-behavior:none}
+#tour.in #tour-hl{animation:tourDim .45s ease both}#tour.in #tour-card{animation:tourCardIn .5s cubic-bezier(.22,1,.36,1) both}
+#tour.out{animation:tourOut .26s ease both}
+#tour-hl{position:fixed;border-radius:20px;box-shadow:0 0 0 9999px rgba(8,10,16,.62),0 0 0 2px var(--accent),0 0 0 8px color-mix(in srgb,var(--accent) 22%,transparent);pointer-events:none;transition:left .55s cubic-bezier(.65,0,.35,1),top .55s cubic-bezier(.65,0,.35,1),width .55s cubic-bezier(.65,0,.35,1),height .55s cubic-bezier(.65,0,.35,1),opacity .25s ease}
+#tour-hl.away{box-shadow:0 0 0 9999px rgba(8,10,16,.62);opacity:1}
+#tour-hl.ping::after{content:"";position:absolute;inset:-2px;border-radius:inherit;border:2px solid var(--accent);animation:tourPing .9s cubic-bezier(.22,1,.36,1) .35s both}
+#tour-card{position:fixed;left:12px;right:12px;top:auto;max-width:520px;margin:0 auto;background:var(--card,var(--bg));color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 14%,transparent);border-radius:24px;padding:14px 18px 16px;box-shadow:0 18px 50px -10px rgba(0,0,0,.45);max-height:46vh;overflow:auto;transition:top .5s cubic-bezier(.65,0,.35,1);touch-action:auto}
+#tour-card.tswap #tour-n,#tour-card.tswap h3,#tour-card.tswap p{animation:tourTxt .42s cubic-bezier(.22,1,.36,1) both}#tour-card.tswap h3{animation-delay:.04s}#tour-card.tswap p{animation-delay:.08s}
+#tour-card h3{margin:.15rem 0 .35rem;outline:0}#tour-card p{margin:0 0 .85rem}
+.tour-prog{height:3px;border-radius:3px;background:color-mix(in srgb,var(--ink) 10%,transparent);overflow:hidden;margin:0 0 .65rem}.tour-prog i{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0);transition:transform .5s cubic-bezier(.65,0,.35,1)}
+#tour-n{display:flex;flex-direction:column;gap:.35rem;margin:0}.tsec{display:flex;flex-wrap:wrap;gap:.25rem}.tsec i{font-style:normal;font-size:.66rem;letter-spacing:.06em;padding:.15rem .45rem;border-radius:99px;color:var(--muted);background:color-mix(in srgb,var(--ink) 6%,transparent);transition:background .3s,color .3s}.tsec i.done{color:var(--ink)}.tsec i.done::before{content:"✓ "}.tsec i.on{background:var(--accent);color:var(--accent-ink,#fff)}
+.tstep{font-size:.72rem}
+@keyframes tourDim{from{opacity:0}to{opacity:1}}@keyframes tourCardIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}@keyframes tourOut{to{opacity:0}}
+@keyframes tourTxt{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes tourPing{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
 .tour-btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tour-btns #tour-exit{margin-left:auto}
 @media (prefers-reduced-motion:no-preference){.wel-in{animation:onb-up .8s cubic-bezier(.2,.8,.2,1) both}}
-@media (prefers-reduced-motion:reduce){#tour-hl{transition:none}}
+@media (prefers-reduced-motion:reduce){#tour-hl,#tour-card,.tour-prog i{transition:none}#tour-hl.ping::after,#tour-card.tswap *,#tour.in *,#tour.out{animation:none!important}}
 .onb-wf{margin:.2rem 0 .6rem}
 .onb-acct{margin-top:1.1rem}
 .onb-abox{display:flex;flex-direction:column;gap:.25rem;padding:.9rem 1rem;border-radius:18px;border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);background:color-mix(in srgb,var(--ink) 5%,transparent)}
@@ -1452,7 +1484,7 @@ html:not(.rm):not(.lite) .stt-bar{transform-origin:bottom;animation:sttUp .6s cu
 </style>
 <style id="clk-phone">@media (pointer:coarse) and (max-width:600px){.clockbar .clk{display:none!important}}</style>
 <style id="chipx-style">.wsumx{display:inline-flex;align-items:center;gap:.45rem}.chipx{display:inline-grid;place-items:center;width:1.25rem;height:1.25rem;border-radius:50%;background:#ff453a;color:#fff;font:700 .7rem/1 system-ui,-apple-system,sans-serif}</style>
-<style id="vnext-style">.vpg .vnext{left:auto;right:1px;bottom:auto;top:calc(50% + 40px);transform:none;width:22px;height:22px;padding:0;display:grid;place-items:center;border-radius:50%;font-size:.75rem;line-height:1;background:color-mix(in srgb,var(--surface) 80%,transparent);color:var(--muted);box-shadow:0 2px 8px rgba(0,0,0,.18)}.vpg .vnext[hidden]{display:none}.vpg .vnext span{margin-top:-1px}</style>
+<style id="vnext-style">.vpg .vnext{left:auto;right:-2px;bottom:auto;top:calc(50% + 40px);transform:none;margin:0;width:1.9rem;height:1.9rem;padding:0;display:grid;place-items:center;border-radius:50%;line-height:1;color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);box-shadow:0 4px 14px rgba(0,0,0,.12);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:transform .25s cubic-bezier(.3,1.4,.5,1),background .3s,color .3s}.vpg .vnext:active{transform:scale(.9)}.vpg .vnext:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.vpg .vnext[hidden]{display:none}.vpg .vnext span{display:grid;place-items:center}.vpg .vnext svg{width:1rem;height:1rem;transition:transform .35s cubic-bezier(.3,1.2,.4,1)}.vpg .vnext.up svg{transform:rotate(180deg)}</style>
 <style id="ovf-style">
 .plk-prev{filter:blur(3px) saturate(.8);opacity:.55;pointer-events:none;user-select:none;max-height:140px;overflow:hidden}
 .lc svg{display:block;width:100%;height:130px;overflow:visible}.lc-x{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-top:.2rem}
@@ -1679,7 +1711,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div class="onb-nav"><button class="btn" data-onb="back" id="onb-back">Back</button><button class="btn primary" data-onb="next" id="onb-next">Next</button></div>
     </div>
     <div id="wel" role="status" aria-live="polite" hidden><div class="wel-in"><div class="wel-ic" id="wel-ic"></div><h2 id="wel-h"></h2><p>Let's take a quick look around.</p></div></div>
-    <div id="tour" hidden><div id="tour-hl" aria-hidden="true"></div><div id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-t"><p class="eyebrow" id="tour-n"></p><h3 id="tour-t" tabindex="-1"></h3><p id="tour-p"></p><div class="tour-btns"><button class="btn" data-tour="back" id="tour-back">Back</button><button class="btn primary" data-tour="next" id="tour-next">Next</button><button class="btn" data-tour="exit" id="tour-exit">Exit tutorial</button></div></div></div>
+    <div id="tour" hidden><div id="tour-hl" aria-hidden="true"></div><div id="tour-card" role="dialog" aria-modal="true" aria-labelledby="tour-t"><div class="tour-prog" aria-hidden="true"><i id="tour-bar"></i></div><div class="eyebrow" id="tour-n"></div><h3 id="tour-t" tabindex="-1"></h3><p id="tour-p"></p><div class="tour-btns"><button class="btn primary" data-tour="next" id="tour-next">Next</button><button class="btn" data-tour="back" id="tour-back">Back</button><button class="btn" data-tour="exit" id="tour-exit">Exit tutorial</button></div></div></div>
     <div id="splash" aria-hidden="true"><div class="sp-in"><svg class="sp-ic" viewBox="0 0 48 48"><path fill="currentColor" fill-rule="evenodd" d="M12 40V26.2C7.6 24.6 5 21.2 5 17.2 5 11.2 10.9 7 18 7h12c7.1 0 13 4.2 13 10.2 0 4-2.6 7.4-7 9V40a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3zM22.5 12.5h3v4.75h4.75v3H25.5V31h-3V20.25h-4.75v-3h4.75z"/></svg><div class="sp-t">Manna</div><div class="sp-s" id="sp-s">Welcome</div></div></div>
     <div class="topl"><a class="setfab" id="setfab" href="#settings" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a><button type="button" class="ambbtn ambtop" data-act="ambtog" aria-pressed="true" aria-label="Turn background music off" title="Background music"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5.5l10-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></button></div>
 <div class="clockbar"><button type="button" class="ambbtn" id="amb-btn" data-act="ambtog" aria-pressed="true" aria-label="Turn background music off" title="Background music">♪</button><span class="clk" role="timer" aria-label="Current time"><span id="clk-time" class="clk-time"></span><span id="clk-date" class="clk-date"></span></span></div>
@@ -1747,7 +1779,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
     <!-- THEMES -->
     <section class="view" id="v-themes" hidden>
       <header class="vh"><p class="eyebrow">Appearance</p><h2>Themes</h2>
-        <p class="lede">Default is a plain white or black look with no picture, and it follows your device. The other twelve are each tied to a mood in scripture. Leave it on the verse of the day and the site changes colour with the verse, or pick one and keep it.</p></header>
+        <p class="lede">Default is a plain white or black look that follows your device. The other twelve are each tied to a mood in scripture. Leave it on the verse of the day and the site changes colour with the verse, or pick one and keep it.</p></header>
       <div class="card stack" id="th-now"></div>
       <div class="tgrid" id="th-grid"></div>
       <p class="small muted">Each preview shows the real colours, so what you see here is what the whole site will use.</p>
@@ -2257,7 +2289,7 @@ var THEMES=[
  {id:'sky',name:'Sky',mood:'Praise and heaven',sw:'#BFE0FF'},
  {id:'ember',name:'Ember',mood:'Zeal and refining',sw:'#F2A66B'},
  {id:'fitness',name:'Fitness',mood:'Black and green, like Apple Fitness',sw:'#30D158'},
- {id:'plain',name:'Default',mood:'Plain white or black, no picture',sw:'#FFFFFF'}
+ {id:'plain',name:'Default',mood:'Plain white or black',sw:'#FFFFFF'}
 ];
 var REFMAP={
  'matthew 7:24':'counsel','matthew 7:24-25':'counsel','proverbs 3:5-6':'counsel','proverbs 3:5':'counsel','psalm 119:105':'counsel','james 1:5':'counsel','jeremiah 29:11':'counsel','proverbs 16:3':'counsel',
@@ -2395,7 +2427,7 @@ function classify(){
   return {id:'devotion',why:'No match yet. Paste the verse text so the theme can follow its words.'};
 }
 function currentTheme(){
-  var c=classify(),id=S.themeMode==='auto'?c.id:S.themeMode;if(!isPro()&&FREE_THEMES.indexOf(id)<0)id='devotion';var th=THEMES.filter(function(t){return t.id===id})[0]||THEMES[0];
+  var c=classify(),id=S.themeMode==='auto'?c.id:S.themeMode;if(!isPro()&&FREE_THEMES.indexOf(id)<0)id='devotion';if(S.thPrev&&THEMES.some(function(t){return t.id===S.thPrev})){var pt=THEMES.filter(function(t){return t.id===S.thPrev})[0];return {id:pt.id,name:pt.name,mood:pt.mood,why:'Preview only.',auto:false,prev:true}}var th=THEMES.filter(function(t){return t.id===id})[0]||THEMES[0];
   return {id:th.id,name:th.name,mood:th.mood,why:S.themeMode==='auto'?c.why:'You chose this theme.',auto:S.themeMode==='auto'};
 }
 function renderHeroVerse(){
@@ -2874,7 +2906,7 @@ function mkMeal(f,q,via,t){var n={};KEYS.forEach(function(k){n[k]=+(f[k]*q).toFi
 function fmtT(t){if(S.h24||!/^\d\d:\d\d$/.test(t))return t;var h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+' '+(h<12?'AM':'PM')}
 function nowTime(){return new Date().toTimeString().slice(0,5)}
 function find(id){return allFoods().filter(function(f){return f.id===id})[0]}
-var PSKIP=['gStep','hsLast','ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
+var PSKIP=['thPrev','gStep','hsLast','ftSel','mday','goV','recClr','bpAsk','bpAskQ','hEdit','hSel','hDelArm','ntDelArm','gaiBusy','gaiMsg','shaBusy','shaMsg','frConfirm','frEditName','bsel','bpBook','rset','bnote','rplay','shIn','pnOpen','ntBusy','ntMsg','siBusy','siMsg','sdelAsk','siRes','est','aiBusy','aiMsg','cl','sched','votd','photo','ai','pasted','prep','prepMsg','pd','pw','wz','wq','fsel','fq','fshow','msel','edit','wedit','tedit','pedit','goalMsg','coachMsg','rest','fcat','hf','wf','addDay','selW','meals'],prefLast='';
 function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem('manna.prefs.v1')||'null');if(p&&typeof p==='object'){Object.keys(p).forEach(function(k){if(PSKIP.indexOf(k)>-1||!(k in d))return;var a=d[k],b=p[k];if(a===null||b!==null&&typeof a===typeof b&&Array.isArray(a)===Array.isArray(b))d[k]=b});if(p.mealsD===todayStamp()&&Array.isArray(p.meals))d.meals=p.meals;else if(p.mealsD&&Array.isArray(p.meals)&&p.meals.length){d.prevMeals={d:p.mealsD,m:p.meals};if(!d.dayLogs||typeof d.dayLogs!=='object'||Array.isArray(d.dayLogs))d.dayLogs={};if(!d.dayLogs[p.mealsD])d.dayLogs[p.mealsD]=p.meals}}}catch(e){}
   try{dayLogTrim(d)}catch(e){}
   d.hist=(Array.isArray(d.hist)?d.hist:[]).filter(function(x){return x&&!x.sample});
@@ -2918,7 +2950,7 @@ function defaults0(){
     thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Friend',uname:'',saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',uname:'',qwOff:0,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -3086,7 +3118,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:168,d:'Nov 12, 2026',t:'A new name and a small touch',s:['Manna Jubilee is now called Manna Abundance, from John 10:10: "I have come that they may have life, and have it more abundantly." Same features, new name.','The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.']},
+ {v:168,d:'Nov 12, 2026',t:'A new name and a small touch',s:['Manna Jubilee is now called Manna Abundance, from John 10:10: "I have come that they may have life, and have it more abundantly." Same features, new name.','The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Abundance themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Pressing Done ends with a big Welcome to Manna.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
  {v:165,d:'Nov 12, 2026',t:'Good morning, good evening',s:['The opening animation now greets you by the time of day: Good morning, Good afternoon or Good evening.','The AI check card is gone from Settings.','Fixed the water bottle on the Drink page: the water now sits level with a gentle wave.','Food trends chart is clearer: grid lines with numbers, your goal and your average marked, bars that grow in, and tapping a bar shows that day with a button to open it. It also shows your best day, a shaded target zone, the numbers on each bar for the week, and a short tip about your pattern.','Tap a Repeat card in Quick add to see what you ate, with numbers, and pick only the foods you want again.','Quick add icons no longer pop in and out every time you tap something.','Meal plan no longer shows an example plan straight away. Tap Show template meal plan to see one.','Every food now gets its own icon instead of a plain plate.','The food catalog is no longer on the Recipes page. Search all foods from More ways to log on Eat.','Rename your meals: tap ✎ next to one of your meals, a recipe or any food in your diary.','Saved meals are now called Your meals, and the Diary no longer has a separate saved meals section. Find Your meals in Quick add on Eat.']},
@@ -3157,51 +3189,75 @@ function vlPaint(){var n=$('#vl-now'),l=$('#vl-list');if(!n||!l)return;n.textCon
 setTimeout(vlPaint,0);
 setTimeout(wnCheck,1200);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('#wn').hidden)ACT.wnclose()});
+var TOURSEC=[['home','Home'],['fit','Fitness'],['fuel','Fuel'],['friends','Friends'],['faith','Faith'],['set','Settings']];
 var TOUR=[
- {v:'today',sel:'.hero',t:'This is Home',p:'Your name, the verse of the day and the date. Tap "Read the chapter" to open it in the Bible reader.'},
- {v:'today',sel:'#t-energy',t:"Today's progress",p:'Calories, protein, water and workouts for the day in one place. Tap a number to change it, and choose which stats you want to see.'},
- {v:'today',sel:'#t-train',t:"Today's workout",p:'The workout from your schedule, plus your top 3 workouts. Tap one to open it.'},
- {v:'today',sel:'#t-check',t:'Daily checklist',p:'Small habits for the day. You can add your own items. To move or hide any card on Home, go to Settings, then Home Screen.'},
- {v:'eat',sel:'#v-eat .vh',t:'Log what you eat',p:'Type a food, snap a photo or describe a meal. Tap a result to see its macros, change the amount and add it to today. Save anything you eat often as a meal.'},
- {v:'eat',sel:'#t-targets',t:'Your targets',p:'Your calorie and macro goals, worked out from your goals, age, height, weight and activity. You can change them in Settings.'},
- {v:'meals',sel:'#m-sum',t:"Today's meals",p:'Everything you logged today, in order, with the time you logged it.'},
- {v:'foods',sel:'#v-foods .vh',t:'Browse foods',p:'About 7,500 everyday foods plus fast food, scored against your targets. Search or filter, then tap a food for details.'},
- {v:'eat',sel:'#e-quick',t:'Fast logging',p:'Type a sentence like "two eggs and toast" to log a meal. Foods you log often show up in Quick add for one tap.'},
- {v:'workouts',sel:'#w-sbox',t:'Find a workout',p:'Search by name, sport or exercise, or answer a few questions: what kind of workout, then the muscles. Sports go straight to a list from easy to hard.'},
- {v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and AI builds it. Every workout can be changed with the Configure button.'},
- {v:'schedule',sel:'#sh-plans',t:'Three schedules',p:'Name each schedule and pick a workout for every day. The selected schedule drives Today and your home page.'},
- {v:'history',sel:'#v-history .vh',t:'Workout history',p:'Every finished session with the sets you logged, plus your week at a glance.'},
- {v:'scripture',sel:'#sc-feed',t:'Word for today',p:'Swipe up through verses, one at a time. Double-tap or tap the heart to save one, and switch to Bible to read whole chapters. Your favorite verse shows here too.'},
- {v:'themes',sel:'#th-now',t:'Themes',p:'Default is plain white or black. The other twelve each match a mood in scripture. Leave it on the verse of the day, or pick one and keep it.'},
- {v:'settings',sel:'#g-card',t:'Goals and body',p:'Change your goals, age, height and activity any time. Your targets update, and you can type your own numbers.'},
- {v:'settings',sel:'#tour-set',t:'That is the tour',p:'You can replay this tutorial here any time. Welcome to Manna.'}
+ {g:'home',v:'today',sel:'.hero',t:'This is Home',p:'Your name, the verse of the day and the date. Tap "Read the chapter" to open it in the Bible reader.'},
+ {g:'home',v:'today',sel:'#t-energy',t:"Today's progress",p:'Calories, protein, water and workouts for the day in one place. Tap a number to change it.'},
+ {g:'home',v:'today',sel:'#t-plan',t:"Today's plan",p:'Three things for today: eat, train and read. When you are short on time, it suggests a quick, easy workout, a different one each day.'},
+ {g:'home',v:'today',sel:'#t-check',t:'Daily checklist',p:'Small habits for the day. You can add your own.'},
+ {g:'fit',v:'workouts',sel:'#w-sbox',t:'Find a workout',p:'Search by name, sport or exercise, or answer a few questions and Manna finds one for you.'},
+ {g:'fit',v:'workouts',sel:'#w-ai',t:'Build with AI',p:'Describe the session you want in your own words and AI builds it for you.'},
+ {g:'fit',v:'schedule',sel:'#sh-plans',t:'Your schedule',p:'Pick a workout for each day of the week. Your schedule decides what shows on Home.'},
+ {g:'fit',v:'history',sel:'#v-history .vh',t:'History',p:'Every workout you finish, with the sets you logged and your week at a glance.'},
+ {g:'fit',v:'stats',sel:'#st-body',t:'Stats',p:'Your BMR, how much you burn a day, your BMI and your training numbers.'},
+ {g:'fuel',v:'eat',sel:'#e-quick',t:'Log what you eat',p:'Type something like "two eggs and toast", scan a barcode or snap a photo. Foods you log often show up in Quick add.'},
+ {g:'fuel',v:'eat',sel:'#t-targets',t:'Your targets',p:'Your calorie and macro goals for the day, worked out from your goal and your body.'},
+ {g:'fuel',v:'drink',sel:'#v-drink .vh',t:'Drink',p:'Tap a glass each time you drink water and watch your bottle fill up.'},
+ {g:'fuel',v:'meals',sel:'#m-sum',t:'Diary',p:'Everything you logged, day by day. Swipe back to see earlier days.'},
+ {g:'fuel',v:'foods',sel:'#v-foods .vh',t:'Recipes',p:'Your saved meals and recipes, ready to add in one tap.'},
+ {g:'friends',v:'friends',sel:'#v-friends .vh',t:'Friends',p:'Add friends by username, cheer each other on and share workouts.'},
+ {g:'faith',v:'scripture',sel:'#sc-feed',t:'Word for today',p:'Swipe through verses one at a time. Tap the heart to save one, or switch to Bible to read whole chapters.'},
+ {g:'set',v:'themes',sel:'#th-now',t:'Themes',p:'Pick a look for the whole app, or let it change with the verse of the day.'},
+ {g:'set',v:'settings',sel:'#g-goals',t:'Goals',p:'Pick your goal, then set your pace and target weight. Your targets update straight away.'},
+ {g:'set',v:'settings',sel:'#hs-card',t:'Home Screen',p:'Choose which cards show on Home and in what order.'},
+ {g:'set',v:'settings',sel:'#tour-set',t:'That is the tour',p:'You can replay it here any time.'}
 ];
-var TS={i:0,on:false,t:0};
-function tourStart(){TS.i=0;TS.on=true;$('#tour').hidden=false;tourShow()}
-function tourEnd(){TS.on=false;clearTimeout(TS.t);$('#tour').hidden=true;var first=!S.toured;S.toured=true;location.hash='#today';window.scrollTo(0,0);refresh();toast(first?'You can replay the tutorial in Settings.':'Tutorial closed.')}
+var TS={i:0,on:false,t:0,L:TOUR,v:''};
+/* While the tutorial runs, only Next, Back and Exit do anything: no scrolling, tapping or typing elsewhere */
+function tourBlock(e){if(!TS.on)return;var card=$('#tour-card');if(e.type==='keydown'){if(e.key==='Escape')return;if(e.key==='Tab'){var b=$$('#tour-card .tour-btns button').filter(function(x){return !x.hidden});var k=b.indexOf(document.activeElement);e.preventDefault();(b[(k+(e.shiftKey?-1:1)+b.length)%b.length]||b[0]).focus();return}if(card&&card.contains(e.target)&&e.target.tagName==='BUTTON'&&(e.key==='Enter'||e.key===' '))return;e.preventDefault();return}
+  if(card&&card.contains(e.target)&&e.type!=='wheel'&&e.type!=='touchmove')return;if(e.target.closest&&e.target.closest('#tour-card .tour-btns'))return;e.preventDefault();e.stopPropagation()}
+['wheel','touchmove','keydown'].forEach(function(t){window.addEventListener(t,tourBlock,{capture:true,passive:false})});
+function tourStart(){TS.L=TOUR.filter(function(s){try{return !focusHidden(s.v)}catch(e){return true}});TS.i=0;TS.on=true;TS.v='';var t=$('#tour');t.hidden=false;t.classList.remove('in');void t.offsetWidth;t.classList.add('in');document.documentElement.classList.add('touring');tourShow()}
+function tourFinale(){var f=document.createElement('div');f.id='twel';f.setAttribute('role','status');var nm=S.name&&S.name!=='Friend'?S.name:'';
+  f.innerHTML='<div class="twel-rays" aria-hidden="true"></div><div class="twel-c"><span class="twel-k">Welcome to</span><b class="twel-m">'+'Manna'.split('').map(function(ch,i){return '<i style="--d:'+(i*70+250)+'ms">'+ch+'</i>'}).join('')+'</b>'+(nm?'<span class="twel-n">'+esc(nm)+', you are all set.</span>':'<span class="twel-n">You are all set.</span>')+'</div>';
+  document.body.appendChild(f);try{sfxPop('today','chime')}catch(e){}var go=function(){if(f.dataset.gone)return;f.dataset.gone=1;f.classList.add('bye');setTimeout(function(){f.remove()},700)};f.addEventListener('click',go);setTimeout(go,matchMedia('(prefers-reduced-motion:reduce)').matches?1600:2700)}
+function tourEnd(done){if(done===true)setTimeout(tourFinale,120);TS.on=false;clearTimeout(TS.t);clearTimeout(TS.t2);var t=$('#tour');t.classList.add('out');document.documentElement.classList.remove('touring');setTimeout(function(){t.hidden=true;t.classList.remove('out')},260);var first=!S.toured;S.toured=true;location.hash='#today';window.scrollTo(0,0);refresh();if(done!==true)toast(first?'You can replay the tutorial in Settings.':'Tutorial closed.')}
 function tourShow(){
-  var st=TOUR[TS.i];
-  $('#tour-n').textContent='Step '+(TS.i+1)+' of '+TOUR.length;$('#tour-t').textContent=st.t;$('#tour-p').textContent=st.p;
-  $('#tour-back').style.visibility=TS.i?'visible':'hidden';$('#tour-next').textContent=TS.i===TOUR.length-1?'Done':'Next';
-  if(location.hash!=='#'+st.v)location.hash='#'+st.v;
-  clearTimeout(TS.t);TS.t=setTimeout(tourPlace,220);
-  var c=$('#tour-card');c.classList.remove('top');c.classList.add('bot');
+  var L=TS.L,st=L[TS.i],c=$('#tour-card'),gi=TOURSEC.map(function(x){return x[0]}).indexOf(st.g),inSec=L.filter(function(x){return x.g===st.g}),k=inSec.indexOf(st)+1;
+  c.classList.remove('tswap');void c.offsetWidth;c.classList.add('tswap');
+  $('#tour-n').innerHTML='<span class="tsec">'+TOURSEC.filter(function(x){return L.some(function(y){return y.g===x[0]})}).map(function(x){var j=TOURSEC.indexOf(x);return '<i class="'+(j<gi?'done':j===gi?'on':'')+'">'+x[1]+'</i>'}).join('')+'</span><span class="tstep">'+esc(TOURSEC[gi][1])+' · '+k+' of '+inSec.length+'</span>';
+  $('#tour-t').textContent=st.t;$('#tour-p').textContent=st.p;
+  $('#tour-back').hidden=!TS.i;$('#tour-next').textContent=TS.i===L.length-1?'Done':'Next';
+  var bar=$('#tour-bar');if(bar)bar.style.transform='scaleX('+((TS.i+1)/L.length)+')';
+  var hl=$('#tour-hl'),nav=TS.v!==st.v;TS.v=st.v;
+  if(nav){hl.classList.add('away');if(location.hash!=='#'+st.v)location.hash='#'+st.v}
+  clearTimeout(TS.t);TS.t=setTimeout(function(){tourPlace(nav)},nav?320:40);
   setTimeout(function(){$('#tour-t').focus({preventScroll:true})},30);
 }
-function tourPlace(){
-  if(!TS.on)return;var st=TOUR[TS.i],el=st.sel&&document.querySelector(st.sel),hl=$('#tour-hl'),c=$('#tour-card');
-  if(el&&el.getClientRects().length){
-    el.scrollIntoView({block:'center'});
-    setTimeout(function(){if(!TS.on)return;var r=el.getBoundingClientRect(),h=Math.min(r.height,window.innerHeight*.6);
-      hl.style.left=(r.left-6)+'px';hl.style.top=(r.top-6)+'px';hl.style.width=(r.width+12)+'px';hl.style.height=(h+12)+'px';
-      var mid=r.top+h/2;c.classList.toggle('top',mid>window.innerHeight*.52);c.classList.toggle('bot',mid<=window.innerHeight*.52)},90);
-  }else{hl.style.left='50%';hl.style.top='40%';hl.style.width='0';hl.style.height='0';c.classList.remove('top');c.classList.add('bot')}
+/* Wait until the page stops moving (smooth scroll, page swipes), then call back */
+function tourSettle(el,cb){var last=null,same=0,t0=Date.now();(function f(){if(!TS.on)return;var r=el.getBoundingClientRect(),k=Math.round(r.top)+','+Math.round(r.left);if(k===last)same++;else{same=0;last=k}if(same>=3||Date.now()-t0>1200)cb();else requestAnimationFrame(f)})()}
+function tourPlace(nav){
+  if(!TS.on)return;var st=TS.L[TS.i],el=st.sel&&document.querySelector(st.sel),hl=$('#tour-hl'),c=$('#tour-card');
+  if(!(el&&el.getClientRects().length)){hl.classList.add('away');tourCard(null);return}
+  try{swReveal(el)}catch(e){}try{vpReveal(el)}catch(e){}
+  var ch=c.offsetHeight,pad=14,gap=14,topSafe=58,avail=innerHeight-ch-pad-gap-topSafe;
+  tourSettle(el,function(){
+    var r=el.getBoundingClientRect(),want=r.top-topSafe;
+    if(Math.abs(want)>4)window.scrollTo({top:Math.max(0,scrollY+want),behavior:nav||matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});
+    tourSettle(el,function(){if(!TS.on)return;var r=el.getBoundingClientRect(),
+      cardBottom=r.top<innerHeight-ch-pad-gap-60, /* room under the element for the card, else the card goes on top */
+      top=cardBottom?Math.max(pad,r.top):Math.max(ch+pad+gap,r.top),lim=cardBottom?innerHeight-ch-pad-gap:innerHeight-pad,h=Math.max(40,Math.min(r.bottom,lim)-top);
+      if(!cardBottom&&r.top<ch+pad+gap){top=Math.max(pad,r.top);h=Math.max(40,Math.min(r.bottom,innerHeight-ch-pad-gap)-top);cardBottom=true}
+      hl.style.left=(r.left-8)+'px';hl.style.top=(top-8)+'px';hl.style.width=(r.width+16)+'px';hl.style.height=(h+16)+'px';
+      hl.classList.remove('away');hl.classList.remove('ping');void hl.offsetWidth;hl.classList.add('ping');
+      c.style.top=(cardBottom?Math.min(innerHeight-ch-pad,top+h+gap+8):pad)+'px'})});
 }
+function tourCard(r){var c=$('#tour-card');c.style.top=Math.max(14,innerHeight-c.offsetHeight-110)+'px'}
 (function(){var t=document.getElementById('tour');if(!t)return;
-  t.addEventListener('click',function(e){var b=e.target.closest('[data-tour]');if(!b)return;var a=b.dataset.tour;
-    if(a==='exit')tourEnd();else if(a==='back'){if(TS.i>0){TS.i--;tourShow()}}else{if(TS.i>=TOUR.length-1)tourEnd();else{TS.i++;tourShow()}}});
+  t.addEventListener('click',function(e){var b=e.target.closest('[data-tour]');if(!b){e.preventDefault();e.stopPropagation();return}var a=b.dataset.tour;
+    if(a==='exit')tourEnd();else if(a==='back'){if(TS.i>0){TS.i--;tourShow()}}else{if(TS.i>=TS.L.length-1)tourEnd(true);else{TS.i++;tourShow()}}try{sfxTap()}catch(e){}});
   document.addEventListener('keydown',function(e){if(TS.on&&e.key==='Escape')tourEnd()});
-  window.addEventListener('resize',function(){if(TS.on)tourPlace()})})();
+  window.addEventListener('resize',function(){if(TS.on)tourPlace(false)})})();
 function welcomeThenTour(){
   var w=$('#wel'),nm=(S.name&&S.name!=='Friend')?S.name:'';location.hash='#today';
   $('#wel-ic').innerHTML=ICON.apple;$('#wel-h').textContent=nm?'Welcome, '+nm+'.':'Welcome.';
@@ -3222,7 +3278,7 @@ function onbPanel(n){
     +'<label class="f" for="onb-gai">Or describe your goal and let AI pick<textarea id="onb-gai" data-oi="1" placeholder="Lose a little weight and get stronger for basketball"></textarea></label><button type="button" class="btn sm" data-onb="gai">Pick my goals with AI</button></div></div>';
   if(n===2)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">About you</h2><p>These are used only to estimate how much energy your body needs.</p><div class="onb-seg" role="group" aria-label="Sex">'+[['female','Female'],['male','Male'],['other','Prefer not to say']].map(function(x){return '<button type="button" class="chip" data-onb="sex" data-k="'+x[0]+'" aria-pressed="'+(S.sex===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-seg" role="group" aria-label="Units">'+[['kg','kg and cm'],['lb','lb and ft']].map(function(x){return '<button type="button" class="chip" data-onb="unit" data-k="'+x[0]+'" aria-pressed="'+(S.units===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-row"><label class="f" for="onb-age">Age<input type="number" id="onb-age" data-oi="1" min="10" inputmode="numeric" placeholder="e.g. 30" value="'+(onbOk(onbSrc().a)?onbSrc().a:'')+'"></label><label class="f" for="onb-wt">Weight ('+S.units+')<input type="number" id="onb-wt" data-oi="1" step="0.1" inputmode="decimal" placeholder="e.g. '+(S.units==='lb'?'165':'75')+'" value="'+(onbOk(onbSrc().kg)?Math.round((S.units==='lb'?onbSrc().kg*2.20462:onbSrc().kg)*10)/10:'')+'"></label><label class="f" for="onb-tgt">Target weight ('+S.units+'), optional<input type="number" id="onb-tgt" data-oi="1" step="0.1" inputmode="decimal" placeholder="Optional" value="'+(S.gTarget>0?(S.units==='lb'?Math.round(S.gTarget*2.20462):S.gTarget):'')+'"></label></div>'+onbH()+'</div>';
   if(n===3)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">How active are you?</h2><p>Think about a normal week, including work.</p><div class="onb-opts" role="radiogroup" aria-label="Activity level">'+ACTS.map(function(a){return '<button type="button" class="onb-opt" role="radio" data-onb="act" data-k="'+a[0]+'" aria-checked="'+(S.activity===a[0])+'" aria-pressed="'+(S.activity===a[0])+'"><b>'+a[1]+'</b><span>'+a[2]+'</span></button>'}).join('')+'</div></div>';
-  if(n===5){var lk=function(t){return !isPro()&&FREE_THEMES.indexOf(t.id)<0},order=THEMES.filter(function(t){return t.id==='plain'}).concat(THEMES.filter(function(t){return t.id!=='plain'&&!lk(t)}),THEMES.filter(function(t){return t.id!=='plain'&&lk(t)}));if(lk({id:S.themeMode}))S.themeMode='plain';var th=function(t){var L=lk(t);return '<button type="button" class="onb-th'+(L?' lock':'')+'" role="radio" data-onb="theme" data-k="'+t.id+'"'+(L?' data-lock="1" aria-disabled="true" aria-label="'+esc(t.name)+', part of Manna Abundance"':'')+' aria-checked="'+(S.themeMode===t.id)+'" aria-pressed="'+(S.themeMode===t.id)+'"><i style="background:'+t.sw+'">'+(L?'<em aria-hidden="true">🔒</em>':'')+'</i><b>'+esc(t.name)+(t.id==='plain'?' (default)':'')+'</b><span>'+(L?'Abundance':esc(t.mood))+'</span></button>'};
+  if(n===5){var lk=function(t){return !isPro()&&FREE_THEMES.indexOf(t.id)<0},order=THEMES.filter(function(t){return t.id==='plain'}).concat(THEMES.filter(function(t){return t.id!=='plain'&&!lk(t)}),THEMES.filter(function(t){return t.id!=='plain'&&lk(t)}));if(lk({id:S.themeMode}))S.themeMode='plain';var th=function(t){var L=lk(t);return '<button type="button" class="onb-th'+(L?' lock':'')+'" role="radio" data-onb="theme" data-k="'+t.id+'"'+(L?' data-lock="1" aria-disabled="true" aria-label="'+esc(t.name)+', part of Manna Abundance"':'')+' aria-checked="'+(S.themeMode===t.id)+'" aria-pressed="'+(S.themeMode===t.id)+'"><i style="background:'+t.sw+'">'+(L?'<em class="lkb" aria-hidden="true">🔒</em>':'')+'</i><b>'+esc(t.name)+'</b><span>'+(L?'Abundance · tap to preview':esc(t.mood))+'</span></button>'};
     return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Pick a look</h2><p>The Default theme is plain white or black and follows your device. Tap a theme to preview it right now.'+(isPro()?'':' Themes with a 🔒 come with Manna Abundance.')+'</p><div class="onb-themes" role="radiogroup" aria-label="Theme">'+order.map(th).join('')+'</div></div>'}
   if(n===-6)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your top 3 workouts</h2><p>Choose up to three you love. They show up on your home page.</p><div class="wpick" id="onb-wpk" data-n="'+S.topW.length+'"><span class="wpd" aria-hidden="true"><i></i><i></i><i></i></span><b id="onb-wc" aria-live="polite">'+wpLabel(S.topW.length)+'</b></div><label class="f" for="onb-wq">Search workouts<input type="search" id="onb-wq" data-oi="1" autocomplete="off" placeholder="Try soccer, legs, plank" value="'+esc(ONB.wq)+'"></label><div class="onb-wf"><p class="eyebrow">Type or sport</p><div class="onb-seg" id="onb-wcats" role="group" aria-label="Filter by type or sport"></div><p class="eyebrow">Equipment</p><div class="onb-seg" id="onb-weqs" role="group" aria-label="Filter by equipment"></div></div><p class="small muted" id="onb-wn" aria-live="polite"></p><div class="wgrid onb-wlist" id="onb-wl" role="group" aria-label="Workouts" tabindex="0"></div></div>';
   if(n===6)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your favorite Bible verse</h2><p>Optional. Type a reference like John 3:16 or Philippians 4:13. You can change it any time in Settings.</p><label class="f" for="onb-v">Favorite verse<input type="text" id="onb-v" data-oi="1" maxlength="80" autocomplete="off" placeholder="John 3:16" value="'+esc(S.favVerse||'')+'"></label><div class="note" id="onb-vp" aria-live="polite" hidden></div><p class="small muted onb-next-tour">Next: a quick tour of Manna, about a minute. You can exit it at any step.</p></div>';
@@ -3305,7 +3361,7 @@ var ONBACT={
   wcat:function(b){ONB.wc=b.dataset.k;onbWL()},
   weq:function(b){ONB.we=b.dataset.k;onbWL()},
   reset:function(){S.goalKcal=null;S.macroOv={p:null,c:null,f:null};onbResults(true)},
-  theme:function(b){if(b.dataset.lock){try{sfxSad()}catch(e){}b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');toast('This theme comes with Manna Abundance. You can get it later in Settings.',{title:'Abundance theme',icon:'🔒'});return}S.themeMode=b.dataset.k;$$('[data-onb=theme]').forEach(function(x){var on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)});refresh()},
+  theme:function(b){if(b.dataset.lock){thPreview(b.dataset.k,true);return}thPrevEnd();S.themeMode=b.dataset.k;$$('[data-onb=theme]').forEach(function(x){var on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)});refresh()},
   wk:function(b){var id=b.dataset.id,i=S.topW.indexOf(id);if(i>-1)S.topW.splice(i,1);else if(S.topW.length<3)S.topW.push(id);else{$('#onb-msg').textContent='You can pick 3. Tap one you picked to swap it.';return}
     $('#onb-msg').textContent='';b.setAttribute('aria-pressed',S.topW.indexOf(id)>-1);$('#onb-wc').textContent=wpLabel(S.topW.length);var pk=$('#onb-wpk');if(pk){pk.dataset.n=S.topW.length;pk.classList.remove('bump');void pk.offsetWidth;pk.classList.add('bump')}}
 };
@@ -3674,7 +3730,12 @@ function repeatBtns(){
     return '<button class="fcard qcard" data-act="rpopen" data-k="'+k+'" aria-label="Repeat '+esc(lab+' '+MGN[k]+': '+nm.join(', '))+'"><span class="femo'+(L.length>1?' fmulti':'')+'" aria-hidden="true">'+(L.length>1?L.slice(0,3).map(function(m){return '<i>'+mealEmoji(m)+'</i>'}).join(''):ic)+'</span><span class="fs">Repeat '+esc(lab)+' '+esc(MGN[k])+'</span><span class="fn">'+esc(nm.slice(0,3).join(', ')+(nm.length>3?' +'+(nm.length-3)+' more':''))+'</span><span class="fm2"><span>'+(S.hideNums?L.length+' food'+(L.length>1?'s':''):kc(Math.round(kc0))+' cal · '+L.length+' food'+(L.length>1?'s':''))+'</span></span><span class="qplus" aria-hidden="true">+</span></button>'}).join('');
 }
 function lastWorkoutDays(){var L=S.hist.filter(function(x){return x&&!x.sample&&x.ts});if(!L.length)return -1;var t=Math.max.apply(null,L.map(function(x){return x.ts}));return Math.floor((Date.now()-t)/864e5)}
-function shortW(){var have=S.have.concat(['bodyweight']);return LIB.filter(function(w){return w.mins<=15&&w.eq.every(function(e){return have.indexOf(e)>-1})}).sort(function(a,b){return a.mins-b.mins})[0]||null}
+/* Quick and easy workouts for Today's plan: a different easy one each day, spread across kinds (core, cardio, mobility, bodyweight...). ↻ shows another. */
+function quickPool(){var have=S.have.concat(['bodyweight']),L=LIB.filter(function(w){return w.mins<=20&&w.level==='Beginner'&&w.cat!=='bjj'&&w.cat!=='wrestle'&&w.eq.every(function(e){return have.indexOf(e)>-1})});
+  if(L.length<4)L=LIB.filter(function(w){return w.mins<=20&&w.eq.every(function(e){return have.indexOf(e)>-1})});
+  var g={},ks=[];L.forEach(function(w){var k=w.cat+'|'+(w.pl||'');if(!g[k]){g[k]=[];ks.push(k)}g[k].push(w)});ks.sort();var out=[],i=0,more=true;
+  while(more){more=false;ks.forEach(function(k){if(g[k][i]){out.push(g[k][i]);more=true}});i++}return out}
+function shortW(){var P=quickPool();if(!P.length)return null;var n=(dayN()*7+(S.qwOff||0))%P.length;return P[(n+P.length)%P.length]}
 function renderPlan(){
   var el=$('#t-plan');if(!el)return;
   var T=targets(),tot=totals(),st=todayStamp(),pt=Math.round(tot.p),pg=T.protein||1,pp=Math.min(100,Math.round(pt/pg*100));
@@ -3693,11 +3754,11 @@ function renderPlan(){
   /* 2. Train */
   var th='';
   if(S.ill)th='<span class="small muted">Rest while you are ill. Getting better is the plan today.</span>';
-  else if(!s&&!hasSchedule()){th='<span class="small">'+esc(trainNudge())+'</span>';if(!trainDone){var sw0=shortW();th+='<div class="row"><a class="btn sm primary" href="#workouts">Pick a workout</a>'+(sw0?'<button class="btn sm" data-act="wstart" data-id="'+sw0.id+'">Quick: '+esc(sw0.name)+' ('+sw0.mins+' min)</button>':'')+'</div>'}}
+  else if(!s&&!hasSchedule()){th='<span class="small">'+esc(trainNudge())+'</span>';if(!trainDone){var sw0=shortW();th+='<div class="row"><a class="btn sm primary" href="#workouts">Pick a workout</a>'+(sw0?'<button class="btn sm" data-act="wstart" data-id="'+sw0.id+'">Quick: '+esc(sw0.name)+' ('+sw0.mins+' min)</button><button class="btn sm qwn" data-act="qwnext" aria-label="Show another quick workout" title="Another quick workout">↻</button>':'')+'</div>'}}
   else if(!s)th='<span class="small muted">Rest day. Rest is part of training, not a break from it.</span>';
   else{var twid=s.w===s.orig?S.sched[0].wid:null,tw=twid&&wById(twid);
     th='<span>'+esc(s.w)+(tw?' <span class="small muted">· '+tw.mins+' min</span>':'')+'</span>';
-    if(!trainDone){var sw=shortW();th+='<div class="row">'+(tw?'<button class="btn sm primary" data-act="wstart" data-id="'+tw.id+'">Start</button>':'<a class="btn sm" href="#workouts">Open workouts</a>')+(sw&&(!tw||tw.mins>20)?'<button class="btn sm" data-act="wstart" data-id="'+sw.id+'">Short on time: '+esc(sw.name)+' ('+sw.mins+' min)</button>':'')+'</div>'}var MX=(S.sched[0]&&S.sched[0].more)||[];if(MX.length)th+='<ul class="dayx">'+MX.map(function(id){var w=wById(id),dn=doneToday(id);return '<li><span>＋ '+esc(w.name)+' <span class="small muted">· '+w.mins+' min</span></span>'+(dn?'<span class="pill done">Done</span>':(!S.sess?'<button class="btn sm" data-act="wstart" data-id="'+id+'">Start</button>':''))+'</li>'}).join('')+'</ul>';}
+    if(!trainDone){var sw=shortW();th+='<div class="row">'+(tw?'<button class="btn sm primary" data-act="wstart" data-id="'+tw.id+'">Start</button>':'<a class="btn sm" href="#workouts">Open workouts</a>')+(sw&&(!tw||tw.mins>20)?'<button class="btn sm" data-act="wstart" data-id="'+sw.id+'">Short on time: '+esc(sw.name)+' ('+sw.mins+' min)</button><button class="btn sm qwn" data-act="qwnext" aria-label="Show another quick workout" title="Another quick workout">↻</button>':'')+'</div>'}var MX=(S.sched[0]&&S.sched[0].more)||[];if(MX.length)th+='<ul class="dayx">'+MX.map(function(id){var w=wById(id),dn=doneToday(id);return '<li><span>＋ '+esc(w.name)+' <span class="small muted">· '+w.mins+' min</span></span>'+(dn?'<span class="pill done">Done</span>':(!S.sess?'<button class="btn sm" data-act="wstart" data-id="'+id+'">Start</button>':''))+'</li>'}).join('')+'</ul>';}
   h+='<div class="pst'+(trainDone||rest?' ok':'')+'"><span class="pn">'+(trainDone||rest?'✓':'2')+'</span><div class="pb"><b>Train</b>'+th+'</div></div>';
   /* 3. Read and pray */
   var v=S.votd,refl=REFL[dayN()%REFL.length];
@@ -4843,11 +4904,12 @@ function renderThemes(){
   var th=currentTheme(),c=classify(),v=S.votd;
   $('#th-now').innerHTML='<div class="row spread"><div><p class="eyebrow">In use now</p><h3>'+esc(th.name)+'</h3></div><span class="badge">'+(th.auto?'Following the verse':'Chosen by you')+'</span></div><p class="muted">'+esc(th.mood)+'. '+esc(th.why)+'</p><div class="row spread"><span class="small muted">Today\'s verse: <b style="color:var(--ink)">'+esc(v.ref)+'</b></span><button class="btn'+(th.auto?' primary':'')+'" role="switch" aria-checked="'+(th.auto?'true':'false')+'" data-act="tfollow">'+(th.auto?'Following the verse of the day':'Theme locked')+'</button></div><p class="small muted">'+(th.auto?'The site changes colour with each day\'s verse. Tap to lock the current theme, or pick one below.':'The site stays on '+esc(th.name)+' and will not change with the verse. Tap to follow the verse of the day again.')+'</p>';
   $('#th-grid').innerHTML=THEMES.map(function(t){
-    var refs=Object.keys(REFMAP).filter(function(k){return REFMAP[k]===t.id}).slice(0,4).map(nice),on=th.id===t.id,match=c.id===t.id,chosen=S.themeMode===t.id;
-    return '<div class="tcard card stack"><div class="tp" data-vtheme="'+t.id+'" aria-hidden="true"><div class="tp-top"><i class="tp-heart"></i><span class="tp-name">'+esc(S.name)+'.</span></div><div class="tp-lines"><i></i><i></i></div><div class="tp-row"><span class="tp-btn">Log Workout</span><span class="tp-paper">'+esc(refs[0]||'')+'</span></div></div>'
+    var refs=Object.keys(REFMAP).filter(function(k){return REFMAP[k]===t.id}).slice(0,4).map(nice),on=th.id===t.id&&!th.prev,match=c.id===t.id,chosen=S.themeMode===t.id;
+    var lk=!isPro()&&FREE_THEMES.indexOf(t.id)<0;
+    return '<div class="tcard card stack"><div class="tp'+(lk?' tlk':'')+'" data-vtheme="'+t.id+'" aria-hidden="true">'+(lk?'<span class="lkb">🔒</span>':'')+'<div class="tp-top"><i class="tp-heart"></i><span class="tp-name">'+esc(S.name)+'.</span></div><div class="tp-lines"><i></i><i></i></div><div class="tp-row"><span class="tp-btn">Log Workout</span><span class="tp-paper">'+esc(refs[0]||'')+'</span></div></div>'
     +'<div class="row spread"><h3>'+esc(t.name)+'</h3><span class="row" style="gap:.35rem">'+(match?'<span class="badge">Matches today</span>':'')+(on?'<span class="badge">In use</span>':'')+'</span></div>'
     +'<p class="small muted">'+esc(t.mood)+'</p><p class="small muted">'+(refs.length?'Verses like '+esc(refs.join(', '))+'.':'Not tied to a verse. Follows light or dark mode.')+'</p>'
-    +'<button class="btn'+(chosen?' primary':'')+'" data-act="theme" data-k="'+t.id+'">'+(chosen?'Using '+esc(t.name):(!isPro()&&FREE_THEMES.indexOf(t.id)<0?'✨ ABUNDANCE · ':'')+'Use '+esc(t.name))+'</button></div>'
+    +(lk?'<div class="row" style="gap:.5rem"><button class="btn primary" data-act="thprev" data-k="'+t.id+'">Preview</button><button class="btn" data-act="theme" data-k="'+t.id+'">✨ Get with Abundance</button></div>':'<button class="btn'+(chosen?' primary':'')+'" data-act="theme" data-k="'+t.id+'">'+(chosen?'Using '+esc(t.name):'Use '+esc(t.name))+'</button>')+'</div>'
   }).join('');
 }
 
@@ -5822,7 +5884,7 @@ function applyPrefs(){
   r.style.fontSize=(16*curScale())+'px';
   r.classList.toggle('noglass',!S.glass);
   r.classList.toggle('hc',S.hc);r.classList.toggle('rm',S.rm);
-  r.lang=S.lang;var thid=currentTheme().id;r.setAttribute('data-vtheme',thid);try{localStorage.setItem('manna.theme.v1',JSON.stringify({id:thid,fs:16*curScale(),fsP:16*S.scale,fsD:16*scaleD(),hc:!!S.hc,rm:!!S.rm,ng:!S.glass}))}catch(e){}
+  r.lang=S.lang;var thid=currentTheme().id;r.setAttribute('data-vtheme',thid);var thSave=thid;if(S.thPrev){var k0=S.thPrev;S.thPrev='';thSave=currentTheme().id;S.thPrev=k0}try{localStorage.setItem('manna.theme.v1',JSON.stringify({id:thSave,fs:16*curScale(),fsP:16*S.scale,fsD:16*scaleD(),hc:!!S.hc,rm:!!S.rm,ng:!S.glass}))}catch(e){}
 }
 function tickClock(){
   var d=new Date(),t=$('#clk-time'),dt=$('#clk-date');if(!t)return;
@@ -5955,6 +6017,12 @@ function stRender(){var c=$('#st-body');if(!c)return;var B=bodyStats(),hid=S.hid
   var wl=(Array.isArray(S.wlog)?S.wlog:[]).slice().sort(function(a,b){return a.t-b.t}),f0=wl[0],l0=wl[wl.length-1];
   put('st-wt','<div class="sh"><h3>Weight</h3><a class="small" href="#today">Log weight</a></div>'+(wl.length>1&&!hid?'<div class="st-tiles"><div><span>Started</span><b>'+fw(f0.kg)+'</b></div><div><span>Now</span><b>'+fw(l0.kg)+'</b></div><div><span>Change</span><b>'+(l0.kg-f0.kg>0?'+':'')+fw(l0.kg-f0.kg).replace('-','−')+'</b></div><div><span>Weigh-ins</span><b>'+wl.length+'</b></div></div><p class="small muted" style="margin:0">Since '+esc(new Date(f0.t).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}))+'. Your BMR updates each time you log a new weight.</p>':'<p class="muted">'+(hid?'Hidden because you turned on hide numbers in Settings.':'Log your weight a couple of times to see how it changes.')+'</p>'));
 }
+/* Preview a locked (Abundance) theme across the whole site without unlocking it */
+function thPreview(id,inSetup){var t=THEMES.filter(function(x){return x.id===id})[0];if(!t)return;S.thPrev=id;applyPrefs();try{renderThemes()}catch(e){}try{sfxTap()}catch(e){}
+  var bar=$('#thpv');if(!bar){bar=document.createElement('div');bar.id='thpv';bar.setAttribute('role','status');document.body.appendChild(bar)}
+  bar.className=inSetup?'insetup':'';
+  bar.innerHTML='<span class="thpv-sw" style="background:'+t.sw+'" aria-hidden="true"></span><span class="thpv-t"><b>Previewing '+esc(t.name)+'</b><span>Comes with Manna Abundance</span></span><button class="btn sm" data-act="thprevend">End preview</button>'+(inSetup?'':'<button class="btn sm primary" data-act="thprevget">Get it</button>');bar.hidden=false}
+function thPrevEnd(){var bar=$('#thpv');if(bar)bar.hidden=true;if(!S.thPrev)return;S.thPrev='';applyPrefs();try{renderThemes()}catch(e){}}
 /* Settings › Home Screen: reorder and hide Home cards, with a little phone preview that updates as you go */
 var HSW={plan:['🗓️',58],actions:['⚡',30],energy:['🎯',50],streak:['🔥',36],macros:['🥗',42],check:['✅',48],tf:['⚠️',22],strip:['📖',22]};
 function hsRender(ord){var c=$('#hs-card');if(!c)return;var nm=function(k){return (TW.filter(function(t){return t[0]===k})[0]||[,k])[1]},sh=ord.filter(function(k){return !S.thide[k]});
@@ -6232,7 +6300,11 @@ var ACT={
   goalauto:function(){S.macroOv={p:null,c:null,f:null};S.goalKcal=null;S.goalMsg=['ok','Using the suggested goal for your profile.'];$('#sg-goal').value=targets().kcal},
   week:function(b){S.week=b.dataset.k},
   save:function(b){S.saved[b.dataset.id]=!S.saved[b.dataset.id]},
-  theme:function(b){var k=b.dataset.k;if(k!=='auto'&&FREE_THEMES.indexOf(k)<0&&!proNeed('theme'))return;S.themeMode=k},
+  theme:function(b){var k=b.dataset.k;thPrevEnd();if(k!=='auto'&&FREE_THEMES.indexOf(k)<0&&!proNeed('theme'))return;S.themeMode=k},
+  qwnext:function(){S.qwOff=(S.qwOff||0)+1;try{sfxTap()}catch(e){}},
+  thprev:function(b){thPreview(b.dataset.k)},
+  thprevend:function(){thPrevEnd()},
+  thprevget:function(){var k=S.thPrev;thPrevEnd();if(!proNeed('theme'))return;S.themeMode=k},
   cladd:function(){var e=$('#cl-in'),t=e?e.value.trim().slice(0,60):'';if(!t)return;if(S.cl.items.length>=30){toast('That is the maximum of 30 custom items.');return}S.cl.items.push({id:'c'+Date.now().toString(36)+(uid++),t:t});e.value='';clSave();toast('Added to your checklist.')},
   cltog:function(b){var id=b.dataset.id;if(S.cl.done[id]===todayStamp())delete S.cl.done[id];else S.cl.done[id]=todayStamp();clSave()},
   cldel:function(b){S.cl.items=S.cl.items.filter(function(c){return c.id!==b.dataset.id});delete S.cl.done[b.dataset.id];clSave()},
@@ -7374,7 +7446,7 @@ function vpGo(v,i,instant){
   v.tr.classList.toggle('anim',!instant&&!swCalm());v.tr.style.transform='translateY('+(-i*v.h)+'px)';
   v.dots.forEach(function(d,k){d.classList.toggle('on',k===i);if(k===i)d.setAttribute('aria-current','true');else d.removeAttribute('aria-current')});
   v.secs.forEach(function(sc,k){sc.setAttribute('aria-hidden',k===i?'false':'true')});
-  var nx=v.secs[i+1];v.next.hidden=!nx;if(nx){v.next.innerHTML='<span>⌄</span>';v.next.title='Next: '+nx.dataset.name;v.next.setAttribute('aria-label','Next: '+nx.dataset.name);var vpl=function(){try{var bh=v.bar.getBoundingClientRect().height;if(bh)v.next.style.top='calc(50% + '+Math.round(bh/2+14)+'px)'}catch(e){}};vpl();requestAnimationFrame(vpl);setTimeout(vpl,400)}
+  var nx=v.secs[i+1],up=!nx&&v.secs.length>1,tg=nx||v.secs[0];v.next.hidden=!(nx||up);v.next.classList.toggle('up',up);if(nx||up){if(!v.next.firstChild||!v.next.querySelector('svg'))v.next.innerHTML='<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>';var lb=(up?'Back to top: ':'Next: ')+tg.dataset.name;v.next.title=lb;v.next.setAttribute('aria-label',lb);var vpl=function(){try{var bh=v.bar.getBoundingClientRect().height;if(bh)v.next.style.top='calc(50% + '+Math.round(bh/2+14)+'px)'}catch(e){}};vpl();requestAnimationFrame(vpl);setTimeout(vpl,400)}
   if(changed&&!instant){var r=v.root.getBoundingClientRect(),top=60;if(r.top<top-4||r.bottom>innerHeight)window.scrollTo({top:Math.max(0,scrollY+r.top-top),behavior:swCalm()?'auto':'smooth'})}
 }
 function vpSize(v){v.h=vpH();v.root.style.setProperty('--vph',v.h+'px');v.tr.classList.remove('anim');v.tr.style.transform='translateY('+(-v.i*v.h)+'px)'}
@@ -7412,7 +7484,7 @@ function vpInit(root){
   var v={root:root,tr:tr,bar:bar,secs:[],i:0,h:0,next:root.querySelector('.vnext'),sig:''};VPG[root.id]=v;
   vpSync(v);
   bar.addEventListener('click',function(e){var b=e.target.closest('.vdot');if(b){v.touched=1;vpGo(v,+b.dataset.k)}});
-  v.next.addEventListener('click',function(){v.touched=1;vpGo(v,v.i+1)});
+  v.next.addEventListener('click',function(){v.touched=1;vpGo(v,v.i>=v.secs.length-1?0:v.i+1)});
   var at=function(dir){var sc=v.secs[v.i];if(!sc)return false;return dir>0?sc.scrollTop+sc.clientHeight>=sc.scrollHeight-2:sc.scrollTop<=1};
   /* Touch: inside a section scroll normally; at its edge the swipe moves to the next or previous section */
   var T=null;
