@@ -3202,18 +3202,19 @@ var TOUR=[
  {g:'fit',v:'stats',sel:'#st-body',t:'Stats',p:'Your BMR, how much you burn a day, your BMI and your training numbers.'},
  {g:'fuel',v:'eat',sel:'#e-quick',t:'Log what you eat',p:'Type what you ate, like "2 eggs and toast", say it out loud, snap a photo or scan a barcode. Manna checks its food list first, then AI estimates anything it cannot find.'},
  {g:'fuel',v:'eat',sel:'#t-targets',t:'Your targets',p:'Six rings for today: protein, carbs, fat, fiber, sodium and sugar. They fill as you log, and the goals come from your goal and your body.'},
- {g:'fuel',v:'drink',sel:'#v-drink .vh',t:'Drink',p:'Tap a glass each time you drink water and watch your bottle fill up.'},
- {g:'fuel',v:'meals',sel:'#m-sum',t:'Diary',p:'Everything you logged, day by day. Swipe back to see earlier days.'},
- {g:'fuel',v:'foods',sel:'#v-foods .vh',t:'Recipes',p:'Your saved meals and recipes, ready to add in one tap.'},
- {g:'friends',v:'friends',sel:'#v-friends .vh',t:'Friends',p:'Add friends by username, cheer each other on and share workouts.'},
+ {g:'fuel',v:'drink',sel:function(){return $('#e-water')&&!$('#e-water').hidden?'#e-water':'#d-off'},t:'Drink',p:'Tap a glass each time you drink water and watch your bottle fill up.'},
+ {g:'fuel',v:'meals',sel:function(){return tourId($('#m-list')&&$('#m-list').closest('.card'),'tour-mlist')||'#m-sum'},t:'Diary',p:'Everything you logged, day by day. Swipe back to see earlier days.'},
+ {g:'fuel',v:'foods',sel:function(){return tourId($('#r-name')&&$('#r-name').closest('.card'),'tour-rbuild')||'#r-link'},t:'Recipes',p:'Build a home-cooked recipe from real ingredients and Manna works out the numbers per serving. It saves to Your meals, ready to add in one tap.'},
+ {g:'friends',v:'friends',sel:function(){return tourId($('#fr-body > .card'),'tour-fr')||'#fr-body'},t:'Friends',p:'Add friends by username, cheer each other on and share workouts.'},
  {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Four tabs: Daily verses, the ones you Saved, the Bible for whole chapters and reading plans, and Search to find any verse.'},
- {g:'faith',v:'scripture',sel:'#sc-feed',t:'Daily verses',p:'Swipe up for the next verse. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
+ {g:'faith',v:'scripture',sel:function(){var e=$('#sc-feed .vslide');return tourId(e,'tour-verse')||'#sc-feed'},t:'Daily verses',p:'Swipe up for the next verse. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
  {g:'set',v:'settings',sel:'#g-goals',t:'Goals',p:'Pick your goal first, like Cut or Bulk. Then set your pace and target weight, and your calorie and protein targets update to match.'},
  {g:'set',v:'settings',sel:'#hs-card',t:'Home Screen',p:'Choose which cards show on Home and in what order.'},
  {g:'set',v:'themes',sel:function(){var l=document.querySelector('#th-grid .tp.tlk');if(l){var c=l.closest('.tcard');if(c&&!c.id)c.id='tour-lockth';return c?'#tour-lockth':'#th-grid'}return '#th-grid'},t:'Themes',p:'Pick a look for the whole app. Free themes are ready to use. Pro themes show a 🔒 and a Preview button so you can try them first.'},
  {g:'set',v:'settings',sel:'#tour-set',t:'That is the tour',p:'You can replay it here any time.'}
 ];
 var TS={i:0,on:false,t:0,L:TOUR,v:''};
+function tourId(el,id){if(!el)return '';if(!el.id)el.id=id;return '#'+el.id}
 /* While the tutorial runs, only Next, Back and Exit do anything: no scrolling, tapping or typing elsewhere */
 function tourBlock(e){if(!TS.on)return;var card=$('#tour-card');if(e.type==='keydown'){if(e.key==='Escape')return;var gs=TS.L[TS.i];if(gs&&gs.gate&&(e.key==='Enter'||e.key===' ')&&!(e.target.closest&&e.target.closest('#tour-card .tour-btns'))){e.preventDefault();TS.i++;tourShow();return}if(e.key==='Tab'){var b=$$('#tour-card .tour-btns button').filter(function(x){return !x.hidden});var k=b.indexOf(document.activeElement);e.preventDefault();(b[(k+(e.shiftKey?-1:1)+b.length)%b.length]||b[0]).focus();return}if(card&&card.contains(e.target)&&e.target.tagName==='BUTTON'&&(e.key==='Enter'||e.key===' '))return;e.preventDefault();return}
   if(card&&card.contains(e.target)&&e.type!=='wheel'&&e.type!=='touchmove')return;if(e.target.closest&&e.target.closest('#tour-card .tour-btns'))return;e.preventDefault();e.stopPropagation()}
@@ -3240,7 +3241,7 @@ function tourFit(el,maxH){var R=el.getBoundingClientRect(),top=R.bottom,bot=R.to
   kids.forEach(function(k){var q=k.getBoundingClientRect();if(q.width&&q.height&&getComputedStyle(k).visibility!=='hidden'){top=Math.min(top,q.top);bot=Math.max(bot,q.bottom)}});
   if(bot<=top){top=R.top;bot=R.bottom}else{top=Math.max(R.top,top-14);bot=Math.min(R.bottom,bot+16)}
   if(bot-top>maxH&&maxH>80){var cut=top+maxH,best=0;[].slice.call(el.querySelectorAll(':scope>*,:scope>*>*')).slice(0,300).forEach(function(d){var q=d.getBoundingClientRect();if(q.height>8&&q.bottom<=cut&&q.bottom>best&&q.top>=top)best=q.bottom});
-    bot=best>top+60?best+10:cut}
+    bot=best>top+60?best+6:cut}
   return {top:top,bottom:bot,left:R.left,right:R.right,width:R.width,height:bot-top}}
 function tourPlace(nav){
   if(!TS.on)return;var st=TS.L[TS.i],sl=typeof st.sel==='function'?st.sel():st.sel,el=sl&&document.querySelector(sl),hl=$('#tour-hl'),c=$('#tour-card');
