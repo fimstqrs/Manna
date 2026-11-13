@@ -10,7 +10,7 @@
 // so clearing the browser can't reset them. Signed-out people: the app counts 5 a
 // day on the device. Set AI_REQUIRE_LOGIN=1 to make AI need an account.
 
-import { supaEnv, bearer, getUser, rpc, cors } from './_supa.js';
+import { supaEnv, bearer, getUser, rpc, cors, usernameOf } from './_supa.js';
 import { lookup } from 'node:dns/promises';
 
 const MAX_PROMPT = 8000;          // characters
@@ -114,7 +114,21 @@ function recipePrompt(page) {
 // Pro accounts: no daily AI limit. Add more emails in Vercel as PRO_EMAILS (comma separated).
 const PRO = new Set(['themorningfallcorp@gmail.com', ...String(process.env.PRO_EMAILS || '').split(',')]
   .map(e => e.trim().toLowerCase()).filter(Boolean));
-const isPro = u => !!(u && u.email && PRO.has(String(u.email).toLowerCase()));
+// Pro by Manna username too. Add more in Vercel as PRO_USERNAMES (comma separated).
+const PRO_USERS = new Set(['brownmicah', ...String(process.env.PRO_USERNAMES || '').split(',')]
+  .map(e => e.trim().toLowerCase().replace(/^@/, '')).filter(Boolean));
+const PRO_SEEN = new Map();
+async function isPro(env, u) {
+  if (!u) return false;
+  if (u.email && PRO.has(String(u.email).toLowerCase())) return true;
+  const hit = PRO_SEEN.get(u.id);
+  if (hit && Date.now() - hit.t < 300e3) return hit.v;
+  const name = await usernameOf(env, u.id).catch(() => '');
+  const v = !!name && PRO_USERS.has(String(name).toLowerCase());
+  if (PRO_SEEN.size > 5000) PRO_SEEN.clear();
+  PRO_SEEN.set(u.id, { t: Date.now(), v });
+  return v;
+}
 const PRO_USAGE = { allowed: true, used: 0, limit: null, plan: 'pro' };
 
 const SYSTEM = 'You are the assistant inside Manna, a food, workout and faith app. ' +
@@ -208,7 +222,7 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     // Whether AI is switched on, and for a signed-in person, today's uses.
     let usage = null;
-    if (user) usage = isPro(user) ? PRO_USAGE : await rpc(env, 'ai_today', { p_user: user.id }).catch(() => null);
+    if (user) usage = (await isPro(env, user)) ? PRO_USAGE : await rpc(env, 'ai_today', { p_user: user.id }).catch(() => null);
     return res.status(200).json({ ok: true, ready: !!(process.env.GEMINI_API_KEY || process.env.ANTHROPIC_API_KEY), usage });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, code: 'method' });
@@ -220,7 +234,7 @@ export default async function handler(req, res) {
   if (process.env.AI_REQUIRE_LOGIN === '1' && env.ready && !user) return res.status(401).json({ ok: false, code: 'login' });
 
   const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  const pro = isPro(user);
+  const pro = await isPro(env, user);
 
   let body = req.body;
   if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }

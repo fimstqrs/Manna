@@ -1513,7 +1513,7 @@ input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--muted) 85
 @media (prefers-reduced-motion:reduce){.mt-bar{animation:none;opacity:0}}
 </style>
 <style id="ai-colours">
-/* AI that uses credits: Jubilee colours */
+/* AI that uses credits: Pro colours */
 :is([data-act=lphoto],[data-act=fcam],[data-act=fup],[data-act=fpfix],[data-act=aigen],[data-act=wbuildai],[data-act=wsearchai],[data-act=gaimake],[data-act=gairefine],[data-act=ntai],[data-act=siai],[data-act=shamake],[data-act=mkagain],[data-act=recapgo],[data-act=mpgo],[data-act=baigo],[data-act=rlgo]).btn{background:linear-gradient(120deg,#B565D9,#6EC1FF)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 16px rgba(110,140,255,.28)!important}
 :is([data-act=lphoto],[data-act=fcam],[data-act=fup],[data-act=fpfix],[data-act=aigen],[data-act=wbuildai],[data-act=wsearchai],[data-act=gaimake],[data-act=gairefine],[data-act=ntai],[data-act=siai],[data-act=shamake],[data-act=mkagain],[data-act=recapgo],[data-act=mpgo],[data-act=baigo],[data-act=rlgo]).btn:disabled{opacity:.55}
 /* AI that is free: the theme's own colour */
@@ -2040,7 +2040,7 @@ p,li,.note,.small,.muted{text-wrap:pretty}
       <div class="swpage" data-name="Body" data-ic="body"><div class="grid2">
         <div class="card stack" id="g-goals">
           <div class="row spread"><h3 style="margin:0">Goals</h3><span class="badge">🎯</span></div>
-          <label class="check dtg" for="g-daytgt"><input type="checkbox" id="g-daytgt"><span><b>Training-day and rest-day targets</b> <span class="badge pro">✨ JUBILEE</span><br><span class="small muted">Eat about 10% more on days you train (mostly carbs) and a little less on rest days.</span></span></label>
+          <label class="check dtg" for="g-daytgt"><input type="checkbox" id="g-daytgt"><span><b>Training-day and rest-day targets</b> <span class="badge pro">✨ PRO</span><br><span class="small muted">Eat about 10% more on days you train (mostly carbs) and a little less on rest days.</span></span></label>
           <div class="grid2"><label class="f" for="g-tgt"><span id="g-tgtl">Target weight</span><input type="number" id="g-tgt" data-chg="1" min="30" max="600" step="0.1" inputmode="decimal" placeholder="Optional"></label>
           <div class="stack" style="gap:.3rem"><b class="small">Pace</b><div class="seg" role="radiogroup" aria-label="Pace" id="g-pace"><button type="button" role="radio" data-act="gpace" data-k="gentle">Gentle</button><button type="button" role="radio" data-act="gpace" data-k="steady">Steady</button><button type="button" role="radio" data-act="gpace" data-k="fast">Faster</button></div></div></div>
           <p class="small" id="g-eta"></p>
@@ -2576,19 +2576,19 @@ var SCHED_T=[
  {id:'S2',tag:'Untitled schedule',load:'',desc:'',days:[null,null,null,null,null,null,null]},
  {id:'S3',tag:'Untitled schedule',load:'',desc:'',days:[null,null,null,null,null,null,null]}
 ];
-/* Schedules people have made. Free: 1. Jubilee: up to 3. Schedules made before this keep working. */
+/* Schedules people have made. Free: 1. Pro: up to 3. Schedules made before this keep working. */
 function schedList(){
   if(!Array.isArray(S.schedList))S.schedList=SCHED_T.map(function(t){return t.id}).filter(function(id){return (S.plans[id]||[]).some(Boolean)||((S.planNames||{})[id]||'').trim()});
   S.schedList=S.schedList.filter(function(id){return S.plans[id]});
   if(S.schedList.length&&S.schedList.indexOf(S.planId)<0)S.planId=S.schedList[0];
   return S.schedList;
 }
-/* Jubilee status: the server's answer when we have it, otherwise the last answer remembered on this phone (so Jubilee themes show straight away) */
+/* Pro status: the server's answer when we have it, otherwise the last answer remembered on this phone (so Pro themes show straight away) */
 var PROC=null;
 function isPro(){if(typeof ACC!=='undefined'&&ACC.usage&&ACC.usage.plan){var v=ACC.usage.plan==='pro'||ACC.usage.plan==='paid';if(v!==PROC){PROC=v;try{localStorage.setItem('manna.pro.v1',v?'1':'0')}catch(e){}}return v}
   if(PROC==null){try{PROC=localStorage.getItem('manna.pro.v1')==='1'&&!!localStorage.getItem('manna.auth.v1')}catch(e){PROC=false}}return !!PROC}
 function schedMax(){return isPro()?3:1}
-/* ---------- Manna Jubilee ---------- */
+/* ---------- Manna Pro ---------- */
 var PRO_PRICE={m:7,y:70},FREE_THEMES=['devotion','fitness','plain'],FREE_ROUTINES=5,FREE_PHOTOS=2,FREE_HIST_DAYS=30;
 var PROF=[
   ['AI uses','5 a day','Unlimited'],
@@ -2624,21 +2624,21 @@ function proNeed(why){if(isPro())return true;proOpen(why);return false}
 function proOpen(why){PROUI.why=why||'';proRender();modalOpen($('#prom'))}
 function proRender(){var c=$('#prom-card');if(!c)return;var yr=PROUI.yr,mo=(PRO_PRICE.y/12).toFixed(2),save=Math.round((1-PRO_PRICE.y/(PRO_PRICE.m*12))*100);
   c.innerHTML='<div class="row spread"><span></span><button class="btn sm" data-act="proclose">Close</button></div>'
-   +'<div class="prohead"><span class="proglow" aria-hidden="true">✨</span><h3 id="prom-t">Manna Jubilee</h3>'+(PROUI.why&&PROWHY[PROUI.why]?'<p class="proreason">'+esc(PROWHY[PROUI.why])+' is part of Manna Jubilee.</p>':'<p class="muted" style="margin:0">Everything in Manna, with no limits.</p>')+'</div>'
+   +'<div class="prohead"><span class="proglow" aria-hidden="true">✨</span><h3 id="prom-t">Manna Pro</h3>'+(PROUI.why&&PROWHY[PROUI.why]?'<p class="proreason">'+esc(PROWHY[PROUI.why])+' is part of Manna Pro.</p>':'<p class="muted" style="margin:0">Everything in Manna, with no limits.</p>')+'</div>'
    +'<div class="proseg" role="radiogroup" aria-label="Billing"><button type="button" role="radio" aria-checked="'+(!yr)+'" data-act="proplan" data-k="m">Monthly</button><button type="button" role="radio" aria-checked="'+yr+'" data-act="proplan" data-k="y">Yearly <span class="prosave">Save '+save+'%</span></button></div>'
    +'<div class="proprice"><b>$'+(yr?PRO_PRICE.y:PRO_PRICE.m)+'</b><span>'+(yr?'a year · just $'+mo+' a month':'a month')+'</span></div>'
    +proTable()
-   +'<button class="btn primary probuy" data-act="probuy">'+(isPro()?'You have Jubilee ✓':'Get Jubilee · $'+(yr?PRO_PRICE.y+'/year':PRO_PRICE.m+'/month'))+'</button>'
+   +'<button class="btn primary probuy" data-act="probuy">'+(isPro()?'You have Pro ✓':'Get Pro · $'+(yr?PRO_PRICE.y+'/year':PRO_PRICE.m+'/month'))+'</button>'
    +'<p class="small muted" style="text-align:center;margin:0">Cancel any time. Everything you have logged stays yours either way.</p>'}
-function proTable(){return '<div class="protab" role="table" aria-label="Free and Jubilee compared"><div class="prorow proth" role="row"><span role="columnheader"></span><span role="columnheader">Free</span><span role="columnheader">Jubilee</span></div>'
+function proTable(){return '<div class="protab" role="table" aria-label="Free and Pro compared"><div class="prorow proth" role="row"><span role="columnheader"></span><span role="columnheader">Free</span><span role="columnheader">Pro</span></div>'
    +PROF.map(function(r){return '<div class="prorow" role="row"><span role="cell">'+esc(r[0])+'</span><span role="cell" class="'+(r[1]==='—'?'no':'')+'">'+esc(r[1])+'</span><span role="cell" class="yes">'+esc(r[2])+'</span></div>'}).join('')+'</div>'}
-function proBadge(){return '<span class="badge pro">✨ JUBILEE</span>'}
+function proBadge(){return '<span class="badge pro">✨ PRO</span>'}
 function proPhotoLeft(){if(isPro())return 99;try{var o=JSON.parse(localStorage.getItem('manna.photo.v1')||'{}');return o.d===todayStamp()?Math.max(0,FREE_PHOTOS-(o.n||0)):FREE_PHOTOS}catch(e){return FREE_PHOTOS}}
 function proPhotoUse(){if(isPro())return;try{var o=JSON.parse(localStorage.getItem('manna.photo.v1')||'{}');if(o.d!==todayStamp())o={d:todayStamp(),n:0};o.n=(o.n||0)+1;localStorage.setItem('manna.photo.v1',JSON.stringify(o))}catch(e){}}
 function proRoutineOk(){if(isPro())return true;if((S.customW||[]).length<FREE_ROUTINES)return true;proOpen('routine');return false}
-function proSettingsHtml(){var p=isPro();return '<div class="row spread"><h3 style="margin:0">Manna Jubilee</h3>'+(p?'<span class="badge pro">✨ You have Jubilee</span>':proBadge())+'</div>'
+function proSettingsHtml(){var p=isPro();return '<div class="row spread"><h3 style="margin:0">Manna Pro</h3>'+(p?'<span class="badge pro">✨ You have Pro</span>':proBadge())+'</div>'
   +(p?'<p class="small muted" style="margin:0">Thank you for supporting Manna. Everything is unlocked.</p>':'<p class="small" style="margin:0">$'+PRO_PRICE.m+' a month or $'+PRO_PRICE.y+' a year. Unlimited AI, every theme and music mood, workout compare, full history and more.</p>')
-  +'<button class="btn'+(p?'':' primary')+'" data-act="proopen">'+(p?'See what is in Jubilee':'Compare Free and Jubilee')+'</button>'}
+  +'<button class="btn'+(p?'':' primary')+'" data-act="proopen">'+(p?'See what is in Pro':'Compare Free and Pro')+'</button>'}
 function schedAdd(){var L=schedList();if(L.length>=schedMax())return null;var id=SCHED_T.map(function(t){return t.id}).filter(function(x){return L.indexOf(x)<0})[0];if(!id)return null;
   S.plans[id]=[null,null,null,null,null,null,null];S.planNames[id]='';L.push(id);S.planId=id;syncSched();return id}
 function schedName(id){id=id||S.planId;var n=(S.planNames&&S.planNames[id]||'').trim();return n||'Untitled schedule'}
@@ -3073,6 +3073,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
  {v:165,d:'Nov 12, 2026',t:'Good morning, good evening',s:['The opening animation now greets you by the time of day: Good morning, Good afternoon or Good evening.','The AI check card is gone from Settings.','Fixed the water bottle on the Drink page: the water now sits level with a gentle wave.','Food trends chart is clearer: grid lines with numbers, your goal and your average marked, bars that grow in, and tapping a bar shows that day with a button to open it. It also shows your best day, a shaded target zone, the numbers on each bar for the week, and a short tip about your pattern.','Tap a Repeat card in Quick add to see what you ate, with numbers, and pick only the foods you want again.','Quick add icons no longer pop in and out every time you tap something.','Meal plan no longer shows an example plan straight away. Tap Show template meal plan to see one.','Every food now gets its own icon instead of a plain plate.','The food catalog is no longer on the Recipes page. Search all foods from More ways to log on Eat.','Rename your meals: tap ✎ next to one of your meals, a recipe or any food in your diary.','Saved meals are now called Your meals, and the Diary no longer has a separate saved meals section. Find Your meals in Quick add on Eat.']},
@@ -3208,8 +3209,8 @@ function onbPanel(n){
     +'<label class="f" for="onb-gai">Or describe your goal and let AI pick<textarea id="onb-gai" data-oi="1" placeholder="Lose a little weight and get stronger for basketball"></textarea></label><button type="button" class="btn sm" data-onb="gai">Pick my goals with AI</button></div></div>';
   if(n===2)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">About you</h2><p>These are used only to estimate how much energy your body needs.</p><div class="onb-seg" role="group" aria-label="Sex">'+[['female','Female'],['male','Male'],['other','Prefer not to say']].map(function(x){return '<button type="button" class="chip" data-onb="sex" data-k="'+x[0]+'" aria-pressed="'+(S.sex===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-seg" role="group" aria-label="Units">'+[['kg','kg and cm'],['lb','lb and ft']].map(function(x){return '<button type="button" class="chip" data-onb="unit" data-k="'+x[0]+'" aria-pressed="'+(S.units===x[0])+'">'+x[1]+'</button>'}).join('')+'</div><div class="onb-row"><label class="f" for="onb-age">Age<input type="number" id="onb-age" data-oi="1" min="10" inputmode="numeric" placeholder="e.g. 30" value="'+(onbOk(onbSrc().a)?onbSrc().a:'')+'"></label><label class="f" for="onb-wt">Weight ('+S.units+')<input type="number" id="onb-wt" data-oi="1" step="0.1" inputmode="decimal" placeholder="e.g. '+(S.units==='lb'?'165':'75')+'" value="'+(onbOk(onbSrc().kg)?Math.round((S.units==='lb'?onbSrc().kg*2.20462:onbSrc().kg)*10)/10:'')+'"></label><label class="f" for="onb-tgt">Target weight ('+S.units+'), optional<input type="number" id="onb-tgt" data-oi="1" step="0.1" inputmode="decimal" placeholder="Optional" value="'+(S.gTarget>0?(S.units==='lb'?Math.round(S.gTarget*2.20462):S.gTarget):'')+'"></label></div>'+onbH()+'</div>';
   if(n===3)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">How active are you?</h2><p>Think about a normal week, including work.</p><div class="onb-opts" role="radiogroup" aria-label="Activity level">'+ACTS.map(function(a){return '<button type="button" class="onb-opt" role="radio" data-onb="act" data-k="'+a[0]+'" aria-checked="'+(S.activity===a[0])+'" aria-pressed="'+(S.activity===a[0])+'"><b>'+a[1]+'</b><span>'+a[2]+'</span></button>'}).join('')+'</div></div>';
-  if(n===5){var lk=function(t){return !isPro()&&FREE_THEMES.indexOf(t.id)<0},order=THEMES.filter(function(t){return t.id==='plain'}).concat(THEMES.filter(function(t){return t.id!=='plain'&&!lk(t)}),THEMES.filter(function(t){return t.id!=='plain'&&lk(t)}));if(lk({id:S.themeMode}))S.themeMode='plain';var th=function(t){var L=lk(t);return '<button type="button" class="onb-th'+(L?' lock':'')+'" role="radio" data-onb="theme" data-k="'+t.id+'"'+(L?' data-lock="1" aria-disabled="true" aria-label="'+esc(t.name)+', part of Manna Jubilee"':'')+' aria-checked="'+(S.themeMode===t.id)+'" aria-pressed="'+(S.themeMode===t.id)+'"><i style="background:'+t.sw+'">'+(L?'<em aria-hidden="true">🔒</em>':'')+'</i><b>'+esc(t.name)+(t.id==='plain'?' (default)':'')+'</b><span>'+(L?'Jubilee':esc(t.mood))+'</span></button>'};
-    return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Pick a look</h2><p>The Default theme is plain white or black and follows your device. Tap a theme to preview it right now.'+(isPro()?'':' Themes with a 🔒 come with Manna Jubilee.')+'</p><div class="onb-themes" role="radiogroup" aria-label="Theme">'+order.map(th).join('')+'</div></div>'}
+  if(n===5){var lk=function(t){return !isPro()&&FREE_THEMES.indexOf(t.id)<0},order=THEMES.filter(function(t){return t.id==='plain'}).concat(THEMES.filter(function(t){return t.id!=='plain'&&!lk(t)}),THEMES.filter(function(t){return t.id!=='plain'&&lk(t)}));if(lk({id:S.themeMode}))S.themeMode='plain';var th=function(t){var L=lk(t);return '<button type="button" class="onb-th'+(L?' lock':'')+'" role="radio" data-onb="theme" data-k="'+t.id+'"'+(L?' data-lock="1" aria-disabled="true" aria-label="'+esc(t.name)+', part of Manna Pro"':'')+' aria-checked="'+(S.themeMode===t.id)+'" aria-pressed="'+(S.themeMode===t.id)+'"><i style="background:'+t.sw+'">'+(L?'<em aria-hidden="true">🔒</em>':'')+'</i><b>'+esc(t.name)+(t.id==='plain'?' (default)':'')+'</b><span>'+(L?'Pro':esc(t.mood))+'</span></button>'};
+    return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Pick a look</h2><p>The Default theme is plain white or black and follows your device. Tap a theme to preview it right now.'+(isPro()?'':' Themes with a 🔒 come with Manna Pro.')+'</p><div class="onb-themes" role="radiogroup" aria-label="Theme">'+order.map(th).join('')+'</div></div>'}
   if(n===-6)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your top 3 workouts</h2><p>Choose up to three you love. They show up on your home page.</p><div class="wpick" id="onb-wpk" data-n="'+S.topW.length+'"><span class="wpd" aria-hidden="true"><i></i><i></i><i></i></span><b id="onb-wc" aria-live="polite">'+wpLabel(S.topW.length)+'</b></div><label class="f" for="onb-wq">Search workouts<input type="search" id="onb-wq" data-oi="1" autocomplete="off" placeholder="Try soccer, legs, plank" value="'+esc(ONB.wq)+'"></label><div class="onb-wf"><p class="eyebrow">Type or sport</p><div class="onb-seg" id="onb-wcats" role="group" aria-label="Filter by type or sport"></div><p class="eyebrow">Equipment</p><div class="onb-seg" id="onb-weqs" role="group" aria-label="Filter by equipment"></div></div><p class="small muted" id="onb-wn" aria-live="polite"></p><div class="wgrid onb-wlist" id="onb-wl" role="group" aria-label="Workouts" tabindex="0"></div></div>';
   if(n===6)return '<div class="onb-panel go"><h2 id="onb-h" tabindex="-1">Your favorite Bible verse</h2><p>Optional. Type a reference like John 3:16 or Philippians 4:13. You can change it any time in Settings.</p><label class="f" for="onb-v">Favorite verse<input type="text" id="onb-v" data-oi="1" maxlength="80" autocomplete="off" placeholder="John 3:16" value="'+esc(S.favVerse||'')+'"></label><div class="note" id="onb-vp" aria-live="polite" hidden></div><p class="small muted onb-next-tour">Next: a quick tour of Manna, about a minute. You can exit it at any step.</p></div>';
   var C=2*Math.PI*52;
@@ -3291,7 +3292,7 @@ var ONBACT={
   wcat:function(b){ONB.wc=b.dataset.k;onbWL()},
   weq:function(b){ONB.we=b.dataset.k;onbWL()},
   reset:function(){S.goalKcal=null;S.macroOv={p:null,c:null,f:null};onbResults(true)},
-  theme:function(b){if(b.dataset.lock){try{sfxSad()}catch(e){}b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');toast('This theme comes with Manna Jubilee. You can get it later in Settings.',{title:'Jubilee theme',icon:'🔒'});return}S.themeMode=b.dataset.k;$$('[data-onb=theme]').forEach(function(x){var on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)});refresh()},
+  theme:function(b){if(b.dataset.lock){try{sfxSad()}catch(e){}b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');toast('This theme comes with Manna Pro. You can get it later in Settings.',{title:'Pro theme',icon:'🔒'});return}S.themeMode=b.dataset.k;$$('[data-onb=theme]').forEach(function(x){var on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)});refresh()},
   wk:function(b){var id=b.dataset.id,i=S.topW.indexOf(id);if(i>-1)S.topW.splice(i,1);else if(S.topW.length<3)S.topW.push(id);else{$('#onb-msg').textContent='You can pick 3. Tap one you picked to swap it.';return}
     $('#onb-msg').textContent='';b.setAttribute('aria-pressed',S.topW.indexOf(id)>-1);$('#onb-wc').textContent=wpLabel(S.topW.length);var pk=$('#onb-wpk');if(pk){pk.dataset.n=S.topW.length;pk.classList.remove('bump');void pk.offsetWidth;pk.classList.add('bump')}}
 };
@@ -3325,7 +3326,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='167';
+var heroLast='',APPV='168';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -3415,7 +3416,7 @@ function renderSafe(){
 }
 function renderLabs(){
   var lk=$('#lb-lock');if(!lk){var v=$('#v-labs .vh');if(v){lk=document.createElement('div');lk.id='lb-lock';v.parentNode.insertBefore(lk,v.nextSibling)}}
-  if(lk){var pro=isPro();lk.hidden=pro;$('#v-labs').classList.toggle('prolocked',!pro);if(!pro&&!lk.innerHTML)lk.innerHTML='<button type="button" class="prolock big" data-act="proopen"><span>🔒</span><span><b>Bloodwork and nutrients is part of Jubilee</b><small>Track iron, B12, vitamin D and more, and see how your food connects to your lab results.</small></span>'+proBadge()+'</button>'}
+  if(lk){var pro=isPro();lk.hidden=pro;$('#v-labs').classList.toggle('prolocked',!pro);if(!pro&&!lk.innerHTML)lk.innerHTML='<button type="button" class="prolock big" data-act="proopen"><span>🔒</span><span><b>Bloodwork and nutrients is part of Pro</b><small>Track iron, B12, vitamin D and more, and see how your food connects to your lab results.</small></span>'+proBadge()+'</button>'}
   var T=targets(),tot=totals();
   var rows=[['Iron',tot.fe,T.iron,'mg',false],['Vitamin B12',tot.b12,T.b12,'µg',false],['Vitamin D',tot.vd,T.vd,'µg',false],['Potassium',tot.k,T.k,'mg',false],['Fiber',tot.fib,T.fiber,'g',false],['Sodium (max)',tot.na,T.sodium,'mg',true]];
   $('#lb-nut').innerHTML=rows.map(function(r){
@@ -3568,7 +3569,7 @@ function accOn(){return typeof ACC!=='undefined'&&ACC&&ACC.cfg&&ACC.cfg.accounts
 function aiLoginNeeded(){return accOn()&&ACC.cfg.aiNeedsLogin&&!signedIn()}
 function aiPro(){return !!(accOn()&&signedIn()&&ACC.usage&&ACC.usage.plan==='pro')}
 function aiLeft(){if(aiPro())return 999;if(accOn()&&signedIn())return ACC.usage?Math.max(0,ACC.usage.limit-ACC.usage.used):1;if(aiLoginNeeded())return 0;return Math.max(0,AI_DAY-aiUsed())}
-function aiLeftText(){if(aiLoginNeeded())return 'Log in under Settings › Account to use AI.';if(aiPro())return 'Jubilee: unlimited AI';var n=aiLeft(),lim=accOn()&&signedIn()&&ACC.usage?ACC.usage.limit:AI_DAY;if(accOn()&&signedIn()&&!ACC.usage)return '';return n?n+' of '+lim+' AI uses left today':'No AI uses left today. They reset at midnight.'}
+function aiLeftText(){if(aiLoginNeeded())return 'Log in under Settings › Account to use AI.';if(aiPro())return 'Pro: unlimited AI';var n=aiLeft(),lim=accOn()&&signedIn()&&ACC.usage?ACC.usage.limit:AI_DAY;if(accOn()&&signedIn()&&!ACC.usage)return '';return n?n+' of '+lim+' AI uses left today':'No AI uses left today. They reset at midnight.'}
 function blobUrl(b){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(r.result)};r.onerror=no;r.readAsDataURL(b)})}
 var SERVER_AI={
   json:function(inst,opts){
@@ -3990,11 +3991,11 @@ function gAI(mode,text,after){
     });
   }).catch(function(e){S.gaiBusy=false;S.gaiMsg=aiErr(e&&e.code)+' Try again in a moment.';refresh()});
 }
-/* ---------- AI schedule (Jubilee) ---------- */
+/* ---------- AI schedule (Pro) ---------- */
 var SHA=null;
 function shaRender(){
-  var el=$('#sh-ai');if(!el)return;var pro=isPro(),used=!pro&&S.shaFreeWk===dk(weekStart().getTime()),h='<div class="row spread"><h3 style="margin:0">Make a schedule with AI</h3>'+(pro?'<span class="badge pro">✨ JUBILEE</span>':'<span class="small muted">'+(used?'Free one used this week':'1 free a week')+'</span>')+'</div>';
-  if(used)h+='<p class="small muted">You have used this week\'s free AI schedule. It comes back on Monday, or get unlimited with Manna Jubilee.</p><button class="btn sm" data-act="proopen">See Jubilee</button>';
+  var el=$('#sh-ai');if(!el)return;var pro=isPro(),used=!pro&&S.shaFreeWk===dk(weekStart().getTime()),h='<div class="row spread"><h3 style="margin:0">Make a schedule with AI</h3>'+(pro?'<span class="badge pro">✨ PRO</span>':'<span class="small muted">'+(used?'Free one used this week':'1 free a week')+'</span>')+'</div>';
+  if(used)h+='<p class="small muted">You have used this week\'s free AI schedule. It comes back on Monday, or get unlimited with Manna Pro.</p><button class="btn sm" data-act="proopen">See Pro</button>';
   else{h+='<textarea id="sha-text" aria-label="What do you want from your schedule" placeholder="4 days a week, build muscle, 45 minutes, no running"></textarea><div class="row"><button class="btn primary" data-act="shamake">Make my schedule</button><span class="small muted">1 AI use</span></div>';
     if(S.shaMsg)h+='<p class="note warn small">'+esc(S.shaMsg)+'</p>';
     if(SHA){h+='<div class="stack shaout"><label class="f" for="sha-name">Schedule name<input type="text" id="sha-name" maxlength="40" value="'+esc(SHA.name)+'"></label><ul class="list">'+SHA.days.map(function(d,i){return '<li><div style="flex:1;min-width:0"><span class="small muted">'+DAYN[i]+'</span>'+(d?'<input type="text" class="shad" id="sha-d'+i+'" maxlength="50" value="'+esc(d.name)+'" aria-label="'+DAYN[i]+' workout name"><span class="small muted">'+d.items.length+' exercises · '+d.mins+' min · '+esc(d.items.slice(0,3).map(function(x){return x.name}).join(', '))+(d.items.length>3?'…':'')+'</span>':'<b>Rest</b>')+'</div></li>'}).join('')+'</ul><div class="row"><button class="btn primary" data-act="shasave">Save schedule</button><button class="btn" data-act="shaclr">Discard</button></div><p class="small muted">Tap a name to rename it before saving.</p></div>'}}
@@ -4468,10 +4469,10 @@ function mptOpen(){var T=targets(),k=T.kcal,sc=function(f){return Math.round(k*f
   var M=[['🥣','Breakfast','Greek yogurt bowl with berries, oats and honey',sc(.22),30],['🥗','Lunch','Chicken and rice bowl with greens and avocado',sc(.3),42],['🍎','Snack','Apple with peanut butter',sc(.1),7],['🐟','Dinner','Salmon, roasted potatoes and broccoli',sc(.3),40],['🥛','Evening','Glass of milk and a handful of almonds',sc(.08),12]];
   var tk=M.reduce(function(a,m){return a+m[3]},0),tp=M.reduce(function(a,m){return a+m[4]},0);
   $('#mpt-card').innerHTML='<div class="row spread"><h3 id="mpt-t" style="margin:0">Template meal plan</h3><button class="btn sm" data-act="mptclose">Close</button></div>'
-    +'<p class="small muted" style="margin:0">An example day sized to your '+kc(k)+' kcal goal. '+(isPro()?'Tap Plan my day for one made around your own tastes and targets.':'Jubilee plans a real one around your tastes, with a grocery list.')+'</p>'
+    +'<p class="small muted" style="margin:0">An example day sized to your '+kc(k)+' kcal goal. '+(isPro()?'Tap Plan my day for one made around your own tastes and targets.':'Pro plans a real one around your tastes, with a grocery list.')+'</p>'
     +'<ul class="mptl">'+M.map(function(m){return '<li><span class="mpte">'+m[0]+'</span><span class="mptn"><small>'+m[1]+'</small><b>'+m[2]+'</b><small>'+kc(m[3])+' kcal · about '+m[4]+' g protein</small></span></li>'}).join('')+'</ul>'
     +'<div class="rptot"><span><b>'+kc(tk)+'</b> kcal</span><span><b>'+tp+'</b> g protein</span><span><b>5</b> meals</span><span><b>'+Math.round(tk/k*100)+'%</b> of goal</span></div>'
-    +(isPro()?'<button class="btn primary" data-act="mptgo">Plan my day</button>':'<button class="btn primary" data-act="proopen" data-why="mplan">See Manna Jubilee</button>');
+    +(isPro()?'<button class="btn primary" data-act="mptgo">Plan my day</button>':'<button class="btn primary" data-act="proopen" data-why="mplan">See Manna Pro</button>');
   modalOpen($('#mpt'))}
 /* Version 165: tap a Repeat card to see what you ate, with numbers, and pick just the foods you want again */
 var RPK={k:'',sel:[]};
@@ -4816,7 +4817,7 @@ function renderThemes(){
     return '<div class="tcard card stack"><div class="tp" data-vtheme="'+t.id+'" aria-hidden="true"><div class="tp-top"><i class="tp-heart"></i><span class="tp-name">'+esc(S.name)+'.</span></div><div class="tp-lines"><i></i><i></i></div><div class="tp-row"><span class="tp-btn">Log Workout</span><span class="tp-paper">'+esc(refs[0]||'')+'</span></div></div>'
     +'<div class="row spread"><h3>'+esc(t.name)+'</h3><span class="row" style="gap:.35rem">'+(match?'<span class="badge">Matches today</span>':'')+(on?'<span class="badge">In use</span>':'')+'</span></div>'
     +'<p class="small muted">'+esc(t.mood)+'</p><p class="small muted">'+(refs.length?'Verses like '+esc(refs.join(', '))+'.':'Not tied to a verse. Follows light or dark mode.')+'</p>'
-    +'<button class="btn'+(chosen?' primary':'')+'" data-act="theme" data-k="'+t.id+'">'+(chosen?'Using '+esc(t.name):(!isPro()&&FREE_THEMES.indexOf(t.id)<0?'✨ JUBILEE · ':'')+'Use '+esc(t.name))+'</button></div>'
+    +'<button class="btn'+(chosen?' primary':'')+'" data-act="theme" data-k="'+t.id+'">'+(chosen?'Using '+esc(t.name):(!isPro()&&FREE_THEMES.indexOf(t.id)<0?'✨ PRO · ':'')+'Use '+esc(t.name))+'</button></div>'
   }).join('');
 }
 
@@ -4903,7 +4904,7 @@ function allWorkouts(){return LIB.concat(S.customW)}
 function eqText(w){return Array.isArray(w.eq)?w.eq.map(function(k){return EQ[k]||k}).join(', '):String(w.eq||'')}
 function syncSched(){S.sched=schedFrom(S)}
 function planDays(){return S.plans[S.planId]}
-/* Version 163: Jubilee schedules can hold more than one workout a day. The first stays in S.plans; the rest live in S.plansX[schedule][day]. */
+/* Version 163: Pro schedules can hold more than one workout a day. The first stays in S.plans; the rest live in S.plansX[schedule][day]. */
 function dayX(pid,di){if(!isPro())return [];var X=S.plansX&&S.plansX[pid];var L=X&&Array.isArray(X[di])?X[di]:[];return L.filter(function(id){return wById(id)})}
 function dayXSet(pid,di,L){if(!S.plansX||typeof S.plansX!=='object'||Array.isArray(S.plansX))S.plansX={};if(!Array.isArray(S.plansX[pid])||S.plansX[pid].length!==7)S.plansX[pid]=[[],[],[],[],[],[],[]];S.plansX[pid][di]=L.slice(0,4)}
 function doneToday(wid){return S.hist.some(function(h){return h.wid===wid&&dk(h.ts)===dk(Date.now())})}
@@ -5204,20 +5205,20 @@ document.addEventListener('input',function(e){if(e.target&&e.target.id==='nt-tit
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.dataset||t.dataset.si==null||!S.siRes)return;var d=+t.dataset.si;var prev=S.siRes.days[d]||{};S.siRes.days[d]=t.value==='__new'?{kind:'none',label:prev.label,sel:'__new'}:t.value?{kind:'match',id:t.value,label:prev.label||wById(t.value).name}:{kind:'rest',label:prev.label}});
 function dayXHtml(di,ti,opts){var X=dayX(S.planId,di),h='';
   if(X.length)h+='<ul class="dayx">'+X.map(function(id,k){var w=wById(id),dn=di===ti&&doneToday(id);return '<li><span>＋ '+esc(w.name)+' <span class="small muted">· '+w.mins+' min</span>'+(dn?' <span class="pill done">Done</span>':'')+'</span><span class="row" style="gap:.3rem;flex-wrap:nowrap">'+(di===ti&&!dn&&!S.sess?'<button class="btn primary sm" data-act="wstart" data-id="'+id+'">Start</button>':'')+'<button class="btn sm" data-act="dayxdel" data-d="'+di+'" data-k="'+k+'" aria-label="Remove '+esc(w.name)+'">✕</button></span></li>'}).join('')+'</ul>';
-  if(!isPro())h+='<button class="btn sm dayxadd" data-act="proopen" data-why="multi">＋ Another workout this day <span class="badge pro">✨ JUBILEE</span></button>';
+  if(!isPro())h+='<button class="btn sm dayxadd" data-act="proopen" data-why="multi">＋ Another workout this day <span class="badge pro">✨ PRO</span></button>';
   else if(X.length<4)h+='<label class="vh-only" for="schx-'+di+'">Add another workout on '+DAYN[di]+'</label><select id="schx-'+di+'" class="dayxsel" data-schx="'+di+'">'+opts('').replace('>Rest day<','>＋ Add another workout…<')+'</select>';
   return h}
 function renderSchedule(){
   if(S.useSched===false){$('#sh-plans').innerHTML='';$('#sh-week').innerHTML='<h3>Schedules are off</h3><p class="muted">Turn them on to plan a workout for each day of the week.</p><div class="row"><button class="btn primary" data-act="schedon">Turn schedules on</button></div>';return}
   var SL=schedList(),max=schedMax();
   if(!SL.length){$('#sh-plans').innerHTML='';
-    $('#sh-week').innerHTML='<div class="sempty"><div class="sempty-ic" aria-hidden="true">📅</div><h3>No schedules yet</h3><p class="muted">Make a weekly schedule to plan a workout for each day. It shows on Home and Today.</p><button class="btn primary" data-act="sadd">+ Add a schedule</button><p class="small muted">Free: 1 schedule. Jubilee: up to 3.</p></div>';
+    $('#sh-week').innerHTML='<div class="sempty"><div class="sempty-ic" aria-hidden="true">📅</div><h3>No schedules yet</h3><p class="muted">Make a weekly schedule to plan a workout for each day. It shows on Home and Today.</p><button class="btn primary" data-act="sadd">+ Add a schedule</button><p class="small muted">Free: 1 schedule. Pro: up to 3.</p></div>';
     renderSchedImport();return}
   $('#sh-plans').innerHTML=SL.map(function(id,ti2){
     var n=S.plans[id].filter(Boolean).length;
     return '<button class="scard" data-act="splan" data-id="'+id+'" aria-pressed="'+(S.planId===id?'true':'false')+'"><span class="sl">'+(ti2+1)+'</span><b data-sn="'+id+'">'+esc(schedName(id))+'</b><span class="mono small">'+n+(n===1?' workout':' workouts')+' a week</span></button>';
-  }).join('')+(SL.length<max?'<button class="scard sadd" data-act="sadd"><span class="sl">+</span><b>Add a schedule</b><span class="mono small">'+(max-SL.length)+' more '+(isPro()?'with Jubilee':'')+'</span></button>'
-    :!isPro()?'<div class="scard slock" aria-disabled="true"><span class="sl">🔒</span><b>More schedules</b><span class="small muted">Jubilee accounts get up to 3</span></div>':'');
+  }).join('')+(SL.length<max?'<button class="scard sadd" data-act="sadd"><span class="sl">+</span><b>Add a schedule</b><span class="mono small">'+(max-SL.length)+' more '+(isPro()?'with Pro':'')+'</span></button>'
+    :!isPro()?'<div class="scard slock" aria-disabled="true"><span class="sl">🔒</span><b>More schedules</b><span class="small muted">Pro accounts get up to 3</span></div>':'');
   var days=planDays(),tpl=SCHED_T.filter(function(t){return t.id===S.planId})[0],ti=todayIdx(),done=0,total=0;
   var opts=function(sel){
     var o='<option value=""'+(sel?'':' selected')+'>Rest day</option>';
@@ -5379,7 +5380,7 @@ function renderHistory(){
       +'<button class="btn sm" data-act="hshare1" data-id="'+esc(x.id)+'">Share</button><button class="btn sm" data-act="hdel" data-id="'+esc(x.id)+'" aria-label="Delete '+esc(x.name)+' from history">Delete</button></div></div></details>';
     out+=sdWrap(row,'hdel',x.id,x.name);
   });
-  if(older)out+='<button type="button" class="prolock" data-act="proopen"><span>🔒</span><span><b>'+older+' older session'+(older===1?'':'s')+'</b><small>Free shows the last '+FREE_HIST_DAYS+' days. See everything with Jubilee.</small></span>'+proBadge()+'</button>';
+  if(older)out+='<button type="button" class="prolock" data-act="proopen"><span>🔒</span><span><b>'+older+' older session'+(older===1?'':'s')+'</b><small>Free shows the last '+FREE_HIST_DAYS+' days. See everything with Pro.</small></span>'+proBadge()+'</button>';
   try{hperBind()}catch(e){}
   var hl=$('#h-list'),hh=out||'<p class="muted">No sessions yet. Start a workout and it will show up here.</p>';if(hl.dataset.h!==hh||!hl.innerHTML){hl.dataset.h=hh;hl.innerHTML=hh}
 }
@@ -6314,14 +6315,14 @@ var ACT={
     S.plans[S.planId]=plan;var snm=$('#si-name')?$('#si-name').value.trim():(o.name||'');if(snm)S.planNames[S.planId]=snm.slice(0,30);syncSched();S.siRes=null;$('#si-text').value='';
     toast('Imported '+set+' day'+(set===1?'':'s')+' into '+schedName()+(made?', with '+made+' new workout'+(made===1?'':'s'):'')+'.')},
   sreset:function(){S.plans[S.planId]=[null,null,null,null,null,null,null];if(S.plansX)delete S.plansX[S.planId];syncSched();toast('Schedule cleared.')},
-  sadd:function(){var L=schedList();if(L.length>=schedMax()){toast(isPro()?'You have the most schedules: 3.':'Free accounts get 1 schedule. Jubilee gets up to 3.');return}schedAdd();toast('Added a schedule. Pick a workout for each day.')},
+  sadd:function(){var L=schedList();if(L.length>=schedMax()){toast(isPro()?'You have the most schedules: 3.':'Free accounts get 1 schedule. Pro gets up to 3.');return}schedAdd();toast('Added a schedule. Pick a workout for each day.')},
   sdel:function(){var id=S.planId;if(S.sdelAsk!==id){S.sdelAsk=id;setTimeout(function(){if(S.sdelAsk===id){S.sdelAsk=null;refresh()}},4000);return}
     S.sdelAsk=null;var nm=schedName(id);S.plans[id]=[null,null,null,null,null,null,null];S.planNames[id]='';S.schedList=schedList().filter(function(x){return x!==id});S.planId=S.schedList[0]||'S1';syncSched();toast('Deleted '+nm+'.')},
   hfilter:function(b){S.hf=b.dataset.k},
   proopen:function(b){proOpen(b&&b.dataset&&b.dataset.why||'')},
   proclose:function(){modalHide($('#prom'))},
   proplan:function(b){PROUI.yr=b.dataset.k==='y';proRender()},
-  probuy:function(){if(isPro()){modalHide($('#prom'));return}toast('Checkout is coming soon. Thank you for wanting Jubilee!',{title:'Manna Jubilee',icon:'✨'})},
+  probuy:function(){if(isPro()){modalHide($('#prom'));return}toast('Checkout is coming soon. Thank you for wanting Pro!',{title:'Manna Pro',icon:'✨'})},
   shmclose:function(){modalHide($('#shm'))},
   shpick:function(b){var u=b.dataset.u;SH.sel[u]=!SH.sel[u];SH.msg='';shRender();return false},
   shsend:function(){shSend();return false},
@@ -6686,7 +6687,7 @@ function accRender(){
   var f=accFields(),h='<div class="sh"><h3>'+(!signedIn()&&ACC.mode==='signup'?'Create an account':!signedIn()&&ACC.mode==='reset'?'Reset your password':'Account')+'</h3>';
   var note=ACC.msg?'<p class="note small'+(ACC.err==='out'?' crit':ACC.err?' warn':' ok')+'" role="status">'+esc(ACC.msg)+'</p>':'';
   if(signedIn()&&ACC.mode!=='newpass'){
-    var u=ACC.usage,plan=u&&u.plan==='pro'?'Jubilee':u&&u.plan==='paid'?'Paid':'Free';
+    var u=ACC.usage,plan=u&&u.plan==='pro'?'Pro':u&&u.plan==='paid'?'Paid':'Free';
     var pv=a.prov||'email',linked=(a.provs&&a.provs.length?a.provs:[pv]);
     h+='<p class="small muted">Signed in as <b>'+esc(a.email)+'</b></p></div>'+note
       +'<div class="acwho"><span class="acav" data-p="'+esc(pv)+'" aria-hidden="true">'+esc(((a.name||a.email||'?').trim()[0]||'?').toUpperCase())+'</span><div class="acwt">'+(a.name?'<b>'+esc(a.name)+'</b>':'')+'<span class="small">'+(pv==='email'?'Signed in with email and password':'Signed in with '+esc(PROVN[pv]||pv))+'</span></div>'+provBadge(pv)+'</div>'
@@ -6920,8 +6921,8 @@ function svmRender(){var L=$('#svm-list');if(!L)return;
   L.innerHTML=S.meals.map(function(m){var on=SVM.sel.indexOf(String(m.id))>-1;return '<li><label class="row" style="gap:.6rem;flex-wrap:nowrap;width:100%"><input type="checkbox" data-svm="'+m.id+'"'+(on?' checked':'')+'><span style="flex:1">'+esc(m.name)+'</span><span class="small muted mono">'+kc(Math.round(m.n.kcal))+' kcal</span></label></li>'}).join('');
   svmSum()}
 function svmSum(){var k=0,n=0;S.meals.forEach(function(m){if(SVM.sel.indexOf(String(m.id))>-1){k+=+m.n.kcal||0;n++}});var su=$('#svm-sum');if(su)su.textContent=n+' food'+(n===1?'':'s')+' · '+kc(Math.round(k))+' kcal';var g=$('#svm-go');if(g)g.disabled=!n}
-/* ================= Jubilee extras (Version 156) ================= */
-function proLock(title,blurb,why,preview){return '<div class="row spread"><h3 style="margin:0">'+title+'</h3>'+proBadge()+'</div><p class="small muted" style="margin:0">'+blurb+'</p>'+(preview?'<div class="plk-prev" aria-hidden="true">'+preview+'</div>':'')+'<button type="button" class="prolock" data-act="proopen" data-why="'+why+'"><span>🔒</span><span><b>Part of Manna Jubilee</b><small>Tap to see what Jubilee adds.</small></span></button>'}
+/* ================= Pro extras (Version 156) ================= */
+function proLock(title,blurb,why,preview){return '<div class="row spread"><h3 style="margin:0">'+title+'</h3>'+proBadge()+'</div><p class="small muted" style="margin:0">'+blurb+'</p>'+(preview?'<div class="plk-prev" aria-hidden="true">'+preview+'</div>':'')+'<button type="button" class="prolock" data-act="proopen" data-why="'+why+'"><span>🔒</span><span><b>Part of Manna Pro</b><small>Tap to see what Pro adds.</small></span></button>'}
 /* simple line chart: pts=[{x:ts,y:number}] */
 function lineChart(pts,fmtY,col){if(pts.length<2)return '<p class="small muted">Log this a couple more times to see a line.</p>';
   var W=300,H=120,P=8,xs=pts.map(function(p){return p.x}),ys=pts.map(function(p){return p.y}),x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys);
@@ -6970,7 +6971,7 @@ function recapMake(){if(RCP.busy)return;RCP={busy:true,msg:''};mkOpen('recap','Y
   .catch(function(e){RCP={busy:false,msg:aiErr(e&&e.code)};refresh()})}
 function renderRecap(){var el=$('#h-recap');if(!el)return;var h;
   if(!isPro())h=proLock('Weekly recap','Every week, AI sums up your training and eating and gives you one tip for next week.','recap','<div class="rcp"><b>Strong week: 4 workouts</b><ul><li>Hit protein 5 of 7 days</li><li>New bench press record</li></ul></div>');
-  else{var r=S.recap;h='<div class="row spread"><h3 style="margin:0">Weekly recap</h3><span class="badge pro">✨ JUBILEE</span></div>';
+  else{var r=S.recap;h='<div class="row spread"><h3 style="margin:0">Weekly recap</h3><span class="badge pro">✨ PRO</span></div>';
     if(r)h+='<div class="rcp"><b>'+esc(r.headline)+'</b>'+(r.wins.length?'<ul>'+r.wins.map(function(w){return '<li>'+esc(w)+'</li>'}).join('')+'</ul>':'')+(r.watch?'<p class="small"><b>Work on:</b> '+esc(r.watch)+'</p>':'')+(r.tip?'<p class="small"><b>Tip:</b> '+esc(r.tip)+'</p>':'')+'<p class="small muted" style="margin:0">Written '+new Date(r.at).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+'</p></div>';
     else h+='<p class="small muted" style="margin:0">Get a short, honest summary of your last 7 days and one tip for next week.</p>';
     h+='<div class="row"><button class="btn '+(r?'sm':'primary')+'" data-act="recapgo"'+(RCP.busy?' disabled':'')+'>'+(RCP.busy?'Writing…':r?'Write a new recap':'Write my recap')+'</button></div>'+(RCP.msg?'<p class="note warn small">'+esc(RCP.msg)+'</p>':'')}
@@ -7000,7 +7001,7 @@ function renderTrend(){var el=$('#m-trend');if(!el)return;var h,T=targets();
     for(var q=2*R-1;q>=R;q--){var dq=FD[dkey(new Date(Date.now()-q*864e5))];if(dq&&dq.k>0&&dq[M]!=null){prev+=+dq[M];pn++}}
     var avg=n?Math.round(sum/n):0,pavg=pn?Math.round(prev/pn):0,chg=n&&pn?avg-pavg:null;
     var max=Math.max(tgt*1.3,Math.max.apply(null,rows.map(function(r){return r.v}))||1);
-    h='<div class="row spread"><h3 style="margin:0">Food trends</h3><span class="badge pro">✨ JUBILEE</span></div>'
+    h='<div class="row spread"><h3 style="margin:0">Food trends</h3><span class="badge pro">✨ PRO</span></div>'
       +'<div class="ftrange ftmet" role="group" aria-label="What to show">'+Object.keys(FTM).map(function(key){return '<button type="button" class="chip" data-act="ftm" data-m="'+key+'" aria-pressed="'+(key===M)+'">'+FTM[key].l+'</button>'}).join('')+'</div>'
       +'<div class="ftrange" role="group" aria-label="How many days">'+[7,14,30].map(function(r){return '<button type="button" class="chip" data-act="ftr" data-r="'+r+'" aria-pressed="'+(r===R)+'">'+r+' days</button>'}).join('')+'</div>';
     if(!n)h+='<p class="small muted" style="margin:0">Your days fill in here as you log food. Check back in a few days.</p>';
@@ -7052,7 +7053,7 @@ function estLog(m,via){var o=F('e'+(uid++),m.name,'Meal plan',m.serv,m.kcal,m.p,
   S.est=S.est.filter(function(x){return (x.name+'|'+x.serv)!==(o.name+'|'+o.serv)});S.est.unshift(o);S.est=S.est.slice(0,300);estSave();var meal=mkMeal(o,1,'Plan');meal.em=emojiFor(o.name);S.meals.push(meal);return meal}
 function renderMealPlan(){var el=$('#m-plan');if(!el)return;var h;
   if(!isPro())h=proLock('Meal plan','AI plans a full day of meals that hits your targets, with a grocery list. Add any meal with one tap.','mplan')+'<button class="btn sm" data-act="mptpl">Show template meal plan</button>';
-  else{var P=S.mplan;h='<div class="row spread"><h3 style="margin:0">Meal plan</h3><span class="badge pro">✨ JUBILEE</span></div><label class="vh-only" for="mp-pref">Preferences</label><input type="text" id="mp-pref" maxlength="200" placeholder="Optional: high protein, no fish, quick lunches" value="'+esc(P&&P.pref||'')+'"><div class="row"><button class="btn '+(P?'sm':'primary')+'" data-act="mpgo"'+(MPL.busy?' disabled':'')+'>'+(MPL.busy?'Planning…':P?'Plan a new day':'Plan my day')+'</button></div>'+(MPL.msg?'<p class="note warn small">'+esc(MPL.msg)+'</p>':'');
+  else{var P=S.mplan;h='<div class="row spread"><h3 style="margin:0">Meal plan</h3><span class="badge pro">✨ PRO</span></div><label class="vh-only" for="mp-pref">Preferences</label><input type="text" id="mp-pref" maxlength="200" placeholder="Optional: high protein, no fish, quick lunches" value="'+esc(P&&P.pref||'')+'"><div class="row"><button class="btn '+(P?'sm':'primary')+'" data-act="mpgo"'+(MPL.busy?' disabled':'')+'>'+(MPL.busy?'Planning…':P?'Plan a new day':'Plan my day')+'</button></div>'+(MPL.msg?'<p class="note warn small">'+esc(MPL.msg)+'</p>':'');
     if(!P)h+='<button class="btn sm" data-act="mptpl">Show template meal plan</button>';
     if(P){var tk=P.meals.reduce(function(a,m){return a+m.kcal},0),tp=P.meals.reduce(function(a,m){return a+m.p},0);
       h+='<p class="small muted" style="margin:0">'+kc(tk)+' kcal · '+tp+' g protein'+(P.note?' · '+esc(P.note):'')+'</p><ul class="list mpl">'+P.meals.map(function(m,i){return '<li><div style="flex:1;min-width:0"><span class="small muted">'+esc(m.slot)+'</span><br><b>'+esc(m.name)+'</b><br><span class="small muted">'+esc(m.serv)+' · '+kc(m.kcal)+' kcal · '+m.p+' g protein</span></div><button class="btn sm" data-act="mpadd" data-i="'+i+'">Add</button></li>'}).join('')+'</ul>';
@@ -7086,8 +7087,8 @@ function bpView(B){var n=B.days.length,dn=B.done.length,nx=-1,h='';for(var i=0;i
   if((B.started||dn)&&nx>=0)h+='<div class="row" style="justify-content:flex-end"><button class="btn sm" data-act="bpend">End plan</button></div>';
   return h}
 function renderBai(){var el=$('#sc-bai');if(!el)return;var h;
-  if(!isPro())h=proLock('Bible help','Reading the Bible is always free. Jubilee adds AI help: explain this chapter, a devotional on any topic, or a 7-day reading plan for what you are going through.','bible');
-  else{var B=S.bai,ch=(S.rb||'John')+' '+(S.rc||1);h='<div class="row spread"><h3 style="margin:0">Bible help</h3><span class="badge pro">✨ JUBILEE</span></div>'
+  if(!isPro())h=proLock('Bible help','Reading the Bible is always free. Pro adds AI help: explain this chapter, a devotional on any topic, or a 7-day reading plan for what you are going through.','bible');
+  else{var B=S.bai,ch=(S.rb||'John')+' '+(S.rc||1);h='<div class="row spread"><h3 style="margin:0">Bible help</h3><span class="badge pro">✨ PRO</span></div>'
     +'<div class="row"><button class="btn sm primary" data-act="baigo" data-k="explain"'+(BAI.busy?' disabled':'')+'>Explain '+esc(ch)+'</button></div>'
     +'<label class="vh-only" for="bai-q">Topic or what you are going through</label><div class="row baiq"><input type="text" id="bai-q" maxlength="200" enterkeyhint="go" placeholder="A topic or feeling, like anxiety or a new job" style="flex:1;min-width:0"><button class="btn primary" data-act="baigo" data-k="dev"'+(BAI.busy?' disabled':'')+' aria-label="Enter: write a devotional on this">Enter</button></div>'
     +'<p class="small muted" style="margin:0">Enter writes a short devotional on it. Or make a reading plan instead:</p><div class="row"><button class="btn sm" data-act="baigo" data-k="plan"'+(BAI.busy?' disabled':'')+'>7-day reading plan</button></div>'
@@ -7111,10 +7112,10 @@ function recipeLink(){var u=($('#rl-url')&&$('#rl-url').value||'').trim();if(!/^
     var o={id:'r'+Date.now().toString(36)+(uid++),name:name,region:'My recipes',serv:String(r.serving||'1 serving').slice(0,50),al:[],src:'recipe',keys:[name.toLowerCase()],parts:(Array.isArray(r.ingredients)?r.ingredients:[]).slice(0,20).map(function(x){return String(x).slice(0,80)}),from:u.slice(0,300),
       kcal:Math.round(n(r.kcal,4000)),p:+n(r.protein,400).toFixed(1),c:+n(r.carbs,600).toFixed(1),f:+n(r.fat,300).toFixed(1),fib:+n(r.fiber,100).toFixed(1),fe:0,b12:0,vd:0,na:Math.round(n(r.sodium,10000)),k:0};
     S.recipes.push(o);RLK={busy:false,msg:'',last:o.name+' · '+o.kcal+' kcal per serving'};if($('#rl-url'))$('#rl-url').value='';toast('Saved "'+o.name+'" to your recipes.',{title:'Recipe added',icon:'🍲',kind:'ok'});refresh()})
-  .catch(function(e){var c=e&&e.code;RLK={busy:false,msg:c==='bad_url'?'That link can\'t be read. Use a normal https recipe page.':c==='page'?'That page could not be opened. Try another link.':c==='notrecipe'?'That page doesn\'t look like a recipe.':c==='pro'?'Recipe links are part of Manna Jubilee.':aiErr(c)};refresh()})}
+  .catch(function(e){var c=e&&e.code;RLK={busy:false,msg:c==='bad_url'?'That link can\'t be read. Use a normal https recipe page.':c==='page'?'That page could not be opened. Try another link.':c==='notrecipe'?'That page doesn\'t look like a recipe.':c==='pro'?'Recipe links are part of Manna Pro.':aiErr(c)};refresh()})}
 function renderRecipeLink(){var el=$('#r-link');if(!el)return;var h;
   if(!isPro())h=proLock('Import from a link','Paste a recipe page and AI works out the calories and macros per serving, then saves it to your recipes.','rlink');
-  else h='<div class="row spread"><h3 style="margin:0">Import from a link</h3><span class="badge pro">✨ JUBILEE</span></div><p class="small muted" style="margin:0">Paste a recipe page. AI reads it and works out the numbers per serving.</p><div class="row"><label class="vh-only" for="rl-url">Recipe link</label><input type="url" id="rl-url" inputmode="url" placeholder="https://…" style="flex:1;min-width:12rem"><button class="btn primary" data-act="rlgo"'+(RLK.busy?' disabled':'')+'>'+(RLK.busy?'Reading…':'Import')+'</button></div>'+(RLK.msg?'<p class="note warn small">'+esc(RLK.msg)+'</p>':'')+(RLK.last?'<p class="small">Added: '+esc(RLK.last)+'</p>':'');
+  else h='<div class="row spread"><h3 style="margin:0">Import from a link</h3><span class="badge pro">✨ PRO</span></div><p class="small muted" style="margin:0">Paste a recipe page. AI reads it and works out the numbers per serving.</p><div class="row"><label class="vh-only" for="rl-url">Recipe link</label><input type="url" id="rl-url" inputmode="url" placeholder="https://…" style="flex:1;min-width:12rem"><button class="btn primary" data-act="rlgo"'+(RLK.busy?' disabled':'')+'>'+(RLK.busy?'Reading…':'Import')+'</button></div>'+(RLK.msg?'<p class="note warn small">'+esc(RLK.msg)+'</p>':'')+(RLK.last?'<p class="small">Added: '+esc(RLK.last)+'</p>':'');
   if(el.dataset.h!==h){var v=$('#rl-url')?$('#rl-url').value:'';el.dataset.h=h;el.innerHTML=h;if($('#rl-url')&&v)$('#rl-url').value=v}}
 function renderFocus(){applyFocus();var e=$('#p-focus');if(e){var h=focusChips('data-act');if(e.dataset.h!==h){e.dataset.h=h;e.innerHTML=h}}if(focusHidden(curId)&&curId!=='session'){location.hash='#today'}}
 /* Version 159: the preview site for the next branch says it is a test version, with a quick way to send feedback */
@@ -7156,7 +7157,7 @@ var remTT=0;function remLater(){clearTimeout(remTT);remTT=setTimeout(remUpdate,8
 document.addEventListener('change',function(e){var t=e.target,d=t&&t.dataset;if(!d)return;var R=remS();
   if(d.rem&&R[d.rem]){R[d.rem].on=!!t.checked;if(S.push.on&&!remAny()){remOff();return}remLater();refresh();prefSave();return}
   if(d.remt&&R[d.remt]&&/^\d\d:\d\d$/.test(t.value)){R[d.remt].t=t.value;remLater();prefSave();setTimeout(refresh,0)}});
-/* Version 159: AI check. Jubilee accounts can test every AI route against the real AI,
+/* Version 159: AI check. Pro accounts can test every AI route against the real AI,
    and see how each AI feature did the last time it was really used on this device. */
 var AIC={busy:false,res:[],url:'https://www.bbcgoodfood.com/recipes/easy-pancakes'};
 var AICN={workout:'Build a workout',food:'Log food with AI',read:'Bible help',goal:'Goals with AI',photo:'Food photo',sched:'Schedule with AI',readsched:'Reading plan',recap:'Weekly recap',mplan:'Meal plan',recipe:'Recipe from a link',bexplain:'Explain a verse',bdev:'Devotional',bplan:'Bible plan'};
@@ -7177,7 +7178,7 @@ function aicRun(){if(AIC.busy)return;AIC.busy=true;AIC.res=[];var u=$('#aic-url'
 function renderAic(){var el=$('#aic-card');if(!el)return;var on=isPro()&&accOn()&&signedIn();el.hidden=!on;if(!on)return;
   var ago=function(t){var m=Math.round((Date.now()-t)/6e4);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
   var L=S.aiLog||{},lk=Object.keys(L).sort(function(a,b){return L[b].at-L[a].at});
-  var h='<div class="sh"><h3>AI check</h3><p class="small muted">Runs each kind of AI request against the real AI and shows what passed. Uses about 6 requests. Only Jubilee accounts see this.</p></div>'
+  var h='<div class="sh"><h3>AI check</h3><p class="small muted">Runs each kind of AI request against the real AI and shows what passed. Uses about 6 requests. Only Pro accounts see this.</p></div>'
     +'<label class="f" for="aic-url">Recipe page to test with<input type="url" id="aic-url" value="'+esc(AIC.url)+'"></label>'
     +'<div class="row"><button class="btn primary" data-act="aicrun"'+(AIC.busy?' disabled':'')+'>'+(AIC.busy?'Checking…':'Run AI check')+'</button></div>'
     +(AIC.res.length?'<ul class="list aicl">'+AIC.res.map(function(r){return '<li><span class="aicd">'+(r.run?'⏳':r.ok?'✅':'❌')+'</span><div><b>'+esc(r.n)+'</b>'+(r.run?'':'<div class="small '+(r.ok?'muted':'')+'">'+esc(r.m)+' <span class="muted">· '+(r.ms/1000).toFixed(1)+' s</span></div>')+'</div></li>'}).join('')+'</ul>':'')
@@ -7195,7 +7196,7 @@ function renderBk(){var el=$('#t-bk');if(!el)return;var DAY=864e5,now=Date.now()
   var h=show?'<div class="card stack bknudge"><div class="row" style="gap:.7rem;flex-wrap:nowrap;align-items:flex-start"><span class="bki" aria-hidden="true">🛟</span><div class="stack" style="gap:.2rem"><b>Keep your progress safe</b><span class="small muted">Everything is saved only on this device right now. If you clear your browser or lose your phone, it is gone. Sign in for automatic backup, or download a copy.</span></div></div><div class="row">'+(accOn()?'<button class="btn primary sm" data-act="bksign">Sign in to back up</button>':'')+'<button class="btn sm" data-act="bkdl">Download a copy</button><button class="btn sm" data-act="bkno">Not now</button></div></div>':'';
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}}
 function renderProExtras(){try{renderFocus()}catch(e){}try{renderRem()}catch(e){}try{renderBk()}catch(e){}try{foodDaySave()}catch(e){}var dg=$('#g-daytgt');if(dg)dg.checked=!!S.dayTgt&&isPro();[renderProgress,renderRecap,renderTrend,renderMealPlan,renderBai,renderRecipeLink].forEach(function(f){try{f()}catch(e){console.error(e)}})}
-/* training days vs rest days (Jubilee) */
+/* training days vs rest days (Pro) */
 function isTrainDay(){try{if(wdaysSync()[new Date().toDateString()])return true;var sv=typeof sessionView==='function'?sessionView(todayIdx()):null;return !!sv}catch(e){return false}}
 function keepPlace(fn,sel){var y=window.scrollY,a=sel&&document.querySelector(sel),at=a?a.getBoundingClientRect().top:null;fn();
   var put=function(){var n=sel&&document.querySelector(sel);if(n&&at!=null){var d=n.getBoundingClientRect().top-at;if(Math.abs(d)>2)window.scrollTo({top:window.scrollY+d,behavior:'instant'})}else if(Math.abs(window.scrollY-y)>2)window.scrollTo({top:y,behavior:'instant'});if(n&&document.activeElement!==n)try{n.focus({preventScroll:true})}catch(e){}};

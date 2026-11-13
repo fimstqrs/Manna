@@ -81,3 +81,14 @@ export async function createUser(env, email, password) {
   if (/weak|password/i.test(c)) return { ok: false, code: 'weak' };
   return { ok: false, code: 'failed' };
 }
+
+// A person's Manna username (or ''), looked up with the server key.
+export async function usernameOf(env, id) {
+  if (!env.ready || !id) return '';
+  const r = await fetch(env.url + '/rest/v1/handles?select=username&id=eq.' + encodeURIComponent(id), {
+    headers: keyHeaders(env.service), signal: AbortSignal.timeout(5000),
+  });
+  if (!r.ok) return '';
+  const j = await r.json().catch(() => []);
+  return (Array.isArray(j) && j[0] && j[0].username) || '';
+}
