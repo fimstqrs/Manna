@@ -654,6 +654,22 @@ input[type=text],input[type=number],select,textarea{
 .mring.st-over .mr,.crw.st-over .cring{animation:rbPulse 2.4s ease-in-out infinite}.cring{position:relative}
 @keyframes rbPop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}@keyframes rbPulse{50%{transform:scale(1.03)}}
 @media (prefers-reduced-motion:reduce){.rbadge,.mring.st-over .mr,.crw.st-over .cring{animation:none}}
+#e-more .msec{border-top:1px solid var(--line);padding:0}
+#e-more .msec>summary{list-style:none;display:flex;align-items:center;gap:.75rem;padding:.75rem .1rem;cursor:pointer;border-radius:14px;transition:background .2s}
+#e-more .msec>summary::-webkit-details-marker{display:none}
+#e-more .msec>summary::after,#e-more .msec>summary::before{content:none!important;display:none!important}
+#e-more .msec>summary:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+#e-more .msec>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#e-more .msi{flex:none;display:grid;place-items:center;width:2.4rem;height:2.4rem;border-radius:12px;font-size:1.15rem;background:color-mix(in srgb,var(--accent) 12%,transparent)}
+#e-more .mst{flex:1;min-width:0;display:flex;flex-direction:column;gap:.1rem;line-height:1.25}#e-more .mst b{font-size:.98rem}#e-more .mst span{font-size:.78rem;font-weight:400;color:var(--muted)}
+#e-more .msc{flex:none;width:.6rem;height:.6rem;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .3s cubic-bezier(.3,1.2,.4,1)}
+#e-more .msec[open]>summary .msc{transform:rotate(225deg) translate(-2px,-2px)}
+#e-more .msec[open]>.msb{animation:msOpen .35s cubic-bezier(.22,1,.36,1) both}
+#e-more .msb{padding:.2rem .1rem 1rem;gap:.7rem}
+#e-more .mrow input{width:100%}#e-more .mtools{display:flex;flex-wrap:wrap;gap:.4rem}
+@keyframes msOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.shake{animation:onbShake .4s ease}
+@media (prefers-reduced-motion:reduce){#e-more .msec[open]>.msb,#e-more .msc,.shake{animation:none;transition:none}}
 .hsg{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:1rem;align-items:start}
 @media (max-width:560px){.hsg{grid-template-columns:1fr}.hsp{justify-self:center}}
 .hsp{width:100%;max-width:190px}
@@ -1978,30 +1994,28 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         </div>
       </div>
       <div class="card stack" id="e-qadd"><h3>Quick add</h3><div id="l-freq" class="stack"></div><div id="l-saved"></div></div>
-      <div class="card stack" id="e-more"><h3>More ways to log</h3>
-        <details class="msec" id="em-find"><summary><span class="msi">🔎</span>Search the food list</summary><div class="stack msb">
-        <div class="row"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="What are you eating?" style="flex:1;min-width:12rem"><button class="btn" data-act="fcam">Camera</button><button class="btn" data-act="fup">Upload photo</button><button class="btn" data-act="bcopen">Scan barcode</button></div>
+      <div class="card stack" id="e-more"><div class="sh"><h3>More ways to log</h3><p class="small muted" style="margin:0">Other ways to add food when typing it out is not handy.</p></div>
+        <details class="msec" id="em-find"><summary><span class="msi" aria-hidden="true">🔎</span><span class="mst"><b>Search the food list</b><span>Thousands of foods, plus photos and barcodes</span></span><span class="msc" aria-hidden="true"></span></summary><div class="stack msb">
+        <div class="mrow"><input type="text" id="f-q" placeholder="Type a food, like salmon or Big Mac" aria-label="Search the food list"></div>
+        <div class="mtools"><button class="btn sm" data-act="fcam"><span aria-hidden="true">📷</span> Camera</button><button class="btn sm" data-act="fup"><span aria-hidden="true">🖼️</span> Upload photo</button><button class="btn sm" data-act="bcopen"><span aria-hidden="true">▥</span> Scan barcode</button></div>
         <input type="file" id="f-cam" accept="image/*" capture="environment" hidden><input type="file" id="f-up" accept="image/*" hidden>
         <div id="f-ask-out" aria-live="polite"></div>
         <div class="fgrid" id="e-res"></div>
-      
         </div></details>
-        <details class="msec" id="em-desc"><summary><span class="msi">✍️</span>Describe it for an AI estimate</summary><div class="stack msb">
-        <p class="small muted">Write it the way you would say it, like "two slices of pepperoni pizza and a cola". AI estimates the calories, protein and more, and you can adjust the amount before adding it.</p>
-        <textarea id="e-ai" aria-label="Describe what you ate" placeholder="What did you eat, and about how much?"></textarea>
-        <div class="row" style="align-items:flex-end"><label class="f" for="e-amt" style="flex:1;min-width:9rem">Amount, if you know it (optional)<input type="number" id="e-amt" min="0" step="any" inputmode="decimal" placeholder="e.g. 250"></label><div class="chips" id="e-unit" role="group" aria-label="Amount units"></div></div>
-        <p class="small muted">If you enter an amount, the estimate is for exactly that much, and the amount carries over to the food's details.</p>
-        <div class="row"><button class="btn primary" data-act="eestimate">Estimate with AI</button></div>
-      
+        <details class="msec" id="em-desc"><summary><span class="msi" aria-hidden="true">✍️</span><span class="mst"><b>Describe it for an AI estimate</b><span>Say it your way and AI does the numbers</span></span><span class="msc" aria-hidden="true"></span></summary><div class="stack msb">
+        <textarea id="e-ai" aria-label="Describe what you ate" rows="3" placeholder="Like &quot;two slices of pepperoni pizza and a cola&quot;"></textarea>
+        <div class="row" style="align-items:flex-end"><label class="f" for="e-amt" style="flex:1;min-width:9rem">Amount, if you know it<input type="number" id="e-amt" min="0" step="any" inputmode="decimal" placeholder="Optional"></label><div class="chips" id="e-unit" role="group" aria-label="Amount units"></div></div>
+        <div class="row"><button class="btn primary" data-act="eestimate">✨ Estimate with AI</button><span class="small muted">You can change the amount after.</span></div>
         </div></details>
-        <details class="msec" id="em-cal"><summary><span class="msi">🔢</span>Just know the calories</summary><div class="stack msb">
-        <div class="row" style="align-items:flex-end"><label class="f" for="t-cal" style="flex:1;min-width:10rem">Calories you ate<input type="number" id="t-cal" min="1" max="5000" step="10" inputmode="numeric" placeholder="e.g. 450"></label><button class="btn primary" data-act="caladd">Add to today</button></div>
-        <p class="small muted" id="e-cmsg" aria-live="polite"></p>
-      
+        <details class="msec" id="em-cal"><summary><span class="msi" aria-hidden="true">🔢</span><span class="mst"><b>Just know the calories</b><span>Add a number when that is all you have</span></span><span class="msc" aria-hidden="true"></span></summary><div class="stack msb">
+        <div class="row" style="align-items:flex-end"><label class="f" for="t-cal" style="flex:1;min-width:9rem">Calories you ate<input type="number" id="t-cal" min="1" max="5000" step="10" inputmode="numeric" placeholder="e.g. 450"></label><button class="btn primary" data-act="caladd">Add to today</button></div>
+        <div class="chips" role="group" aria-label="Quick amounts"><button type="button" class="chip" data-act="calpick" data-k="100">100</button><button type="button" class="chip" data-act="calpick" data-k="250">250</button><button type="button" class="chip" data-act="calpick" data-k="500">500</button><button type="button" class="chip" data-act="calpick" data-k="750">750</button></div>
         </div></details>
-        <details class="msec" id="em-browse"><summary><span class="msi">🗂️</span>Browse by type</summary><div class="stack msb">
-        <div class="chips" id="e-browse"></div>
-      
+        <details class="msec" id="em-browse"><summary><span class="msi" aria-hidden="true">🗂️</span><span class="mst"><b>Browse the catalog</b><span>Every food, by type: high protein, light, fast food and more</span></span><span class="msc" aria-hidden="true"></span></summary><div class="stack msb">
+        <div class="mrow"><input type="text" id="b-q" placeholder="Filter the catalog" aria-label="Filter the catalog"></div>
+        <div class="chips" id="f-cats"></div>
+        <p class="small muted" id="f-meta" aria-live="polite"></p>
+        <div class="fgrid" id="f-res"></div>
         </div></details>
       </div>
     </section>
@@ -2018,13 +2032,6 @@ p,li,.note,.small,.muted{text-wrap:pretty}
         <ul class="list" id="r-list"></ul>
         <div class="row"><input type="text" id="r-name" placeholder="Recipe name" aria-label="Recipe name" style="flex:2;min-width:10rem"><label class="row small" for="r-serv">Makes <input type="number" id="r-serv" min="1" max="20" step="1" value="2" style="width:5rem"> servings</label></div>
         <div id="r-tot"></div>
-      </div>
-      <div class="card stack fcatalog" id="f-catalog" hidden>
-        <h3>Food catalog</h3>
-        <div class="row"><input type="text" id="b-q" placeholder="Search the list" aria-label="Search foods" style="flex:1;min-width:12rem"><a class="btn" href="#eat" style="text-decoration:none">What are you eating?</a></div>
-        <div class="chips" id="f-cats"></div>
-        <p class="small muted" id="f-meta" aria-live="polite"></p>
-        <div class="fgrid" id="f-res"></div>
       </div>
     </section>
 
@@ -3129,7 +3136,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Faith has a new Notes tab. Write a private prayer note there and see every note you have ever written, newest first. Notes from Home show up there too.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Rings now show clearly when you hit or pass a target: a ✓ badge and "Goal met" when you reach it, and past 100% the ring keeps going with a darker second lap plus a "+12 g over" pill. Sodium and sugar turn red with a ! when you go over.','AI logging no longer shows what you typed as a heading or lumps separate foods together. Each food is logged on its own, and "2 apples" logs as 2 × 1 apple.','Cardio and sport has a new 🏅 icon.','Workout search no longer shows the count line above the results.','In Stats, your daily target is now called your recommended daily intake.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
+ {v:169,d:'Nov 12, 2026',t:'A smoother start',s:['The footer now says © 2026 Morningfall Corp.','Goals in Settings, then Body, now go in two steps: first pick Cut, Bulk, Keep stable or Get lean, then set the pace, target weight and other options for that goal.','Pro themes now have a Preview button so you can see the whole app in that theme before you get it. The lock now sits in the bottom-right corner.','The Default theme is just called Default now.','The tutorial is redone. It goes section by section in app order (Home, Fitness, Fuel, Friends, Faith, Settings), shows where you are, moves smoothly between steps, and holds the page still so you can follow along. Next now comes before Back so it never moves. Each step now points at the right thing and explains it with up-to-date wording. Between sections it lights up that button in the bottom bar and you tap it to move on.','Today\'s plan now suggests a different quick, easy workout each day, from core and cardio to mobility and bodyweight. Tap ↻ to see another.','Faith has a new Notes tab. Write a private prayer note there and see every note you have ever written, newest first. Notes from Home show up there too.','While you type a note, the box stays put and keeps the keyboard up. It only lets go when you tap outside it.','Rings now show clearly when you hit or pass a target: a ✓ badge and "Goal met" when you reach it, and past 100% the ring keeps going, each lap darker than the last, plus a "+12 g over" pill. Sodium and sugar turn red with a ! when you go over.','AI logging no longer shows what you typed as a heading or lumps separate foods together. Each food is logged on its own, and "2 apples" logs as 2 × 1 apple.','Cardio and sport has a new 🏅 icon.','Workout search no longer shows the count line above the results.','More ways to log has a new Browse the catalog section with every food, filters by type and a search box. It is also cleaner: each option has an icon, a one-line description and a smooth open, the calorie option has quick amounts, and results and problems now pop in as notifications instead of text stuck in the card.','In Stats, your daily target is now called your recommended daily intake.','Your targets on Eat now shows its six rings three across, so the whole card fits on screen instead of running into Log it.','The little arrow for moving between sections now matches the settings and music buttons, and on the last section it turns around to take you back to the top.']},
  {v:168,d:'Nov 12, 2026',t:'Manna Pro',s:['Manna Jubilee is now called Manna Pro. Same features, simpler name.']},
  {v:167,d:'Nov 12, 2026',t:'Smarter food logging',s:['When you log food, AI first looks for it in the food list and only estimates it if it is not there.','Counts stay separate. 2 cookies now shows as 2 × 1 cookie (75 g), not 1 × 150 g.','In setup, the free themes come first, and Jubilee themes show a lock.','Setup no longer asks for your top 3 workouts.','New Jiu Jitsu category with 15 workouts, from solo drills and guard work to grip strength and live rolling.','Making an account now says Create an account at the top, and you are signed in as soon as it is made. No confirmation email to wait for.','Manna Overflow is now called Manna Jubilee, after the year of rest and plenty in Leviticus 25. Same features, new name.','Reordering Home moved to Settings, then Home Screen, with a little phone preview that changes as you move or hide cards.','Setup now asks you to pick a username. It is saved to your account when you sign in, so friends can find you.','Change theme is no longer in capitals.','All five tap sounds (Pop, Bubble, Click, Chime and Wood) are now free for everyone.','New Stats page in Fitness: your estimated BMR (what your body burns at rest, from your age, weight, height and sex), how many calories you burn a day, your BMI, and your training and weight numbers.']},
  {v:166,d:'Nov 12, 2026',t:'Edit your meals',s:['Open one of Your meals to add or remove foods in it. The calories and other numbers update as you go.','Fixed a strip of different colour under the bottom bar on short pages like Drink on iPhone.']},
@@ -3799,6 +3806,7 @@ function renderPlan(){
 }
 /* While you are typing in a box, the screen around it does not redraw (that would drop the keyboard). It catches up when you tap out. */
 function typingIn(el){var a=document.activeElement;return !!(a&&el&&el.contains(a)&&(a.tagName==='TEXTAREA'||(a.tagName==='INPUT'&&/^(text|search|email|number|tel|url)$/.test(a.type))))}
+document.addEventListener('toggle',function(e){if(e.target&&e.target.id==='em-browse'&&e.target.open)refresh()},true);
 document.addEventListener('focusout',function(e){var t=e.target;if(t&&(t.tagName==='TEXTAREA'||t.tagName==='INPUT'))setTimeout(function(){var a=document.activeElement;if(!a||(a.tagName!=='TEXTAREA'&&a.tagName!=='INPUT'))refresh()},80)});
 function renderPNotes(){
   var el=$('#sc-pnotes');if(!el)return;var L=S.pnotes.slice().reverse(),h;
@@ -4346,13 +4354,17 @@ var RIC={kcal:'<path d="M12 2c1.5 4.5 7.5 7.5 7.5 15a7.5 7.5 0 0 1-15 0c0-3.5 1.
 function ringSvg(frac,col,size,w){var r=(size-w)/2,c=2*Math.PI*r,f=Math.max(0,Math.min(1,frac||0));
   return '<svg class="rg" viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="'+w+'"/><circle class="rgv" cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')"/></svg>'}
 /* Past 100% the ring keeps going: a second, darker lap shows how far over you are */
-function ringLap(frac,col,size,w){if(!(frac>1))return '';var r=(size-w)/2,c=2*Math.PI*r,f=Math.min(.999,frac-1);
-  return '<svg class="rg rgo" viewBox="0 0 '+size+' '+size+'" aria-hidden="true"><circle cx="'+size/2+'" cy="'+size/2+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+size/2+' '+size/2+')" style="filter:brightness(.62) saturate(1.2)"/><circle cx="'+(size/2+r*Math.sin(2*Math.PI*f)).toFixed(1)+'" cy="'+(size/2-r*Math.cos(2*Math.PI*f)).toFixed(1)+'" r="'+(w*.42).toFixed(1)+'" fill="#fff" opacity=".9"/></svg>'}
+function ringLap(frac,col,size,w){if(!(frac>1))return '';var r=(size-w)/2,c=2*Math.PI*r,cx=size/2,out='',last=0;
+  /* Every time around past 100% is its own layer, each one darker than the last */
+  for(var k=1;k<=4&&frac>k;k++){var f=Math.min(.999,frac-k),dk=Math.max(.22,1-.24*k);last=f;
+    out+='<circle cx="'+cx+'" cy="'+cx+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="'+(c*f).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 '+cx+' '+cx+')" style="filter:brightness('+dk.toFixed(2)+') saturate(1.25)"/>'}
+  out+='<circle cx="'+(cx+r*Math.sin(2*Math.PI*last)).toFixed(1)+'" cy="'+(cx-r*Math.cos(2*Math.PI*last)).toFixed(1)+'" r="'+(w*.42).toFixed(1)+'" fill="#fff" opacity=".9"/>';
+  return '<svg class="rg rgo" viewBox="0 0 '+size+' '+size+'" aria-hidden="true">'+out+'</svg>'}
 function gfmt(n,u){return S.hideNums?'•••':Math.round(n)+(u||' g')}
 var MC={kcal:'var(--accent)',p:'#ff5d5d',c:'#3fbf6a',f:'#4a9dff'};
 function bigRing(eaten,goal,sub,lab){
   var fr=goal?eaten/goal:0,ov=!S.hideNums&&goal&&eaten>goal*1.02;
-  return '<div class="crw'+(ov?' st-over':'')+'"><div class="cring" style="color:'+MC.kcal+'">'+ringSvg(fr,MC.kcal,200,14)+ringLap(fr,MC.kcal,200,14)+(ov?'<span class="rbadge up big" aria-hidden="true">↑</span>':fr>=.98&&goal&&!S.hideNums?'<span class="rbadge ok big" aria-hidden="true">✓</span>':'')+'<div class="cin"><svg viewBox="0 0 24 24" class="cic" aria-hidden="true">'+RIC.kcal+'</svg><b>'+kc(Math.round(eaten))+'</b><span>of '+kc(Math.round(goal))+' kcal</span></div></div><p class="clab">'+(lab||'Calories eaten today')+'</p>'+(ov?'<span class="rpill up">+'+kc(Math.round(eaten-goal))+' kcal over your target</span>':'')+(sub?'<p class="small muted">'+sub+'</p>':'')+'</div>'}
+  return '<div class="crw'+(ov?' st-over':'')+'"><div class="cring" style="color:'+MC.kcal+'">'+ringSvg(fr,MC.kcal,200,14)+ringLap(fr,MC.kcal,200,14)+(ov?'':fr>=.98&&goal&&!S.hideNums?'<span class="rbadge ok big" aria-hidden="true">✓</span>':'')+'<div class="cin"><svg viewBox="0 0 24 24" class="cic" aria-hidden="true">'+RIC.kcal+'</svg><b>'+kc(Math.round(eaten))+'</b><span>of '+kc(Math.round(goal))+' kcal</span></div></div><p class="clab">'+(lab||'Calories eaten today')+'</p>'+(ov?'<span class="rpill up">+'+kc(Math.round(eaten-goal))+' kcal over your target</span>':'')+(sub?'<p class="small muted">'+sub+'</p>':'')+'</div>'}
 function macroRings(v,T,label){
   return '<div class="mrings">'+[['p','Protein',T.protein],['c','Carbs',T.carb],['f','Fat',T.fat]].map(function(x){
     return '<div class="mring"><div class="mr" style="color:'+MC[x[0]]+'">'+ringSvg(x[2]?v[x[0]]/x[2]:0,MC[x[0]],96,9)+'<div class="cin"><svg viewBox="0 0 24 24" class="mic" aria-hidden="true">'+RIC[x[0]]+'</svg><b>'+gfmt(v[x[0]])+'</b></div></div><p class="mlab">'+x[1]+'</p><p class="small muted">'+(label==='of'?'of '+gfmt(x[2]):label)+'</p></div>'}).join('')+'</div>'}
@@ -4507,16 +4519,20 @@ function renderFoods(){
   var FC=FCATS.filter(function(a){return a[0]!=='fav'||X('favs')});if(S.fcat==='fav'&&!X('favs'))S.fcat='all';
   chipGroup('f-cats',FC.map(function(a){return {k:a[0],label:a[1],on:S.fcat===a[0]}}),'fcat');
   chipGroup('e-unit',UNITS.map(function(a){return a[0]}).map(function(u){return {k:u,label:u,on:S.fu===u}}),'fu');
-  $('#e-cmsg').textContent=S.calMsg||'';
-  chipGroup('e-browse',FC.filter(function(a){return a[0]!=='all'}).map(function(a){return {k:a[0],label:a[1],on:false}}),'fbrowse');
-  var list=foodList($('#b-q').value,S.fcat);
-  $('#f-meta').textContent=list.length?'':'No foods match that.';
-  $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try What are you eating? to search or estimate it.</p>';
+  var cat=$('#em-browse'),list=cat&&cat.open?foodList($('#b-q').value,S.fcat):[];
+  if(cat&&!cat.open){$('#f-res').innerHTML='';$('#f-meta').textContent=''}else{
+  $('#f-meta').textContent=list.length?list.length+' food'+(list.length===1?'':'s'):'No foods match that.';
+  $('#f-res').innerHTML=list.length?list.slice(0,S.fshow).map(foodCard).join('')+(list.length>S.fshow?'<div style="grid-column:1/-1"><button class="btn" data-act="fmore">Show 60 more</button></div>':''):'<p class="muted">No foods match. Try Describe it for an AI estimate.</p>';}
   var qq=($('#f-q').value||'').trim(),el=foodList(qq,'all');
   var multi=qq&&/,|&|\+|\band\b|\bwith\b/i.test(qq);
   $('#e-res').innerHTML=qq?(el.length?(multi?'<div class="stack" style="grid-column:1/-1"><div><button class="btn primary" data-act="festimate">Ask AI to add each food in "'+esc(qq.slice(0,60))+'"</button></div><p class="small muted">AI adds each food.</p></div>':'')+el.slice(0,8).map(foodCard).join(''):'<div class="stack"><p class="muted">No match for "'+esc(qq)+'".</p><div><button class="btn primary" data-act="festimate">'+(multi?'Ask AI to add each food':'Ask AI to estimate "'+esc(qq.slice(0,40))+'"')+'</button></div>'+(multi?'<p class="small muted">AI adds each food.</p>':'')+'</div>'):'';
   var _se='';/* Version 164: the saved AI estimates list is gone. To keep a food, use Save as a meal. */
-  $('#f-ask-out').innerHTML=_se+(ASK.busy?'<div class="note">'+(ASK.img?'<img class="askimg" alt="Your photo" src="'+ASK.img+'"> ':'')+'Asking AI. This takes a few seconds.</div>':(ASK.msg?'<div class="note '+(ASK.ok?'ok':'warn')+'">'+esc(ASK.msg)+'</div>':''));
+  /* AI results and problems show as notifications now, not as text stuck in the card */
+  $('#f-ask-out').innerHTML='';
+  if(!ASK.busy&&ASK.msg&&ASK.shown!==ASK.msg){ASK.shown=ASK.msg;var am=ASK.msg;
+    if(!ASK.ok){try{sfxSad()}catch(e){}toast(am,{title:'Could not log that',icon:'!',kind:'warn'})}
+    else if(/Heads up/.test(am))toast(am.replace(/^.*?Heads up: /,'Heads up: '),{title:'Allergy check',icon:'⚠️',kind:'warn'})
+    else if(/simple way/.test(am))toast(am,{title:'Logged',icon:'✓',kind:'ok'})}
   renderFoodModal();
   var sel=$('#r-ing'),cur=sel.value;
   var opts=BASE.filter(function(f){return f.src!=='community'&&f.src!=='chain'});
@@ -6154,10 +6170,10 @@ var ACT={
   tunit:function(b){S.units=b.dataset.k},
   caladd:function(){
     var v=parseFloat($('#t-cal').value);
-    if(!isFinite(v)||v<=0){S.calMsg='Type the calories first.';return}
+    if(!isFinite(v)||v<=0){try{sfxSad()}catch(e){}var ci=$('#t-cal');if(ci){ci.classList.remove('shake');void ci.offsetWidth;ci.classList.add('shake');ci.focus()}toast('Type the calories first.',{title:'Just know the calories',icon:'🔢',kind:'warn'});return}
     v=Math.min(5000,Math.round(v));
     var f=F('q'+(uid++),'Calories entered','Manual','1 entry',v,0,0,0,0,0,0,0,0,0,[],'label',[]);
-    S.meals.push(mkMeal(f,1,'manual'));$('#t-cal').value='';S.calMsg='Added '+v+' calories to today.';
+    S.meals.push(mkMeal(f,1,'manual'));$('#t-cal').value='';toast('Added '+v+' calories to today.',{title:'Logged',icon:'🔥',kind:'ok'});try{sfxTap()}catch(e){}
   },
   wadd:function(b){var n=waterN()+(+b.dataset.d);S.water={d:todayStamp(),n:Math.max(0,Math.min(300,n))}},
   wcust:function(){var e=$('#wo-amt'),v=parseFloat(e.value);if(!(v>0)||v>100){toast('Enter an amount between 1 and 100 oz.');return}S.water={d:todayStamp(),n:Math.min(300,waterN()+Math.round(v))};e.value=''},
@@ -6275,8 +6291,9 @@ var ACT={
   totop:function(){window.scrollTo({top:0,behavior:'smooth'})},
   tgl:function(b){S.track[b.dataset.k]=!S.track[b.dataset.k]},
   fmore:function(){S.fshow+=60},
-  fbrowse:function(b){S.fcat=b.dataset.k;location.hash='foods'},
-  eestimate:function(){var q=($('#e-ai').value||'').trim();if(!q){ASK={busy:false,msg:'Describe what you ate first.',img:''};return}askFood(q,null)},
+  fbrowse:function(b){S.fcat=b.dataset.k;location.hash='eat';setTimeout(function(){var d=$('#em-browse');if(d){d.open=true;try{vpReveal(d)}catch(e){}d.scrollIntoView({block:'start'})}},200)},
+  eestimate:function(){var q=($('#e-ai').value||'').trim();if(!q){try{sfxSad()}catch(e){}var ta=$('#e-ai');if(ta){ta.classList.remove('shake');void ta.offsetWidth;ta.classList.add('shake');ta.focus()}toast('Describe what you ate first.',{title:'AI estimate',icon:'✍️',kind:'warn'});return}askFood(q,null)},
+  calpick:function(b){var ci=$('#t-cal');if(ci){ci.value=b.dataset.k;ci.focus()}try{sfxTap()}catch(e){}},
   fadd:function(){var f=find(S.fsel);if(!f)return;var ml=mkMeal(f,S.fq,'food menu');if(Array.isArray(f.parts)&&f.parts.some(function(x){return x&&x.n}))ml.parts=f.parts;S.meals.push(ml);setTimeout(function(){fpOpen([ml],'logged')},80);var hit=f.al.filter(function(a){return S.allergy[a]});S.fsel=null;toast(hit.length?'Added '+f.name+'. It contains '+hit.join(', ')+'.':'Added '+f.name+' to today.')},
   addfood:function(b){var f=find(b.dataset.id);if(!f)return;var ml=mkMeal(f,1,'tap');if(Array.isArray(f.parts)&&f.parts.some(function(x){return x&&x.n}))ml.parts=f.parts;S.meals.push(ml);setTimeout(function(){fpOpen([ml],'logged')},80);var hit=f.al.filter(function(a){return S.allergy[a]});toast(hit.length?'Added '+f.name+'. It contains '+hit.join(', ')+'.':'Added '+f.name+'.')},
   estdel:function(b){S.est=S.est.filter(function(o){return o.id!==b.dataset.id});estSave();if(S.fsel===b.dataset.id)S.fsel=null},
