@@ -327,9 +327,9 @@ input[type=text],input[type=number],select,textarea{background:var(--field);bord
 .wmu{font-size:.78rem}
 .vh-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .subnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.subnav a{font-size:.92rem;padding:.38rem .9rem;border-radius:999px;border:1px solid var(--line);color:var(--ink);opacity:.82;text-decoration:none}
-.subnav a[aria-current=page]{opacity:1}
-.subnav a[aria-current=page]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.subnav a,.sctabs .sctab{font-size:.92rem;padding:.38rem .9rem;border-radius:999px;border:1px solid var(--line);color:var(--ink);opacity:.82;text-decoration:none}
+.subnav a[aria-current=page],.sctabs .sctab[aria-selected=true]{opacity:1}
+.subnav a[aria-current=page],.sctabs .sctab[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
 .nav a .n{display:none}
 /* filters */
 .filters{display:flex;flex-direction:column;gap:.55rem}
@@ -452,7 +452,7 @@ i.mp{background:#6EC3F0}i.mc{background:#C792EA}i.mf{background:#F27C6B}
 /* ---------- iOS Liquid Glass layer ---------- */
 :root{--lg-hi:rgba(255,255,255,.34);--lg-lo:rgba(255,255,255,.07);--lg-sh:0 10px 34px rgba(0,0,0,.30)}
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(42vmax 42vmax at 12% 8%,color-mix(in srgb,var(--accent) 30%,transparent),transparent 70%),radial-gradient(46vmax 46vmax at 92% 55%,color-mix(in srgb,var(--accent-soft) 85%,transparent),transparent 70%),radial-gradient(38vmax 38vmax at 28% 98%,color-mix(in srgb,var(--accent) 20%,transparent),transparent 70%)}
-.card,.hero,.wcard,.fcard,.morerow,.mcard,.note,.tabs,.clockbar,.subnav a,.chip,.btn,.badge,.nav a[aria-current=page],input[type=text],input[type=number],select,textarea{
+.card,.hero,.wcard,.fcard,.morerow,.mcard,.note,.tabs,.clockbar,.subnav a,.sctabs .sctab,.chip,.btn,.badge,.nav a[aria-current=page],input[type=text],input[type=number],select,textarea{
   -webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8)}
 .card,.wcard,.fcard,.mcard,.note,.hero{
   background-color:color-mix(in srgb,var(--ink) 7%,transparent);
@@ -464,7 +464,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
 .wcard,.fcard{border-radius:22px}
 .wcard:hover,.fcard:hover{background-color:color-mix(in srgb,var(--ink) 11%,transparent)}
 .wcard[aria-pressed=true]{border-color:color-mix(in srgb,var(--accent) 80%,transparent);box-shadow:inset 0 1px 0 var(--lg-hi),0 0 0 2px color-mix(in srgb,var(--accent) 40%,transparent),var(--lg-sh)}
-.btn,.chip,.subnav a{
+.btn,.chip,.subnav a,.sctabs .sctab{
   background-color:color-mix(in srgb,var(--ink) 9%,transparent);
   background-image:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.04));
   border:1px solid color-mix(in srgb,var(--ink) 24%,transparent);
@@ -472,7 +472,7 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;bac
   transition:transform .12s ease,background-color .2s ease}
 .btn{border-radius:999px;padding:.55rem 1.05rem}
 .btn:active,.chip:active{transform:scale(.97)}
-.btn.primary,.chip[aria-pressed=true],.subnav a[aria-current=page]{
+.btn.primary,.chip[aria-pressed=true],.subnav a[aria-current=page],.sctabs .sctab[aria-selected=true]{
   background-color:color-mix(in srgb,var(--accent) 72%,transparent);
   background-image:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,.05));
   color:var(--accent-ink);border-color:color-mix(in srgb,var(--accent) 70%,#fff 30%);
@@ -514,8 +514,8 @@ input[type=text],input[type=number],select,textarea{
   .view:not([hidden])>:nth-child(2){animation-delay:.04s}.view:not([hidden])>:nth-child(3){animation-delay:.09s}.view:not([hidden])>:nth-child(4){animation-delay:.14s}.view:not([hidden])>:nth-child(5){animation-delay:.19s}.view:not([hidden])>:nth-child(6){animation-delay:.24s}.view:not([hidden])>:nth-child(n+7){animation-delay:.28s}
   .modal:not([hidden]) .mback{animation:lg-fade .3s ease backwards}
   .modal:not([hidden]) .mcard{animation:lg-sheet .5s cubic-bezier(.2,.9,.25,1.08) backwards}
-  .btn,.chip,.subnav a,.wcard,.fcard,.tabs a,.tabs button{transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .25s ease,box-shadow .25s ease,color .25s ease,border-color .25s ease}
-  @media (hover:hover){.btn:hover,.chip:hover,.subnav a:hover{transform:translateY(-1px) scale(1.02)}.wcard:hover,.fcard:hover{transform:translateY(-3px)}}
+  .btn,.chip,.subnav a,.sctabs .sctab,.wcard,.fcard,.tabs a,.tabs button{transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .25s ease,box-shadow .25s ease,color .25s ease,border-color .25s ease}
+  @media (hover:hover){.btn:hover,.chip:hover,.subnav a:hover,.sctabs .sctab:hover{transform:translateY(-1px) scale(1.02)}.wcard:hover,.fcard:hover{transform:translateY(-3px)}}
   .btn:active,.chip:active,.wcard:active,.fcard:active{transform:scale(.96);transition-duration:.1s}
   .chip[aria-pressed=true]{animation:lg-pop .4s cubic-bezier(.34,1.56,.64,1)}
   .tabs [aria-current=page] svg{animation:lg-bop .5s cubic-bezier(.34,1.56,.64,1)}
@@ -941,9 +941,9 @@ html{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100
 /* Faith feed: one verse per screen, swipe up for the next (Version 131) */
 .vis-hide{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .sc-vh{margin-bottom:0}
-.sctabs{display:flex;justify-content:center;gap:2px;padding:3px;margin:0 auto;max-width:100%;border-radius:99px;background:color-mix(in srgb,var(--ink) 7%,transparent)}
-.sctab{appearance:none;border:0;background:none;font:inherit;font-weight:600;font-size:clamp(.78rem,3.4vw,.92rem);color:var(--muted);padding:.42rem clamp(.5rem,2.6vw,1rem);white-space:nowrap;border-radius:99px;cursor:pointer;transition:background .2s,color .2s}
-.sctab[aria-selected=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 6px rgba(0,0,0,.12)}
+.sctabs{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:-8px -10px 2px;padding:8px 10px 14px;background:none}.sctabs::-webkit-scrollbar{display:none}
+.sctabs .sctab{flex:none;appearance:none;font:inherit;font-size:clamp(.8rem,3.6vw,.92rem);padding:.38rem clamp(.6rem,2.8vw,.9rem);border-radius:999px;color:var(--ink);opacity:.82;cursor:pointer;white-space:nowrap}
+.sctabs .sctab[aria-selected=true]{opacity:1;font-weight:600}
 .sctab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .vfeed{position:relative;height:var(--fh,72vh);width:100%;max-width:520px;margin:0 auto;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;border-radius:24px;scrollbar-width:none;-webkit-overflow-scrolling:touch;outline:none}
 .vfeed::-webkit-scrollbar{display:none}
@@ -1027,7 +1027,7 @@ html.touring #t-targets .mr{width:min(78px,21vw)}html.touring #t-targets .trings
 
 <style id="perf-style">
 /* ===== Flat surfaces: used when Frosted Surfaces is off, and automatically on slower phones ===== */
-html.noglass .card,html.lite .card,html.noglass .hero,html.lite .hero,html.noglass .wcard,html.lite .wcard,html.noglass .fcard,html.lite .fcard,html.noglass .mcard,html.lite .mcard,html.noglass .note,html.lite .note,html.noglass .tabs,html.lite .tabs,html.noglass .clockbar,html.lite .clockbar,html.noglass .subnav a,html.lite .subnav a,html.noglass .chip,html.lite .chip,html.noglass .btn,html.lite .btn,html.noglass .badge,html.lite .badge,html.noglass .nav a[aria-current=page],html.lite .nav a[aria-current=page],html.noglass input[type=text],html.lite input[type=text],html.noglass input[type=number],html.lite input[type=number],html.noglass input[type=search],html.lite input[type=search],html.noglass select,html.lite select,html.noglass textarea,html.lite textarea,html.noglass .verse-strip,html.lite .verse-strip,html.noglass .onb-wt,html.lite .onb-wt,html.noglass .onb-opt,html.lite .onb-opt,html.noglass .onb-th,html.lite .onb-th,html.noglass #tour-card,html.lite #tour-card,html.noglass .mback,html.lite .mback{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.noglass .card,html.lite .card,html.noglass .hero,html.lite .hero,html.noglass .wcard,html.lite .wcard,html.noglass .fcard,html.lite .fcard,html.noglass .mcard,html.lite .mcard,html.noglass .note,html.lite .note,html.noglass .tabs,html.lite .tabs,html.noglass .clockbar,html.lite .clockbar,html.noglass .subnav a,.sctabs .sctab,html.lite .subnav a,.sctabs .sctab,html.noglass .chip,html.lite .chip,html.noglass .btn,html.lite .btn,html.noglass .badge,html.lite .badge,html.noglass .nav a[aria-current=page],html.lite .nav a[aria-current=page],html.noglass input[type=text],html.lite input[type=text],html.noglass input[type=number],html.lite input[type=number],html.noglass input[type=search],html.lite input[type=search],html.noglass select,html.lite select,html.noglass textarea,html.lite textarea,html.noglass .verse-strip,html.lite .verse-strip,html.noglass .onb-wt,html.lite .onb-wt,html.noglass .onb-opt,html.lite .onb-opt,html.noglass .onb-th,html.lite .onb-th,html.noglass #tour-card,html.lite #tour-card,html.noglass .mback,html.lite .mback{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 html.noglass .card,html.lite .card,html.noglass .wcard,html.lite .wcard,html.noglass .fcard,html.lite .fcard,html.noglass .verse-strip,html.lite .verse-strip{background-color:var(--surface);background-image:none;border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.14),0 6px 18px rgba(0,0,0,.10)}
 html.noglass .hero,html.lite .hero{background-color:var(--surface);background-image:radial-gradient(90% 80% at 85% 20%,var(--hero-glow),transparent 70%);border:1px solid var(--line);box-shadow:0 6px 22px rgba(0,0,0,.14)}
 html.noglass .card.plain,html.lite .card.plain,html.noglass .card.bare,html.lite .card.bare{background:transparent;border-color:transparent;box-shadow:none}
@@ -1038,8 +1038,8 @@ html.noglass .note.warn,html.lite .note.warn{background-color:var(--warn-soft);b
 html.noglass .note.crit,html.lite .note.crit{background-color:var(--crit-soft);border-color:var(--crit)}
 html.noglass .mcard,html.lite .mcard{background-color:var(--bg);background-image:none;border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.35)}
 html.noglass .mback,html.lite .mback{background:rgba(0,0,0,.55)}
-html.noglass .btn,html.lite .btn,html.noglass .chip,html.lite .chip,html.noglass .subnav a,html.lite .subnav a{background-color:var(--surface);background-image:none;border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-html.noglass .btn.primary,html.lite .btn.primary,html.noglass .chip[aria-pressed=true],html.lite .chip[aria-pressed=true],html.noglass .subnav a[aria-current=page],html.lite .subnav a[aria-current=page]{background-color:var(--accent);background-image:none;color:var(--accent-ink);border-color:var(--accent);box-shadow:0 2px 10px color-mix(in srgb,var(--accent) 30%,transparent)}
+html.noglass .btn,html.lite .btn,html.noglass .chip,html.lite .chip,html.noglass .subnav a,.sctabs .sctab,html.lite .subnav a,.sctabs .sctab{background-color:var(--surface);background-image:none;border:1px solid var(--line);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+html.noglass .btn.primary,html.lite .btn.primary,html.noglass .chip[aria-pressed=true],html.lite .chip[aria-pressed=true],html.noglass .subnav a[aria-current=page],.sctabs .sctab[aria-selected=true],html.lite .subnav a[aria-current=page],.sctabs .sctab[aria-selected=true]{background-color:var(--accent);background-image:none;color:var(--accent-ink);border-color:var(--accent);box-shadow:0 2px 10px color-mix(in srgb,var(--accent) 30%,transparent)}
 html.noglass .badge,html.lite .badge{background-color:var(--accent-soft);border-color:transparent}
 html.noglass input[type=text],html.lite input[type=text],html.noglass input[type=number],html.lite input[type=number],html.noglass input[type=search],html.lite input[type=search],html.noglass select,html.lite select,html.noglass textarea,html.lite textarea{background-color:color-mix(in srgb,var(--ink) 7%,var(--bg));box-shadow:none;border:1px solid var(--line)}
 html.noglass .nav a[aria-current=page],html.lite .nav a[aria-current=page]{background-color:var(--accent-soft);box-shadow:none}
@@ -3230,7 +3230,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:173,d:'Nov 16, 2026',t:'Tutorial fix',s:['The tutorial now walks through all five Settings pages, You, Look, Body, Data and About, and you tap each page\'s button at the top to move on.','The tutorial is no longer covered by the Get the Manna app pop-up. Fuel steps 1 and 2 now show Log it and Your targets clearly, and the install pop-up waits until the tutorial is done.']},
+ {v:173,d:'Nov 16, 2026',t:'Tutorial fix',s:['Faith\'s five pages, Daily, Saved, Bible, Search and Notes, now use the same buttons as Fitness\'s Workouts, Schedule, History and Stats.','The tutorial now walks through all five Settings pages, You, Look, Body, Data and About, and you tap each page\'s button at the top to move on.','The tutorial is no longer covered by the Get the Manna app pop-up. Fuel steps 1 and 2 now show Log it and Your targets clearly, and the install pop-up waits until the tutorial is done.']},
  {v:172,d:'Nov 15, 2026',t:'Whole numbers',s:['When you change how many of a food you ate, the + and − buttons now go 1, 2, 3, 4, not 1.25, 1.5. Ate 2 cookies? Tap + once.','In your Diary, the water bottle and the calories ring now match: the bottle is the same height as the ring, your water shows inside the bottle just like calories show inside the ring, and Calories eaten today and Water today sit on the same line.']},
  {v:171,d:'Nov 13, 2026',t:'Setup that fits your screen',s:['Setup now has two layouts. On a phone held upright it stays one simple column. On a computer or a sideways screen, a side panel lists every step and ticks off the ones you have done, and each step sits in two columns: the question on the left, your answers on the right. On short sideways phones the side panel shrinks to just the step numbers.','The up and down arrow on the right now sits neatly centred just under the page dots, with even spacing however many sections a page has.','The Made with AI workout pop-up no longer shows the exercise count line or the notes text under the exercises.','On computers, the tutorial now points at the right button in the menu on the left when it asks you to move to Fuel, Friends, Faith or Settings, instead of the phone\'s bottom bar.','The tutorial now skips anything you have hidden, like a Home card you turned off in Home Screen, or Drink when water tracking is off.','Diary now shows the same water bottle as Drink right next to your calories ring, side by side, filling up as you drink. Tap it to open Drink.','Heads-up flags on Home now always sit right above Today\'s plan, so you never miss one. They are no longer in the Home Screen list, so they cannot be moved or hidden.','Stats has a fresh Training card in your theme colours: a ring for this week\'s workouts against your schedule, your streak, a chart of the last 8 weeks, tidy tiles for minutes, calories, personal bests and total workouts, and bars for what you train most.','Photo logging now reads food packets and wrappers: snap the front or the Nutrition Facts label and it logs that exact product with the numbers printed on it.','Your Diary list now scrolls inside its own card, so the page stays short however much you log.','Meal plan no longer shows the sample meal plan. When AI makes your plan from what you typed, it pops up right away with an Add button for each meal.','The over-target badges on the rings are back to solid colours, orange for over and red for limits like sodium, a little darker when you are well past.','The tutorial now looks at what you have already set up and tells you about it as it goes, like your schedule and its training days, your goals and targets, what you have logged today, your last workout, friends, saved verses and prayer notes. Then it carries on as normal.','Your account picture now matches everywhere. Settings, the signed-in box in setup and your Friends card all show your profile photo, or the same initial if you have not added one.']},
  {v:170,d:'Nov 13, 2026',t:'Small touches',s:['When you have not logged anything lately, Quick add now just says Nothing recently logged.','The tutorial now waits for you to tap each page button at the top too, like Drink or Diary, not just the bottom bar.','Every button now makes a soft tap sound, even with the music off.','Goals: every goal now has its own icon, and you can pick up to 3 before tapping Continue. Goals that pull in opposite directions, like Cut and Bulk, swap each other out.','Make a schedule with AI: pick how many workouts a day (Auto reads what you write, or 1, 2 or 3 with Pro). The suggestion now has Edit, to change workout names, exercises and sets, and Cancel.','Faith Notes no longer shows the "1 note, newest first" line above your notes.','Log food in your Diary now takes you straight to Log it on Eat, ready to type. The Save as a meal button is gone from the Diary.','The numbers inside the rings are smaller and easier to read at a glance.','Rings that go over a target show a small badge again: ↑ when you pass it, ↑↑ when you are well past it, and ! or !! for limits like sodium and sugar.','Foods logged with AI, from a photo or by barcode now get tidy names, like Grilled chicken breast instead of GRILLED CHICKEN BREAST (ESTIMATE), and barcode foods show the brand after a dot.','Schedules: the Add a schedule card no longer shows how many more you can add.','Friends: add a profile photo. Tap your picture on the Friends page, pick a photo, and your friends see it next to your name.']},
