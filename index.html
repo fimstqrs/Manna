@@ -988,6 +988,7 @@ html{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100
 .wel-ic{width:84px;height:84px;margin:0 auto 1rem;color:var(--accent)}.wel-ic svg{width:100%;height:100%}
 #wel h2{font:italic 600 clamp(2rem,9vw,3rem)/1.1 var(--f-display);margin:0 0 .5rem}#wel p{color:var(--muted);margin:0}
 #tour{position:fixed;inset:0;z-index:9300;touch-action:none;overscroll-behavior:none}
+#tour.swgate{pointer-events:none;touch-action:auto}#tour.swgate #tour-card{pointer-events:auto}
 #tour[hidden]{display:none}
 html.touring,html.touring body{overflow:hidden;overscroll-behavior:none}
 #tour.in #tour-hl{animation:tourDim .45s ease both}#tour.in #tour-card{animation:tourCardIn .5s cubic-bezier(.22,1,.36,1) both}
@@ -1561,9 +1562,9 @@ body.fitmode{overscroll-behavior:none}body.fitmode footer,body.fitmode .foot,bod
 .frload{min-height:calc(100svh - 300px);align-content:center}
 </style>
 <style id="vfind-style">
-.vftopics{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.5rem}
+.vftopics{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,9.5rem),1fr));gap:.5rem}@media (max-width:640px){.vftopics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .vftop{display:flex;align-items:center;gap:.55rem;padding:.7rem .75rem;border-radius:16px;border:1px solid var(--line,rgba(127,127,127,.22));background:color-mix(in srgb,var(--accent) 7%,var(--surface));color:var(--ink);font:600 .9rem var(--f-body,system-ui);text-align:left;cursor:pointer;transition:transform .15s,background .2s}
-.vftop:active{transform:scale(.97)}.vftop span:nth-child(2){flex:1;min-width:0}.vftop small{color:var(--muted);font-weight:500;margin-left:.3rem;flex:none}
+.vftop:active{transform:scale(.97)}.vftop{min-width:0;display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:.6rem;row-gap:.1rem;align-items:center;align-content:center;padding:.65rem .7rem!important}@media (max-width:380px){.vftop{column-gap:.45rem;padding:.6rem .55rem!important}.vftop span:nth-child(2){font-size:.84rem}.vftop .vfte{font-size:1.15rem}}.vftop .vfte{grid-row:1/3;font-size:1.35rem;line-height:1}.vftop span:nth-child(2){grid-column:2;min-width:0;line-height:1.2;hyphens:auto;-webkit-hyphens:auto}.vftop small{grid-column:2;margin:0!important;font-size:.72rem}.vftop small{color:var(--muted);font-weight:500;margin-left:.3rem;flex:none}
 .vfte{font-size:1.25rem}
 .vflist{display:grid;gap:.6rem}
 .vfv{display:grid;gap:.45rem;padding:.85rem .9rem;border-radius:16px;background:color-mix(in srgb,var(--ink) 4%,transparent);border:1px solid var(--line,rgba(127,127,127,.18))}
@@ -3234,7 +3235,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:175,d:'Nov 17, 2026',t:'More reminders',s:['New Workout reminder: on days your schedule has a workout, Manna tells you which one, like "Today: Leg day". On rest days it stays quiet.','New Water reminder: a nudge to drink and log it, at a time you pick.','Friends notifications: get a notification the moment someone sends you a friend request, accepts yours, or sends you a cheer 🙏 💪 🔥. Turn it off any time in Reminders.','Reminders now turn on properly in the iPhone Home Screen app. There is also a Send a test button to check they arrive.','Find them all in Settings, About, Reminders.']},
+ {v:175,d:'Nov 17, 2026',t:'More reminders',s:['New Workout reminder: on days your schedule has a workout, Manna tells you which one, like "Today: Leg day". On rest days it stays quiet.','New Water reminder: a nudge to drink and log it, at a time you pick.','Friends notifications: get a notification the moment someone sends you a friend request, accepts yours, or sends you a cheer 🙏 💪 🔥. Turn it off any time in Reminders.','The tutorial now goes through all five Faith pages, Daily, Saved, Bible, Search and Notes, and always opens the right one, so it no longer points at the wrong thing.','In the Settings part of the tutorial, swipe left or right to move between pages, or tap the page name.','Fixed pages that could feel stuck when scrolling: sections now fit the screen above the bottom bar, so you can reach everything without leaving and coming back.','Faith Search topics are tidier on phones: two across, with the verse count under each name so nothing overlaps.','The tutorial no longer lights things up under the settings and music buttons on phones with a notch.','The empty Saved page button now says Go to Daily.','Reminders now turn on properly in the iPhone Home Screen app. There is also a Send a test button to check they arrive.','Find them all in Settings, About, Reminders.']},
  {v:174,d:'Nov 17, 2026',t:'Faith on phones',s:['On phones, Faith\'s Daily and Saved verse feed no longer has the Manna version line showing through the bottom bar, and the page buttons sit a little closer to the verse.','Fitness Stats: the empty week now says LET\'S START.']},
  {v:173,d:'Nov 16, 2026',t:'Tutorial fix',s:['Faith\'s five pages, Daily, Saved, Bible, Search and Notes, now use the same buttons as Fitness\'s Workouts, Schedule, History and Stats.','The tutorial now walks through all five Settings pages, You, Look, Body, Data and About, and you tap each page\'s button at the top to move on.','The tutorial is no longer covered by the Get the Manna app pop-up. Fuel steps 1 and 2 now show Log it and Your targets clearly, and the install pop-up waits until the tutorial is done.']},
  {v:172,d:'Nov 15, 2026',t:'Whole numbers',s:['When you change how many of a food you ate, the + and − buttons now go 1, 2, 3, 4, not 1.25, 1.5. Ate 2 cookies? Tap + once.','In your Diary, the water bottle and the calories ring now match: the bottle is the same height as the ring, your water shows inside the bottle just like calories show inside the ring, and Calories eaten today and Water today sit on the same line.']},
@@ -3324,7 +3325,7 @@ function tourList(){var L=TOUR.filter(function(s){try{return !focusHidden(s.v)&&
     /* Inside a section, moving to another page waits for a tap on that page's button at the top */
     else if(pv&&pv.g===st.g&&pv.v!==st.v){var lab=VLABEL[st.v]||st.v,sel=st.v==='themes'?'#p-theme':st.v==='settings'?tourGateSel('set'):'#subnav a[href="#'+st.v+'"]';
       out.push({gate:true,g:st.g,v:pv.v,sel:sel,t:'Next: '+lab,p:st.v==='themes'?'Tap Change theme to see every theme.':st.v==='settings'?(tabsShown()?'Tap the gear at the top left to go back to Settings.':'Click Settings in the menu on the left to go back.'):'Tap '+lab+' at the top to keep going.'})}
-    var sp=tourSwPage(st);if(sp&&!st.nogate&&(!pv||pv.v!==st.v||tourSwPage(pv)!==sp||pv.g!==st.g)){var last=out[out.length-1];if(!(last&&last.swk===sp.k))out.push({gate:true,g:st.g,v:st.v,swk:sp.k,sel:'#'+sp.root+' .swdot[data-swi="'+sp.k+'"]',t:'Next: '+sp.nm,p:'Tap '+sp.nm+' at the top of Settings to open that page.'})}
+    var sp=tourSwPage(st);if(sp&&!st.nogate&&(!pv||pv.v!==st.v||tourSwPage(pv)!==sp||pv.g!==st.g)){var last=out[out.length-1];if(!(last&&last.swk===sp.k))out.push({gate:true,g:st.g,v:st.v,swk:sp.k,swroot:sp.root,sel:'#'+sp.root,t:'Next: '+sp.nm,p:'Swipe to '+sp.nm+'. You can also tap '+sp.nm+' at the top of Settings.'})}
     out.push(st)});return out}
 /* Which Settings page (You, Look, Body, Data, About) a step's target is on */
 function tourSwPage(st){if(!st||st.v!=='settings')return null;var s=typeof st.sel==='function'?st.sel():st.sel,e=s&&$(s),pg=e&&e.closest('.swpage');if(!pg)return null;var rt=pg.closest('.swp'),k=[].indexOf.call(pg.parentNode.children,pg);return {k:k,nm:pg.dataset.name||'that page',root:rt&&rt.id||'s-sw'}}
@@ -3344,8 +3345,17 @@ var TOUR=[
  {g:'fuel',v:'meals',sel:function(){return tourId($('#m-list')&&$('#m-list').closest('.card'),'tour-mlist')||'#m-sum'},t:'Diary',p:'Everything you logged, day by day. Swipe back to see earlier days.'},
  {g:'fuel',v:'foods',sel:function(){return tourId($('#r-name')&&$('#r-name').closest('.card'),'tour-rbuild')||'#r-link'},t:'Recipes',p:'Describe a home-cooked recipe in your own words and AI lists the ingredients and works out the numbers per serving. It saves to Your meals, ready to add in one tap.'},
  {g:'friends',v:'friends',sel:function(){return tourId($('#fr-body > .card'),'tour-fr')||'#fr-body'},t:'Friends',p:'Add friends by username, cheer each other on and share workouts.'},
- {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Five tabs: Daily verses, the ones you Saved, the Bible for whole chapters and reading plans, Search to find any verse, and Notes for your private prayer notes.'},
- {g:'faith',v:'scripture',sel:function(){var e=$('#sc-feed .vslide');return tourId(e,'tour-verse')||'#sc-feed'},t:'Daily verses',p:'Swipe up for the next verse. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
+ {g:'faith',v:'scripture',sel:'#v-scripture .sctabs',t:'Faith',p:'Five pages: Daily verses, the ones you Saved, the Bible, Search and your private Notes. Let\'s go through each one.'},
+ {g:'faith',v:'scripture',gate:true,ftab:'feed',sel:'#sct-feed',t:'Next: Daily',p:'Tap Daily at the top.'},
+ {g:'faith',v:'scripture',tab:'feed',sel:function(){var e=$('#sc-feed .vslide');return tourId(e,'tour-verse')||'#sc-feed'},t:'Daily verses',p:'A new verse every day. Swipe up for more. Tap the heart to save one, or Chapter to read the whole chapter around it.'},
+ {g:'faith',v:'scripture',gate:true,ftab:'saved',sel:'#sct-saved',t:'Next: Saved',p:'Tap Saved at the top.'},
+ {g:'faith',v:'scripture',tab:'saved',sel:'#sc-feed',t:'Saved',p:'Every verse you tapped the heart on, kept in one place to come back to.'},
+ {g:'faith',v:'scripture',gate:true,ftab:'bible',sel:'#sct-bible',t:'Next: Bible',p:'Tap Bible at the top.'},
+ {g:'faith',v:'scripture',tab:'bible',sel:'#sc-bible',t:'Bible',p:'Read any book and chapter. Use the arrows to move between chapters, the speaker to listen, and Aa to change the text size.'},
+ {g:'faith',v:'scripture',gate:true,ftab:'find',sel:'#sct-find',t:'Next: Search',p:'Tap Search at the top.'},
+ {g:'faith',v:'scripture',tab:'find',sel:'#sc-find .vfind',t:'Search',p:'Look up any word, or tap a topic like Strength, Anxiety or Peace to see verses about it.'},
+ {g:'faith',v:'scripture',gate:true,ftab:'notes',sel:'#sct-notes',t:'Next: Notes',p:'Tap Notes at the top.'},
+ {g:'faith',v:'scripture',tab:'notes',sel:'#sc-notes',t:'Notes',p:'Write private prayer notes. Only you can see them, and they are never shared.'},
  {g:'set',v:'settings',sel:'#acct-card',t:'You',p:'Your account and profile. Sign in to back up and sync, and set your name and username so friends can find you.'},
  {g:'set',v:'settings',sel:'#hs-card .hsp',t:'Home Screen',p:'Choose which cards show on Home and in what order. This little phone shows how Home will look as you move or hide cards.'},
  {g:'set',v:'themes',sel:function(){var l=document.querySelector('#th-grid .tp.tlk');if(l){var c=l.closest('.tcard');if(c&&!c.id)c.id='tour-lockth';return c?'#tour-lockth':'#th-grid'}var f=document.querySelector('#th-grid .tcard');if(f){if(!f.id)f.id='tour-th1';return '#'+f.id}return '#th-grid'},t:'Themes',p:'Pick a look for the whole app. Free themes are ready to use. Pro themes show a 🔒 and a Preview button so you can try them first.'},
@@ -3358,10 +3368,11 @@ var TS={i:0,on:false,t:0,L:TOUR,v:''};
 function tourId(el,id){if(!el)return '';if(!el.id)el.id=id;return '#'+el.id}
 /* While the tutorial runs, only Next, Back and Exit do anything: no scrolling, tapping or typing elsewhere */
 function tourBlock(e){if(!TS.on)return;var card=$('#tour-card');if(e.type==='keydown'){if(e.key==='Escape')return;var gs=TS.L[TS.i];if(gs&&gs.gate&&(e.key==='Enter'||e.key===' ')&&!(e.target.closest&&e.target.closest('#tour-card .tour-btns'))){e.preventDefault();TS.i++;tourShow();return}if(e.key==='Tab'){var b=$$('#tour-card .tour-btns button').filter(function(x){return !x.hidden});var k=b.indexOf(document.activeElement);e.preventDefault();(b[(k+(e.shiftKey?-1:1)+b.length)%b.length]||b[0]).focus();return}if(card&&card.contains(e.target)&&e.target.tagName==='BUTTON'&&(e.key==='Enter'||e.key===' '))return;e.preventDefault();return}
+  var sg=TS.L&&TS.L[TS.i];if(sg&&sg.swroot&&e.type!=='keydown'&&e.target.closest&&e.target.closest('#'+sg.swroot))return;
   if(card&&card.contains(e.target)&&e.type!=='wheel'&&e.type!=='touchmove')return;if(e.target.closest&&e.target.closest('#tour-card .tour-btns'))return;e.preventDefault();e.stopPropagation()}
 ['wheel','touchmove','keydown'].forEach(function(t){window.addEventListener(t,tourBlock,{capture:true,passive:false})});
 function tourStart(){try{a2Close()}catch(e){}TS.L=tourList();TS.i=0;TS.on=true;TS.v='';var t=$('#tour');t.hidden=false;t.classList.remove('in');void t.offsetWidth;t.classList.add('in');document.documentElement.classList.add('touring');tourShow()}
-function tourEnd(done){TS.on=false;clearTimeout(TS.t);clearTimeout(TS.t2);var t=$('#tour');t.classList.add('out');document.documentElement.classList.remove('touring');setTimeout(function(){t.hidden=true;t.classList.remove('out')},260);var first=!S.toured;S.toured=true;location.hash='#today';window.scrollTo(0,0);refresh();toast(done===true?(first?'All set. You can replay the tutorial in Settings.':'Tutorial done.'):(first?'You can replay the tutorial in Settings.':'Tutorial closed.'))}
+function tourEnd(done){TS.on=false;clearTimeout(TS.t);clearTimeout(TS.t2);clearInterval(TS.sw);var t=$('#tour');t.classList.remove('swgate');t.classList.add('out');document.documentElement.classList.remove('touring');setTimeout(function(){t.hidden=true;t.classList.remove('out')},260);var first=!S.toured;S.toured=true;location.hash='#today';window.scrollTo(0,0);refresh();toast(done===true?(first?'All set. You can replay the tutorial in Settings.':'Tutorial done.'):(first?'You can replay the tutorial in Settings.':'Tutorial closed.'))}
 /* The tutorial looks at what you have already set up and says what it is, then carries on as normal */
 function tourMine(st){var e=function(x){return esc(String(x))},n=function(v){return Math.round(+v||0).toLocaleString()},pl=function(c,w){return c+' '+w+(c===1?'':'s')};
   var T=targets(),t=totals(),ml=(S.meals||[]).length,hist=(S.hist||[]).slice().sort(function(a,b){return (b.ts||0)-(a.ts||0)});
@@ -3382,6 +3393,10 @@ function tourMine(st){var e=function(x){return esc(String(x))},n=function(v){ret
   }
   if(st.v==='themes'&&S.themeMode)return 'You are using the '+e(String(S.themeMode).replace(/^\w/,function(c){return c.toUpperCase()}))+' theme.';
   return ''}
+/* Settings tour: a swipe gate moves on as soon as that Settings page is showing, however you got there */
+function tourSwWatch(st){clearInterval(TS.sw);if(!st||st.swk==null)return;var dir=function(){var S2=SWP[st.swroot];return S2&&S2.i<st.swk?'left':'right'};
+  var p=$('#tour-p');if(p)p.textContent='Swipe '+dir()+' to '+st.t.replace(/^Next: /,'')+'. You can also tap '+st.t.replace(/^Next: /,'')+' at the top of Settings.';
+  TS.sw=setInterval(function(){if(!TS.on||TS.L[TS.i]!==st){clearInterval(TS.sw);return}var S2=SWP[st.swroot];if(S2&&S2.i===st.swk&&!S2.animating&&!S2.drag){clearInterval(TS.sw);try{sfxTap()}catch(x){}TS.i++;tourShow()}},250)}
 function tourShow(){
   var L=TS.L,st=L[TS.i],c=$('#tour-card'),gi=TOURSEC.map(function(x){return x[0]}).indexOf(st.g),inSec=L.filter(function(x){return x.g===st.g&&!x.gate}),k=inSec.indexOf(st)+1;
   c.classList.remove('tswap');void c.offsetWidth;c.classList.add('tswap');
@@ -3389,6 +3404,8 @@ function tourShow(){
   $('#tour-t').textContent=st.t;$('#tour-p').textContent=st.p;var tx=$('#tour-x');if(tx){var mine='';try{mine=st.gate?'':tourMine(st)}catch(e){}tx.hidden=!mine;tx.innerHTML=mine?'<b>Yours</b> '+mine:''}
   $('#tour-back').hidden=!TS.i;$('#tour-next').hidden=!!st.gate;$('#tour-next').textContent=TS.i===L.length-1?'Done':'Next';$('#tour-card').classList.toggle('gate',!!st.gate);
   var bar=$('#tour-bar');if(bar)bar.style.transform='scaleX('+((TS.i+1)/L.length)+')';
+  if(st.tab&&S.sctab!==st.tab){S.sctab=st.tab;try{refresh()}catch(e){}}
+  tourSwWatch(st);$('#tour').classList.toggle('swgate',st.swk!=null);
   var hl=$('#tour-hl'),nav=TS.v!==st.v;TS.v=st.v;
   if(nav){hl.classList.add('away');if(location.hash!=='#'+st.v)location.hash='#'+st.v}
   clearTimeout(TS.t);TS.t=setTimeout(function(){tourPlace(nav)},nav?320:40);
@@ -3404,6 +3421,8 @@ function tourFit(el,maxH){var R=el.getBoundingClientRect(),top=R.bottom,bot=R.to
   if(bot-top>maxH&&maxH>80){var cut=top+maxH,best=0;[].slice.call(el.querySelectorAll(':scope>*,:scope>*>*')).slice(0,300).forEach(function(d){var q=d.getBoundingClientRect();if(q.height>8&&q.bottom<=cut&&q.bottom>best&&q.top>=top)best=q.bottom});
     bot=best>top+60?best+6:cut}
   return {top:top,bottom:bot,left:R.left,right:R.right,width:R.width,height:bot-top}}
+/* Height of the phone's notch area at the top (0 on most computers), so the tutorial never lights things up under the floating buttons */
+function safeTop(){if(safeTop.v==null){try{var d=document.createElement('div');d.style.cssText='position:fixed;top:0;height:0;padding-top:env(safe-area-inset-top,0px);visibility:hidden';document.body.appendChild(d);safeTop.v=parseFloat(getComputedStyle(d).paddingTop)||0;d.remove()}catch(e){safeTop.v=0}}return safeTop.v}
 function tourPlace(nav){
   if(!TS.on)return;var st=TS.L[TS.i],sl=typeof st.sel==='function'?st.sel():st.sel,el=sl&&document.querySelector(sl),hl=$('#tour-hl'),c=$('#tour-card');
   /* An empty or hidden target falls back to its card, then to the page heading */
@@ -3414,7 +3433,7 @@ function tourPlace(nav){
   if(el&&el.getBoundingClientRect().height<24){var cd=el.closest('.card');el=cd&&cd.getBoundingClientRect().height>=24?cd:document.querySelector('#v-'+st.v+' .vh')}
   if(!(el&&el.getClientRects().length)){hl.classList.add('away');if(st.gate)$('#tour-next').hidden=false;tourCard(null);return}
   try{swReveal(el)}catch(e){}try{vpReveal(el)}catch(e){}
-  var ch=c.offsetHeight,pad=14,gap=14,topSafe=innerHeight<700?50:58,avail=innerHeight-ch-pad-gap-topSafe;
+  var ch=c.offsetHeight,pad=14,gap=14,topSafe=(innerHeight<700?50:58)+safeTop(),avail=innerHeight-ch-pad-gap-topSafe;
   tourSettle(el,function(){
     var r=el.getBoundingClientRect(),want=r.top-topSafe;
     if(Math.abs(want)>4)window.scrollTo({top:Math.max(0,scrollY+want),behavior:nav||matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});
@@ -5088,7 +5107,7 @@ function vfBuild(){
   var items=[];
   if(VF.mode==='saved'){
     items=(S.vsaved||[]).slice().reverse().map(function(r){return {ref:r,tag:'Saved'}});
-    if(!items.length){f.innerHTML='<div class="vs-empty"><b>No saved verses yet</b><span>Double-tap a verse, or tap the heart, to keep it here.</span><button class="btn sm" data-act="sctab" data-k="feed">Go to For you</button></div>';VF.built=1;return}
+    if(!items.length){f.innerHTML='<div class="vs-empty"><b>No saved verses yet</b><span>Double-tap a verse, or tap the heart, to keep it here.</span><button class="btn sm" data-act="sctab" data-k="feed">Go to Daily</button></div>';VF.built=1;return}
   }else{
     VF.cyc=0;
     items.push({ref:vfNice(S.votd.ref),tag:'Verse of the day',why:stampLabel(S.votd.stamp)});
@@ -5120,7 +5139,7 @@ function vfWordSearch(q){var out=[],ql=q.toLowerCase();if(!WEBB||ql.length<3)ret
   Object.keys(WEBB).some(function(b){return WEBB[b].some(function(ch,ci){return ch.some(function(v,vi){var l=v.toLowerCase();if(words.every(function(w){return l.indexOf(w)>-1})){out.push([b+' '+(ci+1)+':'+(vi+1),v]);if(out.length>=60)return true}return false})})});return out}
 function vfFind(){var o=$('#vf-out'),qi=$('#vf-q');if(!o)return;var q=qi?qi.value.trim():'';var key=q+'|'+(VFS.topic||'')+'|'+(WEBB?1:0);if(o.dataset.k===key)return;o.dataset.k=key;
   var t=VFS.topic?TOPICS.filter(function(x){return x[0]===VFS.topic})[0]:vfTopicMatch(q),h='';
-  if(!q&&!VFS.topic){h='<p class="eyebrow" style="margin:.4rem 0 0">Topics</p><div class="vftopics">'+TOPICS.map(function(x){return '<button type="button" class="vftop" data-act="vftopic" data-k="'+x[0]+'"><span class="vfte" aria-hidden="true">'+x[2]+'</span><span>'+esc(x[1])+'</span><small>'+x[4].split(';').length+'</small></button>'}).join('')+'</div>';o.innerHTML=h;return}
+  if(!q&&!VFS.topic){h='<p class="eyebrow" style="margin:.4rem 0 0">Topics</p><div class="vftopics">'+TOPICS.map(function(x){return '<button type="button" class="vftop" data-act="vftopic" data-k="'+x[0]+'"><span class="vfte" aria-hidden="true">'+x[2]+'</span><span>'+esc(x[1])+'</span><small>'+x[4].split(';').length+' verses</small></button>'}).join('')+'</div>';o.innerHTML=h;return}
   if(t){var refs=t[4].split(';');h+='<div class="row spread vfhead"><div><p class="eyebrow" style="margin:0">Topic</p><h3 style="margin:.1rem 0 0">'+t[2]+' '+esc(t[1])+'</h3></div><button class="btn sm" data-act="vfclear">All topics</button></div><p class="small muted" style="margin:0">'+refs.length+' verses</p><div class="vflist">'+refs.map(function(r){return vfVerseCard(r)}).join('')+'</div>'}
   if(q&&!VFS.topic){var L=vfWordSearch(q);if(!WEBB)h+='<p class="muted">Loading the Bible…</p>';else if(L.length)h+='<p class="eyebrow" style="margin:'+(t?'1rem':'.3rem')+' 0 0">Verses with “'+esc(q)+'”'+(L.length>=60?' (first 60)':'')+'</p><div class="vflist">'+L.map(function(x){return vfVerseCard(x[0],x[1],q.split(/\s+/)[0])}).join('')+'</div>';else if(!t)h+='<p class="muted">No verses found for “'+esc(q)+'”. Try a single word, like hope or strength.</p>'}
   o.innerHTML=h}
@@ -7813,7 +7832,12 @@ function vpGo(v,i,instant){
   var nx=v.secs[i+1],up=!nx&&v.secs.length>1,tg=nx||v.secs[0];v.next.hidden=!(nx||up);v.next.classList.toggle('up',up);if(nx||up){if(!v.next.firstChild||!v.next.querySelector('svg'))v.next.innerHTML='<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>';var lb=(up?'Back to top: ':'Next: ')+tg.dataset.name;v.next.title=lb;v.next.setAttribute('aria-label',lb);var vpl=function(){try{var bh=v.bar.getBoundingClientRect().height;if(bh)v.next.style.top='calc(50% + '+Math.round(bh/2+14)+'px)'}catch(e){}};vpl();requestAnimationFrame(vpl);setTimeout(vpl,400)}
   if(changed&&!instant){var r=v.root.getBoundingClientRect(),top=60;if(r.top<top-4||r.bottom>innerHeight)window.scrollTo({top:Math.max(0,scrollY+r.top-top),behavior:swCalm()?'auto':'smooth'})}
 }
-function vpSize(v){v.h=vpH();v.root.style.setProperty('--vph',v.h+'px');v.tr.classList.remove('anim');v.tr.style.transform='translateY('+(-v.i*v.h)+'px)'}
+/* Fit each set of sections to the room below where it starts, so the bottom of a section is never hidden under the bottom bar
+   (that made some pages feel stuck: the swipe moved sections instead of showing the rest). Re-measured when a page opens. */
+function vpFit(v){var h=vpH();try{if(v.root.offsetParent){var top=v.root.getBoundingClientRect().top+scrollY,tb=$('#tabs'),res=16;if(tb&&getComputedStyle(tb).position==='fixed'&&tb.offsetHeight)res=tb.offsetHeight+22;h=Math.max(380,Math.min(820,Math.round(innerHeight-top-res)))}}catch(e){}return h}
+function vpRefit(){Object.keys(VPG).forEach(function(k){var v=VPG[k];if(v.root.offsetParent){var h=vpFit(v);if(Math.abs(h-v.h)>2)vpSize(v)}})}
+window.addEventListener('hashchange',function(){setTimeout(vpRefit,80);setTimeout(vpRefit,500)});
+function vpSize(v){v.h=vpFit(v);v.root.style.setProperty('--vph',v.h+'px');v.tr.classList.remove('anim');v.tr.style.transform='translateY('+(-v.i*v.h)+'px)'}
 var VPN={'acct-card':'Account','t-targets':'Your targets','e-water':'Water','sh-week':'This week','w-recent':'Recent','w-saved':'Saved','w-make':'Make your own','upd-card':'Updates'};
 function vpSync(v){
   [].forEach.call(v.tr.children,function(sc){var c=sc.firstElementChild;sc.hidden=!!(c&&c.hidden&&sc.children.length===1);
@@ -7872,7 +7896,7 @@ function vpInit(root){
     if(v.wlock)return;v.wacc=(v.wacc||0)+e.deltaY;if(Math.abs(v.wacc)>40){v.wlock=true;v.wacc=0;v.touched=1;vpGo(v,v.i+dir)}},{passive:false});
   root.addEventListener('focusin',function(e){vpReveal(e.target)});
   window.addEventListener('resize',function(){vpSize(v)});
-  vpSize(v);vpGo(v,0,true);
+  vpSize(v);vpGo(v,0,true);setTimeout(function(){vpSize(v)},400);
 }
 function swInit(root){
   var tr=root.querySelector('.swtrack'),bar=root.querySelector('.swbar');
