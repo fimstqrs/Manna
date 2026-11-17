@@ -3037,7 +3037,8 @@ function defaults(){var d=defaults0();try{var p=JSON.parse(localStorage.getItem(
   ['S1','S2','S3'].forEach(function(k){if(!Array.isArray(d.plans[k])||d.plans[k].length!==7)d.plans[k]=[null,null,null,null,null,null,null];if(typeof d.planNames[k]!=='string')d.planNames[k]=''});
   if(!d.plans[d.planId]||['S1','S2','S3'].indexOf(d.planId)<0)d.planId='S1';
   d.sched=schedFrom(d);return d}
-function prefSave(){if(S&&S._restoring)return;try{dayRoll();var o={};Object.keys(S).forEach(function(k){if(PSKIP.indexOf(k)<0&&k!=='_mt')o[k]=S[k]});o.meals=S.meals;o.mealsD=todayStamp();
+var remSig='';
+function prefSave(){if(S&&S._restoring)return;try{if(S.push&&S.push.on){var rs=JSON.stringify(remPlan());if(rs!==remSig){if(remSig)remLater();remSig=rs}}}catch(e){}try{dayRoll();var o={};Object.keys(S).forEach(function(k){if(PSKIP.indexOf(k)<0&&k!=='_mt')o[k]=S[k]});o.meals=S.meals;o.mealsD=todayStamp();
   /* Note the time each setting changes, so sync can keep the newest change from any device */
   var prev=null;try{prev=JSON.parse(prefLast||localStorage.getItem('manna.prefs.v1')||'null')}catch(e){}
   if(prev){var now=Date.now(),mt=S._mt&&typeof S._mt==='object'?S._mt:(S._mt={});Object.keys(o).forEach(function(k){if(k==='mealsD')return;if(JSON.stringify(o[k])!==JSON.stringify(prev[k]))mt[k]=now})}
@@ -3065,7 +3066,7 @@ function defaults0(){
     thread:[],
     lang:'en',plain:false,scale:1,scaleD:0,hc:false,rm:false,
     week:'normal',photo:null,verOnly:false,recipe:[],recipes:[],est:estLoad(),cl:clLoad(),
-    name:'Friend',uname:'',myPic:'',shaPerDay:'auto',qwOff:0,pnTie:'votd',schAdj:null,schRes:null,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
+    name:'Friend',uname:'',myPic:'',remFr:true,shaPerDay:'auto',qwOff:0,pnTie:'votd',schAdj:null,schRes:null,saved:{},votd:dayVerse(),pasted:{},themeMode:'plain',version:'BSB',kjv:false,rb:'John',rc:3,waterGoal:64,wlog:[],prevMeals:{d:'',m:[]},hl:{},howC:{},aiLvl:'mid',aiMins:30,gTarget:null,gPace:'steady',gPlan:null,gNote:'',fshare:{workouts:true,meals:false,weight:false},rsz:1,rfont:'serif',rdays:[],pnotes:[],checkin:{d:'',v:''},pnOpen:false,wedit:false,tord:['actions','energy','streak','macros','check','tf','train','strip'],tedit:false,xp:{water:true,streak:true,macros:true,check:true,greet:true,rest:true,wake:true,favs:true,resume:true,top:true},water:{d:'',n:0},favs:{},bm:null,rest:null,readD:'',sess:null,prep:null,pd:{},pw:{},prepMsg:'',wz:0,fu:'g',track:{protein:true,fiber:true,micro:true,sodium:true,fat:true,sugar:false,cal:true},
     sets:{},hist:[],customW:[],selW:'g1',ai:null,notes:null,
     plans:{},planId:'S1',planNames:{S1:'',S2:'',S3:''},schedList:null,have:['bodyweight','dumbbells'],wf:{access:'all',cat:'all',mu:'all'},addDay:todayIdx(),edit:null,hf:'all',fcat:'all',fsel:null,fq:1,fshow:60,thide:{},pshow:['kcal','workout','protein'],pedit:false,h24:true,glass:true,msel:[]
   };
@@ -3233,6 +3234,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
+ {v:175,d:'Nov 17, 2026',t:'More reminders',s:['New Workout reminder: on days your schedule has a workout, Manna tells you which one, like "Today: Leg day". On rest days it stays quiet.','New Water reminder: a nudge to drink and log it, at a time you pick.','Friends notifications: get a notification the moment someone sends you a friend request, accepts yours, or sends you a cheer 🙏 💪 🔥. Turn it off any time in Reminders.','Find them all in Settings, About, Reminders.']},
  {v:174,d:'Nov 17, 2026',t:'Faith on phones',s:['On phones, Faith\'s Daily and Saved verse feed no longer has the Manna version line showing through the bottom bar, and the page buttons sit a little closer to the verse.','Fitness Stats: the empty week now says LET\'S START.']},
  {v:173,d:'Nov 16, 2026',t:'Tutorial fix',s:['Faith\'s five pages, Daily, Saved, Bible, Search and Notes, now use the same buttons as Fitness\'s Workouts, Schedule, History and Stats.','The tutorial now walks through all five Settings pages, You, Look, Body, Data and About, and you tap each page\'s button at the top to move on.','The tutorial is no longer covered by the Get the Manna app pop-up. Fuel steps 1 and 2 now show Log it and Your targets clearly, and the install pop-up waits until the tutorial is done.']},
  {v:172,d:'Nov 15, 2026',t:'Whole numbers',s:['When you change how many of a food you ate, the + and − buttons now go 1, 2, 3, 4, not 1.25, 1.5. Ate 2 cookies? Tap + once.','In your Diary, the water bottle and the calories ring now match: the bottle is the same height as the ring, your water shows inside the bottle just like calories show inside the ring, and Calories eaten today and Water today sit on the same line.']},
@@ -3575,7 +3577,7 @@ function onbInput(e){
   o.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur();if(ONB.step!==4&&e.target.id!=='onb-wq')ONBACT.next()}})})();
 
 /* APPV: bump with every release, together with version.json (it drives the relaunch prompt) */
-var heroLast='',APPV='174';
+var heroLast='',APPV='175';
 function renderHeroArt(){var id=currentTheme().id,o=$('#hero-art');if(!o||heroLast===id)return;heroLast=id;o.innerHTML=id==='plain'?'':(SPART[id]||HEROART[id]||HEROART.devotion)}
 function renderToday(){
   renderHeroArt();
@@ -6497,13 +6499,13 @@ var ACT={
   frname:function(){var e=$('#fr-un'),u=(e&&e.value||'').trim().replace(/^@/,'').toLowerCase();if(!/^[a-z0-9_]{3,20}$/.test(u)){FR.ok=false;FR.msgAt=Date.now();FR.msg='Use 3 to 20 lowercase letters, numbers or underscores.';return}frAct(rpc('set_username',{p_username:u,p_display:S.name&&S.name!=='Friend'?S.name:''}),function(r){S.frEditName=false;FR.handle=undefined;return 'You are @'+r.username+'. Tell friends your username so they can add you.'})},
   freditname:function(){S.frEditName=true;FR.msg=''},
   frnamecancel:function(){S.frEditName=false;FR.msg=''},
-  fradd:function(){var e=$('#fr-add'),u=(e&&e.value||'').trim().replace(/^@/,'').toLowerCase();if(!u){FR.ok=false;FR.msgAt=Date.now();FR.msg='Type your friend\'s username.';return}frAct(rpc('friend_request',{p_username:u}),function(r){if(e)e.value='';return r.status==='accepted'?'You and @'+u+' are now friends.':r.status==='already'?'You already asked @'+u+', or you are already friends.':'Request sent to @'+u+'.'})},
-  fracc:function(b){frAct(rpc('friend_update',{p_username:b.dataset.u,p_action:'accept'}),'You and @'+b.dataset.u+' are now friends.')},
+  fradd:function(){var e=$('#fr-add'),u=(e&&e.value||'').trim().replace(/^@/,'').toLowerCase();if(!u){FR.ok=false;FR.msgAt=Date.now();FR.msg='Type your friend\'s username.';return}frAct(rpc('friend_request',{p_username:u}),function(r){if(e)e.value='';if(r&&r.status==='sent')frNotify('request',u);else if(r&&r.status==='accepted')frNotify('accept',u);return r.status==='accepted'?'You and @'+u+' are now friends.':r.status==='already'?'You already asked @'+u+', or you are already friends.':'Request sent to @'+u+'.'})},
+  fracc:function(b){var u=b.dataset.u;frAct(rpc('friend_update',{p_username:u,p_action:'accept'}).then(function(r){if(r&&r.ok!==false)frNotify('accept',u);return r}),'You and @'+u+' are now friends.')},
   frrem:function(b){frAct(rpc('friend_update',{p_username:b.dataset.u,p_action:'remove'}),'')},
   frask:function(b){S.frConfirm={u:b.dataset.u,a:b.dataset.a}},
   frcancel:function(){S.frConfirm=null},
   frdo:function(b){var a=b.dataset.a,u=b.dataset.u;S.frConfirm=null;frAct(rpc('friend_update',{p_username:u,p_action:a}),a==='block'?'Blocked @'+u+'.':a==='unblock'?'Unblocked @'+u+'.':'Removed @'+u+'.')},
-  frcheer:function(b){var u=b.dataset.u,k=b.dataset.k;if(b.getAttribute('aria-pressed')==='true'){toast('You already sent that today.');return}var f=FR.data&&FR.data.friends.filter(function(x){return x.username===u})[0];if(f){f.cheered=(f.cheered||[]).concat([k])}rpc('send_cheer',{p_username:u,p_kind:k}).then(function(){toast('Sent '+CHEER[k][0]+' to @'+u+'.',{title:'Cheer sent',icon:CHEER[k][0]})}).catch(function(e){toast(frErr(e))})},
+  frcheer:function(b){var u=b.dataset.u,k=b.dataset.k;if(b.getAttribute('aria-pressed')==='true'){toast('You already sent that today.');return}var f=FR.data&&FR.data.friends.filter(function(x){return x.username===u})[0];if(f){f.cheered=(f.cheered||[]).concat([k])}rpc('send_cheer',{p_username:u,p_kind:k}).then(function(r){if(!r||r.ok!==false)frNotify('cheer',u,k);toast('Sent '+CHEER[k][0]+' to @'+u+'.',{title:'Cheer sent',icon:CHEER[k][0]})}).catch(function(e){toast(frErr(e))})},
   frpic:function(){var i=$('#fr-picin');if(i)i.click()},
   frpicdel:function(){frPicSave('')},
   frshareme:function(){var t='Add me on Manna: @'+FR.handle.username,u=location.origin+location.pathname+'#friends';if(navigator.share)navigator.share({title:'Manna',text:t,url:u}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(t+' '+u).then(function(){toast('Copied. Paste it to a friend.',{title:'Copied',icon:'📋'})})},
@@ -7576,10 +7578,13 @@ function remSupported(){return 'serviceWorker' in navigator&&'PushManager' in wi
 function remIOSBrowser(){return /iP(hone|ad|od)/.test(navigator.userAgent)&&!(navigator.standalone||matchMedia('(display-mode: standalone)').matches)}
 function remKey(){if(REM.key)return Promise.resolve(REM.key);return fetch(API+'/api/push').then(function(r){return r.json()}).then(function(j){REM.ready=!!(j&&j.ready);REM.key=j&&j.key||null;return REM.key})}
 function remB64(k){var p='='.repeat((4-k.length%4)%4),b=atob((k+p).replace(/-/g,'+').replace(/_/g,'/')),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
-var REMK=[['verse','📖','Morning verse','A verse to start your day'],['breakfast','🍳','Breakfast','A nudge to eat and log it'],['lunch','🥗','Lunch','A nudge to eat and log it'],['dinner','🍝','Dinner','A nudge to eat and log it'],['log','🌙','Evening check-in','Log anything you missed today']];
-function remS(){var d={verse:{on:true,t:'07:00'},breakfast:{on:false,t:'08:00'},lunch:{on:false,t:'12:30'},dinner:{on:false,t:'18:30'},log:{on:true,t:'20:00'}};if(!S.rem||typeof S.rem!=='object')S.rem={};REMK.forEach(function(k){var x=S.rem[k[0]];if(!x||typeof x!=='object'||!/^\d\d:\d\d$/.test(x.t||''))S.rem[k[0]]=d[k[0]]});return S.rem}
-function remPrefs(){var R=remS(),o={};REMK.forEach(function(k){o[k[0]]=R[k[0]].on?R[k[0]].t:null});return o}
-function remAny(){var R=remS();return REMK.some(function(k){return R[k[0]].on})}
+var REMK=[['verse','📖','Morning verse','A verse to start your day'],['workout','💪','Workout','Today\'s workout from your schedule. Quiet on rest days'],['breakfast','🍳','Breakfast','A nudge to eat and log it'],['lunch','🥗','Lunch','A nudge to eat and log it'],['water','💧','Water','A nudge to drink and log it'],['dinner','🍝','Dinner','A nudge to eat and log it'],['log','🌙','Evening check-in','Log anything you missed today']];
+function remS(){var d={workout:{on:true,t:'17:00'},water:{on:false,t:'15:00'},verse:{on:true,t:'07:00'},breakfast:{on:false,t:'08:00'},lunch:{on:false,t:'12:30'},dinner:{on:false,t:'18:30'},log:{on:true,t:'20:00'}};if(!S.rem||typeof S.rem!=='object')S.rem={};REMK.forEach(function(k){var x=S.rem[k[0]];if(!x||typeof x!=='object'||!/^\d\d:\d\d$/.test(x.t||''))S.rem[k[0]]=d[k[0]]});return S.rem}
+function remPlan(){try{var P=(S.plans&&S.plans[S.planId])||[];return [0,1,2,3,4,5,6].map(function(i){var w=P[i]&&wById(P[i]);return w?String(w.name).slice(0,40):null})}catch(e){return null}}
+function remPrefs(){var R=remS(),o={};REMK.forEach(function(k){o[k[0]]=R[k[0]].on?R[k[0]].t:null});o.plan=remPlan();o.friends=S.remFr!==false;return o}
+/* Version 175: tell a friend's phone about a request, an accepted request or a cheer. The server checks it really happened. */
+function frNotify(kind,to,cheer){try{if(!accOn()||!signedIn())return;authToken().then(function(tok){if(!tok)return;return fetch(API+'/api/push',{method:'POST',headers:{'content-type':'application/json',authorization:'Bearer '+tok},body:JSON.stringify({notify:{kind:kind,to:to,cheer:cheer||''}})})}).catch(function(){})}catch(e){}}
+function remAny(){var R=remS();return S.remFr!==false||REMK.some(function(k){return R[k[0]].on})}
 function remFmt(t){var a=t.split(':'),d=new Date();d.setHours(+a[0],+a[1],0,0);try{return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}catch(e){return t}}
 function remSave(sub,hello){return (accOn()&&signedIn()?authToken():Promise.resolve(null)).then(function(tok){var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
   var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
@@ -7596,14 +7601,17 @@ function remUpdate(){if(!S.push.on||!remSupported())return;navigator.serviceWork
 function renderRem(){var el=$('#rem-card');if(!el)return;var P=S.push||(S.push={on:false}),R=remS(),h='<div class="sh"><h3>Reminders</h3><p class="small muted">Pick what Manna reminds you about, and when. Times are your own local time.</p></div>';
   if(remIOSBrowser())h+='<p class="small">On iPhone, reminders work once Manna is on your Home Screen. Tap Share, then Add to Home Screen, then open Manna from there.</p>';
   else if(!remSupported())h+='<p class="small">This browser cannot show reminders. Try Chrome, Edge, Firefox or Safari.</p>';
-  else{h+='<div class="remlist">'+REMK.map(function(k){var x=R[k[0]];return '<div class="remrow'+(x.on?'':' off')+'"><label class="remck"><input type="checkbox" data-rem="'+k[0]+'"'+(x.on?' checked':'')+'><span class="remi" aria-hidden="true">'+k[1]+'</span><span><b>'+k[2]+'</b><small>'+k[3]+'</small></span></label><input type="time" class="remt" data-remt="'+k[0]+'" value="'+x.t+'" aria-label="'+esc(k[2])+' time"'+(x.on?'':' disabled')+'></div>'}).join('')+'</div>'
+  else{h+='<div class="remlist">'+REMK.map(function(k){var x=R[k[0]];return '<div class="remrow'+(x.on?'':' off')+'"><label class="remck"><input type="checkbox" data-rem="'+k[0]+'"'+(x.on?' checked':'')+'><span class="remi" aria-hidden="true">'+k[1]+'</span><span><b>'+k[2]+'</b><small>'+k[3]+'</small></span></label><input type="time" class="remt" data-remt="'+k[0]+'" value="'+x.t+'" aria-label="'+esc(k[2])+' time"'+(x.on?'':' disabled')+'></div>'}).join('')+'<div class="remrow'+(S.remFr!==false?'':' off')+'"><label class="remck"><input type="checkbox" data-remfr="1"'+(S.remFr!==false?' checked':'')+'><span class="remi" aria-hidden="true">🤝</span><span><b>Friends</b><small>Friend requests, new friends and cheers, the moment they happen</small></span></label></div></div>'
     +'<div class="row">'+(P.on?'<span class="badge ok">On</span><button class="btn sm" data-act="remoff"'+(REM.busy?' disabled':'')+'>Turn all off</button>':'<button class="btn primary" data-act="remon"'+(REM.busy||!remAny()?' disabled':'')+'>'+(REM.busy?'Turning on…':'Turn on reminders')+'</button>')+'</div>'
     +(P.on?'<p class="small muted" style="margin:0">Changes save straight away.</p>':'')
     +(REM.msg?'<p class="small" role="status">'+esc(REM.msg)+'</p>':'')}
   var ae=document.activeElement;if(ae&&ae.classList&&ae.classList.contains('remt')&&el.contains(ae))return;
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}}
 var remTT=0;function remLater(){clearTimeout(remTT);remTT=setTimeout(remUpdate,800)}
+/* Each time Manna opens, refresh this phone's reminder settings, so friend alerts find you after you sign in */
+setTimeout(function(){try{remUpdate()}catch(e){}},5000);
 document.addEventListener('change',function(e){var t=e.target,d=t&&t.dataset;if(!d)return;var R=remS();
+  if(d.remfr){S.remFr=!!t.checked;remLater();refresh();prefSave();return}
   if(d.rem&&R[d.rem]){R[d.rem].on=!!t.checked;if(S.push.on&&!remAny()){remOff();return}remLater();refresh();prefSave();return}
   if(d.remt&&R[d.remt]&&/^\d\d:\d\d$/.test(t.value)){R[d.remt].t=t.value;remLater();prefSave();setTimeout(refresh,0)}});
 /* Version 159: AI check. Pro accounts can test every AI route against the real AI,

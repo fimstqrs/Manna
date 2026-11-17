@@ -4,6 +4,8 @@
 //        prefs = { verse, breakfast, lunch, dinner, log }: each "HH:MM" in the person's own time, or null for off
 //   DELETE /api/push {endpoint}   -> stops reminders for this phone
 //   GET  /api/push?run=tick       -> called every 5 minutes by Supabase (pg_cron); sends what is due
+//   POST /api/push   {notify}     -> friend request, accepted request or cheer: tells the other person's phones (Version 175)
+//   prefs also holds water and workout times, plan (7 workout names, Monday first) and friends (true or false)
 //
 // No extra packages: the VAPID signature and the message encryption (RFC 8291, aes128gcm)
 // are done with Node's own crypto. The signing key is derived from a server secret, so no
@@ -108,10 +110,42 @@ const MSGS = {
     ['Keep your streak going 🔥', 'Did you train today? Log it before bed so it counts.'],
     ['End the day well 🙏', 'Finish your log, then rest. Tomorrow is a fresh start.'],
   ] },
+  water: { url: '/#drink', list: [
+    ['Water break 💧', 'Have a glass of water and tap it into Manna.'],
+    ['Stay topped up 🥤', 'A few sips now keeps the afternoon slump away. Log your water.'],
+    ['Thirsty? 💦', 'Your water bottle in Manna is waiting to be filled.'],
+    ['Hydration check 🫗', 'How much water so far today? Add a glass in a tap.'],
+    ['Drink up 🌊', 'Your body is mostly water. Top it up and log it.'],
+  ] },
+  workout: { url: '/#workouts', list: [] },
 };
 const SLOTS = Object.keys(MSGS);
-function cleanPrefs(p) { const o = {}; for (const k of SLOTS) { const t = p && p[k]; o[k] = hhmm(t) === null ? null : t; } return o; }
-function pick(slot) { const m = MSGS[slot], x = m.list[Math.floor(Math.random() * m.list.length)]; return { title: x[0], body: x[1], url: m.url, tag: 'manna-' + slot }; }
+// Workout reminder: says what today's workout is. On a rest day it sends nothing.
+const WORK = [
+  ['Workout day 💪', 'Today: {w}. Your workout is ready in Manna when you are.'],
+  ['Time to train 🏋️', '{w} is on your schedule today. Let’s get it done.'],
+  ['You’ve got this 🔥', 'Today’s plan is {w}. Open Manna and start when you’re ready.'],
+  ['Move today 🏃', '{w} is waiting for you. Even a short session counts.'],
+  ['Strong body, strong spirit 🙏', 'It’s {w} today. Show up and give it your best.'],
+];
+function cleanPrefs(p) {
+  const o = {};
+  for (const k of SLOTS) { const t = p && p[k]; o[k] = hhmm(t) === null ? null : t; }
+  // Today's workouts, Monday first: a name, or null on a rest day.
+  o.plan = Array.isArray(p && p.plan) ? p.plan.slice(0, 7).map(x => (typeof x === 'string' && x.trim() ? x.trim().slice(0, 40) : null)) : null;
+  o.friends = !(p && p.friends === false);
+  return o;
+}
+const rnd = a => a[Math.floor(Math.random() * a.length)];
+function pick(slot, pr, now) {
+  if (slot === 'workout') {
+    const w = pr && Array.isArray(pr.plan) ? pr.plan[now.dow] : null;
+    if (!w) return null;
+    const x = rnd(WORK);
+    return { title: x[0], body: x[1].replace('{w}', w), url: '/#workouts', tag: 'manna-workout' };
+  }
+  const m = MSGS[slot], x = rnd(m.list); return { title: x[0], body: x[1], url: m.url, tag: 'manna-' + slot };
+}
 
 // The time and date where this person is.
 function localNow(tz) {
@@ -119,7 +153,9 @@ function localNow(tz) {
   try { p = new Intl.DateTimeFormat('en-CA', { timeZone: tz || 'UTC', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()); }
   catch { p = new Intl.DateTimeFormat('en-CA', { timeZone: 'UTC', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()); }
   const g = t => (p.find(x => x.type === t) || {}).value;
-  return { day: g('year') + '-' + g('month') + '-' + g('day'), mins: (+g('hour') % 24) * 60 + +g('minute') };
+  const day = g('year') + '-' + g('month') + '-' + g('day');
+  const dow = (new Date(day + 'T12:00:00Z').getUTCDay() + 6) % 7;
+  return { day, dow, mins: (+g('hour') % 24) * 60 + +g('minute') };
 }
 const hhmm = t => { const m = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(String(t || '')); return m ? +m[1] * 60 + +m[2] : null; };
 
@@ -136,13 +172,13 @@ async function tick(env, v, res) {
       const t = hhmm(pr[slot]);
       if (t === null || last[slot] === now.day) continue;
       const late = now.mins - t;
-      if (late >= 0 && late <= 25) jobs.push({ row, slot, day: now.day });
+      if (late >= 0 && late <= 25) { const msg = pick(slot, pr, now); if (msg) jobs.push({ row, slot, day: now.day, msg }); }
     }
   }
   let sent = 0;
   const gone = new Set();
   for (let i = 0; i < jobs.length; i += 20) {
-    await Promise.all(jobs.slice(i, i + 20).map(async ({ row, slot, day }) => {
+    await Promise.all(jobs.slice(i, i + 20).map(async ({ row, slot, day, msg }) => {
       if (gone.has(row.endpoint)) return;
       // Claim it: only one call can move last[slot] to today.
       const f = 'push_subs?endpoint=eq.' + encodeURIComponent(row.endpoint) + '&or=(last->>' + slot + '.is.null,last->>' + slot + '.neq.' + day + ')';
@@ -152,13 +188,48 @@ async function tick(env, v, res) {
       const got = c && c.ok ? await c.json().catch(() => []) : [];
       if (!got.length) return;
       try {
-        const st = await send(v, row.sub, pick(slot));
+        const st = await send(v, row.sub, msg);
         if (st === 404 || st === 410 || st === 403) gone.add(row.endpoint); else if (st < 300) sent++;
       } catch {}
     }));
   }
   for (const ep of gone) await rest(env, 'push_subs?endpoint=eq.' + encodeURIComponent(ep), { method: 'DELETE' }).catch(() => {});
   return res.status(200).json({ ok: true, due: jobs.length, sent, removed: gone.size });
+}
+
+
+// Friend activity: sent the moment it happens, to the other person's phones.
+//   POST /api/push {notify: {kind: 'request' | 'accept' | 'cheer', to: username, cheer: 'pray' | 'strong' | 'fire'}}
+// The server checks in the database that it really happened before sending, so it cannot be used to spam.
+const CHEERS = { pray: ['🙏', 'is praying for you'], strong: ['💪', 'says stay strong'], fire: ['🔥', 'says you’re on fire'] };
+async function one(env, path) { const r = await rest(env, path); if (!r.ok) return null; const j = await r.json().catch(() => []); return j[0] || null; }
+async function notify(env, v, req, body, res) {
+  const token = bearer(req);
+  const user = token ? await getUser(env, token).catch(() => null) : null;
+  if (!user) return res.status(401).json({ ok: false, code: 'signin' });
+  const n = body.notify || {}, kind = String(n.kind || ''), to = String(n.to || '').toLowerCase().replace(/^@/, '');
+  if (!/^[a-z0-9_]{3,20}$/.test(to) || !['request', 'accept', 'cheer'].includes(kind)) return res.status(400).json({ ok: false });
+  const me = await one(env, 'handles?select=id,username,display&id=eq.' + user.id);
+  const them = await one(env, 'handles?select=id,username&username=eq.' + to);
+  if (!me || !them || me.id === them.id) return res.status(200).json({ ok: true, sent: 0 });
+  const pair = 'friendships?select=a,b,status&or=(and(a.eq.' + me.id + ',b.eq.' + them.id + '),and(a.eq.' + them.id + ',b.eq.' + me.id + '))';
+  const f = await one(env, pair);
+  const who = (me.display && me.display.trim()) ? me.display.trim().slice(0, 30) + ' (@' + me.username + ')' : '@' + me.username;
+  let msg = null;
+  if (kind === 'request' && f && f.status === 'pending' && f.a === me.id) msg = { title: 'New friend request 👋', body: who + ' wants to be friends on Manna.', url: '/#friends', tag: 'manna-fr-' + me.username };
+  else if (kind === 'accept' && f && f.status === 'accepted') msg = { title: 'You have a new friend 🤝', body: who + ' accepted your friend request.', url: '/#friends', tag: 'manna-fr-' + me.username };
+  else if (kind === 'cheer' && f && f.status === 'accepted' && CHEERS[n.cheer]) {
+    const c = await one(env, 'cheers?select=id,created_at&from_id=eq.' + me.id + '&to_id=eq.' + them.id + '&kind=eq.' + n.cheer + '&order=created_at.desc&limit=1');
+    if (c && Date.now() - new Date(c.created_at).getTime() < 10 * 60 * 1000) msg = { title: CHEERS[n.cheer][0] + ' ' + who, body: who + ' ' + CHEERS[n.cheer][1] + '.', url: '/#friends', tag: 'manna-cheer-' + me.username + '-' + n.cheer };
+  }
+  if (!msg) return res.status(200).json({ ok: true, sent: 0 });
+  const r = await rest(env, 'push_subs?select=endpoint,sub,prefs&user_id=eq.' + them.id);
+  const subs = r.ok ? await r.json().catch(() => []) : [];
+  let sent = 0;
+  await Promise.all(subs.filter(x => !(x.prefs && x.prefs.friends === false)).map(async x => {
+    try { const st = await send(v, x.sub, msg); if (st < 300) sent++; else if (st === 404 || st === 410) await rest(env, 'push_subs?endpoint=eq.' + encodeURIComponent(x.endpoint), { method: 'DELETE' }).catch(() => {}); } catch {}
+  }));
+  return res.status(200).json({ ok: true, sent });
 }
 
 export default async function handler(req, res) {
@@ -185,6 +256,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
   if (req.method !== 'POST') return res.status(405).json({ ok: false });
+  if (body?.notify) return notify(env, v, req, body, res);
   const s = body?.sub;
   if (!s || !goodSub(s)) return res.status(400).json({ ok: false, code: 'bad_sub' });
   const token = bearer(req);
