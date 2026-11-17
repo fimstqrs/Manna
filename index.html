@@ -3234,7 +3234,7 @@ function haInit(){
 /* ---------- welcome and tutorial ---------- */
 /* ===== Update log: newest first. Add an entry with every version. ===== */
 var CHANGES=[
- {v:175,d:'Nov 17, 2026',t:'More reminders',s:['New Workout reminder: on days your schedule has a workout, Manna tells you which one, like "Today: Leg day". On rest days it stays quiet.','New Water reminder: a nudge to drink and log it, at a time you pick.','Friends notifications: get a notification the moment someone sends you a friend request, accepts yours, or sends you a cheer 🙏 💪 🔥. Turn it off any time in Reminders.','Find them all in Settings, About, Reminders.']},
+ {v:175,d:'Nov 17, 2026',t:'More reminders',s:['New Workout reminder: on days your schedule has a workout, Manna tells you which one, like "Today: Leg day". On rest days it stays quiet.','New Water reminder: a nudge to drink and log it, at a time you pick.','Friends notifications: get a notification the moment someone sends you a friend request, accepts yours, or sends you a cheer 🙏 💪 🔥. Turn it off any time in Reminders.','Reminders now turn on properly in the iPhone Home Screen app. There is also a Send a test button to check they arrive.','Find them all in Settings, About, Reminders.']},
  {v:174,d:'Nov 17, 2026',t:'Faith on phones',s:['On phones, Faith\'s Daily and Saved verse feed no longer has the Manna version line showing through the bottom bar, and the page buttons sit a little closer to the verse.','Fitness Stats: the empty week now says LET\'S START.']},
  {v:173,d:'Nov 16, 2026',t:'Tutorial fix',s:['Faith\'s five pages, Daily, Saved, Bible, Search and Notes, now use the same buttons as Fitness\'s Workouts, Schedule, History and Stats.','The tutorial now walks through all five Settings pages, You, Look, Body, Data and About, and you tap each page\'s button at the top to move on.','The tutorial is no longer covered by the Get the Manna app pop-up. Fuel steps 1 and 2 now show Log it and Your targets clearly, and the install pop-up waits until the tutorial is done.']},
  {v:172,d:'Nov 15, 2026',t:'Whole numbers',s:['When you change how many of a food you ate, the + and − buttons now go 1, 2, 3, 4, not 1.25, 1.5. Ate 2 cookies? Tap + once.','In your Diary, the water bottle and the calories ring now match: the bottle is the same height as the ring, your water shows inside the bottle just like calories show inside the ring, and Calories eaten today and Water today sit on the same line.']},
@@ -6576,6 +6576,7 @@ var ACT={
   bkno:function(){S.bkNo=Date.now()},
   aicrun:function(){aicRun()},
   remon:function(){remOn()},
+  remtest:function(){if(REM.busy||!remSupported())return;REM.busy=true;REM.msg='';navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){if(!sub)throw {code:'nosub'};return remSave(sub,true)}).then(function(){REM.busy=false;toast('A test reminder is on its way. If nothing shows up in a minute, check Settings, Notifications, Manna on your phone.',{title:'Test sent',icon:'🔔'});refresh()},function(e){REM.busy=false;REM.msg=e&&e.code==='nosub'?'This phone is not signed up for reminders any more. Tap Turn all off, then Turn on reminders.':e&&e.code==='push'?'Your phone\'s push service turned the test down. Tap Turn all off, then turn reminders on again.':'Could not send a test. Check your connection and try again.';refresh()})},
   remoff:function(){remOff()},
   testfb:function(){location.hash='settings';setTimeout(function(){var c=$('#fb-card');if(c){try{var pg=c.closest('.swpage'),sw=pg&&pg.parentNode;if(sw&&pg)sw.scrollTo({left:pg.offsetLeft,behavior:'auto'})}catch(e){}c.scrollIntoView({block:'start'});var t=$('#fb-text');if(t)t.focus()}},350)},
   bkdl:function(){ACT.expjson()},
@@ -7588,28 +7589,35 @@ function remAny(){var R=remS();return S.remFr!==false||REMK.some(function(k){ret
 function remFmt(t){var a=t.split(':'),d=new Date();d.setHours(+a[0],+a[1],0,0);try{return d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}catch(e){return t}}
 function remSave(sub,hello){return (accOn()&&signedIn()?authToken():Promise.resolve(null)).then(function(tok){var h={'content-type':'application/json'};if(tok)h.authorization='Bearer '+tok;
   var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}
-  return fetch(API+'/api/push',{method:'POST',headers:h,body:JSON.stringify({sub:sub.toJSON?sub.toJSON():sub,prefs:remPrefs(),tz:tz,hello:!!hello})})}).then(function(r){if(!r.ok)throw {code:'db'}})}
+  return fetch(API+'/api/push',{method:'POST',headers:h,body:JSON.stringify({sub:sub.toJSON?sub.toJSON():sub,prefs:remPrefs(),tz:tz,hello:!!hello})})}).then(function(r){if(!r.ok)throw {code:'db'};return r.json().catch(function(){return {}})}).then(function(j){if(hello&&j&&j.hello&&j.hello>=300)throw {code:'push',st:j.hello}})}
+/* iPhone only allows the subscribe call straight from the tap, with nothing slow before it.
+   So get the key and the service worker ready early, then subscribe the instant the button is tapped. */
+function remPrep(){try{if(!remSupported())return;if(!REM.key)remKey().catch(function(){});if(!REM.reg)navigator.serviceWorker.ready.then(function(r){REM.reg=r}).catch(function(){})}catch(e){}}
 function remOn(){if(REM.busy)return;if(!remSupported()){toast('This browser cannot show reminders.');return}
+  var first=null;
+  /* Fast path: subscribe right inside the tap (this also asks for permission). Needed on iPhone. */
+  if(REM.key&&REM.reg){try{first=REM.reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:remB64(REM.key)})}catch(e){first=Promise.reject(e)}}
   REM.busy=true;REM.msg='';refresh();
-  Notification.requestPermission().then(function(p){if(p!=='granted')throw {code:'denied'};return remKey()}).then(function(k){if(!k)throw {code:'off'};return navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription().then(function(old){return old||reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:remB64(k)})})})})
+  (first||Notification.requestPermission().then(function(p){if(p!=='granted')throw {code:'denied'};return remKey()}).then(function(k){if(!k)throw {code:'off'};return navigator.serviceWorker.ready.then(function(reg){REM.reg=reg;return reg.pushManager.getSubscription().then(function(old){return old||reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:remB64(k)})})})}))
+  .catch(function(e){if(e&&e.code)throw e;if(typeof Notification!=='undefined'&&Notification.permission==='denied')throw {code:'denied'};throw {code:e&&e.name==='NotAllowedError'?'gesture':'sub'}})
   .then(function(sub){return remSave(sub,true)}).then(function(){S.push.on=true;REM.busy=false;toast('Reminders are on. A test one is on its way.');refresh()},
-  function(e){var c=e&&e.code;REM.busy=false;REM.msg=c==='denied'?'Notifications are blocked for Manna. Allow them in your phone or browser settings, then try again.':c==='off'?'Reminders are not switched on for Manna yet. Run supabase/v159.sql in Supabase first.':'Could not turn on reminders. Check your connection and try again.';refresh()})}
+  function(e){var c=e&&e.code;REM.busy=false;REM.msg=c==='denied'?'Notifications are blocked for Manna. Allow them in your phone or browser settings, then try again.':c==='gesture'?'Your phone did not let Manna ask yet. Tap Turn on reminders once more.':c==='push'?'Your phone\'s push service turned the reminder down. Tap Turn all off, then turn reminders on again.':c==='off'?'Reminders are not switched on for Manna yet. Run supabase/v159.sql in Supabase first.':'Could not turn on reminders. Check your connection and try again.';refresh()})}
 function remOff(){REM.busy=true;refresh();var done=function(){S.push.on=false;REM.busy=false;toast('Reminders are off.');refresh()};
   if(!remSupported()){done();return}
   navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){if(!sub)return;var ep=sub.endpoint;return sub.unsubscribe().catch(function(){}).then(function(){return fetch(API+'/api/push',{method:'DELETE',headers:{'content-type':'application/json'},body:JSON.stringify({endpoint:ep})}).catch(function(){})})}).then(done,done)}
 function remUpdate(){if(!S.push.on||!remSupported())return;navigator.serviceWorker.ready.then(function(reg){return reg.pushManager.getSubscription()}).then(function(sub){if(sub)return remSave(sub,false)}).catch(function(){})}
-function renderRem(){var el=$('#rem-card');if(!el)return;var P=S.push||(S.push={on:false}),R=remS(),h='<div class="sh"><h3>Reminders</h3><p class="small muted">Pick what Manna reminds you about, and when. Times are your own local time.</p></div>';
+function renderRem(){var el=$('#rem-card');if(!el)return;remPrep();var P=S.push||(S.push={on:false}),R=remS(),h='<div class="sh"><h3>Reminders</h3><p class="small muted">Pick what Manna reminds you about, and when. Times are your own local time.</p></div>';
   if(remIOSBrowser())h+='<p class="small">On iPhone, reminders work once Manna is on your Home Screen. Tap Share, then Add to Home Screen, then open Manna from there.</p>';
   else if(!remSupported())h+='<p class="small">This browser cannot show reminders. Try Chrome, Edge, Firefox or Safari.</p>';
   else{h+='<div class="remlist">'+REMK.map(function(k){var x=R[k[0]];return '<div class="remrow'+(x.on?'':' off')+'"><label class="remck"><input type="checkbox" data-rem="'+k[0]+'"'+(x.on?' checked':'')+'><span class="remi" aria-hidden="true">'+k[1]+'</span><span><b>'+k[2]+'</b><small>'+k[3]+'</small></span></label><input type="time" class="remt" data-remt="'+k[0]+'" value="'+x.t+'" aria-label="'+esc(k[2])+' time"'+(x.on?'':' disabled')+'></div>'}).join('')+'<div class="remrow'+(S.remFr!==false?'':' off')+'"><label class="remck"><input type="checkbox" data-remfr="1"'+(S.remFr!==false?' checked':'')+'><span class="remi" aria-hidden="true">🤝</span><span><b>Friends</b><small>Friend requests, new friends and cheers, the moment they happen</small></span></label></div></div>'
     +'<div class="row">'+(P.on?'<span class="badge ok">On</span><button class="btn sm" data-act="remoff"'+(REM.busy?' disabled':'')+'>Turn all off</button>':'<button class="btn primary" data-act="remon"'+(REM.busy||!remAny()?' disabled':'')+'>'+(REM.busy?'Turning on…':'Turn on reminders')+'</button>')+'</div>'
-    +(P.on?'<p class="small muted" style="margin:0">Changes save straight away.</p>':'')
+    +(P.on?'<div class="row"><button class="btn sm" data-act="remtest"'+(REM.busy?' disabled':'')+'>Send a test</button><span class="small muted">Changes save straight away.</span></div>':'')
     +(REM.msg?'<p class="small" role="status">'+esc(REM.msg)+'</p>':'')}
   var ae=document.activeElement;if(ae&&ae.classList&&ae.classList.contains('remt')&&el.contains(ae))return;
   if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}}
 var remTT=0;function remLater(){clearTimeout(remTT);remTT=setTimeout(remUpdate,800)}
 /* Each time Manna opens, refresh this phone's reminder settings, so friend alerts find you after you sign in */
-setTimeout(function(){try{remUpdate()}catch(e){}},5000);
+setTimeout(function(){try{remPrep();remUpdate()}catch(e){}},5000);
 document.addEventListener('change',function(e){var t=e.target,d=t&&t.dataset;if(!d)return;var R=remS();
   if(d.remfr){S.remFr=!!t.checked;remLater();refresh();prefSave();return}
   if(d.rem&&R[d.rem]){R[d.rem].on=!!t.checked;if(S.push.on&&!remAny()){remOff();return}remLater();refresh();prefSave();return}

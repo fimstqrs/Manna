@@ -53,17 +53,29 @@ function encrypt(sub, payload) {
   return Buffer.concat([head, asPub, body]);
 }
 
+// One signed token per push service, reused for up to 11 hours (Apple asks not to make a new one more than once an hour).
+const JWTS = new Map();
+function jwt(v, aud) {
+  const now = Math.floor(Date.now() / 1000), c = JWTS.get(aud);
+  if (c && c.exp - now > 3600) return c.t;
+  const exp = now + 12 * 3600;
+  const jh = b64u(JSON.stringify({ typ: 'JWT', alg: 'ES256' }));
+  const jc = b64u(JSON.stringify({ aud, exp, sub: 'mailto:themorningfallcorp@gmail.com' }));
+  const sig = crypto.sign('sha256', Buffer.from(jh + '.' + jc), { key: v.key, dsaEncoding: 'ieee-p1363' });
+  const t = jh + '.' + jc + '.' + b64u(sig);
+  JWTS.set(aud, { t, exp });
+  return t;
+}
 async function send(v, sub, msg) {
   const aud = new URL(sub.endpoint).origin;
-  const jh = b64u(JSON.stringify({ typ: 'JWT', alg: 'ES256' }));
-  const jc = b64u(JSON.stringify({ aud, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: 'mailto:themorningfallcorp@gmail.com' }));
-  const sig = crypto.sign('sha256', Buffer.from(jh + '.' + jc), { key: v.key, dsaEncoding: 'ieee-p1363' });
   const r = await fetch(sub.endpoint, {
     method: 'POST',
-    headers: { authorization: 'vapid t=' + jh + '.' + jc + '.' + b64u(sig) + ', k=' + b64u(v.pub), 'content-encoding': 'aes128gcm', 'content-type': 'application/octet-stream', ttl: '21600', urgency: 'normal' },
+    headers: { authorization: 'vapid t=' + jwt(v, aud) + ', k=' + b64u(v.pub), 'content-encoding': 'aes128gcm', 'content-type': 'application/octet-stream', TTL: '21600', urgency: 'high' },
     body: encrypt(sub, JSON.stringify(msg)),
     signal: AbortSignal.timeout(8000),
   });
+  // Log failures (no keys or personal data), so problems with a push service show up in Vercel's logs.
+  if (r.status >= 300) { let why = ''; try { why = (await r.text()).slice(0, 160); } catch {} console.error('push fail', new URL(sub.endpoint).hostname, r.status, why); }
   return r.status;
 }
 
@@ -270,6 +282,7 @@ export default async function handler(req, res) {
   const r = await rest(env, 'push_subs?on_conflict=endpoint', { method: 'POST', headers: { prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(row) });
   if (!r.ok) return res.status(503).json({ ok: false, code: 'db' });
   // A welcome notification, so people can see it works straight away.
-  if (body.hello) { try { await send(v, row.sub, { title: 'Reminders are on ✓', body: 'This is how Manna’s reminders will look. Change the times any time in Settings.', url: '/#settings', tag: 'manna-hello' }); } catch {} }
-  return res.status(200).json({ ok: true });
+  let hello = 0;
+  if (body.hello) { try { hello = await send(v, row.sub, { title: 'Reminders are on ✓', body: 'This is how Manna’s reminders will look. Change the times any time in Settings.', url: '/#settings', tag: 'manna-hello' }); } catch { hello = 599; } }
+  return res.status(200).json({ ok: true, hello });
 }
