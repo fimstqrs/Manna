@@ -144,6 +144,9 @@ function allowedOrigin(req) {
   } catch { return false; }
 }
 
+// Interface translation: generous, but capped per network so it cannot be abused.
+const UI_HITS = new Map();
+function uiOver(ip) { const now = Date.now(), L = (UI_HITS.get(ip) || []).filter(t => now - t < 10 * 60 * 1000); L.push(now); UI_HITS.set(ip, L); return L.length > 150; }
 function overLimit(ip) {
   const day = new Date().toISOString().slice(0, 10);
   const k = ip + '|' + day;
@@ -256,6 +259,30 @@ export default async function handler(req, res) {
       const code = e.name === 'TimeoutError' || e.name === 'AbortError' ? 'timeout' : e.status === 429 || e.status === 503 ? 'rate_limited' : 'failed';
       console.error('ai how error', e.status || '', e.message);
       return res.status(code === 'rate_limited' ? 429 : 502).json({ ok: false, code });
+    }
+  }
+
+  // Version 176: translate the app's own interface text. The server writes the prompt, so this cannot be used as a free general AI.
+  if (body?.kind === 'ui') {
+    const LN = { es: 'Spanish', fr: 'French', pt: 'Portuguese (Brazil)', de: 'German', it: 'Italian', tl: 'Tagalog', sw: 'Swahili', yo: 'Yoruba', hi: 'Hindi', zh: 'Simplified Chinese', ko: 'Korean', ja: 'Japanese', ru: 'Russian', nl: 'Dutch' };
+    const lang = LN[body.lang] ? body.lang : null;
+    const strings = (Array.isArray(body.strings) ? body.strings : []).map(x => String(x || '').replace(/[\r\n]+/g, ' ').slice(0, 240)).filter(x => /[A-Za-z]{2}/.test(x)).slice(0, 80);
+    if (!lang || !strings.length) return res.status(400).json({ ok: false, code: 'empty' });
+    if (uiOver(ip)) return res.status(429).json({ ok: false, code: 'rate_limited' });
+    const pr = ['Translate these short pieces of text from a faith, food and fitness app into ' + LN[lang] + '.',
+      'Use a warm, casual, everyday tone, like a friendly app. Keep them about as short as the English.',
+      'Keep these exactly as they are: placeholders like {0} and {1}, emoji, numbers, and the names Manna and Manna Pro. Keep Bible book names in the usual ' + LN[lang] + ' form.',
+      'Reply with JSON only: {"t": [the translations, in the same order, the same count]}.',
+      'Text: ' + JSON.stringify(strings)].join('\n');
+    try {
+      const out = await (gem ? askGemini(gem, pr, null) : askClaude(ant, pr, null));
+      const d = parseJson(out), t = d && Array.isArray(d.t) ? d.t : [];
+      const map = {};
+      strings.forEach((x, i) => { if (typeof t[i] === 'string' && t[i].trim()) map[x] = t[i].slice(0, 400); });
+      return res.status(200).json({ ok: true, data: { map }, free: true });
+    } catch (e) {
+      console.error('ai ui error', e.status || '', e.message);
+      return res.status(502).json({ ok: false, code: 'failed' });
     }
   }
 
